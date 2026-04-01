@@ -85,10 +85,10 @@ export default function Home() {
             PREMIUM B2B GIFTING PARTNER
           </motion.div>
           <motion.h1 variants={FADE_UP} className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-5xl mx-auto leading-tight">
-            Custom <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#FF7582]">Corporate Gifting Solutions</span> for Businesses in India
+            Custom <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#FF7582]">Corporate Gifting Solutions</span> for Businesses in Delhi NCR
           </motion.h1>
           <motion.p variants={FADE_UP} className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
-            Bulk gifting solutions for employees, clients, and events. Pan India delivery with custom branding and packaging.
+            Bulk gifting solutions for employees, clients, and events across Delhi NCR with custom branding and premium packaging.
           </motion.p>
           <motion.div variants={FADE_UP} className="flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/enquiry">
