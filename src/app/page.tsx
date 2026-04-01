@@ -41,18 +41,19 @@ const STATS = [
   { value: "50,000+", label: "Kits Delivered" },
   { value: "100+", label: "Corporate Clients" },
   { value: "25+", label: "Cities Covered" },
+  { value: "5+", label: "Years Experience" },
 ];
 
 const TESTIMONIALS = [
   {
-    quote: "PacMyProduct helped us deliver high-quality onboarding kits across multiple cities seamlessly.",
+    quote: "PacMyProduct delivered high-quality onboarding kits across multiple locations on time.",
     author: "HR Manager",
-    company: "Leading Tech Company"
+    company: "IT Company"
   },
   {
-    quote: "Great quality packaging and timely delivery. Highly recommended for corporate gifting.",
-    author: "Marketing Lead",
-    company: "National Retail Brand"
+    quote: "Great packaging quality and smooth execution for bulk corporate gifting.",
+    author: "Marketing Head",
+    company: "Retail Brand"
   }
 ];
 
@@ -84,10 +85,10 @@ export default function Home() {
             PREMIUM B2B GIFTING PARTNER
           </motion.div>
           <motion.h1 variants={FADE_UP} className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-5xl mx-auto leading-tight">
-            Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#FF7582]">Corporate Gifting & Packaging</span> Solutions in India
+            Custom <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#FF7582]">Corporate Gifting Solutions</span> for Businesses in India
           </motion.h1>
           <motion.p variants={FADE_UP} className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
-            Bulk corporate gifts, custom branding, and end-to-end packaging solutions trusted by businesses across India.
+            Bulk gifting solutions for employees, clients, and events. Pan India delivery with custom branding and packaging.
           </motion.p>
           <motion.div variants={FADE_UP} className="flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/enquiry">
