@@ -40,7 +40,7 @@ const CATEGORIES = [
 const STATS = [
   { value: "50,000+", label: "Kits Delivered" },
   { value: "100+", label: "Corporate Clients" },
-  { value: "25+", label: "Cities Covered" },
+  // { value: "25+", label: "Cities Covered" },
   { value: "5+", label: "Years Experience" },
 ];
 
