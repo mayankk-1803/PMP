@@ -50,20 +50,22 @@ export function Footer() {
                 PACMYPRODUCT
               </span>
             </Link>
-            <p className="text-gray-400 mb-6 max-w-sm">
-              End-to-End Corporate Gifting Solutions in India. Bulk orders, custom branding, and premium quality delivery across the nation.
-            </p>
-            <div className="flex gap-4">
-              <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:border-primary transition-all">
-                <Globe className="h-5 w-5" />
-              </a>
-              <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:border-primary transition-all">
-                <Mail className="h-5 w-5" />
-              </a>
-              <a href="#" className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:border-primary transition-all">
-                <Phone className="h-5 w-5" />
-              </a>
+            
+            <div className="space-y-4 text-sm text-gray-400 max-w-sm mb-6">
+              <div className="flex items-start gap-3">
+                <Globe className="w-5 h-5 flex-shrink-0 text-primary mt-0.5" />
+                <p>Digital Greens, A-6-014, 6th Floor Tower A, Golf Course Extn. Road, Sector-61, Gurgaon, Haryana-122102</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="w-5 h-5 flex-shrink-0 text-primary" />
+                <p>+91 9818601834</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="w-5 h-5 flex-shrink-0 text-primary" />
+                <p>pacmyproduct@gmail.com</p>
+              </div>
             </div>
+            
           </div>
 
           {footerLinks.map((section, idx) => (

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { ArrowRight, Package, TrendingUp, Truck, ShieldCheck } from "lucide-react";
+import { ArrowRight, Package, TrendingUp, Truck, ShieldCheck, Quote, CheckCircle2 } from "lucide-react";
 
 const FEATURED_HAMPERS = [
   {
@@ -35,6 +35,25 @@ const CATEGORIES = [
   { name: "Festive Hampers", href: "/festive-gifting", icon: <ShieldCheck className="h-8 w-8" /> },
   { name: "Promo Merch", href: "/promotional-merchandise", icon: <TrendingUp className="h-8 w-8" /> },
   { name: "Industry Kits", href: "/industry-solutions", icon: <Truck className="h-8 w-8" /> },
+];
+
+const STATS = [
+  { value: "50,000+", label: "Kits Delivered" },
+  { value: "100+", label: "Corporate Clients" },
+  { value: "25+", label: "Cities Covered" },
+];
+
+const TESTIMONIALS = [
+  {
+    quote: "PacMyProduct helped us deliver high-quality onboarding kits across multiple cities seamlessly.",
+    author: "HR Manager",
+    company: "Leading Tech Company"
+  },
+  {
+    quote: "Great quality packaging and timely delivery. Highly recommended for corporate gifting.",
+    author: "Marketing Lead",
+    company: "National Retail Brand"
+  }
 ];
 
 const FADE_UP: Variants = {
@@ -65,10 +84,10 @@ export default function Home() {
             PREMIUM B2B GIFTING PARTNER
           </motion.div>
           <motion.h1 variants={FADE_UP} className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-5xl mx-auto leading-tight">
-            End-to-End <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#FF7582]">Corporate Gifting</span> Solutions
+            Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-[#FF7582]">Corporate Gifting & Packaging</span> Solutions in India
           </motion.h1>
           <motion.p variants={FADE_UP} className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
-            Bulk Orders | Custom Branding | Pan India Delivery
+            Bulk corporate gifts, custom branding, and end-to-end packaging solutions trusted by businesses across India.
           </motion.p>
           <motion.div variants={FADE_UP} className="flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/enquiry">
@@ -79,11 +98,58 @@ export default function Home() {
             </Link>
             <Link href="/corporate-kits">
               <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg bg-[#0F0F0F]/50 backdrop-blur-sm">
-                View Products
+                Explore Solutions
               </Button>
             </Link>
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* Trust Section */}
+      <section className="py-12 bg-[#0A0A0A] border-y border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h3 className="text-sm font-semibold tracking-wider text-gray-400 uppercase mb-8">
+            Trusted by 100+ companies across India
+          </h3>
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={STAGGER}
+            className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500"
+          >
+            {["JBL", "BOROSIL", "ADIDAS", "VIP", "BOAT"].map((brand) => (
+              <motion.h4 variants={FADE_UP} key={brand} className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-400 to-gray-600">
+                {brand}
+              </motion.h4>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-20 relative overflow-hidden bg-[#0F0F0F]">
+        <BackgroundGradient />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={STAGGER}
+            className="grid sm:grid-cols-3 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-gray-800"
+          >
+            {STATS.map((stat, idx) => (
+              <motion.div variants={FADE_UP} key={idx} className="text-center pt-8 sm:pt-0">
+                <div className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-lg text-primary font-semibold tracking-wide">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* Categories Grid */}
@@ -113,6 +179,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Mid-Page CTA */}
+      <section className="py-24 relative overflow-hidden bg-[#E63946]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent opacity-50" />
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={STAGGER}
+          className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10"
+        >
+          <motion.h2 variants={FADE_UP} className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Need Custom Corporate Gifts?
+          </motion.h2>
+          <motion.p variants={FADE_UP} className="text-xl text-white/90 mb-10">
+            Get a Quote in 24 Hours. Bulk orders starting from 50 units.
+          </motion.p>
+          <motion.div variants={FADE_UP}>
+            <Link href="/enquiry">
+              <Button variant="outline" size="lg" className="text-lg bg-white text-primary border-white hover:bg-gray-100 hover:text-primary">
+                Get Started Now
+              </Button>
+            </Link>
+          </motion.div>
+        </motion.div>
+      </section>
+
       {/* Why Choose Us */}
       <section className="py-20 relative overflow-hidden bg-[#0A0A0A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -133,7 +225,7 @@ export default function Home() {
                 ].map((item, idx) => (
                   <motion.div variants={FADE_UP} key={idx} className="flex gap-4 items-start">
                     <div className="mt-1 bg-primary/20 p-2 rounded-lg text-primary">
-                      <ShieldCheck className="h-5 w-5" />
+                      <CheckCircle2 className="h-5 w-5" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-lg text-white">{item.title}</h4>
@@ -190,51 +282,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Brands & Clients */}
-      <section className="py-16 bg-[#0A0A0A] border-y border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-sm font-semibold tracking-wider text-gray-400 uppercase mb-8">
-            Proudly partnered with top brands
-          </h3>
+      {/* Testimonials */}
+      <section className="py-24 bg-[#0F0F0F] border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading title="What Our Clients Say" centered />
           <motion.div 
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-50px" }}
             variants={STAGGER}
-            className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500"
+            className="grid md:grid-cols-2 gap-8 mt-12"
           >
-            {["JBL", "BOROSIL", "ADIDAS", "VIP", "BOAT"].map(brand => (
-              <motion.h4 variants={FADE_UP} key={brand} className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-400 to-gray-600">
-                {brand}
-              </motion.h4>
+            {TESTIMONIALS.map((testimonial, idx) => (
+              <motion.div variants={FADE_UP} key={idx} className="bg-[#1A1A1A] p-8 rounded-2xl border border-gray-800 relative">
+                <Quote className="absolute top-6 right-6 w-12 h-12 text-gray-800 opacity-50" />
+                <p className="text-xl text-gray-300 italic mb-8 relative z-10 leading-relaxed">
+                  "{testimonial.quote}"
+                </p>
+                <div>
+                  <h4 className="text-white font-bold">{testimonial.author}</h4>
+                  <p className="text-primary text-sm font-medium">{testimonial.company}</p>
+                </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-24 relative overflow-hidden">
-        <BackgroundGradient />
+      {/* SEO Content Section */}
+      <article className="py-24 bg-[#0A0A0A] border-t border-gray-800">
         <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={STAGGER}
-          className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-invert prose-p:text-gray-400 prose-headings:text-white"
         >
-          <SectionHeading title="Ready to elevate your corporate gifting?" centered className="mb-8" />
-          <motion.p variants={FADE_UP} className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-            Get in touch with our gifting experts today to design the perfect unboxing experience for your employees, clients, or partners.
-          </motion.p>
-          <motion.div variants={FADE_UP}>
-            <Link href="/enquiry">
-              <Button variant="gradient" size="lg" className="text-lg hover:scale-105 transition-transform duration-300">
-                Get Your Custom Quote Today
-              </Button>
-            </Link>
-          </motion.div>
+          <h2 className="text-3xl font-bold mb-6">Corporate Gifting Solutions for Modern Businesses</h2>
+          <p className="mb-4 text-lg leading-relaxed">
+            Corporate gifting plays a crucial role in building strong business relationships. At PacMyProduct, we provide end-to-end corporate gifting and packaging solutions tailored for companies of all sizes.
+          </p>
+          <p className="mb-4 text-lg leading-relaxed">
+            From employee onboarding kits to festive hampers and promotional merchandise, our solutions are designed to enhance brand value and create lasting impressions. With bulk ordering, custom branding, and pan India delivery, we ensure seamless execution for every requirement.
+          </p>
+          <p className="text-lg leading-relaxed">
+            Whether you are looking for premium executive gifts or cost-effective bulk solutions, our team helps you choose the right products aligned with your brand identity.
+          </p>
         </motion.div>
-      </section>
+      </article>
+
     </>
   );
 }

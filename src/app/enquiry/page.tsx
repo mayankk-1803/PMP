@@ -70,13 +70,28 @@ export default function EnquiryPage() {
               </div>
 
               <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Primary Requirement</label>
+                <select className="w-full bg-[#0F0F0F] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors appearance-none">
+                  <option>Corporate Kits</option>
+                  <option>Festive Gifts</option>
+                  <option>Packaging</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-300">Specific Requirements</label>
                 <textarea rows={4} className="w-full bg-[#0F0F0F] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors resize-none" placeholder="Tell us about the occasion, target audience, and preferred items..." />
               </div>
 
-              <Button variant="gradient" size="lg" className="w-full" type="button">
-                Submit Enquiry
-              </Button>
+              <div className="pt-2">
+                <Button variant="gradient" size="lg" className="w-full" type="button">
+                  Submit Enquiry
+                </Button>
+                <p className="text-center text-sm text-gray-400 mt-4 flex items-center justify-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-primary" />
+                  We typically respond within 24 hours.
+                </p>
+              </div>
             </form>
           </div>
 

@@ -5,9 +5,9 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const IMAGES = [
   "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1610486663553-6a56fddcb8b2?q=80&w=800&auto=format&fit=crop",
+  // "https://images.unsplash.com/photo-1610486663553-6a56fddcb8b2?q=80&w=800&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1593642532744-d377ab507dc8?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1555616642-e0ba23fb5f56?q=80&w=800&auto=format&fit=crop",
+  // "https://images.unsplash.com/photo-1555616642-e0ba23fb5f56?q=80&w=800&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1603513492128-ba7bc9b3e143?q=80&w=800&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop",
 ];

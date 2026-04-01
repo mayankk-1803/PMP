@@ -12,6 +12,8 @@ const LINKS = [
   { href: "/promotional-merchandise", label: "Merchandise" },
   { href: "/industry-solutions", label: "Industries" },
   { href: "/packaging-solutions", label: "Packaging" },
+  { href: "/about", label: "About Us" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export function Navbar() {
