@@ -53,7 +53,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="font-semibold text-lg mb-2">Corporate Office</h4>
-                <p className="text-gray-400">Address</p>
+                <p className="text-gray-400">Digital Greens, A-6-014, 6th Floor Tower A, Golf Course Extn. Road, Sector-61, Gugaon, Haryana-122102</p>
               </div>
             </div>
 
@@ -63,7 +63,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="font-semibold text-lg mb-2">Phone</h4>
-                <p className="text-gray-400">+91 98765xxxxx<br />Mon-Fri 9am to 6pm IST</p>
+                <p className="text-gray-400">91 9818601834</p>
               </div>
             </div>
 
@@ -73,7 +73,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="font-semibold text-lg mb-2">Email</h4>
-                <p className="text-gray-400">hello@pacmyproduct.in<br />support@pacmyproduct.in</p>
+                <p className="text-gray-400">pacmyproduct@gmail.com</p>
               </div>
             </div>
             
