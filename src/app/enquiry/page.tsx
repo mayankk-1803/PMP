@@ -109,7 +109,7 @@ export default function EnquiryPage() {
 
             <div className="mt-12 p-6 bg-[#0F0F0F] rounded-xl border border-gray-800 text-center">
               <h4 className="font-semibold text-white mb-2">Need Immediate Support?</h4>
-              <p className="text-primary font-bold text-lg">+91 98765xxxxx</p>
+              <p className="text-primary font-bold text-lg">+91 9818601834</p>
             </div>
           </div>
         </div>
