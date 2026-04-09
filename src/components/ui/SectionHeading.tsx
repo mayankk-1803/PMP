@@ -23,17 +23,17 @@ export function SectionHeading({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={cn("mb-12", centered && "text-center", className)}
+      className={cn("mb-16", centered && "text-center", className)}
       {...props}
     >
 
-      <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+      <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E3A5F]">
         {title}
       </h2>
 
       <div
         className={cn(
-          "mt-4 h-[2px] rounded-full bg-gradient-to-r from-[#E63946] via-red-500 to-[#7A0000]",
+          "mt-6 h-[3px] rounded-full bg-[#C9A227]",
           centered
             ? "mx-auto w-20 md:w-24"
             : "w-16 md:w-20"
@@ -43,7 +43,7 @@ export function SectionHeading({
       {subtitle && (
         <p
           className={cn(
-            "text-gray-400 text-lg md:text-xl mt-4",
+            "text-[#1E3A5F]/70 text-lg md:text-xl mt-6 font-medium leading-relaxed",
             centered && "mx-auto max-w-2xl"
           )}
         >

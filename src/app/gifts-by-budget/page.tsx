@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
 
@@ -23,7 +24,7 @@ export default function GiftsByBudgetPage() {
     : MOCK_PRODUCTS.filter(p => p.tier === activeTier);
 
   return (
-    <div className="pt-24 pb-20 bg-dark">
+    <div className="pt-24 pb-20 bg-[#F9FAFB] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading 
           title="Browse by Budget" 
@@ -37,10 +38,10 @@ export default function GiftsByBudgetPage() {
             <button
               key={tier}
               onClick={() => setActiveTier(tier)}
-              className={`px-6 py-2 rounded-full border transition-all ${
+              className={`px-8 py-3 rounded-full border transition-all font-bold shadow-sm ${
                 activeTier === tier 
-                  ? "bg-primary border-primary text-white" 
-                  : "bg-transparent border-gray-700 text-gray-400 hover:border-primary/50"
+                  ? "bg-[#1E3A5F] border-[#1E3A5F] text-white shadow-md transform scale-105" 
+                  : "bg-white border-gray-200 text-[#1E3A5F]/70 hover:border-[#C9A227] hover:text-[#1E3A5F]"
               }`}
             >
               {tier}
@@ -48,11 +49,22 @@ export default function GiftsByBudgetPage() {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div 
+          layout
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {filtered.map((item, i) => (
-            <ProductCard key={i} {...item} />
+            <motion.div
+              layout
+              key={item.title}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+            >
+              <ProductCard {...item} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

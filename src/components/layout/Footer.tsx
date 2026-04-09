@@ -37,31 +37,31 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#0A0A0A] border-t border-gray-800 pt-16 pb-8">
+    <footer className="bg-[#F1F5F9] border-t border-gray-200 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-6 group">
-              <div className="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
-                <Gift className="h-6 w-6 text-primary" />
+              <div className="bg-[#1E3A5F]/10 p-2 rounded-lg group-hover:bg-[#1E3A5F]/20 transition-colors">
+                <Gift className="h-6 w-6 text-[#1E3A5F]" />
               </div>
-              <span className="font-bold text-2xl tracking-tight">
+              <span className="font-extrabold text-2xl tracking-tight text-[#1E3A5F]">
                 PACMYPRODUCT
               </span>
             </Link>
             
-            <div className="space-y-4 text-sm text-gray-400 max-w-sm mb-6">
+            <div className="space-y-4 text-sm text-[#1E3A5F]/70 max-w-sm mb-6 font-medium leading-relaxed">
               <div className="flex items-start gap-3">
-                <Globe className="w-5 h-5 flex-shrink-0 text-primary mt-0.5" />
+                <Globe className="w-5 h-5 flex-shrink-0 text-[#C9A227] mt-0.5" />
                 <p>Digital Greens, A-6-014, 6th Floor Tower A, Golf Course Extn. Road, Sector-61, Gurgaon, Haryana-122102</p>
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 flex-shrink-0 text-primary" />
+                <Phone className="w-5 h-5 flex-shrink-0 text-[#C9A227]" />
                 <p>+91 9818601834</p>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 flex-shrink-0 text-primary" />
+                <Mail className="w-5 h-5 flex-shrink-0 text-[#C9A227]" />
                 <p>pacmyproduct@gmail.com</p>
               </div>
             </div>
@@ -70,13 +70,13 @@ export function Footer() {
 
           {footerLinks.map((section, idx) => (
             <div key={idx}>
-              <h3 className="font-semibold text-white mb-6 tracking-wide uppercase text-sm">{section.title}</h3>
+              <h3 className="font-bold text-[#1E3A5F] mb-6 tracking-wider uppercase text-sm">{section.title}</h3>
               <ul className="space-y-4">
                 {section.links.map((link, linkIdx) => (
                   <li key={linkIdx}>
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-primary transition-colors text-sm"
+                      className="text-[#1E3A5F]/70 hover:text-[#C9A227] transition-colors font-medium text-sm"
                     >
                       {link.name}
                     </Link>
@@ -88,13 +88,13 @@ export function Footer() {
 
         </div>
 
-        <div className="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">
+        <div className="border-t border-gray-200 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-[#1E3A5F]/60 text-sm font-medium">
             © {new Date().getFullYear()} Pacmyproduct. All rights reserved.
           </p>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+          <div className="flex gap-6 text-sm text-[#1E3A5F]/60 font-medium">
+            <Link href="#" className="hover:text-[#1E3A5F] transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-[#1E3A5F] transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

@@ -43,7 +43,7 @@ const FADE_UP: Variants = {
 
 export default function BlogPage() {
   return (
-    <div className="pt-32 pb-24 relative min-h-screen">
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#F9FAFB]">
       <BackgroundGradient />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

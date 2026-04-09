@@ -15,11 +15,11 @@ interface BlogCardProps {
 export function BlogCard({ title, excerpt, date, imageUrl, href }: BlogCardProps) {
   return (
     <motion.article 
-      whileHover={{ y: -8 }}
+      whileHover={{ y: -8, scale: 1.02 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="group flex flex-col overflow-hidden rounded-2xl bg-[#1A1A1A] border border-gray-800 hover:border-primary/50 transition-colors duration-300"
+      className="group flex flex-col h-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
     >
-      <Link href={href} className="block overflow-hidden aspect-video bg-gray-900 relative">
+      <Link href={href} className="block overflow-hidden aspect-video bg-[#F1F5F9] relative">
         <motion.img 
           src={imageUrl} 
           alt={title}
@@ -27,25 +27,25 @@ export function BlogCard({ title, excerpt, date, imageUrl, href }: BlogCardProps
           transition={{ duration: 0.5 }}
           className="h-full w-full object-cover"
         />
-        <div className="absolute top-4 left-4 bg-[#0F0F0F]/80 backdrop-blur-md px-3 py-1 rounded-full border border-gray-800 text-xs font-semibold text-gray-300">
+        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-gray-200 text-xs font-bold text-[#1E3A5F] shadow-sm">
           {date}
         </div>
       </Link>
       
-      <div className="p-6 flex flex-col flex-1">
-        <Link href={href} className="group-hover:text-primary transition-colors">
-          <h3 className="text-xl md:text-2xl font-bold mb-3 text-white line-clamp-2">
+      <div className="p-6 md:p-8 flex flex-col flex-1">
+        <Link href={href} className="group-hover:text-[#C9A227] transition-colors">
+          <h3 className="text-xl md:text-2xl font-extrabold mb-4 text-[#1E3A5F] line-clamp-2 leading-tight">
             {title}
           </h3>
         </Link>
-        <p className="text-gray-400 text-base mb-6 line-clamp-3 flex-1">
+        <p className="text-[#1E3A5F]/70 font-medium text-base mb-8 line-clamp-3 flex-1 leading-relaxed">
           {excerpt}
         </p>
         
         <div className="mt-auto">
           <Link 
             href={href} 
-            className="inline-flex items-center font-semibold text-primary group/link hover:text-white transition-colors"
+            className="inline-flex items-center font-bold text-[#C9A227] group/link hover:text-[#1E3A5F] transition-colors"
           >
             Read More
             <span className="ml-2 transform group-hover/link:translate-x-1 transition-transform">

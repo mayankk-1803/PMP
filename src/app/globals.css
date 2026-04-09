@@ -1,44 +1,54 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0F0F0F;
-  --color-foreground: #FFFFFF;
-  --color-primary: #E63946;
-  --color-primary-hover: #C52C37;
-  --color-gradient-start: #3A0000;
-  --color-gradient-end: #7A0000;
+  --color-brand-blue: #1E3A5F;
+  --color-brand-gold: #C9A227;
+  --color-brand-beige: #E8D8C4;
+  --color-brand-white: #F9FAFB;
+  --color-brand-gray: #F1F5F9;
+  --color-background: #F9FAFB;
+  --color-foreground: #1E3A5F;
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
 
 @layer base {
   :root {
-    --background: #0F0F0F;
-    --foreground: #FFFFFF;
+    --background: #F9FAFB;
+    --foreground: #1E3A5F;
   }
 
   html {
-    scroll-behavior: smooth;
     background-color: var(--background);
     color: var(--foreground);
+    /* Note: scroll-behavior smooth was removed to fix Next.js App Router bug */
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
-    @apply antialiased min-h-screen flex flex-col;
+    @apply antialiased flex flex-col min-h-screen selection:bg-[#C9A227] selection:text-white;
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   
   ::-webkit-scrollbar-track {
-    background: #0F0F0F;
+    background: #F9FAFB;
   }
   
   ::-webkit-scrollbar-thumb {
-    background: #E63946;
+    background: #e2e8f0;
     border-radius: 4px;
   }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+  }
+}
+
+/* Base text selection utilities for sleekness */
+* {
+  border-color: #e2e8f0;
 }

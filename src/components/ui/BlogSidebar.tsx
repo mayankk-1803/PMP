@@ -20,33 +20,33 @@ export function BlogSidebar() {
   ];
 
   return (
-    <aside className="space-y-12">
+    <aside className="space-y-8">
       {/* Search Widget */}
-      <div className="bg-[#1A1A1A] p-6 rounded-2xl border border-gray-800">
-        <h3 className="text-xl font-bold text-white mb-4">Search</h3>
+      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+        <h3 className="text-xl font-extrabold text-[#1E3A5F] mb-6">Search</h3>
         <div className="relative">
           <input 
             type="text" 
             placeholder="Search articles..." 
-            className="w-full bg-[#0F0F0F] border border-gray-700 text-white rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:border-primary transition-colors"
+            className="w-full bg-[#F1F5F9] border border-gray-200 text-[#1E3A5F] rounded-xl pl-4 pr-10 py-4 focus:outline-none focus:ring-2 focus:ring-[#C9A227] transition-all font-medium"
           />
-          <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+          <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1E3A5F]/50 hover:text-[#C9A227] transition-colors">
             <Search className="w-5 h-5" />
           </button>
         </div>
       </div>
 
       {/* Categories Widget */}
-      <div className="bg-[#1A1A1A] p-6 rounded-2xl border border-gray-800">
-        <h3 className="text-xl font-bold text-white mb-4">Categories</h3>
-        <ul className="space-y-3">
+      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+        <h3 className="text-xl font-extrabold text-[#1E3A5F] mb-6">Categories</h3>
+        <ul className="space-y-2">
           {categories.map((category) => (
             <li key={category.name}>
               <button 
-                className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+                className={`w-full text-left flex items-center justify-between px-4 py-3 rounded-xl transition-all font-semibold ${
                   category.isActive 
-                    ? "bg-primary/10 text-primary font-medium" 
-                    : "text-gray-400 hover:text-white hover:bg-[#0F0F0F]"
+                    ? "bg-[#C9A227] text-white shadow-md shadow-[#C9A227]/20" 
+                    : "text-[#1E3A5F]/70 hover:text-[#1E3A5F] hover:bg-[#F1F5F9]"
                 }`}
               >
                 {category.name}
@@ -57,12 +57,12 @@ export function BlogSidebar() {
       </div>
 
       {/* Recent Posts Widget */}
-      <div className="bg-[#1A1A1A] p-6 rounded-2xl border border-gray-800">
-        <h3 className="text-xl font-bold text-white mb-4">Recent Posts</h3>
+      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+        <h3 className="text-xl font-extrabold text-[#1E3A5F] mb-6">Recent Posts</h3>
         <ul className="space-y-4">
           {recentPosts.map((post, idx) => (
-            <li key={idx} className="border-b border-gray-800 last:border-0 pb-4 last:pb-0">
-              <Link href={post.href} className="text-gray-400 hover:text-primary transition-colors line-clamp-2 leading-snug">
+            <li key={idx} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0 group">
+              <Link href={post.href} className="text-[#1E3A5F]/80 font-medium hover:text-[#C9A227] transition-colors line-clamp-2 leading-relaxed">
                 {post.title}
               </Link>
             </li>
