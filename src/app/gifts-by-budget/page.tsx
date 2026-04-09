@@ -53,7 +53,7 @@ export default function GiftsByBudgetPage() {
           layout
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {filtered.map((item, i) => (
+          {filtered.map((item, idx) => (
             <motion.div
               layout
               key={item.title}
@@ -61,7 +61,7 @@ export default function GiftsByBudgetPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
             >
-              <ProductCard {...item} />
+              <ProductCard {...item} index={idx} />
             </motion.div>
           ))}
         </motion.div>

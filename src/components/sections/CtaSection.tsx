@@ -28,17 +28,17 @@ export function CtaSection() {
               We help you curate memorable hampers within your budget. Let's discuss your custom gifting needs today.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link href="/enquiry">
-                <Button variant="gold" size="lg" className="w-full sm:w-auto text-lg px-10 py-6 rounded-full font-bold">
+              <Button variant="gold" size="lg" className="w-full sm:w-auto text-lg px-10 py-6 rounded-full font-bold" asChild>
+                <Link href="/enquiry">
                   Get Quote
-                </Button>
-              </Link>
-              <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 rounded-full border-white text-white hover:bg-white hover:text-[#1E3A5F] transition-colors flex items-center justify-center gap-2">
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 rounded-full border-white text-white hover:bg-white hover:text-[#1E3A5F] transition-colors flex items-center justify-center gap-2" asChild>
+                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-5 h-5" />
                   WhatsApp Us
-                </Button>
-              </a>
+                </a>
+              </Button>
             </div>
           </div>
         </motion.div>

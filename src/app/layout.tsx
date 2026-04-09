@@ -25,8 +25,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col relative bg-[#F9FAFB] text-[#1E3A5F] selection:bg-[#C9A227] selection:text-white">
+      <body suppressHydrationWarning className="min-h-full flex flex-col relative bg-[#F9FAFB] text-[#1E3A5F] selection:bg-[#C9A227] selection:text-white">
         <ShortlistProvider>
           <Navbar />
           <main className="flex-1 flex flex-col pt-20">

@@ -45,9 +45,9 @@ export default function AboutPage() {
               Whether you need 50 executive kits for your leadership team or 50,000 festive hampers distributed directly to employee homes across India, our state-of-the-art logistics and fulfillment ensure your corporate gifting is completely stress-free.
             </p>
             <div className="pt-6">
-              <Link href="/enquiry">
-                <Button variant="default" size="lg" className="px-10 py-6 rounded-full shadow-lg">Partner With Us</Button>
-              </Link>
+              <Button variant="default" size="lg" className="px-10 py-6 rounded-full shadow-lg" asChild>
+                <Link href="/enquiry">Partner With Us</Link>
+              </Button>
             </div>
           </motion.div>
           

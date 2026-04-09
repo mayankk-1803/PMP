@@ -98,9 +98,9 @@ export function Navbar() {
                 )}
               </button>
               
-              <Link href="/enquiry">
-                <Button variant="gold" className="rounded-full px-8 font-bold">Bulk Enquiry</Button>
-              </Link>
+              <Button variant="gold" className="rounded-full px-8 font-bold" asChild>
+                <Link href="/enquiry">Bulk Enquiry</Link>
+              </Button>
             </div>
 
             <div className="flex items-center lg:hidden gap-4">
@@ -148,9 +148,9 @@ export function Navbar() {
                   </Link>
                 ))}
                 <div className="pt-6 pb-2">
-                  <Link href="/enquiry" onClick={() => setIsOpen(false)}>
-                    <Button variant="gold" className="w-full justify-center rounded-xl py-6 text-lg font-bold">Bulk Enquiry</Button>
-                  </Link>
+                  <Button variant="gold" className="w-full justify-center rounded-xl py-6 text-lg font-bold" asChild>
+                    <Link href="/enquiry" onClick={() => setIsOpen(false)}>Bulk Enquiry</Link>
+                  </Button>
                 </div>
               </div>
             </motion.div>

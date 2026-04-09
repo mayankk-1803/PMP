@@ -52,15 +52,15 @@ export default function CorporateKitsPage() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {KITS.map((kit, i) => (
+          {KITS.map((kit, idx) => (
             <motion.div
-              key={i}
+              key={idx}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.5 }}
+              transition={{ delay: idx * 0.15, duration: 0.5 }}
             >
-              <ProductCard {...kit} />
+              <ProductCard {...kit} index={idx} />
             </motion.div>
           ))}
         </div>

@@ -31,7 +31,7 @@ export default function PromoMerchPage() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
             >
-              <ProductCard {...item} />
+              <ProductCard {...item} index={i} />
             </motion.div>
           ))}
         </div>

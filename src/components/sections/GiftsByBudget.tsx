@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/Button";
 
@@ -20,9 +20,16 @@ const BUDGET_PRODUCTS = [
 ];
 
 export function GiftsByBudget() {
+  const [mounted, setMounted] = useState(false);
   const [activeTier, setActiveTier] = useState("₹1000–₹2500");
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const filteredProducts = BUDGET_PRODUCTS.filter(p => p.tier === activeTier);
+
+  if (!mounted) return null;
 
   return (
     <section className="py-24 bg-white border-y border-[#F1F5F9]">
@@ -37,6 +44,7 @@ export function GiftsByBudget() {
             {BUDGET_TIERS.map((tier) => (
               <button
                 key={tier}
+                type="button"
                 onClick={() => setActiveTier(tier)}
                 className={`px-5 py-3 text-sm md:text-base font-semibold rounded-xl transition-all ${
                   activeTier === tier 

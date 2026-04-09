@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Button } from "./Button";
 import { cn } from "@/lib/utils";
 import { Bookmark } from "lucide-react";
@@ -14,16 +14,43 @@ interface ProductCardProps {
   imageUrl: string;
   price?: string;
   className?: string;
+  index?: number;
 }
 
-export function ProductCard({ title, description, imageUrl, price, className }: ProductCardProps) {
+export function ProductCard({ title, description, imageUrl, price, className, index = 0 }: ProductCardProps) {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const router = useRouter();
   
-  // To avoid hydration mismatch errors with localStorage, we initially assume it's not selected 
-  // until the client mounts. Since ProductCard is client side and Context manages 'isMounted', 
-  // checking is safe.
   const isSelected = isInShortlist(title);
+
+  // --- 3D TILT LOGIC ---
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0.5);
+  const y = useMotionValue(0.5);
+
+  const mouseXSpring = useSpring(x, { stiffness: 400, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 400, damping: 30 });
+
+  // Rotate between -5deg and 5deg
+  const rotateX = useTransform(mouseYSpring, [0, 1], [5, -5]);
+  const rotateY = useTransform(mouseXSpring, [0, 1], [-5, 5]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    x.set(mouseX / width);
+    y.set(mouseY / height);
+  };
+
+  const handleMouseLeave = () => {
+    // Reset gracefully to center
+    x.set(0.5);
+    y.set(0.5);
+  };
 
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -41,9 +68,27 @@ export function ProductCard({ title, description, imageUrl, price, className }: 
 
   return (
     <motion.div 
-      whileHover={{ y: -5, scale: 1.02 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className={cn("group flex flex-col h-full relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl border border-gray-100 transition-all", className)}
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ 
+        duration: 0.6, 
+        ease: "easeOut",
+        delay: index * 0.1 // Apply subtle stagger on entry based on mapping index
+      }}
+      style={{
+        rotateX,
+        rotateY,
+        perspective: 1200 // Defines rendering depth for 3D elements
+      }}
+      whileHover={{ y: -8, scale: 1.03 }}
+      className={cn(
+        "group flex flex-col h-full relative overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100 transition-colors hover:border-[#1E3A5F]/10 hover:shadow-xl", 
+        className
+      )}
     >
       <div className="relative w-full h-[240px] overflow-hidden bg-[#F9FAFB] flex-shrink-0">
         <motion.img 
@@ -54,7 +99,6 @@ export function ProductCard({ title, description, imageUrl, price, className }: 
           className="absolute inset-0 h-full w-full object-cover"
         />
         
-        {/* Bookmark Icon Container */}
         <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2">
           <button
             onClick={handleToggleShortlist}

@@ -54,7 +54,7 @@ export default function FestiveGiftingPage() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
             >
-              <ProductCard {...hamper} />
+              <ProductCard {...hamper} index={i} />
             </motion.div>
           ))}
         </div>
