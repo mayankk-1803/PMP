@@ -39,19 +39,20 @@ export function Testimonials() {
           Partner Success Stories
         </motion.h2>
         
-        <div className="bg-white p-10 md:p-16 rounded-[2.5rem] shadow-xl border border-gray-100">
+        <div className="bg-white p-10 md:p-16 rounded-[2.5rem] shadow-lg">
           <Swiper
             modules={[Autoplay, Pagination]}
             pagination={{ clickable: true }}
-            autoplay={{ delay: 6000 }}
+            autoplay={{ delay: 8000, disableOnInteraction: true }}
             loop={true}
+            speed={1000}
             className="pb-16"
           >
             {TESTIMONIALS.map((testimonial, idx) => (
               <SwiperSlide key={idx}>
                 <div className="flex flex-col items-center max-w-3xl mx-auto text-center">
                   <Quote className="w-12 h-12 text-[#C9A227] mb-8 opacity-80" />
-                  <p className="text-xl md:text-2xl font-semibold italic mb-8 text-[#1E3A5F]/80 leading-relaxed">
+                  <p className="text-xl md:text-2xl font-medium italic mb-8 text-[#1E3A5F]/90 leading-relaxed">
                     "{testimonial.quote}"
                   </p>
                   <div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
+import { MobileStickyCTA } from "@/components/ui/MobileStickyCTA";
 import { ShortlistProvider } from "@/context/ShortlistContext";
 
 const inter = Inter({
@@ -35,6 +36,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <FloatingWhatsApp />
+          <MobileStickyCTA />
         </ShortlistProvider>
       </body>
     </html>

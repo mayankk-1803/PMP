@@ -1,30 +1,26 @@
 import React from "react";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { CorporateSolutions } from "@/components/sections/CorporateSolutions";
-import { WhyChooseUs } from "@/components/sections/WhyChooseUs";
-import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
-import { PremiumBrands } from "@/components/sections/PremiumBrands";
+import { TrustBar } from "@/components/sections/TrustBar";
+import { HowItWorks } from "@/components/sections/HowItWorks";
 import { FeaturedHampers } from "@/components/sections/FeaturedHampers";
+import { ProductMarquee } from "@/components/sections/ProductMarquee";
 import { IndustriesServed } from "@/components/sections/IndustriesServed";
-import { PackagingSolutions } from "@/components/sections/PackagingSolutions";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { BulkEnquiryForm } from "@/components/sections/BulkEnquiryForm";
 import { CtaSection } from "@/components/sections/CtaSection";
 
 export default function Home() {
   return (
-    <>
+    <div className="flex flex-col">
       <HeroSection />
       <CorporateSolutions />
-      <WhyChooseUs />
-      <GiftsByBudget />
-      <PremiumBrands />
+      <TrustBar />
+      <HowItWorks />
       <FeaturedHampers />
+      <ProductMarquee />
       <IndustriesServed />
-      <PackagingSolutions />
       <Testimonials />
-      <BulkEnquiryForm />
       <CtaSection />
-    </>
+    </div>
   );
 }

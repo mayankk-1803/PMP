@@ -2,27 +2,28 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { MessageSquareText, PackageOpen, CheckCircle, Truck } from "lucide-react";
 
 const STEPS = [
   {
-    num: "01",
-    title: "Select Product",
-    desc: "Browse our curated catalog and choose the perfect gifts for your target audience."
+    icon: <MessageSquareText className="w-8 h-8" />,
+    title: "1. Submit Enquiry",
+    desc: "Share your requirements, budget, and quantity with our gifting experts."
   },
   {
-    num: "02",
-    title: "Customize Branding",
-    desc: "Share your logo and brand guidelines. We'll render professional mockups for approval."
+    icon: <PackageOpen className="w-8 h-8" />,
+    title: "2. Get Samples",
+    desc: "Receive curated product options and physical samples for your review."
   },
   {
-    num: "03",
-    title: "Place Bulk Order",
-    desc: "Confirm your quantities and delivery locations. We handle the procurement and assembly."
+    icon: <CheckCircle className="w-8 h-8" />,
+    title: "3. Approve Design",
+    desc: "Finalize products and approve the digital mockup of your corporate branding."
   },
   {
-    num: "04",
-    title: "Delivery & Tracking",
-    desc: "Relax as we manage the logistics and deliver pan-India on your specified dates."
+    icon: <Truck className="w-8 h-8" />,
+    title: "4. Delivery",
+    desc: "We handle the procurement, packing, and seamless doorstep delivery."
   }
 ];
 
@@ -31,14 +32,11 @@ export function HowItWorks() {
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
-          <h2 className="text-4xl font-bold text-[#0B1D26] mb-4">How It Works</h2>
-          <p className="text-lg text-gray-500">A seamless process from selection to doorstep delivery.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1E3A5F] mb-4">How It Works</h2>
+          <p className="text-lg text-[#1E3A5F]/70 max-w-2xl mx-auto">A seamless, linear process designed to make bulk corporate gifting effortless from start to finish.</p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-12 relative">
-          {/* Connector Line */}
-          <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gray-100" />
-          
+        <div className="grid md:grid-cols-4 gap-6 group">
           {STEPS.map((step, idx) => (
             <motion.div
               key={idx}
@@ -46,13 +44,13 @@ export function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.15 }}
-              className="relative text-center"
+              className="relative text-center flex flex-col items-center bg-[#F8FAFC] p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 h-full"
             >
-              <div className="w-24 h-24 mx-auto bg-white border-2 border-[#0B1D26] rounded-full flex items-center justify-center text-3xl font-bold text-[#0B1D26] mb-6 relative z-10 shadow-[0_0_0_10px_white]">
-                {step.num}
+              <div className="w-16 h-16 bg-white shadow-sm rounded-xl flex items-center justify-center text-[#C9A227] mb-6 transition-transform hover:scale-105 duration-300 group-hover:text-[#1E3A5F]">
+                {step.icon}
               </div>
-              <h3 className="text-xl font-bold text-[#0B1D26] mb-3">{step.title}</h3>
-              <p className="text-gray-500 leading-relaxed">{step.desc}</p>
+              <h3 className="text-lg font-extrabold text-[#1E3A5F] mb-3">{step.title}</h3>
+              <p className="text-[#1E3A5F]/60 leading-relaxed text-sm flex-grow">{step.desc}</p>
             </motion.div>
           ))}
         </div>

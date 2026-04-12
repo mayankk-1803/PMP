@@ -3,6 +3,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "../ui/Button";
+import Link from "next/link";
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import { useShortlist } from "@/context/ShortlistContext";
 
 const HAMPERS = [
   {
@@ -15,55 +18,89 @@ const HAMPERS = [
     id: 2,
     title: "Premium Welcome Kit",
     price: "₹2,200",
-    image: "https://images.pexels.com/photos/3826676/pexels-photo-3826676.jpeg"
+    image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: 3,
     title: "Tech Associate Kit",
     price: "₹3,500",
-    image: "https://images.pexels.com/photos/34929075/pexels-photo-34929075.jpeg"
+    image: "https://5.imimg.com/data5/SELLER/Default/2023/4/297186863/QF/QA/EU/27887478/employee-welcome-kit-500x500.jpg"
   }
 ];
 
 export function FeaturedHampers() {
+  const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
+
   return (
-    <section className="py-24 bg-[#F1F5F9]">
+    <section className="py-24 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
-          <div>
-            <h2 className="text-4xl font-bold text-[#1E3A5F] mb-4">Featured Hampers</h2>
-            <p className="text-lg text-[#1E3A5F]/70">Explore our most popular ready-to-ship business curations.</p>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 text-center md:text-left">
+          <div className="max-w-2xl mx-auto md:mx-0">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1E3A5F] mb-4">Featured Curations</h2>
+            <p className="text-lg text-[#1E3A5F]/70">Explore our most popular ready-to-ship business curations crafted for impact.</p>
           </div>
-          <Button variant="outline" className="hidden md:inline-flex">View All Hampers</Button>
+          <Button variant="outline" className="hidden md:inline-flex border-[#1E3A5F]/20 text-[#1E3A5F] hover:bg-[#1E3A5F] hover:text-white transition-colors" asChild>
+            <Link href="/corporate-kits">View All Hampers</Link>
+          </Button>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {HAMPERS.map((product, idx) => (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.15 }}
-              key={product.id}
-              className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100"
-            >
-              <div className="relative h-72 overflow-hidden bg-[#F9FAFB]">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
-                  style={{ backgroundImage: `url(${product.image})` }}
-                />
-                <div className="absolute inset-0 bg-[#1E3A5F]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
-                  <Button variant="gold" className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 font-bold px-8">
-                    Request Quote
-                  </Button>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+          {HAMPERS.map((product, idx) => {
+            const inList = isInShortlist(product.title);
+            
+            return (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: idx * 0.15, duration: 0.5 }}
+                key={product.id}
+                className="flex flex-col group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 transform hover:-translate-y-1 h-full"
+              >
+                <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#F9FAFB]">
+                  <img 
+                    src={product.image}
+                    alt={product.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  {/* Save for Quote Button */}
+                  <button
+                    onClick={() => {
+                      if (inList) {
+                        removeFromShortlist(product.title);
+                      } else {
+                        addToShortlist({ title: product.title, price: product.price, imageUrl: product.image });
+                      }
+                    }}
+                    className={`absolute top-4 right-4 p-3 rounded-full shadow-lg backdrop-blur-md transition-all ${inList ? 'bg-[#C9A227] text-white hover:bg-[#be9823]' : 'bg-white/90 text-[#1E3A5F] hover:bg-white hover:text-[#C9A227]'}`}
+                    title={inList ? "Remove from Shortlist" : "Save for Quote"}
+                  >
+                    {inList ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
+                  </button>
                 </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">{product.title}</h3>
-                <p className="text-[#C9A227] font-bold text-lg">{product.price}</p>
-              </div>
-            </motion.div>
-          ))}
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">{product.title}</h3>
+                  <p className="text-[#C9A227] font-bold text-lg mb-6 flex-grow">{product.price}</p>
+                  
+                  <div className="flex flex-col gap-3 mt-auto">
+                    <Button 
+                      className="w-full py-6 font-bold shadow-sm" 
+                      variant="outline"
+                      onClick={() => {
+                        if (!inList) addToShortlist({ title: product.title, price: product.price, imageUrl: product.image });
+                      }}
+                    >
+                      {inList ? "Added to Quote List" : "Save for Quote"}
+                    </Button>
+                    <Button className="w-full bg-[#1E3A5F] hover:bg-[#152844] text-white py-6 shadow-md transition-all" asChild>
+                      <Link href={`/enquiry?product=${encodeURIComponent(product.title)}`}>Request Quote</Link>
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

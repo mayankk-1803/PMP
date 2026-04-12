@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 export function CtaSection() {
   return (
-    <section className="py-24 bg-[#F1F5F9]">
+    <section className="py-24 bg-gradient-to-br from-[#F8FAFC] via-[#EEF2F6] to-[#E2E8F0]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
