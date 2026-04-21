@@ -18,7 +18,7 @@ const KITS = [
   { title: "Electrician Service Kit", price: "Custom Quote", description: "Safety-focused kits with branded utility tools for electricians.", imageUrl: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop" },
   { title: "Pharma Representative Kit", price: "Custom Quote", description: "Professional bags and daily reporting tools for pharma field teams.", imageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop" },
   { title: "Retail Partner Kit", price: "Custom Quote", description: "In-store branding items and utility kits for retail outlet owners.", imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop" },
-  { title: "Sales Team Performance Kit", price: "Custom Quote", description: "Motivation kits with tech gadgets and high-end lifestyle items.", imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop" },
+  { title: "Sales Team Kit", price: "Custom Quote", description: "Motivation kits with tech gadgets and high-end lifestyle items for sales professionals.", imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop" },
 ];
 
 export default function CorporateKitsPage() {

@@ -7,13 +7,13 @@ import { ProductCard } from "@/components/ui/ProductCard";
 import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 
 const FESTIVE_HAMPERS = [
-  { title: "Grand Diwali Celebration Hamper", price: "Custom Quote", description: "Premium sweets, dry fruits, floating diyas, and silver coins for the festival of lights.", imageUrl: "https://images.pexels.com/photos/8819840/pexels-photo-8819840.jpeg" },
-  { title: "Vibrant Holi Colors & Sweets", price: "Custom Quote", description: "Organic gulal, gourmet gujiya, and festive thandai mix in a branded box.", imageUrl: "https://images.pexels.com/photos/7176252/pexels-photo-7176252.jpeg" },
-  { title: "Eid Mubarak Premium Kit", price: "Custom Quote", description: "Traditional dates, exotic nuts, and luxury prayer mats for Eid gifting.", imageUrl: "https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?q=80&w=800&auto=format&fit=crop" },
-  { title: "Women's Day Special Curation", price: "Custom Quote", description: "Self-care items, designer accessories, and inspirational journals for her.", imageUrl: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop" },
-  { title: "Classic Christmas Joy Box", price: "Custom Quote", description: "Plum cake, artisanal chocolates, and festive ornaments for the holiday season.", imageUrl: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=800&auto=format&fit=crop" },
-  { title: "New Year Executive Planner Kit", price: "Custom Quote", description: "Premium 2025 planner, desk calendar, and high-end tech accessories.", imageUrl: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=800&auto=format&fit=crop" },
-  { title: "Employee Welcome Hamper", price: "Custom Quote", description: "Branded office essentials and snacks to welcome new team members.", imageUrl: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop" },
+  { title: "Diwali Hampers", price: "Custom Quote", description: "Premium sweets, dry fruits, floating diyas, and silver coins for the festival of lights.", imageUrl: "https://images.pexels.com/photos/8819840/pexels-photo-8819840.jpeg" },
+  { title: "Holi Hampers", price: "Custom Quote", description: "Vibrant colors, gourmet gujiya, and festive thandai mix in a branded box.", imageUrl: "https://images.pexels.com/photos/7176252/pexels-photo-7176252.jpeg" },
+  { title: "Eid Kits", price: "Custom Quote", description: "Traditional dates, exotic nuts, and luxury prayer mats for Eid gifting.", imageUrl: "https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?q=80&w=800&auto=format&fit=crop" },
+  { title: "Women's Day Gifts", price: "Custom Quote", description: "Self-care items, designer accessories, and inspirational journals for her.", imageUrl: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop" },
+  { title: "Christmas Kits", price: "Custom Quote", description: "Plum cake, artisanal chocolates, and festive ornaments for the holiday season.", imageUrl: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=800&auto=format&fit=crop" },
+  { title: "New Year Gifts", price: "Custom Quote", description: "Premium 2025 planner, desk calendar, and high-end tech accessories.", imageUrl: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=800&auto=format&fit=crop" },
+  { title: "Employee Welcome Hampers", price: "Custom Quote", description: "Branded office essentials and snacks to welcome new team members.", imageUrl: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop" },
 ];
 
 const TAGS = ["Diwali", "Holi", "Eid", "Women's Day", "Christmas", "New Year", "Welcome Kits"];

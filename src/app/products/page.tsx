@@ -11,9 +11,15 @@ const CATEGORIES = [
     id: "promotional-gifts",
     title: "Promotional Gifts",
     items: [
-      { title: "Custom Metal Pens", price: "₹250", image: "https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=400&q=80" },
-      { title: "Branded T-Shirts", price: "₹450", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80" },
-      { title: "Logo Printed Mugs", price: "₹199", image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=400&q=80" },
+      { title: "Premium Branding Pens", price: "Custom Quote", image: "https://images.unsplash.com/photo-1585336261022-680e295ce3fe?q=80&w=800&auto=format&fit=crop" },
+      { title: "Corporate T-Shirts", price: "Custom Quote", image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800&auto=format&fit=crop" },
+      { title: "Custom Keychains", price: "Custom Quote", image: "https://images.unsplash.com/photo-1575880911432-843818617882?q=80&w=800&auto=format&fit=crop" },
+      { title: "Diaries & Notebooks", price: "Custom Quote", image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=800&auto=format&fit=crop" },
+      { title: "Branded Caps", price: "Custom Quote", image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=800&auto=format&fit=crop" },
+      { title: "Executive Paper Weights", price: "Custom Quote", image: "https://images.unsplash.com/photo-1594498653385-d5172c532c00?q=80&w=800&auto=format&fit=crop" },
+      { title: "Mouse Pads & Table Mats", price: "Custom Quote", image: "https://images.unsplash.com/photo-1616422285623-13ff0167c95c?q=80&w=800&auto=format&fit=crop" },
+      { title: "Table Top Items", price: "Custom Quote", image: "https://images.unsplash.com/photo-1516542076529-1ea3854896f2?q=80&w=800&auto=format&fit=crop" },
+      { title: "Backpacks & Bags", price: "Custom Quote", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800&auto=format&fit=crop" },
     ]
   },
   {
