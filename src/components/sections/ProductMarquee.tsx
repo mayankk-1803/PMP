@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "../ui/Button";
 
 const MARQUEE_PRODUCTS = [
@@ -15,27 +16,28 @@ const MARQUEE_PRODUCTS = [
 
 export function ProductMarquee() {
   return (
-    <section className="bg-white py-12 md:py-16 overflow-hidden">
-      <div className="max-w-[100vw] relative">
-        <div className="flex gap-6 md:gap-8 animate-marquee-slow w-max hover:pause hover:[animation-play-state:paused] items-center px-4">
+    <section className="bg-white py-12 md:py-16 overflow-hidden max-w-full">
+      <div className="relative overflow-hidden">
+        <div className="flex gap-6 md:gap-8 animate-marquee-slow w-max hover:[animation-play-state:paused] items-center px-4 group">
           {[...MARQUEE_PRODUCTS, ...MARQUEE_PRODUCTS].map((product, idx) => (
             <div
               key={`${product.id}-${idx}`}
-              className="flex bg-[#F8FAFC] rounded-[16px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow w-[280px] h-[100px]"
+              className="flex bg-gray-50 rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all w-[280px] h-[100px]"
             >
-              <div className="w-[100px] h-full flex-shrink-0 bg-white">
-                <img 
+              <div className="w-[100px] h-full flex-shrink-0 bg-gray-100 relative">
+                <Image 
                   src={product.img} 
                   alt={product.title} 
-                  loading="lazy"
-                  className="w-full h-full object-cover" 
+                  fill
+                  className="object-cover" 
+                  unoptimized
                 />
               </div>
               <div className="flex-1 p-3 flex flex-col justify-center">
-                <h4 className="font-bold text-[#1E3A5F] text-[13px] leading-tight mb-1 line-clamp-2">
+                <h4 className="font-bold text-red-600 text-[13px] leading-tight mb-1 line-clamp-2">
                   {product.title}
                 </h4>
-                <p className="text-[#C9A227] font-semibold text-xs mb-2">
+                <p className="text-gray-500 font-semibold text-xs mb-2">
                   {product.price}
                 </p>
                 <div className="mt-auto">
@@ -49,9 +51,19 @@ export function ProductMarquee() {
         </div>
         
         {/* Gradient Edge Fades */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10" />
       </div>
+
+      <style jsx global>{`
+        @keyframes marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee-slow {
+          animation: marquee 40s linear infinite;
+        }
+      `}</style>
     </section>
   );
 }

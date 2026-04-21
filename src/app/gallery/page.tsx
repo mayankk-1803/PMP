@@ -13,8 +13,8 @@ const IMAGES = [
 
 export default function GalleryPage() {
   return (
-    <div className="pt-24 pb-20 bg-[#F9FAFB]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-24 pb-20 bg-white overflow-hidden max-w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <SectionHeading 
           title="Past Projects" 
           subtitle="Take a look at some of the premium bespoke kits and packaging we've crafted." 
@@ -30,14 +30,14 @@ export default function GalleryPage() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
-              className={`relative overflow-hidden group rounded-2xl shadow-sm border border-gray-100 ${i === 0 || i === 4 ? "md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto" : "aspect-square"}`}
+              className={`relative overflow-hidden group rounded-2xl shadow-sm border border-gray-200 ${i === 0 || i === 4 ? "md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto" : "aspect-square"}`}
             >
               <img 
                 src={src} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 alt={`Gallery image ${i+1}`}
               />
-              <div className="absolute inset-0 bg-[#1E3A5F]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gray-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <span className="text-white font-bold tracking-widest uppercase border border-white px-8 py-3 backdrop-blur-sm rounded-xl">View Details</span>
               </div>
             </motion.div>

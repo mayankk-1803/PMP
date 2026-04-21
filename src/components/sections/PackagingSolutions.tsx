@@ -2,64 +2,87 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { PackageOpen, Printer, Grid3X3, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { Package, Shield, Layers, PenTool } from "lucide-react";
 import { Button } from "../ui/Button";
 
-const FEATURES = [
-  { icon: <PackageOpen className="w-6 h-6"/>, title: "Premium Rigid Boxes" },
-  { icon: <Grid3X3 className="w-6 h-6"/>, title: "Corrugated Packaging" },
-  { icon: <Printer className="w-6 h-6"/>, title: "Custom Screen & UV Printing" },
+const PACKAGING_TYPES = [
+  {
+    title: "Mono Cartons",
+    description: "Premium single-layer cartons for retail-ready product packaging with high-quality printing.",
+    icon: <Layers className="w-6 h-6" />,
+    img: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    title: "Rigid Boxes",
+    description: "Luxury handcrafted boxes for premium gifting, electronics, and high-end brand presentation.",
+    icon: <Package className="w-6 h-6" />,
+    img: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    title: "Corrugated Boxes",
+    description: "Heavy-duty shipping and storage solutions designed for durability and brand visibility.",
+    icon: <Shield className="w-6 h-6" />,
+    img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80"
+  }
 ];
 
 export function PackagingSolutions() {
   return (
-    <section className="py-24 bg-[#F1F5F9] overflow-hidden">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="order-2 lg:order-1 relative h-[500px] rounded-3xl overflow-hidden shadow-2xl"
-          >
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://www.fedex.com/content/dam/fedex/us-united-states/FedEx-Office/images/2020/Q4/woman-packing-shipment-with-note.jpg')" }} />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A5F]/80 to-transparent" />
-            <div className="absolute bottom-8 left-8 right-8 text-white">
-              <div className="bg-[#C9A227] text-[#1E3A5F] w-fit px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-4 shadow-xl">
-                Our Differentiator
-              </div>
-              <h3 className="text-3xl font-bold">Unboxing Experiences that Matter.</h3>
-            </div>
-          </motion.div>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+          <div className="max-w-2xl">
+            <span className="text-gray-500 text-xs font-bold tracking-widest uppercase mb-3 block">In-House Manufacturing</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-red-600 mb-4">Custom Packaging Solutions</h2>
+            <p className="text-lg text-gray-600">We manufacture premium packaging that protects your products while elevating your brand identity.</p>
+          </div>
+          <Button variant="outline" className="hidden md:flex rounded-lg border-gray-200" asChild>
+            <Link href="/packaging-solutions">View All Solutions</Link>
+          </Button>
+        </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="order-1 lg:order-2"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#1E3A5F] mb-6">Bespoke Packaging Solutions</h2>
-            <p className="text-lg text-[#1E3A5F]/70 mb-10 leading-relaxed font-medium">
-              We don't just supply products; we manufacture the packaging. From luxury rigid boxes to sturdy corrugated shippers with premium branding, we own the entire supply chain to guarantee perfection.
-            </p>
-            
-            <div className="space-y-6 mb-10">
-              {FEATURES.map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                  <div className="bg-[#1E3A5F]/5 p-3 rounded-lg text-[#1E3A5F]">
-                    {feature.icon}
-                  </div>
-                  <span className="font-bold text-[#1E3A5F] text-lg">{feature.title}</span>
+        <div className="grid md:grid-cols-3 gap-8">
+          {PACKAGING_TYPES.map((type, idx) => (
+            <motion.div
+              key={type.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="group flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all overflow-hidden"
+            >
+              <div className="relative h-48 overflow-hidden bg-gray-50">
+                <Image 
+                  src={type.img} 
+                  alt={type.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  unoptimized
+                />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-2 rounded-lg text-gray-900 shadow-sm">
+                  {type.icon}
                 </div>
-              ))}
-            </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-bold text-red-600 mb-2 transition-colors">{type.title}</h3>
+                <p className="text-sm text-gray-600 mb-6 leading-relaxed">{type.description}</p>
+                <Link 
+                  href="/enquiry?source=packaging" 
+                  className="inline-flex items-center text-xs font-bold text-red-600 hover:underline uppercase tracking-wider"
+                >
+                  Request Sample
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
-            <Button variant="default" size="lg">Explore Packaging Solutions</Button>
-          </motion.div>
-
+        <div className="mt-10 md:hidden">
+          <Button variant="outline" className="w-full rounded-lg border-gray-200" asChild>
+            <Link href="/packaging-solutions">View All Solutions</Link>
+          </Button>
         </div>
       </div>
     </section>

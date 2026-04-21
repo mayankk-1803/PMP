@@ -30,11 +30,11 @@ const INDUSTRIES = [
 
 export function IndustriesServed() {
   return (
-    <section className="py-24 bg-[#F9FAFB]">
+    <section className="py-24 bg-gray-50 border-y border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold text-[#1E3A5F] mb-4">Industries We Serve</h2>
-          <p className="text-lg text-[#1E3A5F]/70">Specialized curations crafted around the specific use-cases of your sector.</p>
+          <h2 className="text-4xl font-bold text-red-600 mb-4">Industries We Serve</h2>
+          <p className="text-lg text-gray-600">Specialized curations crafted around the specific use-cases of your sector.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -45,15 +45,15 @@ export function IndustriesServed() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center cursor-pointer group hover:border-[#C9A227]/30 transition-all"
+              className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center text-center cursor-pointer group hover:border-gray-300 hover:shadow-md transition-all"
             >
-              <div className="bg-[#1E3A5F]/5 w-20 h-20 rounded-full flex items-center justify-center text-[#1E3A5F] mb-6 group-hover:bg-[#1E3A5F] group-hover:text-white transition-colors">
+              <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center text-gray-900 mb-6 transition-colors">
                 {industry.icon}
               </div>
-              <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">{industry.name}</h3>
-              <p className="text-[#1E3A5F]/60 font-medium mb-6">{industry.desc}</p>
+              <h3 className="text-xl font-bold text-red-600 mb-2">{industry.name}</h3>
+              <p className="text-gray-500 font-medium mb-6">{industry.desc}</p>
               
-              <Link href="/industry-solutions" className="mt-auto text-[#C9A227] font-semibold text-sm flex items-center opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
+              <Link href="/industry-solutions" className="mt-auto text-gray-900 font-semibold text-sm flex items-center opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
                 View Solutions <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </motion.div>

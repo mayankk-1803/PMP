@@ -1,96 +1,78 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "../ui/Button";
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Wallet, PiggyBank, Briefcase, Gem, Sparkles } from "lucide-react";
 
-const BUDGET_TIERS = ["₹0–₹250", "₹250–₹500", "₹500–₹1000", "₹1000–₹2500", "₹2500+"];
-
-const BUDGET_PRODUCTS = [
-  { id: 1, tier: "₹0–₹250", name: "Custom Ceramic Mug", price: "₹199", img: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=400&q=80" },
-  { id: 2, tier: "₹0–₹250", name: "Metal Pen with Case", price: "₹249", img: "https://images.unsplash.com/photo-1585336261022-680e295ce3fe?auto=format&fit=crop&w=400&q=80" },
-  
-  { id: 3, tier: "₹500–₹1000", name: "Premium Sipper & Diary", price: "₹850", img: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=400&q=80" },
-  { id: 4, tier: "₹500–₹1000", name: "Desk Organizer Clock", price: "₹750", img: "https://images.unsplash.com/photo-1594498653385-d5172c532c00?auto=format&fit=crop&w=400&q=80" },
-  
-  { id: 5, tier: "₹1000–₹2500", name: "Executive Welcome Kit", price: "₹1,800", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=400&q=80" },
-  { id: 6, tier: "₹1000–₹2500", name: "Bluetooth Speaker Box", price: "₹2,100", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=400&q=80" },
-  
-  { id: 7, tier: "₹2500+", name: "Luxury Leadership Hamper", price: "₹4,500", img: "https://images.pexels.com/photos/34929075/pexels-photo-34929075.jpeg" },
+const BUDGETS = [
+  {
+    range: "Under ₹250",
+    label: "Pocket Friendly",
+    icon: <Wallet className="w-6 h-6" />,
+    color: "bg-gray-50",
+    textColor: "text-gray-900"
+  },
+  {
+    range: "₹250 - ₹500",
+    label: "Value Gifting",
+    icon: <PiggyBank className="w-6 h-6" />,
+    color: "bg-gray-50",
+    textColor: "text-gray-900"
+  },
+  {
+    range: "₹500 - ₹1000",
+    label: "Mid-Range",
+    icon: <Briefcase className="w-6 h-6" />,
+    color: "bg-gray-50",
+    textColor: "text-gray-900"
+  },
+  {
+    range: "₹1000 - ₹2500",
+    label: "Executive Gifts",
+    icon: <Gem className="w-6 h-6" />,
+    color: "bg-gray-50",
+    textColor: "text-gray-900"
+  },
+  {
+    range: "₹2500+",
+    label: "Premium Luxury",
+    icon: <Sparkles className="w-6 h-6" />,
+    color: "bg-gray-50",
+    textColor: "text-gray-900"
+  }
 ];
 
 export function GiftsByBudget() {
-  const [mounted, setMounted] = useState(false);
-  const [activeTier, setActiveTier] = useState("₹1000–₹2500");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const filteredProducts = BUDGET_PRODUCTS.filter(p => p.tier === activeTier);
-
-  if (!mounted) return null;
-
   return (
-    <section className="py-24 bg-white border-y border-[#F1F5F9]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="text-4xl font-bold text-[#1E3A5F] mb-4">Gifts by Budget</h2>
-          <p className="text-lg text-[#1E3A5F]/70 mb-10">Find the perfect corporate gift combinations that align with your requirements.</p>
-          
-          {/* Filter UI */}
-          <div className="inline-flex flex-wrap justify-center bg-[#F9FAFB] p-1.5 rounded-2xl border border-gray-100 shadow-sm gap-1">
-            {BUDGET_TIERS.map((tier) => (
-              <button
-                key={tier}
-                type="button"
-                onClick={() => setActiveTier(tier)}
-                className={`px-5 py-3 text-sm md:text-base font-semibold rounded-xl transition-all ${
-                  activeTier === tier 
-                    ? "bg-[#1E3A5F] text-white shadow-md transform scale-105" 
-                    : "text-[#1E3A5F]/70 hover:text-[#1E3A5F] hover:bg-[#F1F5F9]"
-                }`}
-              >
-                {tier}
-              </button>
-            ))}
-          </div>
+    <section className="py-24 bg-white overflow-hidden max-w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-red-600 mb-4">Gifts by Budget</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">Explore our curated collections designed to fit every corporate gifting requirement and budget.</p>
         </div>
 
-        <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center max-w-4xl mx-auto min-h-[350px]">
-          <AnimatePresence mode="popLayout">
-            {filteredProducts.length > 0 ? filteredProducts.map((product) => (
-              <motion.div
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                key={product.id}
-                className="group bg-[#F9FAFB] rounded-2xl overflow-hidden border border-gray-100 hover:border-[#1E3A5F]/20 hover:shadow-lg transition-all"
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {BUDGETS.map((budget, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+            >
+              <Link 
+                href={`/gifts-by-budget?range=${encodeURIComponent(budget.range)}`}
+                className="group flex flex-col items-center text-center p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-gray-200 transition-all h-full"
               >
-                <div className="relative h-48 overflow-hidden bg-white">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
-                    style={{ backgroundImage: `url(${product.img})` }}
-                  />
+                <div className="w-16 h-16 rounded-xl bg-gray-50 flex items-center justify-center text-gray-900 mb-6 group-hover:scale-110 transition-transform duration-300">
+                  {budget.icon}
                 </div>
-                <div className="p-5 text-center">
-                  <h3 className="text-lg font-bold text-[#1E3A5F] mb-2">{product.name}</h3>
-                  <p className="text-[#C9A227] font-semibold text-lg">{product.price}</p>
-                </div>
-              </motion.div>
-            )) : (
-              <div className="col-span-full flex items-center justify-center text-gray-400 font-medium py-12">
-                Products updating for this tier soon...
-              </div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg">View All Products</Button>
+                <h3 className="font-bold text-red-600 mb-2">{budget.range}</h3>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{budget.label}</p>
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

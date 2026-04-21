@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import { Button } from "./Button";
 import { cn } from "@/lib/utils";
 import { Bookmark } from "lucide-react";
@@ -23,35 +23,6 @@ export function ProductCard({ title, description, imageUrl, price, className, in
   
   const isSelected = isInShortlist(title);
 
-  // --- 3D TILT LOGIC ---
-  const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0.5);
-  const y = useMotionValue(0.5);
-
-  const mouseXSpring = useSpring(x, { stiffness: 400, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 400, damping: 30 });
-
-  // Rotate between -5deg and 5deg
-  const rotateX = useTransform(mouseYSpring, [0, 1], [5, -5]);
-  const rotateY = useTransform(mouseXSpring, [0, 1], [-5, 5]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    x.set(mouseX / width);
-    y.set(mouseY / height);
-  };
-
-  const handleMouseLeave = () => {
-    // Reset gracefully to center
-    x.set(0.5);
-    y.set(0.5);
-  };
-
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isSelected) {
@@ -68,63 +39,61 @@ export function ProductCard({ title, description, imageUrl, price, className, in
 
   return (
     <motion.div 
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
+      viewport={{ once: true, margin: "-20px" }}
       transition={{ 
-        duration: 0.6, 
+        duration: 0.5, 
         ease: "easeOut",
-        delay: index * 0.1 // Apply subtle stagger on entry based on mapping index
+        delay: index * 0.05
       }}
-      style={{
-        rotateX,
-        rotateY,
-        perspective: 1200 // Defines rendering depth for 3D elements
-      }}
-      whileHover={{ y: -8, scale: 1.03 }}
+      whileHover={{ y: -4 }}
       className={cn(
-        "group flex flex-col h-full relative overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100 transition-colors hover:border-[#1E3A5F]/10 hover:shadow-xl", 
+        "group flex flex-col h-full relative overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100 transition-all hover:shadow-md hover:border-gray-200", 
         className
       )}
     >
-      <div className="relative w-full h-[240px] overflow-hidden bg-[#F9FAFB] flex-shrink-0">
+      <div className="relative w-full h-[240px] overflow-hidden bg-gray-50 flex-shrink-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <motion.img 
           src={imageUrl} 
           alt={title}
-          whileHover={{ scale: 1.08 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0 h-full w-full object-cover"
         />
         
-        <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2">
+        <div className="absolute top-3 right-3 z-10">
           <button
             onClick={handleToggleShortlist}
-            className="p-3 rounded-full bg-white/95 backdrop-blur shadow-sm hover:scale-110 transition-transform flex items-center justify-center focus:outline-none"
+            className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-all focus:outline-none"
             aria-label="Save for quote"
-            title={isSelected ? "Remove from shortlist" : "Save for Quote"}
           >
-            <Bookmark className={cn("w-5 h-5 transition-colors", isSelected ? "fill-[#C9A227] text-[#C9A227]" : "text-[#1E3A5F] hover:text-[#C9A227]")} />
+            <Bookmark className={cn("w-4 h-4 transition-colors", isSelected ? "fill-red-600 text-red-600" : "text-gray-400 hover:text-gray-900")} />
           </button>
         </div>
       </div>
       
-      <div className="p-6 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">{title}</h3>
-        {description && <p className="text-[#1E3A5F]/70 text-sm mb-6 leading-relaxed font-medium line-clamp-3">{description}</p>}
+      <div className="p-5 flex flex-col flex-grow">
+        <div className="mb-3">
+          <h3 className="text-[17px] font-bold text-red-600 leading-tight line-clamp-2 transition-colors">{title}</h3>
+        </div>
         
-        {/* mt-auto pushes this footer perfectly to the bottom regardless of description height */}
-        <div className="mt-auto pt-5 border-t border-gray-100 flex items-center justify-between w-full">
-          {price && <span className="font-bold text-[#C9A227] text-lg">{price}</span>}
+        {description && <p className="text-gray-500 text-[13px] mb-6 line-clamp-2 leading-relaxed">{description}</p>}
+        
+        <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+          {price ? (
+            <span className="font-bold text-gray-800 text-sm">{price}</span>
+          ) : (
+            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Contact for Price</span>
+          )}
           <Button 
-            variant="default" 
+            variant="outline" 
             size="sm" 
             onClick={handleRequestQuote}
-            className={cn("px-6 py-4 rounded-xl font-semibold shadow-sm text-sm tracking-wide", !price && "w-full ml-auto justify-center")}
+            className="text-[12px] h-8 px-3"
           >
-            Request Quote
+            Get Quote
           </Button>
         </div>
       </div>

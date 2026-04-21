@@ -35,17 +35,17 @@ export function TrustBar() {
               transition={{ delay: idx * 0.1 }}
               className="flex flex-col items-center justify-center text-center space-y-2"
             >
-              <h3 className="text-4xl md:text-5xl font-extrabold text-[#1E3A5F]">{metric.value}</h3>
-              <p className="text-sm md:text-base text-[#1E3A5F]/70 font-semibold uppercase tracking-wider">{metric.label}</p>
+              <h3 className="text-4xl md:text-5xl font-extrabold text-red-600">{metric.value}</h3>
+              <p className="text-sm md:text-base text-gray-600 font-semibold uppercase tracking-wider">{metric.label}</p>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center w-full relative">
-          <p className="text-sm font-semibold tracking-widest uppercase text-[#1E3A5F]/40 mb-8">Trusted by industry leaders</p>
+          <p className="text-sm font-semibold tracking-widest uppercase text-gray-400 mb-8">Trusted by industry leaders</p>
           
           <div className="relative overflow-hidden w-full max-w-[100vw]">
-            <div className="flex gap-16 md:gap-24 animate-marquee w-max items-center">
+            <div className="flex gap-16 md:gap-24 animate-marquee w-max items-center hover:[animation-play-state:paused] group">
               {[...LOGOS, ...LOGOS].map((logo, i) => (
                 <img
                   key={i}

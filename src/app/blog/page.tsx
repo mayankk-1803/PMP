@@ -43,10 +43,10 @@ const FADE_UP: Variants = {
 
 export default function BlogPage() {
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-[#F9FAFB]">
+    <div className="pt-32 pb-24 relative min-h-screen bg-white overflow-hidden max-w-full">
       <BackgroundGradient />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         <SectionHeading 
           title="Insights & Trends" 
           subtitle="Stay updated with the latest in corporate gifting, branding, and employee engagement." 

@@ -9,9 +9,10 @@ import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 
 const LINKS = [
+  { href: "/products", label: "Products" },
   { href: "/corporate-kits", label: "Corporate Kits" },
   { href: "/festive-gifting", label: "Festive Gifting" },
-  { href: "/promotional-merchandise", label: "Merchandise" },
+  { href: "/packaging-solutions", label: "Packaging" },
   { href: "/about", label: "Company" },
 ];
 
@@ -55,18 +56,18 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 w-full z-40 transition-all duration-300 ${
           scrolled 
-            ? "bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm py-0" 
-            : "bg-transparent py-2"
+            ? "bg-white border-b border-gray-100 shadow-sm" 
+            : "bg-white/90 backdrop-blur-md"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-16 md:h-18">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="bg-[#1E3A5F] p-2.5 rounded-xl group-hover:bg-[#11233A] transition-colors shadow-sm">
-                  <Gift className="h-5 w-5 text-[#C9A227]" />
+              <Link href="/" className="flex items-center gap-2 group">
+                <div className="bg-gray-900 p-1.5 rounded-lg transition-colors shadow-sm">
+                  <Gift className="h-4.5 w-4.5 text-white" />
                 </div>
-                <span className="font-bold text-xl tracking-wide text-[#1E3A5F] hidden sm:block">
+                <span className="font-bold text-lg tracking-tight text-red-600">
                   PACMYPRODUCT
                 </span>
               </Link>
@@ -77,49 +78,47 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-[#1E3A5F]/80 hover:text-[#1E3A5F] hover:bg-gray-50 px-5 py-2.5 rounded-full text-[15px] font-semibold transition-all"
+                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-[14px] font-medium transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
             </div>
 
-            <div className="hidden lg:flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-4">
               <button 
                 onClick={() => setIsDrawerOpen(true)}
-                className="relative p-2 text-[#1E3A5F] hover:text-[#C9A227] transition-colors focus:outline-none flex items-center justify-center group"
+                className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors focus:outline-none flex items-center justify-center group"
                 aria-label="View Shortlist"
               >
-                <Bookmark className="w-6 h-6" />
+                <Bookmark className="w-5 h-5" />
                 {items.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#C9A227] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm border-2 border-white transform group-hover:scale-110 transition-transform">
+                  <span className="absolute top-1 right-1 bg-gray-900 text-white text-[9px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-sm border border-white">
                     {items.length}
                   </span>
                 )}
               </button>
               
-              <Button variant="gold" className="rounded-full px-8 font-bold" asChild>
+              <Button variant="default" className="rounded-lg px-5 py-2 h-10 text-sm" asChild>
                 <Link href="/enquiry">Bulk Enquiry</Link>
               </Button>
             </div>
 
-            <div className="flex items-center lg:hidden gap-4">
+            <div className="lg:hidden flex items-center gap-4">
               <button 
                 onClick={() => setIsDrawerOpen(true)}
-                className="relative p-2 text-[#1E3A5F] hover:text-[#C9A227] transition-colors focus:outline-none"
+                className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
               >
-                <Bookmark className="w-6 h-6" />
+                <Bookmark className="w-5 h-5" />
                 {items.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#C9A227] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm border border-white">
+                  <span className="absolute top-0 right-0 bg-gray-900 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm border border-white">
                     {items.length}
                   </span>
                 )}
               </button>
-
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-[#1E3A5F] hover:bg-gray-100 p-2 rounded-md focus:outline-none transition-colors"
-                aria-label="Mobile Menu"
+                className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 focus:outline-none transition-colors"
               >
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -127,29 +126,31 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div 
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-white border-b border-gray-100 absolute w-full left-0 z-40 overflow-hidden shadow-xl"
+              className="lg:hidden bg-white border-b border-gray-100 overflow-hidden"
             >
-              <div className="px-4 pt-2 pb-6 space-y-2 sm:px-6">
+              <div className="px-4 pt-2 pb-6 space-y-1">
                 {LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="block px-4 py-3 rounded-xl text-base font-semibold text-[#1E3A5F] hover:bg-gray-50"
                     onClick={() => setIsOpen(false)}
+                    className="block px-3 py-4 text-base font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all"
                   >
                     {link.label}
                   </Link>
                 ))}
-                <div className="pt-6 pb-2">
-                  <Button variant="gold" className="w-full justify-center rounded-xl py-6 text-lg font-bold" asChild>
-                    <Link href="/enquiry" onClick={() => setIsOpen(false)}>Bulk Enquiry</Link>
+                <div className="pt-4 px-3">
+                  <Button className="w-full bg-red-600 hover:bg-red-700 text-white py-6 rounded-xl text-base shadow-lg shadow-red-100" asChild>
+                    <Link href="/enquiry" onClick={() => setIsOpen(false)}>
+                      Get a Quote
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -158,7 +159,7 @@ export function Navbar() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* Shortlist Sidebar Drawer */}
+      {/* Shortlist Drawer */}
       <AnimatePresence>
         {isDrawerOpen && (
           <>
@@ -166,79 +167,87 @@ export function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-[#1E3A5F]/40 backdrop-blur-sm z-50"
               onClick={() => setIsDrawerOpen(false)}
+              className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50"
             />
-            
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 w-full max-w-sm h-full bg-white z-50 shadow-2xl flex flex-col border-l border-gray-100"
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
             >
-              <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-[#F9FAFB]">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white">
                 <div className="flex items-center gap-3">
-                  <Bookmark className="w-5 h-5 text-[#C9A227]" />
-                  <h2 className="text-xl font-bold text-[#1E3A5F]">Your Shortlist</h2>
+                  <div className="bg-gray-900 p-2 rounded-lg">
+                    <Bookmark className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-red-600">Your Shortlist</h2>
+                    <p className="text-xs text-gray-400 font-medium">{items.length} items saved</p>
+                  </div>
                 </div>
                 <button 
                   onClick={() => setIsDrawerOpen(false)}
-                  className="p-2 text-gray-400 hover:text-[#1E3A5F] hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-900"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+              <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 {items.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full text-center opacity-70">
-                    <Bookmark className="w-16 h-16 text-gray-200 mb-4" />
-                    <p className="text-[#1E3A5F] font-bold text-lg mb-2">Your list is empty</p>
-                    <p className="text-sm text-[#1E3A5F]/70">Save products by clicking the bookmark icon to easily request a bulk quote.</p>
+                  <div className="h-full flex flex-col items-center justify-center text-center p-8">
+                    <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                      <Bookmark className="w-10 h-10 text-gray-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-red-600 mb-2">Shortlist is empty</h3>
+                    <p className="text-gray-500 text-sm max-w-[200px] mx-auto leading-relaxed">
+                      Add products you like to request a bulk quote.
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      className="mt-8 border-gray-200" 
+                      onClick={() => setIsDrawerOpen(false)}
+                    >
+                      Browse Products
+                    </Button>
                   </div>
                 ) : (
                   items.map((item) => (
-                    <motion.div 
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      key={item.title} 
-                      className="flex gap-4 p-3 rounded-2xl border border-gray-100 bg-white shadow-sm hover:border-gray-200 transition-colors"
-                    >
-                      <div className="w-20 h-20 bg-gray-50 rounded-xl overflow-hidden flex-shrink-0">
+                    <div key={item.title} className="flex gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 group hover:border-gray-200 transition-all">
+                      <div className="w-20 h-20 rounded-xl overflow-hidden bg-white border border-gray-100 flex-shrink-0 relative">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
                       </div>
-                      <div className="flex-1 flex flex-col justify-center">
-                        <h4 className="font-bold text-sm text-[#1E3A5F] line-clamp-2 leading-tight mb-1">{item.title}</h4>
-                        {item.price && <p className="text-xs font-semibold text-[#C9A227]">{item.price}</p>}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-red-600 text-sm mb-1 truncate">{item.title}</h4>
+                        <p className="text-xs text-gray-500 mb-3">{item.price || "Contact for price"}</p>
+                        <button 
+                          onClick={() => removeFromShortlist(item.title)}
+                          className="text-xs font-bold text-gray-400 hover:text-red-600 flex items-center gap-1.5 transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          Remove
+                        </button>
                       </div>
-                      <button 
-                        onClick={() => removeFromShortlist(item.title)}
-                        className="self-center p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
-                        title="Remove item"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </motion.div>
+                    </div>
                   ))
                 )}
               </div>
 
               {items.length > 0 && (
-                <div className="p-6 border-t border-gray-100 bg-[#F9FAFB]">
-                  <p className="text-xs text-[#1E3A5F]/70 mb-4 font-medium text-center">
-                    You have {items.length} item{items.length !== 1 ? 's' : ''} in your shortlist.
-                  </p>
+                <div className="p-6 bg-white border-t border-gray-100 space-y-3">
                   <Button 
-                    onClick={handleBulkQuote} 
-                    className="w-full py-6 rounded-xl font-bold flex items-center justify-center gap-2 group"
+                    className="w-full bg-red-600 hover:bg-red-700 text-white py-7 rounded-xl text-base shadow-xl shadow-red-100 flex items-center justify-center gap-2 group"
+                    onClick={handleBulkQuote}
                   >
                     Request Bulk Quote
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
+                  <p className="text-center text-[11px] text-gray-400 font-medium">
+                    Our team typically responds within 2-4 business hours.
+                  </p>
                 </div>
               )}
             </motion.div>

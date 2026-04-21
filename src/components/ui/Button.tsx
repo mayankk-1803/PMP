@@ -4,21 +4,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-[15px] font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E3A5F] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-[15px] font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#dc2626] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-[#1E3A5F] text-white hover:bg-[#1E3A5F]/90 shadow-[0_4px_14px_0_rgba(30,58,95,0.39)] hover:shadow-[0_6px_20px_rgba(30,58,95,0.23)] hover:-translate-y-[1px]",
-        outline: "border-2 border-[#1E3A5F] text-[#1E3A5F] hover:bg-[#1E3A5F]/5",
-        ghost: "hover:bg-[#F1F5F9] text-[#1E3A5F]",
-        gold: "bg-[#C9A227] text-white hover:bg-[#be9823] shadow-[0_4px_14px_0_rgba(201,162,39,0.39)] hover:shadow-[0_6px_20px_rgba(201,162,39,0.23)] hover:-translate-y-[1px]",
-        link: "text-[#1E3A5F] underline-offset-4 hover:underline",
+        default: "bg-red-600 text-white hover:bg-red-700 shadow-sm",
+        outline: "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50",
+        ghost: "hover:bg-gray-100 text-gray-700",
+        gold: "bg-red-600 text-white hover:bg-red-700 shadow-sm",
+        link: "text-red-600 underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-12 px-6 py-2",
-        sm: "h-10 rounded-md px-4",
-        lg: "h-14 rounded-xl px-8 text-base",
-        icon: "h-12 w-12",
+        default: "h-11 px-6 py-2",
+        sm: "h-9 rounded-md px-4 text-sm",
+        lg: "h-12 rounded-lg px-8 text-base",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {

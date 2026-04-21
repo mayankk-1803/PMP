@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { motion, HTMLMotionProps } from "framer-motion";
+import { motion } from "framer-motion";
 
-interface SectionHeadingProps extends HTMLMotionProps<"div"> {
-  title: string;
-  subtitle?: string;
+interface SectionHeadingProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+  title: ReactNode;
+  subtitle?: ReactNode;
   centered?: boolean;
 }
 
@@ -24,26 +24,26 @@ export function SectionHeading({
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={cn("mb-16", centered && "text-center", className)}
-      {...props}
+      {...(props as any)}
     >
 
-      <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#1E3A5F]">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-red-600">
         {title}
       </h2>
 
       <div
         className={cn(
-          "mt-6 h-[3px] rounded-full bg-[#C9A227]",
+          "mt-4 h-1 rounded-full bg-red-600",
           centered
-            ? "mx-auto w-20 md:w-24"
-            : "w-16 md:w-20"
+            ? "mx-auto w-12"
+            : "w-12"
         )}
       />
 
       {subtitle && (
         <p
           className={cn(
-            "text-[#1E3A5F]/70 text-lg md:text-xl mt-6 font-medium leading-relaxed",
+            "text-gray-500 text-base md:text-lg mt-5 leading-relaxed",
             centered && "mx-auto max-w-2xl"
           )}
         >

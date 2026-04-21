@@ -1,71 +1,60 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
 
-const BUDGET_TIERS = ["All", "₹0 - ₹250", "₹250 - ₹500", "₹500 - ₹1000", "₹1000 - ₹2500", "₹2500+"];
-
-const MOCK_PRODUCTS = [
-  { tier: "₹0 - ₹250", title: "Branded Keychain", price: "₹150", imageUrl: "https://images.unsplash.com/photo-1599839619722-39751411ea63?q=80&w=800&auto=format&fit=crop" },
-  { tier: "₹250 - ₹500", title: "Copper Bottle", price: "₹450", imageUrl: "https://tse2.mm.bing.net/th/id/OIP.HynmQ6keY6xYF-GiowS9DAHaHa?pid=Api&h=220&P=0" },
-  { tier: "₹500 - ₹1000", title: "Journal & Pen Set", price: "₹800", imageUrl: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=800&auto=format&fit=crop" },
-  { tier: "₹1000 - ₹2500", title: "Tech Organizer", price: "₹1800", imageUrl: "https://tse4.mm.bing.net/th/id/OIP.k_Pte09bpvs0sjamLxcKiwHaEo?pid=Api&h=220&P=0" },
-  { tier: "₹2500+", title: "Executive Trolley Bag", price: "₹4500", imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800&auto=format&fit=crop" },
-  { tier: "₹2500+", title: "Premium Watch Set", price: "₹6000", imageUrl: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=800&auto=format&fit=crop" },
+const BUDGET_PRODUCTS = [
+  { title: "Custom Ceramic Mug", price: "Under ₹250", description: "Durable and premium branding ceramic mugs for employee gifting.", imageUrl: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=800&q=80" },
+  { title: "Executive Diary", price: "₹250 - ₹500", description: "Leatherette hardbound diaries with custom logo embossing.", imageUrl: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=800&q=80" },
+  { title: "Tech Organizer Case", price: "₹500 - ₹1000", description: "High-quality travel tech organizer for cables, chargers, and powerbanks.", imageUrl: "https://tse4.mm.bing.net/th/id/OIP.k_Pte09bpvs0sjamLxcKiwHaEo?pid=Api&h=220&P=0" },
+  { title: "Premium Welcome Kit", price: "₹1000 - ₹2500", description: "A curated kit for new hires including a bottle, diary, pen, and keychains.", imageUrl: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=800&q=80" },
+  { title: "Luxury Wellness Hamper", price: "₹2500+", description: "An exclusive collection of gourmet treats, essential oils, and luxury candles.", imageUrl: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" },
 ];
 
-export default function GiftsByBudgetPage() {
-  const [activeTier, setActiveTier] = useState("All");
+function GiftsByBudgetContent() {
+  const searchParams = useSearchParams();
+  const selectedRange = searchParams.get("range");
 
-  const filtered = activeTier === "All" 
-    ? MOCK_PRODUCTS 
-    : MOCK_PRODUCTS.filter(p => p.tier === activeTier);
+  const filteredProducts = selectedRange 
+    ? BUDGET_PRODUCTS.filter(p => p.price === selectedRange)
+    : BUDGET_PRODUCTS;
 
   return (
-    <div className="pt-24 pb-20 bg-[#F9FAFB] min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading 
-          title="Browse by Budget" 
-          subtitle="Find the perfect gifting solutions that align with your company's financial planning." 
-          centered 
-          className="mb-12"
-        />
-
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
-          {BUDGET_TIERS.map(tier => (
-            <button
-              key={tier}
-              onClick={() => setActiveTier(tier)}
-              className={`px-8 py-3 rounded-full border transition-all font-bold shadow-sm ${
-                activeTier === tier 
-                  ? "bg-[#1E3A5F] border-[#1E3A5F] text-white shadow-md transform scale-105" 
-                  : "bg-white border-gray-200 text-[#1E3A5F]/70 hover:border-[#C9A227] hover:text-[#1E3A5F]"
-              }`}
-            >
-              {tier}
-            </button>
-          ))}
+    <div className="pt-24 pb-20 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-16">
+          <SectionHeading 
+            title={<>Gifts by <span className="text-red-600">Budget</span></>}
+            subtitle={selectedRange ? `Curated gifts in the ${selectedRange} range.` : "Explore our curated collections designed to fit every budget."} 
+            centered 
+          />
         </div>
 
-        <motion.div 
-          layout
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {filtered.map((item, idx) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProducts.map((product, idx) => (
             <motion.div
-              layout
-              key={item.title}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: (idx % 4) * 0.1, duration: 0.5 }}
             >
-              <ProductCard {...item} index={idx} />
+              <ProductCard {...product} index={idx} />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </div>
+  );
+}
+
+export default function GiftsByBudgetPage() {
+  return (
+    <Suspense fallback={<div className="pt-32 text-center font-bold text-gray-400">Loading...</div>}>
+      <GiftsByBudgetContent />
+    </Suspense>
   );
 }

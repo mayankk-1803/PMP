@@ -47,7 +47,7 @@ export function BulkEnquiryForm() {
   };
 
   return (
-    <section className="py-24 bg-[#F9FAFB] border-t border-[#F1F5F9]">
+    <section className="py-24 bg-white border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           
@@ -57,22 +57,22 @@ export function BulkEnquiryForm() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1E3A5F]">Get a Custom Quote</h2>
-            <p className="text-[#1E3A5F]/70 text-lg mb-10 leading-relaxed font-medium">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-red-600">Get a Custom Quote</h2>
+            <p className="text-gray-600 text-lg mb-10 leading-relaxed font-medium">
               Planning a bulk requirement? Share your details below. Our corporate gifting experts will get back to you within 2-4 business hours with custom curations and pricing.
             </p>
             
             <div className="space-y-6">
-              <div className="flex items-center gap-4 text-[#1E3A5F]">
-                <span className="w-10 h-10 rounded-full bg-[#1E3A5F]/5 text-[#1E3A5F] flex items-center justify-center font-bold">1</span>
+              <div className="flex items-center gap-4 text-gray-700">
+                <span className="w-10 h-10 rounded-full bg-gray-100 text-gray-900 flex items-center justify-center font-bold">1</span>
                 <span className="font-semibold text-lg">Tell us your requirements</span>
               </div>
-              <div className="flex items-center gap-4 text-[#1E3A5F]">
-                <span className="w-10 h-10 rounded-full bg-[#1E3A5F]/5 text-[#1E3A5F] flex items-center justify-center font-bold">2</span>
+              <div className="flex items-center gap-4 text-gray-700">
+                <span className="w-10 h-10 rounded-full bg-gray-100 text-gray-900 flex items-center justify-center font-bold">2</span>
                 <span className="font-semibold text-lg">Get a curated proposal</span>
               </div>
-              <div className="flex items-center gap-4 text-[#1E3A5F]">
-                <span className="w-10 h-10 rounded-full bg-[#1E3A5F]/5 text-[#1E3A5F] flex items-center justify-center font-bold">3</span>
+              <div className="flex items-center gap-4 text-gray-700">
+                <span className="w-10 h-10 rounded-full bg-gray-100 text-gray-900 flex items-center justify-center font-bold">3</span>
                 <span className="font-semibold text-lg">Approve and track your order</span>
               </div>
             </div>
@@ -83,7 +83,7 @@ export function BulkEnquiryForm() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="bg-white rounded-[2rem] p-8 md:p-10 shadow-xl border border-gray-100 text-[#1E3A5F] relative min-h-[600px] flex flex-col justify-center"
+            className="bg-gray-50 rounded-3xl p-8 md:p-10 border border-gray-200 shadow-sm relative min-h-[600px] flex flex-col justify-center"
           >
             <AnimatePresence mode="wait">
               {status === "success" ? (
@@ -99,23 +99,23 @@ export function BulkEnquiryForm() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="w-28 h-28 bg-[#1E3A5F]/5 rounded-full flex items-center justify-center mb-8"
+                    className="w-28 h-28 bg-green-50 rounded-full flex items-center justify-center mb-8"
                   >
-                    <CheckCircle2 className="w-16 h-16 text-[#C9A227]" />
+                    <CheckCircle2 className="w-16 h-16 text-green-600" />
                   </motion.div>
                   <motion.h3 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-3xl font-extrabold mb-4 text-[#1E3A5F] tracking-tight"
+                    className="text-3xl font-bold mb-4 text-gray-900 tracking-tight"
                   >
-                    Your enquiry has been submitted successfully!
+                    Submission Successful!
                   </motion.h3>
                   <motion.p 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-[#1E3A5F]/70 mb-10 max-w-md mx-auto text-lg font-medium"
+                    className="text-gray-600 mb-10 max-w-md mx-auto text-lg font-medium"
                   >
                     Our team will contact you shortly to discuss your custom curation and pricing.
                   </motion.p>
@@ -127,7 +127,7 @@ export function BulkEnquiryForm() {
                     <Button 
                       variant="outline" 
                       onClick={() => setStatus("idle")}
-                      className="px-8 py-4 rounded-full border-gray-200 hover:border-[#1E3A5F] text-[#1E3A5F]"
+                      className="px-8"
                     >
                       Submit Another Enquiry
                     </Button>
@@ -142,14 +142,14 @@ export function BulkEnquiryForm() {
                   className="w-full"
                 >
                   {items.length > 0 && (
-                    <div className="mb-6 bg-[#1E3A5F]/5 border border-[#1E3A5F]/10 rounded-xl p-4">
+                    <div className="mb-6 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                       <div className="flex items-center gap-2 mb-2">
-                        <Package className="w-4 h-4 text-[#C9A227]" />
-                        <span className="text-sm font-bold text-[#1E3A5F]">Your shortlist contains {items.length} item(s):</span>
+                        <Package className="w-4 h-4 text-gray-900" />
+                        <span className="text-sm font-bold text-gray-800">Your shortlist contains {items.length} item(s):</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {items.map((item, idx) => (
-                          <span key={idx} className="bg-white px-2 py-1 rounded-md text-xs font-semibold text-[#1E3A5F] shadow-sm border border-gray-100">
+                          <span key={idx} className="bg-gray-50 px-2 py-1 rounded-md text-xs font-semibold text-gray-700 border border-gray-200">
                             {item.title}
                           </span>
                         ))}
@@ -160,30 +160,30 @@ export function BulkEnquiryForm() {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label htmlFor="name" className="text-sm font-bold text-[#1E3A5F]">Full Name *</label>
-                        <input required type="text" id="name" name="name" className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all font-medium" placeholder="John Doe" />
+                        <label htmlFor="name" className="text-sm font-bold text-gray-700">Full Name *</label>
+                        <input required type="text" id="name" name="name" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="John Doe" />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="company" className="text-sm font-bold text-[#1E3A5F]">Company Name *</label>
-                        <input required type="text" id="company" name="company" className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all font-medium" placeholder="Acme Corp" />
+                        <label htmlFor="company" className="text-sm font-bold text-gray-700">Company Name *</label>
+                        <input required type="text" id="company" name="company" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="Acme Corp" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-bold text-[#1E3A5F]">Work Email *</label>
-                        <input required type="email" id="email" name="email" className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all font-medium" placeholder="john@acmecorp.com" />
+                        <label htmlFor="email" className="text-sm font-bold text-gray-700">Work Email *</label>
+                        <input required type="email" id="email" name="email" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="john@acmecorp.com" />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="phone" className="text-sm font-bold text-[#1E3A5F]">Phone Number *</label>
-                        <input required type="tel" id="phone" name="phone" className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all font-medium" placeholder="+91 98765 43210" />
+                        <label htmlFor="phone" className="text-sm font-bold text-gray-700">Phone Number *</label>
+                        <input required type="tel" id="phone" name="phone" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="+91 98765 43210" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                       <div className="space-y-2 col-span-1">
-                        <label htmlFor="quantity" className="text-sm font-bold text-[#1E3A5F]">Units *</label>
-                        <select required id="quantity" name="quantity" className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all appearance-none cursor-pointer font-medium">
+                        <label htmlFor="quantity" className="text-sm font-bold text-gray-700">Units *</label>
+                        <select required id="quantity" name="quantity" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none cursor-pointer font-medium text-gray-900">
                           <option value="">Select</option>
                           <option value="50-100">50 - 100</option>
                           <option value="101-500">101 - 500</option>
@@ -192,8 +192,8 @@ export function BulkEnquiryForm() {
                         </select>
                       </div>
                       <div className="space-y-2 col-span-1">
-                        <label htmlFor="budget" className="text-sm font-bold text-[#1E3A5F]">Per Kit Budget</label>
-                        <select id="budget" name="budget" className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all appearance-none cursor-pointer font-medium">
+                        <label htmlFor="budget" className="text-sm font-bold text-gray-700">Per Kit Budget</label>
+                        <select id="budget" name="budget" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none cursor-pointer font-medium text-gray-900">
                           <option value="">Select</option>
                           <option value="Under ₹1000">Under ₹1000</option>
                           <option value="₹1000-₹2500">₹1000-₹2500</option>
@@ -201,43 +201,32 @@ export function BulkEnquiryForm() {
                         </select>
                       </div>
                       <div className="space-y-2 col-span-1">
-                        <label htmlFor="deliveryLocation" className="text-sm font-bold text-[#1E3A5F]">Delivery To *</label>
-                        <select required id="deliveryLocation" name="deliveryLocation" className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all appearance-none cursor-pointer font-medium">
+                        <label htmlFor="timeline" className="text-sm font-bold text-gray-700">Delivery Timeline</label>
+                        <select id="timeline" name="timeline" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all appearance-none cursor-pointer font-medium text-gray-900">
                           <option value="">Select</option>
-                          <option value="Single Location">Single Office</option>
-                          <option value="Multiple Locations">Multiple Offices</option>
-                          <option value="Direct to Employees">Home Deliveries</option>
+                          <option value="Urgent (< 1 week)">Urgent (&lt; 1 week)</option>
+                          <option value="1-2 weeks">1-2 weeks</option>
+                          <option value="2-4 weeks">2-4 weeks</option>
+                          <option value="Flexible">Flexible</option>
                         </select>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label htmlFor="message" className="text-sm font-bold text-[#1E3A5F]">Additional Details</label>
-                      <textarea id="message" name="message" rows={3} className="w-full bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition-all resize-none font-medium" placeholder="Tell us about the occasion, preferred items, or any specific branding requests..."></textarea>
-                    </div>
-
-                    {status === "error" && (
-                      <div className="flex items-center gap-2 text-red-600 bg-red-50 p-4 border border-red-100 rounded-xl text-sm font-medium">
-                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                        <span>{errorMessage}</span>
-                      </div>
-                    )}
-
                     <Button 
                       type="submit" 
-                      variant="default" 
-                      className="w-full py-4 text-lg font-bold"
+                      className="w-full py-7 rounded-2xl text-lg font-bold group flex items-center justify-center gap-3 transition-all"
                       disabled={status === "submitting"}
                     >
                       {status === "submitting" ? (
-                        <span className="flex items-center">
-                          <Loader2 className="mr-2 w-5 h-5 animate-spin" />
-                          Sending...
-                        </span>
+                        <>
+                          <Loader2 className="w-6 h-6 animate-spin" />
+                          Processing...
+                        </>
                       ) : (
-                        <span className="flex items-center">
-                          Get Custom Quote <Send className="ml-2 w-5 h-5" />
-                        </span>
+                        <>
+                          <Send className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                          Send Quote Request
+                        </>
                       )}
                     </Button>
                   </form>

@@ -8,34 +8,30 @@ import { motion } from "framer-motion";
 
 export function CtaSection() {
   return (
-    <section className="py-24 bg-gradient-to-br from-[#F8FAFC] via-[#EEF2F6] to-[#E2E8F0]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#1E3A5F] rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl"
+          className="bg-gray-50 rounded-2xl p-10 md:p-16 text-center relative overflow-hidden border border-gray-100"
         >
-          {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#C9A227] rounded-full filter blur-[100px] opacity-20 transform translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#C9A227] rounded-full filter blur-[100px] opacity-20 transform -translate-x-1/2 translate-y-1/2 pointer-events-none" />
-
-          <div className="relative z-10">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Looking for the perfect corporate gifting partner?
+          <div className="relative z-10 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-red-600 mb-6">
+              Looking for a custom gifting partner?
             </h2>
-            <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto font-medium">
+            <p className="text-lg text-gray-600 mb-10 leading-relaxed">
               We help you curate memorable hampers within your budget. Let's discuss your custom gifting needs today.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button variant="gold" size="lg" className="w-full sm:w-auto text-lg px-10 py-6 rounded-full font-bold" asChild>
+              <Button size="lg" className="rounded-lg text-sm px-10 bg-red-600 hover:bg-red-700 text-white" asChild>
                 <Link href="/enquiry">
-                  Get Quote
+                  Get a Quote
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 rounded-full border-white text-white hover:bg-white hover:text-[#1E3A5F] transition-colors flex items-center justify-center gap-2" asChild>
-                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-5 h-5" />
+              <Button variant="outline" size="lg" className="rounded-lg text-sm px-10 flex items-center justify-center gap-2 border-gray-200" asChild>
+                <a href="https://wa.me/919818601834" target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-4 h-4" />
                   WhatsApp Us
                 </a>
               </Button>

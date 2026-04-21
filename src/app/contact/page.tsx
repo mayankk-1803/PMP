@@ -9,94 +9,91 @@ import { MapPin, Phone, Mail } from "lucide-react";
 
 export default function ContactPage() {
   return (
-    <div className="pt-24 pb-20 bg-[#F9FAFB]">
-      <BackgroundGradient />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading 
-          title="Contact Us" 
-          subtitle="Reach out to our team for partnerships, press, or general inquiries." 
-          centered 
-          className="mb-16"
-        />
+    <div className="pt-24 pb-20 bg-white overflow-hidden max-w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-16">
+          <SectionHeading 
+            title="Contact Us" 
+            subtitle="Get in touch with our team for bulk inquiries, partnerships, or any support." 
+            centered 
+          />
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-16">
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="bg-white p-8 md:p-12 rounded-lg border border-gray-100 shadow-sm"
           >
-            <h3 className="text-3xl font-extrabold text-[#1E3A5F] mb-8">Get in Touch</h3>
+            <h3 className="text-xl font-bold text-red-600 mb-8">Inquiry Form</h3>
             <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Full Name</label>
+                <input type="text" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="Your Name" />
+              </div>
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-[#1E3A5F]">First Name</label>
-                  <input type="text" className="w-full bg-[#F1F5F9] border border-gray-200 rounded-xl px-4 py-3 text-[#1E3A5F] focus:outline-none focus:ring-2 focus:ring-[#C9A227] transition-all font-medium" placeholder="John" />
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Email Address</label>
+                  <input type="email" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="email@example.com" />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-[#1E3A5F]">Last Name</label>
-                  <input type="text" className="w-full bg-[#F1F5F9] border border-gray-200 rounded-xl px-4 py-3 text-[#1E3A5F] focus:outline-none focus:ring-2 focus:ring-[#C9A227] transition-all font-medium" placeholder="Doe" />
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Phone Number</label>
+                  <input type="tel" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="+91 00000 00000" />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-[#1E3A5F]">Email Address</label>
-                <input type="email" className="w-full bg-[#F1F5F9] border border-gray-200 rounded-xl px-4 py-3 text-[#1E3A5F] focus:outline-none focus:ring-2 focus:ring-[#C9A227] transition-all font-medium" placeholder="john@example.com" />
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Requirement Details</label>
+                <textarea rows={4} className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all resize-none" placeholder="Tell us about your needs..." />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-[#1E3A5F]">Message</label>
-                <textarea rows={5} className="w-full bg-[#F1F5F9] border border-gray-200 rounded-xl px-4 py-3 text-[#1E3A5F] focus:outline-none focus:ring-2 focus:ring-[#C9A227] transition-all resize-none font-medium" placeholder="How can we help you?" />
-              </div>
-              <Button variant="default" size="lg" className="w-full py-6 text-lg rounded-xl" type="button">
-                Send Message
+              <Button size="lg" className="w-full rounded-lg text-sm font-bold" type="button">
+                Submit Inquiry
               </Button>
             </form>
           </motion.div>
 
-          <div className="space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-6 hover:shadow-md transition-shadow"
-            >
-              <div className="bg-[#F1F5F9] p-4 rounded-xl text-[#1E3A5F]">
-                <MapPin className="w-8 h-8" />
-              </div>
+          <div className="space-y-8 flex flex-col justify-center">
+            {/* Bulk Order Section */}
+            <div className=" text-black p-8 md:p-12 rounded-lg flex flex-col justify-between">
               <div>
-                <h4 className="font-extrabold text-xl text-[#1E3A5F] mb-2">Corporate Office</h4>
-                <p className="text-[#1E3A5F]/70 font-medium leading-relaxed">Digital Greens, A-6-014, 6th Floor Tower A, Golf Course Extn. Road, Sector-61, Gurgaon, Haryana-122102</p>
+                <h4 className="text-xl font-bold mb-3 text-red-600">Bulk Order Special</h4>
+                <p className="text-black text-sm mb-6 leading-relaxed">
+                  Planning a large-scale gifting program? We offer exclusive pricing and dedicated management for orders above 100 units.
+                </p>
               </div>
-            </motion.div>
+              <div className="flex items-center gap-4">
+                <div className="bg-white/10 p-2.5 rounded-lg">
+                  <Phone className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Direct Line</p>
+                  <p className="font-bold">+91 9818601834</p>
+                </div>
+              </div>
+            </div>
 
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-6 hover:shadow-md transition-shadow"
-            >
-              <div className="bg-[#F1F5F9] p-4 rounded-xl text-[#1E3A5F]">
-                <Phone className="w-8 h-8" />
+            {/* Contact Details */}
+            <div className="grid gap-4">
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-100 flex items-start gap-4">
+                <div className="text-[#dc2626]">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm text-red-600 mb-1">Corporate Office</h4>
+                  <p className="text-gray-500 text-xs leading-relaxed">Digital Greens, Sector-61, Gurgaon, Haryana-122102</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-extrabold text-xl text-[#1E3A5F] mb-2">Phone</h4>
-                <p className="text-[#1E3A5F]/70 font-medium">+91 9818601834</p>
-              </div>
-            </motion.div>
 
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-6 hover:shadow-md transition-shadow"
-            >
-              <div className="bg-[#F1F5F9] p-4 rounded-xl text-[#1E3A5F]">
-                <Mail className="w-8 h-8" />
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-100 flex items-start gap-4">
+                <div className="text-[#dc2626]">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm text-red-600 mb-1">Email Support</h4>
+                  <p className="text-gray-500 text-xs">pacmyproduct@gmail.com</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-extrabold text-xl text-[#1E3A5F] mb-2">Email</h4>
-                <p className="text-[#1E3A5F]/70 font-medium">pacmyproduct@gmail.com</p>
-              </div>
-            </motion.div>
+            </div>
             
           </div>
         </div>

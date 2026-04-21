@@ -1,33 +1,47 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-brand-blue: #1E3A5F;
-  --color-brand-gold: #C9A227;
-  --color-brand-beige: #E8D8C4;
-  --color-brand-white: #F9FAFB;
-  --color-brand-gray: #F1F5F9;
-  --color-background: #F9FAFB;
-  --color-foreground: #1E3A5F;
+  --color-brand-red: #dc2626;
+  --color-brand-red-dark: #b91c1c;
+  --color-brand-red-light: #ef4444;
+  --color-brand-white: #ffffff;
+  --color-brand-gray: #fafafa;
+  --color-background: #ffffff;
+  --color-foreground: #1f2937;
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
+
+  /* Premium spacing */
+  --spacing-section: 4rem; /* py-16 */
+  --spacing-section-lg: 5rem; /* py-20 */
 }
 
 @layer base {
   :root {
-    --background: #F9FAFB;
-    --foreground: #1E3A5F;
+    --background: #ffffff;
+    --foreground: #1f2937;
+    --brand-red: #dc2626;
+    --brand-red-dark: #b91c1c;
   }
 
-  html {
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
     background-color: var(--background);
     color: var(--foreground);
-    /* Note: scroll-behavior smooth was removed to fix Next.js App Router bug */
+    scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--background);
-    color: var(--foreground);
-    @apply antialiased flex flex-col min-h-screen selection:bg-[#C9A227] selection:text-white;
+    @apply antialiased flex flex-col min-h-screen selection:bg-gray-900 selection:text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight text-[#dc2626];
+  }
+
+  p {
+    @apply leading-relaxed text-[#4b5563];
   }
 
   ::-webkit-scrollbar {
@@ -35,22 +49,22 @@
   }
   
   ::-webkit-scrollbar-track {
-    background: #F9FAFB;
+    background: #f9fafb;
   }
   
   ::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
+    background: #e5e7eb;
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
+    background: #d1d5db;
   }
 }
 
-/* Base text selection utilities for sleekness */
+/* Professional shadows and borders */
 * {
-  border-color: #e2e8f0;
+  border-color: #f3f4f6;
 }
 
 @keyframes marquee {
