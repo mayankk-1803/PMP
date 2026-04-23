@@ -4,38 +4,27 @@ import { Marquee } from "@/components/ui/Marquee";
 import { CorporateSolutions } from "@/components/sections/CorporateSolutions";
 import { FeaturedHampers } from "@/components/sections/FeaturedHampers";
 import { PackagingSolutions } from "@/components/sections/PackagingSolutions";
-import { HowItWorks } from "@/components/sections/HowItWorks";
-import { IndustriesServed } from "@/components/sections/IndustriesServed";
-import { Testimonials } from "@/components/sections/Testimonials";
+import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 import { CtaSection } from "@/components/sections/CtaSection";
-
-import { ProductMarquee } from "@/components/sections/ProductMarquee";
-
-const BRANDS = [
-  "Adidas", "Reebok", "Rare Rabbit", "Parker", "Beardo", "Cello", "Mokobara", 
-  "VIP", "JBL", "U-bon", "Borosil", "Wildcraft", "Welspun", "Blue Pond", 
-  "Boat", "Philips", "Aiwa"
-];
+import { PremiumBrands } from "@/components/sections/PremiumBrands";
+import { AboutPreview } from "@/components/sections/AboutPreview";
 
 export default function Home() {
   return (
     <div className="flex flex-col">
       <HeroSection />
 
-      {/* 2. Trusted Brands Marquee */}
-      <section className="py-12 bg-white">
-        <Marquee duration={30} fadeColor="white" fadeWidth="w-32">
-          {BRANDS.map((brand, idx) => (
-            <div key={idx} className="mx-12 cursor-default flex items-center justify-center">
-              <span className="text-gray-400 font-bold tracking-widest text-lg md:text-xl grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 uppercase">
-                {brand}
-              </span>
-            </div>
-          ))}
-        </Marquee>
-      </section>
+      {/* 2. Budget categories (TOP) */}
+      <div className="bg-white border-b border-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <GiftsByBudget />
+        </div>
+      </div>
 
-      {/* 3. Product Categories Section */}
+      {/* 3. Associate Brands */}
+      <PremiumBrands />
+
+      {/* 4. Promotional Gifts */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-16 text-center">
@@ -46,22 +35,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Corporate Kits & Hampers Section */}
-      {/* 5. Occasion-Based Hampers Section */}
+      {/* 5. Corporate Kits & Hampers (with festive) */}
       <FeaturedHampers />
 
-      <ProductMarquee />
-
-      {/* 7. Packaging Solutions Preview */}
+      {/* 6. Packaging Solutions */}
       <PackagingSolutions />
 
-      {/* 8. CTA Section (Bulk Enquiry) */}
+      {/* 7. About preview */}
+      <AboutPreview />
+
+      {/* 8. Contact CTA */}
       <CtaSection />
-      
-      {/* Supplemental Sections */}
-      <HowItWorks />
-      <IndustriesServed />
-      <Testimonials />
     </div>
   );
 }

@@ -35,13 +35,13 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
           >
             <h3 className="text-2xl md:text-3xl font-bold text-red-600 leading-tight mb-6">
-              Your Strategic Partner for Bulk Gifting & Brand Visibility
+              Strategic B2B Partner for Corporate Gifting & Packaging
             </h3>
             <p className="text-gray-500 text-base leading-relaxed mb-6">
-              Founded on the principle that every gift should tell a story, PacMyProduct manages the entire lifecycle of corporate gifting. From curating high-quality products from premium brands to manufacturing custom packaging that wows your recipients, we handle it all.
+              PacMyProduct is India's leading B2B platform specializing in end-to-end corporate gifting expertise and advanced packaging solutions capability. We help brands strengthen their professional relationships through thoughtfully curated gifts and premium presentation.
             </p>
             <p className="text-gray-500 text-base leading-relaxed mb-8">
-              Whether you need 50 executive kits for your leadership team or 50,000 festive hampers distributed directly to employee homes across India, our state-of-the-art logistics and fulfillment ensure your corporate gifting is completely stress-free.
+              From conceptualizing employee welcome kits to manufacturing high-volume corrugated cartons for industrial shipping, our integrated approach ensures quality, consistency, and on-time delivery across India.
             </p>
             <Button size="lg" className="rounded-lg text-sm px-10" asChild>
               <Link href="/enquiry">Partner With Us</Link>

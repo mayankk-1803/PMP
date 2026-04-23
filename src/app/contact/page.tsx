@@ -26,11 +26,11 @@ export default function ContactPage() {
             transition={{ duration: 0.6 }}
             className="bg-white p-8 md:p-12 rounded-lg border border-gray-100 shadow-sm"
           >
-            <h3 className="text-xl font-bold text-red-600 mb-8">Inquiry Form</h3>
+            <h3 className="text-xl font-bold text-red-600 mb-8">Corporate Enquiry Form</h3>
             <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Full Name</label>
-                <input type="text" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="Your Name" />
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Company Name & Name</label>
+                <input type="text" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="Company Name / Your Name" />
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-1.5">

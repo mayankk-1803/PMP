@@ -10,8 +10,7 @@ import { useShortlist } from "@/context/ShortlistContext";
 
 const LINKS = [
   { href: "/products", label: "Products" },
-  { href: "/corporate-kits", label: "Corporate Kits" },
-  { href: "/festive-gifting", label: "Festive Gifting" },
+  { href: "/corporate-kits", label: "Corporate Kits & Hampers" },
   { href: "/packaging-solutions", label: "Packaging" },
   { href: "/about", label: "Company" },
 ];
@@ -68,7 +67,7 @@ export function Navbar() {
                   <Gift className="h-4.5 w-4.5 text-white" />
                 </div>
                 <span className="font-bold text-lg tracking-tight text-red-600">
-                  PACMYPRODUCT
+                  PACMYPRODUCTS
                 </span>
               </Link>
             </div>

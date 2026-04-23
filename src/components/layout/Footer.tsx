@@ -1,98 +1,97 @@
 import React from "react";
 import Link from "next/link";
-import { Gift, Mail, Phone, Globe } from "lucide-react";
-
-const footerLinks = [
-  {
-    title: "Categories",
-    links: [
-      { name: "Corporate Kits", href: "/corporate-kits" },
-      { name: "Festive Gifting", href: "/festive-gifting" },
-      { name: "Promotional Merchandise", href: "/promotional-merchandise" },
-      { name: "Industry Solutions", href: "/industry-solutions" },
-      { name: "Packaging Solutions", href: "/packaging-solutions" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { name: "About Us", href: "/about" },
-      { name: "Gallery", href: "/gallery" },
-      { name: "Blog", href: "/blog" },
-      { name: "Contact", href: "/contact" },
-      { name: "Request Quote", href: "/enquiry" },
-    ],
-  },
-  {
-    title: "Budget",
-    links: [
-      { name: "Under ₹250", href: "/gifts-by-budget" },
-      { name: "₹250 - ₹500", href: "/gifts-by-budget" },
-      { name: "₹500 - ₹1000", href: "/gifts-by-budget" },
-      { name: "₹1000 - ₹2500", href: "/gifts-by-budget" },
-      { name: "Premium (₹2500+)", href: "/gifts-by-budget" },
-    ],
-  },
-];
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 pt-16 pb-8">
+    <footer className="bg-white border-t border-gray-200 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-6 group">
-              <div className="bg-gray-900 p-2 rounded-lg transition-colors shadow-sm">
-                <Gift className="h-5 w-5 text-white" />
-              </div>
-              <span className="font-bold text-xl tracking-tight text-red-600">
-                PACMYPRODUCT
+          {/* COMPANY SECTION */}
+          <div className="space-y-6">
+            <Link href="/" className="inline-block">
+              <span className="font-bold text-2xl tracking-tight text-red-600">
+                PACMYPRODUCTS
               </span>
             </Link>
-            
-            <div className="space-y-4 text-sm text-gray-500 max-w-sm mb-6 leading-relaxed">
-              <div className="flex items-start gap-3">
-                <Globe className="w-4 h-4 flex-shrink-0 text-gray-400 mt-0.5" />
-                <p>Digital Greens, Tower A, Sector-61, Gurgaon, Haryana-122102</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 flex-shrink-0 text-gray-400" />
-                <p>+91 9818601834</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 flex-shrink-0 text-gray-400" />
-                <p>pacmyproduct@gmail.com</p>
-              </div>
-            </div>
-            
+            <p className="text-gray-600 text-sm leading-relaxed max-w-xs">
+              Your premier partner for premium corporate gifting, industry-specific kits, and custom packaging solutions.
+            </p>
           </div>
 
-          {footerLinks.map((section, idx) => (
-            <div key={idx}>
-              <h3 className="font-bold text-red-600 mb-6 tracking-widest uppercase text-[10px]">{section.title}</h3>
-              <ul className="space-y-3">
-                {section.links.map((link, linkIdx) => (
-                  <li key={linkIdx}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-500 hover:text-gray-900 transition-colors text-sm font-medium"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* QUICK LINKS */}
+          <div>
+            <h3 className="font-bold text-gray-900 mb-6 uppercase tracking-wider text-xs">Quick Links</h3>
+            <ul className="space-y-4">
+              {[
+                { name: "Home", href: "/" },
+                { name: "Products", href: "/products" },
+                { name: "Corporate Kits & Hampers", href: "/corporate-kits" },
+                { name: "Packaging Solutions", href: "/packaging-solutions" },
+                { name: "About", href: "/about" },
+                { name: "Contact", href: "/contact" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-600 hover:text-red-600 transition-colors text-sm font-medium"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* SERVICES */}
+          <div>
+            <h3 className="font-bold text-gray-900 mb-6 uppercase tracking-wider text-xs">Services</h3>
+            <ul className="space-y-4">
+              {[
+                { name: "Promotional Gifts", href: "/products" },
+                { name: "Corporate Kits", href: "/corporate-kits" },
+                { name: "Festive Hampers", href: "/corporate-kits" },
+                { name: "Packaging Solutions", href: "/packaging-solutions" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-600 hover:text-red-600 transition-colors text-sm font-medium"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* CONTACT INFO */}
+          <div>
+            <h3 className="font-bold text-gray-900 mb-6 uppercase tracking-wider text-xs">Contact Info</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-sm text-gray-600">
+                <Phone className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                <span>+91 9818601834</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-600">
+                <Mail className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                <span className="break-all">pacmyproduct@gmail.com</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-600">
+                <MapPin className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                <span>Digital Greens, Tower A, Sector-61, Gurgaon, Haryana-122102</span>
+              </li>
+            </ul>
+          </div>
 
         </div>
 
-        <div className="border-t border-gray-50 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-xs">
-            © {new Date().getFullYear()} Pacmyproduct. All rights reserved.
+        <div className="border-t border-gray-100 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-xs">
+            © 2026 PACMYPRODUCTS — All rights reserved
           </p>
-          <div className="flex gap-6 text-xs text-gray-400">
+          <div className="flex gap-6 text-xs text-gray-500">
             <Link href="#" className="hover:text-red-600 transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-red-600 transition-colors">Terms of Service</Link>
           </div>

@@ -7,7 +7,7 @@ import { Button } from "../ui/Button";
 
 export function HeroSection() {
   return (
-    <section className="relative pt-24 pb-20 bg-[#f8f6f4] overflow-hidden">
+    <section className="relative pt-10 pb-20 bg-[#f8f6f4] overflow-hidden">
 
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-[#f8f6f4]" />

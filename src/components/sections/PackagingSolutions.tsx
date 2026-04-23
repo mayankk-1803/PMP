@@ -21,7 +21,7 @@ const PACKAGING_TYPES = [
     img: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=600&q=80"
   },
   {
-    title: "Corrugated Boxes",
+    title: "Corrugated Cartons",
     description: "Heavy-duty shipping and storage solutions designed for durability and brand visibility.",
     icon: <Shield className="w-6 h-6" />,
     img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80"

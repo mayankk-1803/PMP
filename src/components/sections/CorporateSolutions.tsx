@@ -20,10 +20,10 @@ const CATEGORIES = [
     href: "/corporate-kits"
   },
   {
-    title: "Occasion Hampers",
-    desc: "Luxury curations for festivals, anniversaries, and company milestones.",
+    title: "Festive Hampers",
+    desc: "Luxury curations for Diwali, Holi, Eid, and other special company milestones.",
     image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop",
-    href: "/festive-gifting"
+    href: "/corporate-kits"
   }
 ];
 

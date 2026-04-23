@@ -36,11 +36,11 @@ export function FeaturedHampers() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div className="max-w-2xl">
             <span className="text-gray-500 text-xs font-bold tracking-widest uppercase mb-3 block">Bestselling Curations</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-red-600 mb-4">Occasion Hampers</h2>
-            <p className="text-lg text-gray-600">Explore our most popular business curations crafted for lasting professional impact.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-red-600 mb-4">Corporate Kits & Hampers</h2>
+            <p className="text-lg text-gray-600">Explore our industry-specific curated kits and festive hampers crafted for lasting professional impact.</p>
           </div>
           <Button variant="outline" size="sm" className="hidden md:inline-flex rounded-lg border-gray-200" asChild>
-            <Link href="/festive-gifting">View All Hampers</Link>
+            <Link href="/corporate-kits">View All Kits</Link>
           </Button>
         </div>
 
@@ -59,7 +59,7 @@ export function FeaturedHampers() {
 
         <div className="mt-10 md:hidden">
           <Button variant="outline" className="w-full rounded-lg border-gray-200" asChild>
-            <Link href="/festive-gifting">View All Hampers</Link>
+            <Link href="/corporate-kits">View All Kits</Link>
           </Button>
         </div>
       </div>
