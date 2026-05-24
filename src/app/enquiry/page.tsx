@@ -6,33 +6,169 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { CheckCircle2, Loader2, Send, Package } from "lucide-react";
+import { 
+  CheckCircle2, 
+  Loader2, 
+  Send, 
+  Package, 
+  ChevronRight, 
+  ChevronLeft, 
+  Clock, 
+  Paintbrush, 
+  Building2, 
+  User, 
+  Mail, 
+  Phone, 
+  ArrowRight, 
+  Check, 
+  HelpCircle,
+  Layers,
+  Coins
+} from "lucide-react";
 import { useShortlist } from "@/context/ShortlistContext";
+import { COMPANY_INFO } from "@/data/siteConfig";
+
+interface FormDataState {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  quantity: string;
+  budget: string;
+  deliveryLocation: string;
+  serviceArea: string;
+  message: string;
+  brandingMethod: string;
+  packagingChoice: string;
+  deliveryTimeline: string;
+  customProductsText: string;
+}
 
 function EnquiryFormContainer() {
   const searchParams = useSearchParams();
   const singleProduct = searchParams.get("product");
   const isShortlistSource = searchParams.get("source") === "shortlist";
-  
   const { items } = useShortlist();
   
+  const [step, setStep] = useState(1);
+  const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [stepErrors, setStepErrors] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const [formData, setFormData] = useState<FormDataState>({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    quantity: "",
+    budget: "",
+    deliveryLocation: "",
+    serviceArea: "",
+    message: "",
+    brandingMethod: "",
+    packagingChoice: "",
+    deliveryTimeline: "",
+    customProductsText: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setStepErrors(null);
+  };
+
+  const selectOption = (field: keyof FormDataState, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    setStepErrors(null);
+  };
+
+  const validateStep = (currentStep: number) => {
+    if (currentStep === 1) {
+      const hasPreselectedItems = (isShortlistSource && items.length > 0) || singleProduct;
+      if (!hasPreselectedItems && !formData.customProductsText.trim()) {
+        return "Please specify the products you are interested in.";
+      }
+    } else if (currentStep === 4) {
+      if (!formData.quantity) {
+        return "Please select an estimated quantity.";
+      }
+      if (!formData.deliveryLocation) {
+        return "Please select a delivery protocol/location.";
+      }
+      if (!formData.serviceArea) {
+        return "Please select your target service area.";
+      }
+    } else if (currentStep === 5) {
+      if (!formData.name.trim()) return "Name is required.";
+      if (!formData.company.trim()) return "Company name is required.";
+      if (!formData.email.trim()) return "Email is required.";
+      if (!/\S+@\S+\.\S+/.test(formData.email)) return "Please enter a valid email address.";
+      if (!formData.phone.trim()) return "Phone number is required.";
+    }
+    return null;
+  };
+
+  const nextStep = () => {
+    const error = validateStep(step);
+    if (error) {
+      setStepErrors(error);
+      return;
+    }
+    setStepErrors(null);
+    setDirection(1);
+    setStep(prev => prev + 1);
+  };
+
+  const prevStep = () => {
+    setStepErrors(null);
+    setDirection(-1);
+    setStep(prev => prev - 1);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const error = validateStep(5);
+    if (error) {
+      setStepErrors(error);
+      return;
+    }
+
     setStatus("submitting");
     setErrorMessage("");
 
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Attach shortlist items to API payload if applicable
-    let finalPayload: any = { ...data };
+    let finalPayload: any = {
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
+      quantity: formData.quantity,
+      budget: formData.budget || "Not Specified",
+      deliveryLocation: `${formData.deliveryLocation} (Region: ${formData.serviceArea})`,
+      shortlist: []
+    };
+
     if (isShortlistSource && items.length > 0) {
       finalPayload.shortlist = items;
     } else if (singleProduct) {
       finalPayload.shortlist = [{ title: singleProduct }];
+    } else if (formData.customProductsText) {
+      finalPayload.shortlist = [{ title: formData.customProductsText }];
+    }
+
+    let customMsg = formData.message || "";
+    const extraDetails = [];
+    if (formData.brandingMethod) extraDetails.push(`Branding: ${formData.brandingMethod}`);
+    if (formData.packagingChoice) extraDetails.push(`Packaging: ${formData.packagingChoice}`);
+    if (formData.deliveryTimeline) extraDetails.push(`Timeline: ${formData.deliveryTimeline}`);
+    if (formData.customProductsText && ((isShortlistSource && items.length > 0) || singleProduct)) {
+      extraDetails.push(`Additional request details: ${formData.customProductsText}`);
+    }
+
+    if (extraDetails.length > 0) {
+      finalPayload.message = `--- Luxury Custom Specifications ---\n${extraDetails.join("\n")}\n\n--- Customer Note ---\n${customMsg || "No custom message provided."}`;
+    } else {
+      finalPayload.message = customMsg || "No custom message provided.";
     }
 
     try {
@@ -47,286 +183,672 @@ function EnquiryFormContainer() {
       if (result.success) {
         setStatus("success");
       } else {
-        setErrorMessage(result.message || "Failed to send enquiry. Please try again.");
+        setErrorMessage(result.message || "Failed to submit enquiry. Please try again.");
         setStatus("error");
       }
     } catch (err: any) {
       console.error(err);
-      setErrorMessage("Failed to send enquiry. Please try again.");
+      setErrorMessage("Failed to submit enquiry. Please check your connection and try again.");
       setStatus("error");
     }
   };
 
+  const stepsList = [
+    { number: 1, label: "Product Selection" },
+    { number: 2, label: "Branding Details" },
+    { number: 3, label: "Packaging" },
+    { number: 4, label: "Quantity & Budget" },
+    { number: 5, label: "Contact Details" }
+  ];
+
+  const brandingOptions = [
+    { id: "Laser Engraving", name: "Laser Engraving", desc: "Best for metal/wooden items" },
+    { id: "Screen Printing", name: "Screen Printing", desc: "Vibrant ink print for fabrics/diaries" },
+    { id: "Embroidery", name: "Premium Embroidery", desc: "Stitched thread for apparel & bags" },
+    { id: "Foil Stamping", name: "Gold/Silver Foil", desc: "Luxury metallic imprint for diaries & boxes" },
+    { id: "Not Sure", name: "Consult Expert", desc: "We'll suggest the best option" }
+  ];
+
+  const packagingOptions = [
+    { id: "Mono Carton", name: "Custom Mono Carton", desc: "Sleek retail card boxes" },
+    { id: "Rigid Box", name: "Luxury Rigid Box", desc: "Premium thick cardboard gift cases" },
+    { id: "Corrugated Carton", name: "Corrugated Box", desc: "Heavy duty shipping-safe cartons" },
+    { id: "Eco Pouch", name: "Cotton / Jute Pouch", desc: "Sustainable drawstring bag style" },
+    { id: "Standard Box", name: "Standard Gifting Box", desc: "Classic corporate gifting pack" }
+  ];
+
   return (
-    <div className="lg:col-span-3 p-8 md:p-12 relative min-h-[600px]">
-      <AnimatePresence mode="wait">
-        {status === "success" ? (
-          <motion.div 
-            key="success"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-white z-10"
-          >
-            <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-              className="w-28 h-28 bg-gray-50 rounded-full flex items-center justify-center mb-8"
-            >
-              <CheckCircle2 className="w-16 h-16 text-gray-900" />
-            </motion.div>
-            <motion.h3 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-3xl font-bold text-gray-900 mb-6 tracking-tight"
-            >
-              Request Submitted Successfully!
-            </motion.h3>
-            <motion.p 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-gray-600 text-lg mb-10 max-w-md font-medium leading-relaxed"
-            >
-              Our team will contact you shortly to discuss your custom curation and pricing.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Button 
-                variant="outline" 
-                size="lg" 
-                onClick={() => setStatus("idle")}
-                className="px-8"
-              >
-                Submit Another Enquiry
-              </Button>
-            </motion.div>
-          </motion.div>
-        ) : (
-          <motion.div 
-            key="form"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div className="mb-8 border-b border-gray-100 pb-4">
-              <h3 className="text-2xl font-bold text-red-600 mb-4">Project Details</h3>
-              
-              {/* Product Context Badges */}
-              {isShortlistSource && items.length > 0 && (
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mt-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Package className="w-4 h-4 text-gray-900" />
-                    <span className="text-sm font-bold text-gray-700">Requesting Quote for {items.length} item(s):</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {items.map(item => (
-                      <span key={item.title} className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-gray-600 border border-gray-200 shadow-sm">
-                        {item.title}
-                      </span>
-                    ))}
-                  </div>
+    <div className="grid lg:grid-cols-5 gap-0 bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-2xl min-h-[680px]">
+      
+      {/* LEFT SIDE: Wizard Form */}
+      <div className="lg:col-span-3 p-6 md:p-10 flex flex-col justify-between relative bg-white">
+        
+        {/* Progress Bar & Indicators */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4 overflow-x-auto no-scrollbar pb-2">
+            {stepsList.map((s) => (
+              <div key={s.number} className="flex items-center flex-shrink-0">
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm transition-all duration-300 ${
+                  step > s.number 
+                    ? "bg-red-650 text-white" 
+                    : step === s.number 
+                      ? "bg-gray-900 text-white ring-4 ring-gray-900/10" 
+                      : "bg-gray-100 text-gray-450"
+                }`}>
+                  {step > s.number ? <Check className="w-4 h-4" /> : s.number}
                 </div>
-              )}
-              
-              {singleProduct && !isShortlistSource && (
-                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mt-4 inline-flex items-center gap-2">
-                   <Package className="w-4 h-4 text-gray-900" />
-                   <span className="text-sm font-bold text-gray-700">Requesting Quote for: </span>
-                   <span className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-gray-600 border border-gray-200 shadow-sm">
-                     {singleProduct}
-                   </span>
-                 </div>
+                <span className={`ml-2 text-xs font-bold whitespace-nowrap ${
+                  step === s.number ? "text-gray-905" : "text-gray-400"
+                }`}>
+                  {s.label}
+                </span>
+                {s.number < 5 && (
+                  <div className={`w-4 sm:w-8 h-0.5 mx-2 transition-colors duration-305 ${
+                    step > s.number ? "bg-red-600" : "bg-gray-150"
+                  }`} />
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+            <motion.div 
+              className="bg-red-600 h-full"
+              initial={{ width: "20%" }}
+              animate={{ width: `${(step / 5) * 100}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+        </div>
+
+        {/* Step Content */}
+        <div className="flex-grow flex flex-col justify-center">
+          <AnimatePresence mode="wait">
+            {status === "success" ? (
+              <motion.div 
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="flex flex-col items-center justify-center text-center py-10"
+              >
+                <div className="w-24 h-24 bg-red-50 text-red-650 rounded-full flex items-center justify-center mb-6 shadow-inner animate-bounce">
+                  <CheckCircle2 className="w-12 h-12" />
+                </div>
+                <h3 className="text-2xl font-black text-gray-900 mb-3">Enquiry Submitted!</h3>
+                <p className="text-gray-500 text-xs sm:text-sm max-w-md mb-8 leading-relaxed font-semibold">
+                  Thank you for sharing your project specifications. Our corporate gifting and packaging curation team will review the details and reach out within 2-4 business hours.
+                </p>
+                <Button 
+                  variant="default" 
+                  onClick={() => {
+                    setStep(1);
+                    setStatus("idle");
+                    setFormData({
+                      name: "",
+                      company: "",
+                      email: "",
+                      phone: "",
+                      quantity: "",
+                      budget: "",
+                      deliveryLocation: "",
+                      serviceArea: "",
+                      message: "",
+                      brandingMethod: "",
+                      packagingChoice: "",
+                      deliveryTimeline: "",
+                      customProductsText: "",
+                    });
+                  }}
+                  className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 border-0 text-white px-8"
+                >
+                  Request Another Quote
+                </Button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={step}
+                custom={direction}
+                initial={{ opacity: 0, x: direction * 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction * -40 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="space-y-6 py-2"
+              >
+                {/* STEP 1: PRODUCT SELECTION */}
+                {step === 1 && (
+                  <div className="space-y-6 text-left">
+                    <div>
+                      <h3 className="text-xl font-black text-gray-900 mb-1 flex items-center gap-2">
+                        <Package className="w-5 h-5 text-red-500" />
+                        Select Gifting Swag / Box Items
+                      </h3>
+                      <p className="text-xs text-gray-500 font-semibold">Review preselected items or describe custom items you need designed.</p>
+                    </div>
+
+                    {((isShortlistSource && items.length > 0) || singleProduct) ? (
+                      <div className="bg-red-50/40 border border-red-100 rounded-2xl p-5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Check className="w-4 h-4 text-red-600" />
+                          <span className="text-xs font-bold text-red-700">Preselected Gifting Items:</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {isShortlistSource && items.length > 0 ? (
+                            items.map(item => (
+                              <span key={item.title} className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
+                                {item.title}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
+                              {singleProduct}
+                            </span>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Add specific requirements or details:</label>
+                          <textarea 
+                            suppressHydrationWarning
+                            name="customProductsText"
+                            value={formData.customProductsText}
+                            onChange={handleInputChange}
+                            rows={3}
+                            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500 transition-all resize-none font-semibold"
+                            placeholder="Add sizing requirements, color options, or custom items..."
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Which products are you planning? *</label>
+                        <textarea
+                          suppressHydrationWarning
+                          name="customProductsText"
+                          value={formData.customProductsText}
+                          onChange={handleInputChange}
+                          rows={5}
+                          required
+                          className="w-full bg-white border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all resize-none font-medium"
+                          placeholder="e.g. 100 Employee Welcome Onboarding Kits featuring diaries, metallic executive pens, bottles, and canvas tote bags."
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* STEP 2: BRANDING REQUIREMENTS */}
+                {step === 2 && (
+                  <div className="space-y-6 text-left">
+                    <div>
+                      <h3 className="text-xl font-black text-gray-900 mb-1 flex items-center gap-2">
+                        <Paintbrush className="w-5 h-5 text-red-500" />
+                        Branding Customization
+                      </h3>
+                      <p className="text-xs text-gray-500 font-semibold">Select the preferred branding and logo placement method for items.</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Branding Logo Method</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {brandingOptions.map(opt => (
+                          <button
+                            suppressHydrationWarning
+                            key={opt.id}
+                            type="button"
+                            onClick={() => selectOption("brandingMethod", opt.id)}
+                            className={`p-4 text-left border rounded-2xl transition-all cursor-pointer flex flex-col justify-between h-20 ${
+                              formData.brandingMethod === opt.id 
+                                ? "border-red-600 bg-red-50/20 text-gray-950 ring-1 ring-red-600 shadow-sm" 
+                                : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600"
+                            }`}
+                          >
+                            <span className="text-xs font-bold text-gray-900">{opt.name}</span>
+                            <span className="text-[10px] text-gray-400 block line-clamp-1">{opt.desc}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 3: PACKAGING REQUIREMENTS */}
+                {step === 3 && (
+                  <div className="space-y-6 text-left">
+                    <div>
+                      <h3 className="text-xl font-black text-gray-900 mb-1 flex items-center gap-2">
+                        <Layers className="w-5 h-5 text-red-500" />
+                        Packaging Customization
+                      </h3>
+                      <p className="text-xs text-gray-500 font-semibold">Choose the presentation box style for your custom gifts.</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Packaging Box Type</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {packagingOptions.map(opt => (
+                          <button
+                            suppressHydrationWarning
+                            key={opt.id}
+                            type="button"
+                            onClick={() => selectOption("packagingChoice", opt.id)}
+                            className={`p-4 text-left border rounded-2xl transition-all cursor-pointer flex flex-col justify-between h-20 ${
+                              formData.packagingChoice === opt.id 
+                                ? "border-red-600 bg-red-50/20 text-gray-950 ring-1 ring-red-600 shadow-sm" 
+                                : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600"
+                            }`}
+                          >
+                            <span className="text-xs font-bold text-gray-900">{opt.name}</span>
+                            <span className="text-[10px] text-gray-400 block line-clamp-1">{opt.desc}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 4: QUANTITY AND BUDGET */}
+                {step === 4 && (
+                  <div className="space-y-6 text-left">
+                    <div>
+                      <h3 className="text-xl font-black text-gray-900 mb-1 flex items-center gap-2">
+                        <Coins className="w-5 h-5 text-red-500" />
+                        Volume, Budget & Timings
+                      </h3>
+                      <p className="text-xs text-gray-500 font-semibold">Define your quantity guidelines, budget ranges, and logistics destinations.</p>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Estimated Quantity *</label>
+                        <select 
+                          suppressHydrationWarning
+                          name="quantity"
+                          value={formData.quantity}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all cursor-pointer font-semibold"
+                        >
+                          <option value="">Select Quantity Range</option>
+                          <option value="50 - 100">50 - 100 units</option>
+                          <option value="100 - 500">100 - 500 units</option>
+                          <option value="500 - 2000">500 - 2000 units</option>
+                          <option value="2000+">2000+ units</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Budget Per Gift (Box)</label>
+                        <select 
+                          suppressHydrationWarning
+                          name="budget"
+                          value={formData.budget}
+                          onChange={handleInputChange}
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all cursor-pointer font-semibold"
+                        >
+                          <option value="">Select Budget Target</option>
+                          <option value="Under ₹500">Under ₹500</option>
+                          <option value="₹500 - ₹1000">₹500 - ₹1,000</option>
+                          <option value="₹1000 - ₹2500">₹1,005 - ₹2,500</option>
+                          <option value="Premium (₹2500+)">Premium (₹2,500+)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Delivery protocol *</label>
+                        <select 
+                          suppressHydrationWarning
+                          name="deliveryLocation"
+                          value={formData.deliveryLocation}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all cursor-pointer font-semibold"
+                        >
+                          <option value="">Select Delivery Method</option>
+                          <option value="Single Location">Single Office Location (Bulk)</option>
+                          <option value="Multiple Locations">Multiple Branches (Split shipment)</option>
+                          <option value="Direct to Employee Home">Direct to Employee Homes (Individual Dispatch)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Required Delivery Timeline</label>
+                        <select 
+                          suppressHydrationWarning
+                          name="deliveryTimeline"
+                          value={formData.deliveryTimeline}
+                          onChange={handleInputChange}
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all cursor-pointer font-semibold"
+                        >
+                          <option value="">Select Timeline Target</option>
+                          <option value="Urgent">Urgent (under 7 business days)</option>
+                          <option value="Standard">Standard (10 - 15 business days)</option>
+                          <option value="Flexible">Flexible (3+ weeks)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Service Area / Delivery Region *</label>
+                      <select 
+                        suppressHydrationWarning
+                        name="serviceArea"
+                        value={formData.serviceArea}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all cursor-pointer font-semibold"
+                      >
+                        <option value="">Select Service Area</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Noida">Noida</option>
+                        <option value="Gurgaon">Gurgaon</option>
+                        <option value="Ghaziabad">Ghaziabad</option>
+                        <option value="Faridabad">Faridabad</option>
+                        <option value="Other">Other Region (Outside Delhi NCR)</option>
+                      </select>
+                      
+                      {formData.serviceArea === "Other" && (
+                        <div className="text-amber-700 font-bold text-xs bg-amber-50 p-4 border border-amber-250 rounded-2xl text-left mt-3">
+                          ⚠️ Currently we only serve Delhi NCR regions for bulk corporate gifting & packaging.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 5: CONTACT DETAILS */}
+                {step === 5 && (
+                  <div className="space-y-5 text-left">
+                    <div>
+                      <h3 className="text-xl font-black text-gray-900 mb-1 flex items-center gap-2">
+                        <Building2 className="w-5 h-5 text-red-500" />
+                        Company & Contact Details
+                      </h3>
+                      <p className="text-xs text-gray-500 font-semibold">Enter your work details to finalize custom quote sheets.</p>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Contact Name *</label>
+                        <div className="relative">
+                          <User className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                          <input 
+                            suppressHydrationWarning
+                            required 
+                            name="name" 
+                            type="text" 
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                            placeholder="Your Name" 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Company Name *</label>
+                        <div className="relative">
+                          <Building2 className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                          <input 
+                            suppressHydrationWarning
+                            required 
+                            name="company" 
+                            type="text" 
+                            value={formData.company}
+                            onChange={handleInputChange}
+                            className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                            placeholder="Company Name" 
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Work Email *</label>
+                        <div className="relative">
+                          <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                          <input 
+                            suppressHydrationWarning
+                            required 
+                            name="email" 
+                            type="email" 
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                            placeholder="email@company.com" 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider">Phone / Mobile *</label>
+                        <div className="relative">
+                          <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
+                          <input 
+                            suppressHydrationWarning
+                            required 
+                            name="phone" 
+                            type="tel" 
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                            placeholder="+91 00000 00000" 
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-gray-700 block uppercase tracking-wider font-semibold">Special Requests / Branding Brief</label>
+                      <textarea 
+                        suppressHydrationWarning
+                        name="message" 
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows={3} 
+                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all resize-none font-medium" 
+                        placeholder="Tell us about the gifting event, customization demands, packaging color preferences, or other instructions..." 
+                      />
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Action Buttons */}
+        {status !== "success" && (
+          <div className="mt-8 border-t border-gray-150 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              {stepErrors && (
+                <p className="text-xs text-red-650 font-bold flex items-center gap-1.5 bg-red-50 px-3 py-1.5 rounded-lg border border-red-100 mb-2 sm:mb-0">
+                  <span>⚠</span> {stepErrors}
+                </p>
               )}
             </div>
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Name *</label>
-                  <input required name="name" type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium" placeholder="Your Name" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Company *</label>
-                  <input required name="company" type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium" placeholder="Company Name" />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Email Contact *</label>
-                  <input required name="email" type="email" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium" placeholder="work@company.com" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Phone Number *</label>
-                  <input required name="phone" type="tel" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium" placeholder="+91" />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6 border-t border-gray-100 pt-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Estimated Quantity *</label>
-                  <select required name="quantity" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none font-medium cursor-pointer">
-                    <option value="">Select Quantity</option>
-                    <option value="50 - 100">50 - 100</option>
-                    <option value="100 - 500">100 - 500</option>
-                    <option value="500 - 2000">500 - 2000</option>
-                    <option value="2000+">2000+</option>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Budget Per Box (₹)</label>
-                  <select name="budget" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none font-medium cursor-pointer">
-                    <option value="">Not Specified</option>
-                    <option value="Under ₹500">Under ₹500</option>
-                    <option value="₹500 - ₹1000">₹500 - ₹1000</option>
-                    <option value="₹1000 - ₹2500">₹1000 - ₹2500</option>
-                    <option value="Premium (₹2500+)">Premium (₹2500+)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Delivery To *</label>
-                <select required name="deliveryLocation" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none font-medium cursor-pointer">
-                  <option value="">Select Protocol</option>
-                  <option value="Single Location">Single Office Building</option>
-                  <option value="Multiple Locations">Multiple Branches</option>
-
-                  <option value="Direct to Employee Home">Direct to Employee Homes</option>
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Specific Requirements</label>
-                <textarea name="message" rows={4} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all resize-none font-medium" placeholder="Tell us about the occasion, target audience, and preferred items..." />
-              </div>
-
-              {status === "error" && (
-                <div className="text-red-600 font-bold bg-gray-50 p-3 rounded-lg text-sm border border-gray-200">
-                  {errorMessage}
-                </div>
+            <div className="flex items-center gap-3 ml-auto">
+              {step > 1 && (
+                <button
+                  suppressHydrationWarning
+                  type="button"
+                  onClick={prevStep}
+                  className="px-5 py-3 border border-gray-200 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-50 flex items-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4" /> Back
+                </button>
               )}
 
-              <div className="pt-2">
-                <Button 
-                  variant="default" 
-                  size="lg" 
-                  className="w-full py-6 text-lg rounded-xl flex items-center justify-center gap-2 transition-all bg-red-600 hover:bg-red-700 text-white" 
-                  type="submit"
+              {step < 5 ? (
+                <button
+                  suppressHydrationWarning
+                  type="button"
+                  onClick={nextStep}
+                  className="px-6 py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-gray-800 flex items-center gap-1.5 transition-all cursor-pointer"
+                >
+                  Continue <ChevronRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <Button
+                  variant="default"
+                  onClick={handleSubmit}
                   disabled={status === "submitting"}
+                  className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white px-7 py-3 rounded-xl font-bold text-sm flex items-center gap-2 shadow-lg hover:shadow-red-600/20 border-0"
                 >
                   {status === "submitting" ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Sending...
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Submitting...
                     </>
                   ) : (
                     <>
-                      Submit Enquiry <Send className="w-4 h-4 ml-1" />
+                      Submit Quote Request <Send className="w-4.5 h-4.5 ml-1" />
                     </>
                   )}
                 </Button>
-                <p className="text-center text-sm text-gray-500 mt-4 flex items-center justify-center gap-2 font-medium">
-                  <CheckCircle2 className="w-4 h-4 text-green-600" />
-                  We typically respond within 2-4 business hours.
-                </p>
-              </div>
-            </form>
-          </motion.div>
+              )}
+            </div>
+          </div>
         )}
-      </AnimatePresence>
+      </div>
+
+      {/* RIGHT SIDE: Real-Time Dynamic Summary Panel */}
+      <div className="lg:col-span-2 p-8 md:p-10 text-white flex flex-col justify-between relative luxury-gradient border-l border-white/10">
+        <div className="space-y-8">
+          <div>
+            <h3 className="text-xl font-black mb-1 tracking-wide uppercase text-red-500">Live Quote Summary</h3>
+            <p className="text-xs text-gray-400">Review your customized requirements as they are selected.</p>
+          </div>
+
+          <div className="space-y-4 border-y border-white/10 py-6 text-left">
+            {/* Products Row */}
+            <div className="flex items-start gap-3">
+              <Package className="w-5 h-5 text-red-550 flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="text-[10px] font-bold text-gray-400 block uppercase tracking-wider">Gifts / Kits Requested</span>
+                {((isShortlistSource && items.length > 0) || singleProduct) ? (
+                  <span className="text-sm font-semibold text-white">
+                    {isShortlistSource && items.length > 0 
+                      ? `${items.length} item(s) selected from shortlist` 
+                      : singleProduct
+                    }
+                  </span>
+                ) : (
+                  <span className="text-sm text-gray-300 italic font-semibold">
+                    {formData.customProductsText ? formData.customProductsText : "None selected yet"}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Scope Row */}
+            <div className="flex items-center gap-3">
+              <Clock className="w-5 h-5 text-red-555 flex-shrink-0" />
+              <div>
+                <span className="text-[10px] font-bold text-gray-400 block uppercase tracking-wider">Volume & Target Budget</span>
+                <span className="text-sm font-semibold text-white">
+                  {formData.quantity ? `${formData.quantity} units` : "Quantity not set"} 
+                  {formData.budget ? ` | Budget: ${formData.budget}` : ""}
+                </span>
+              </div>
+            </div>
+
+            {/* Branding Row */}
+            <div className="flex items-center gap-3">
+              <Paintbrush className="w-5 h-5 text-red-555 flex-shrink-0" />
+              <div>
+                <span className="text-[10px] font-bold text-gray-400 block uppercase tracking-wider">Logo Branding Curation</span>
+                <span className="text-sm font-semibold text-white">
+                  {formData.brandingMethod ? formData.brandingMethod : "None / Standard printing"}
+                </span>
+              </div>
+            </div>
+
+            {/* Packaging Row */}
+            <div className="flex items-center gap-3">
+              <HelpCircle className="w-5 h-5 text-red-555 flex-shrink-0" />
+              <div>
+                <span className="text-[10px] font-bold text-gray-400 block uppercase tracking-wider">Box Presentation Style</span>
+                <span className="text-sm font-semibold text-white">
+                  {formData.packagingChoice ? formData.packagingChoice : "Standard gifting box packaging"}
+                </span>
+              </div>
+            </div>
+
+            {/* Destination Row */}
+            <div className="flex items-start gap-3">
+              <Building2 className="w-5 h-5 text-red-555 flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="text-[10px] font-bold text-gray-400 block uppercase tracking-wider">Delivery Logistics</span>
+                <span className="text-sm font-semibold text-white">
+                  {formData.deliveryLocation ? formData.deliveryLocation : "Select protocol in Step 4"} 
+                  {formData.deliveryTimeline ? ` (${formData.deliveryTimeline} timeline)` : ""}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick FAQ / trust notes */}
+          <div className="space-y-4 pt-2 text-left">
+            <div className="flex gap-3">
+              <div className="text-green-500 mt-1"><CheckCircle2 className="w-4 h-4"/></div>
+              <div>
+                <h4 className="font-bold text-white text-xs tracking-wider uppercase">Free Sample Dispatches</h4>
+                <p className="text-gray-400 text-[10px] leading-relaxed">Corporate accounts qualify for physical proofing sample approvals before batch production.</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="text-green-500 mt-1"><CheckCircle2 className="w-4 h-4"/></div>
+              <div>
+                <h4 className="font-bold text-white text-xs tracking-wider uppercase">Enterprise Tax Invoicing</h4>
+                <p className="text-gray-400 text-[10px] leading-relaxed">All bulk invoices are provided with active GST input credit processing details.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 border-t border-white/10 pt-6 space-y-2 text-xs">
+          <div className="flex items-center justify-between text-gray-450">
+            <span>Direct Hotline:</span>
+            <span className="font-bold text-white">{COMPANY_INFO.phone}</span>
+          </div>
+          <div className="flex items-center justify-between text-gray-450">
+            <span>Email Inquiry:</span>
+            <span className="font-bold text-white break-all">{COMPANY_INFO.email}</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function EnquiryPage() {
   return (
-    <div className="pt-24 pb-20 bg-gray-50 min-h-screen overflow-hidden max-w-full">
+    <div className="pt-28 pb-24 bg-gray-50 min-h-screen overflow-hidden max-w-full relative">
       <BackgroundGradient />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
+      
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center mb-10">
           <SectionHeading 
-            title="Request a Custom Quote"
-            subtitle="Tell us about your gifting requirements and our experts will craft the perfect solution." 
+            title="Premium Request Curation"
+            subtitle="Describe your occasion, branding standards, and quantity guidelines. Our packaging and gifting specialists will compile custom mockups and quote sheets." 
             centered 
             className="mb-0"
           />
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="grid lg:grid-cols-5 gap-0 bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
-        >
-          {/* Wrap form area in Suspense so useSearchParams doesn't block build */}
-          <Suspense fallback={
-            <div className="lg:col-span-3 p-8 md:p-12 flex items-center justify-center min-h-[600px]">
-              <Loader2 className="w-10 h-10 animate-spin text-red-600" />
-            </div>
-          }>
-            <EnquiryFormContainer />
-          </Suspense>
-
-          {/* Info Side */}
-          <div className="lg:col-span-2  p-8 md:p-12 text-white flex flex-col justify-center">
-            <h3 className="text-2xl font-bold mb-8 text-red-600">What happens next?</h3>
-            <div className="space-y-8">
-              <div className="flex gap-4">
-                <div className="text-gray-400 mt-1"><CheckCircle2 className="w-6 h-6"/></div>
-                <div>
-                  <h4 className="font-bold text-red-600 mb-1 tracking-wide text-lg">Expert Consultation</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Our gifting expert will contact you within 24 hours to deeply understand your requirement.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="text-gray-400 mt-1"><CheckCircle2 className="w-6 h-6"/></div>
-                <div>
-                  <h4 className="font-bold text-red-600 mb-1 tracking-wide text-lg">Custom Mockups</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Receive a tailored presentation with product mockups featuring your brand logo.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="text-gray-400 mt-1"><CheckCircle2 className="w-6 h-6"/></div>
-                <div>
-                  <h4 className="font-bold text-red-600 mb-1 tracking-wide text-lg">Sample Approval</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Physical samples are dispatched for your final review before bulk production begins.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-12 space-y-4 border-t border-white/10 pt-8">
-              <div className="flex items-start gap-4">
-                <div className="bg-red-600 p-2 rounded-lg"><Send className="w-4 h-4 text-white" /></div>
-                <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Our Office</p>
-                  <p className="text-sm font-medium leading-relaxed">Digital Greens, Tower A, Sector-61,<br/>Gurgaon, Haryana-122102</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-red-600 p-2 rounded-lg"><Send className="w-4 h-4 text-white" /></div>
-                <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Email Us</p>
-                  <p className="text-sm font-bold">pacmyproduct@gmail.com</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-red-600 p-2 rounded-lg"><Send className="w-4 h-4 text-white" /></div>
-                <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Call Us</p>
-                  <p className="text-sm font-bold">+91 9818601834</p>
-                </div>
-              </div>
+        <Suspense fallback={
+          <div className="p-12 bg-white rounded-2xl border border-gray-250 shadow-xl flex items-center justify-center min-h-[600px]">
+            <div className="text-center space-y-4">
+              <Loader2 className="w-12 h-12 animate-spin text-red-600 mx-auto" />
+              <p className="text-gray-500 text-sm font-bold animate-pulse">Initializing Premium Wizard...</p>
             </div>
           </div>
-        </motion.div>
+        }>
+          <EnquiryFormContainer />
+        </Suspense>
 
       </div>
     </div>

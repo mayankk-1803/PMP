@@ -43,8 +43,11 @@ const FADE_UP: Variants = {
 
 export default function BlogPage() {
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-white overflow-hidden max-w-full">
-      <BackgroundGradient />
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#fafafa] overflow-hidden max-w-full">
+      <BackgroundGradient className="opacity-15 blur-[140px]" />
+      
+      {/* Soft top gradient */}
+      <div className="absolute top-0 left-0 right-0 h-[400px] bg-gradient-to-b from-red-50/30 to-transparent pointer-events-none z-0" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         <SectionHeading 

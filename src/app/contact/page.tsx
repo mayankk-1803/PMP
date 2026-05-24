@@ -1,102 +1,376 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { 
+  MapPin, 
+  Phone, 
+  Mail, 
+  MessageSquare, 
+  Clock, 
+  CreditCard, 
+  CheckCircle2, 
+  Loader2, 
+  Send,
+  ExternalLink 
+} from "lucide-react";
+import { COMPANY_INFO } from "@/data/siteConfig";
 
 export default function ContactPage() {
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("submitting");
+    setErrorMessage("");
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const company = formData.get("company") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const message = formData.get("message") as string;
+
+    if (!name || !company || !email || !phone) {
+      setErrorMessage("Please fill in all required fields.");
+      setStatus("error");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          company,
+          email,
+          phone,
+          quantity: "Not Specified",
+          budget: "Not Specified",
+          deliveryLocation: "Single Location",
+          message: `--- Quick Contact Form Inquiry ---\n${message || "No message provided."}`,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatus("success");
+        e.currentTarget.reset();
+      } else {
+        setErrorMessage(result.message || "Failed to send message. Please try again.");
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage("An error occurred while sending your request.");
+      setStatus("error");
+    }
+  };
+
   return (
-    <div className="pt-24 pb-20 bg-white overflow-hidden max-w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="mb-16">
+    <div className="pt-28 pb-24 bg-gray-50 overflow-hidden max-w-full relative">
+      <BackgroundGradient />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="mb-14">
           <SectionHeading 
-            title="Contact Us" 
-            subtitle="Get in touch with our team for bulk inquiries, partnerships, or any support." 
+            title="Connect with Our Gifting Team" 
+            subtitle="Request customized catalogs, arrange physical sample reviews, or speak with an enterprise Account Specialist. Serving businesses across Delhi, Gurgaon, Noida, Ghaziabad & Faridabad." 
             centered 
           />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white p-8 md:p-12 rounded-lg border border-gray-100 shadow-sm"
-          >
-            <h3 className="text-xl font-bold text-red-600 mb-8">Corporate Enquiry Form</h3>
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Company Name & Name</label>
-                <input type="text" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="Company Name / Your Name" />
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Email Address</label>
-                  <input type="email" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="email@example.com" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Phone Number</label>
-                  <input type="tel" className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all" placeholder="+91 00000 00000" />
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Requirement Details</label>
-                <textarea rows={4} className="w-full bg-gray-50 border border-gray-100 rounded-lg px-4 py-3 text-[#1f2937] focus:outline-none focus:ring-1 focus:ring-[#dc2626] transition-all resize-none" placeholder="Tell us about your needs..." />
-              </div>
-              <Button size="lg" className="w-full rounded-lg text-sm font-bold" type="button">
-                Submit Inquiry
-              </Button>
-            </form>
-          </motion.div>
-
-          <div className="space-y-8 flex flex-col justify-center">
-            {/* Bulk Order Section */}
-            <div className=" text-black p-8 md:p-12 rounded-lg flex flex-col justify-between">
+        {/* Top Info Cards & Form Grid */}
+        <div className="grid lg:grid-cols-5 gap-8 mb-12">
+          
+          {/* LEFT SIDE: Enterprise Details & Direct CTAs */}
+          <div className="lg:col-span-2 space-y-6 flex flex-col justify-between text-left">
+            <div className="space-y-6">
               <div>
-                <h4 className="text-xl font-bold mb-3 text-red-600">Bulk Order Special</h4>
-                <p className="text-black text-sm mb-6 leading-relaxed">
-                  Planning a large-scale gifting program? We offer exclusive pricing and dedicated management for orders above 100 units.
+                <h3 className="text-2xl font-black text-gray-900 mb-2">Corporate Support</h3>
+                <p className="text-sm text-gray-500 leading-relaxed font-medium">
+                  Whether you are launching a bulk employee welcome kit program or ordering bespoke rigid luxury packaging boxes, our team is equipped to support you.
                 </p>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-white/10 p-2.5 rounded-lg">
-                  <Phone className="w-5 h-5" />
+
+              {/* Direct Floating Actions */}
+              <div className="grid gap-3">
+                <a 
+                  href={COMPANY_INFO.whatsapp} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-100 rounded-xl transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="bg-emerald-600 p-2.5 rounded-lg text-white">
+                      <MessageSquare className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-emerald-800 font-extrabold uppercase tracking-wider block">Chat on WhatsApp</span>
+                      <span className="text-sm font-bold text-gray-900">+91 9818601834</span>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-emerald-600 transition-transform group-hover:translate-x-0.5" />
+                </a>
+
+                <a 
+                  href={`tel:${COMPANY_INFO.phone}`}
+                  className="flex items-center justify-between p-4 bg-red-55/40 hover:bg-red-100/60 border border-red-100 rounded-xl transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="bg-red-600 p-2.5 rounded-lg text-white">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-red-800 font-extrabold uppercase tracking-wider block">Bulk Order Helpline</span>
+                      <span className="text-sm font-bold text-gray-900">{COMPANY_INFO.phone}</span>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-red-600 transition-transform group-hover:translate-x-0.5" />
+                </a>
+
+                <a 
+                  href={`mailto:${COMPANY_INFO.email}?subject=Corporate%20Gifting%20Inquiry`}
+                  className="flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-250/60 border border-gray-200 rounded-xl transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="bg-gray-900 p-2.5 rounded-lg text-white">
+                      <Mail className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-gray-500 font-extrabold uppercase tracking-wider block">Official Email</span>
+                      <span className="text-sm font-bold text-gray-900 break-all">{COMPANY_INFO.email}</span>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-gray-955 transition-transform group-hover:translate-x-0.5" />
+                </a>
+              </div>
+
+              {/* Office Details */}
+              <div className="grid gap-4">
+                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex items-start gap-4">
+                  <div className="text-red-500 p-2.5 bg-red-50 rounded-lg">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-gray-900 mb-1">Corporate HQ</h4>
+                    <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                      {COMPANY_INFO.address}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Direct Line</p>
-                  <p className="font-bold">+91 9818601834</p>
+
+                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex items-start gap-4">
+                  <div className="text-red-500 p-2.5 bg-red-50 rounded-lg">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-gray-900 mb-1">Operational Hours</h4>
+                    <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                      {COMPANY_INFO.timings}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex items-start gap-4">
+                  <div className="text-red-500 p-2.5 bg-red-50 rounded-lg">
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-gray-900 mb-1">GST & Billing Info</h4>
+                    <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                      {COMPANY_INFO.gst}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Contact Details */}
-            <div className="grid gap-4">
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-100 flex items-start gap-4">
-                <div className="text-[#dc2626]">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-red-600 mb-1">Corporate Office</h4>
-                  <p className="text-gray-500 text-xs leading-relaxed">Digital Greens, Sector-61, Gurgaon, Haryana-122102</p>
-                </div>
-              </div>
-
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-100 flex items-start gap-4">
-                <div className="text-[#dc2626]">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-red-600 mb-1">Email Support</h4>
-                  <p className="text-gray-500 text-xs">pacmyproduct@gmail.com</p>
-                </div>
-              </div>
+            <div className="text-xs text-gray-400 font-bold uppercase tracking-wider">
+              🛡️ We target a 2-hour response time for standard B2B inquiries.
             </div>
-            
+          </div>
+
+          {/* RIGHT SIDE: Interactive Contact Form */}
+          <div className="lg:col-span-3">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="bg-white p-8 md:p-10 rounded-3xl border border-gray-200 shadow-lg relative text-left"
+            >
+              <h3 className="text-xl font-black text-gray-900 mb-1">Send a Message</h3>
+              <p className="text-xs text-gray-500 mb-6 font-semibold">Complete this quick form to initiate contact. Our account managers will reach out to you.</p>
+              
+              <AnimatePresence mode="wait">
+                {status === "success" ? (
+                  <motion.div 
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="flex flex-col items-center justify-center text-center py-10"
+                  >
+                    <div className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-6 shadow-inner animate-bounce">
+                      <CheckCircle2 className="w-10 h-10" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Message Sent Successfully!</h3>
+                    <p className="text-gray-600 text-xs max-w-sm mb-6 leading-relaxed">
+                      Thank you. We have received your query and will reply via email or phone shortly.
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setStatus("idle")}
+                      className="px-6 text-xs font-bold rounded-xl"
+                    >
+                      Send Another Message
+                    </Button>
+                  </motion.div>
+                ) : (
+                  <form className="space-y-5" onSubmit={handleFormSubmit}>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Full Name *</label>
+                        <input 
+                          required 
+                          name="name"
+                          type="text" 
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          placeholder="Your Name" 
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Company / Organization *</label>
+                        <input 
+                          required 
+                          name="company"
+                          type="text" 
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          placeholder="Company Name" 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Work Email Address *</label>
+                        <input 
+                          required 
+                          name="email"
+                          type="email" 
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          placeholder="email@company.com" 
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Phone Number *</label>
+                        <input 
+                          required 
+                          name="phone"
+                          type="tel" 
+                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          placeholder="+91 00000 00000" 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Inquiry / Project Details</label>
+                      <textarea 
+                        name="message"
+                        rows={4} 
+                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all resize-none font-medium" 
+                        placeholder="Please write down your questions or requests..." 
+                      />
+                    </div>
+
+                    {status === "error" && (
+                      <div className="text-red-650 font-bold text-xs bg-red-50 p-3 border border-red-100 rounded-lg">
+                        {errorMessage}
+                      </div>
+                    )}
+
+                    <div className="pt-2">
+                      <Button 
+                        size="lg" 
+                        className="w-full rounded-xl text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white py-5 flex items-center justify-center gap-2 shadow-md hover:shadow-red-600/10 border-0" 
+                        type="submit"
+                        disabled={status === "submitting"}
+                      >
+                        {status === "submitting" ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Sending Message...
+                          </>
+                        ) : (
+                          <>
+                            Submit Inquiry <Send className="w-3.5 h-3.5 ml-1" />
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
         </div>
+
+        {/* BOTTOM SECTION: Full-width stylized interactive Map */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-white p-2 relative"
+        >
+          {/* Floating Location Card */}
+          <div className="absolute top-6 left-6 z-20 bg-[#0c0c0e]/95 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.5)] max-w-sm hidden md:block text-left">
+            <span className="text-[9px] font-extrabold uppercase tracking-widest text-red-500 block mb-2">Regional Logistics</span>
+            <h4 className="text-sm font-extrabold text-white mb-2">Bulk Orders & Corporate Deliveries Available Across Delhi NCR</h4>
+            <p className="text-xs text-gray-400 leading-relaxed mb-4 font-medium">
+              We manage local warehousing and direct fleet deliveries to guarantee safe transit to branch offices.
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-gray-250">
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Delhi
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Gurgaon (HQ)
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Noida
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Ghaziabad
+              </div>
+              <div className="flex items-center gap-1.5 col-span-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Faridabad
+              </div>
+            </div>
+          </div>
+
+          <div className="h-[450px] w-full rounded-2xl overflow-hidden relative">
+            <iframe 
+              title="PacMyProducts Corporate Office Map"
+              src={COMPANY_INFO.mapsUrl} 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={true} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 grayscale invert-[90%] hue-rotate-[180deg] brightness-[95%] contrast-[90%] hover:grayscale-0 hover:invert-0 hover:hue-rotate-0 transition-all duration-750"
+            />
+          </div>
+        </motion.div>
       </div>
     </div>
   );

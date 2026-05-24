@@ -1,51 +1,155 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
+import { PRODUCTS, BUDGETS } from "@/data/siteConfig";
+import { Wallet, PiggyBank, Coins, Briefcase, Gem, Crown } from "lucide-react";
 
-const BUDGET_PRODUCTS = [
-  { title: "Custom Ceramic Mug", price: "Under ₹250", description: "Durable and premium branding ceramic mugs for employee gifting.", imageUrl: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=800&q=80" },
-  { title: "Executive Diary", price: "₹250 - ₹500", description: "Leatherette hardbound diaries with custom logo embossing.", imageUrl: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=800&q=80" },
-  { title: "Tech Organizer Case", price: "₹500 - ₹1000", description: "High-quality travel tech organizer for cables, chargers, and powerbanks.", imageUrl: "https://tse4.mm.bing.net/th/id/OIP.k_Pte09bpvs0sjamLxcKiwHaEo?pid=Api&h=220&P=0" },
-  { title: "Premium Welcome Kit", price: "₹1000 - ₹2500", description: "A curated kit for new hires including a bottle, diary, pen, and keychains.", imageUrl: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=800&q=80" },
-  { title: "Luxury Wellness Hamper", price: "₹2500+", description: "An exclusive collection of gourmet treats, essential oils, and luxury candles.", imageUrl: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" },
-];
+// Helper to assign icons to budget ranges
+const getBudgetIcon = (index: number) => {
+  const icons = [
+    <Wallet key="1" className="w-4 h-4" />,
+    <PiggyBank key="2" className="w-4 h-4" />,
+    <Coins key="3" className="w-4 h-4" />,
+    <Briefcase key="4" className="w-4 h-4" />,
+    <Gem key="5" className="w-4 h-4" />,
+    <Crown key="6" className="w-4 h-4" />,
+  ];
+  return icons[index] || <Coins key="default" className="w-4 h-4" />;
+};
 
 function GiftsByBudgetContent() {
   const searchParams = useSearchParams();
-  const selectedRange = searchParams.get("range");
+  const router = useRouter();
+  const selectedRange = searchParams.get("range") || "";
 
-  const filteredProducts = selectedRange 
-    ? BUDGET_PRODUCTS.filter(p => p.price === selectedRange)
-    : BUDGET_PRODUCTS;
+  // Convert products object to array and transform images/price fields
+  const allProducts = Object.values(PRODUCTS).map((p) => ({
+    title: p.title,
+    description: p.description,
+    imageUrl: p.images[0] || "",
+    price: `Starts from ₹${p.basePrice}`,
+    budgetRange: p.budget,
+  }));
+
+  // Unique list of budget tiers based on BUDGETS config, preventing duplicate "₹2500+" values
+  const uniqueBudgetTiers = BUDGETS.filter(
+    (item, index, self) => self.findIndex((t) => t.value === item.value) === index
+  );
+
+  const filteredProducts = selectedRange
+    ? allProducts.filter(
+        (p) => p.budgetRange.toLowerCase() === selectedRange.toLowerCase()
+      )
+    : allProducts;
+
+  const handleSelectRange = (rangeValue: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (rangeValue) {
+      params.set("range", rangeValue);
+    } else {
+      params.delete("range");
+    }
+    router.push(`/gifts-by-budget?${params.toString()}`);
+  };
 
   return (
-    <div className="pt-24 pb-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-16">
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#fafafa] overflow-hidden max-w-full">
+      <BackgroundGradient className="opacity-15 blur-[140px]" />
+      
+      {/* Decorative gradient overlay */}
+      <div className="absolute top-0 left-0 right-0 h-[400px] bg-gradient-to-b from-red-50/30 to-transparent pointer-events-none z-0" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        
+        {/* Page Title */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-red-100">
+            Smart Budgets
+          </span>
           <SectionHeading 
-            title={<>Gifts by <span className="text-red-600">Budget</span></>}
-            subtitle={selectedRange ? `Curated gifts in the ${selectedRange} range.` : "Explore our curated collections designed to fit every budget."} 
+            title={<>Corporate Gifts <span className="text-red-600">by Budget</span></>}
+            subtitle="Explore our curated catalog segments structured dynamically to match your cost constraints without compromising on visual elegance." 
             centered 
           />
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((product, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: (idx % 4) * 0.1, duration: 0.5 }}
+        {/* Dynamic Budget Range Selection Tabs */}
+        <div className="flex justify-center mb-16 px-4">
+          <div className="inline-flex flex-wrap p-1.5 bg-white border border-gray-200/80 rounded-2xl shadow-sm max-w-5xl w-full justify-center gap-2">
+            {/* "All Budgets" Pill */}
+            <button
+              onClick={() => handleSelectRange("")}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 w-full sm:w-auto ${
+                selectedRange === ""
+                  ? "bg-gray-900 text-white shadow-md shadow-gray-900/10"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              }`}
             >
-              <ProductCard {...product} index={idx} />
-            </motion.div>
-          ))}
+              <Coins className="w-4 h-4" />
+              All Budgets
+            </button>
+
+            {uniqueBudgetTiers.map((tier, idx) => {
+              const isActive = selectedRange.toLowerCase() === tier.value.toLowerCase();
+              return (
+                <button
+                  key={tier.name}
+                  onClick={() => handleSelectRange(tier.value)}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 w-full sm:w-auto ${
+                    isActive
+                      ? "bg-gray-900 text-white shadow-md shadow-gray-900/10"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  {getBudgetIcon(idx)}
+                  {tier.name}
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Products Grid */}
+        <div className="relative min-h-[300px]">
+          {filteredProducts.length > 0 ? (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedRange}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+              >
+                {filteredProducts.map((product, idx) => (
+                  <ProductCard
+                    key={product.title}
+                    title={product.title}
+                    description={product.description}
+                    imageUrl={product.imageUrl}
+                    price={product.price}
+                    index={idx}
+                    className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            <div className="text-center py-20 bg-white border border-gray-200 rounded-3xl p-8 max-w-md mx-auto shadow-sm">
+              <Coins className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <h4 className="text-lg font-bold text-gray-800 mb-2">No products found</h4>
+              <p className="text-gray-500 text-sm">
+                We don't currently have products categorized directly in this segment. Let us customize a custom gift proposal for you!
+              </p>
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );
@@ -53,7 +157,7 @@ function GiftsByBudgetContent() {
 
 export default function GiftsByBudgetPage() {
   return (
-    <Suspense fallback={<div className="pt-32 text-center font-bold text-gray-400">Loading...</div>}>
+    <Suspense fallback={<div className="pt-32 text-center font-bold text-gray-400">Loading budget catalog...</div>}>
       <GiftsByBudgetContent />
     </Suspense>
   );

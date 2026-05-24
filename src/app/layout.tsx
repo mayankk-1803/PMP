@@ -13,8 +13,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Premium Corporate Gifting & Custom Swag | PacMyProduct",
-  description: "Luxury corporate gifting, custom branding, and bulk employee welcome kits. Discover our curated, premium B2B gift collection.",
+  title: "Corporate Gifting & Packaging Delhi NCR | PacMyProduct",
+  description: "Delhi NCR's premium corporate gifting & custom packaging partner. Fast bulk delivery of employee welcome kits, festive hampers, and rigid box packaging across Gurgaon, Noida, Delhi, Faridabad & Ghaziabad.",
 };
 
 export default function RootLayout({

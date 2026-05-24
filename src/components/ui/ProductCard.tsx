@@ -37,6 +37,14 @@ export function ProductCard({ title, description, imageUrl, price, className, in
     router.push(`/enquiry?product=${encodeURIComponent(title)}`);
   };
 
+  const handleCardClick = () => {
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+    router.push(`/products/${slug}`);
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -48,8 +56,9 @@ export function ProductCard({ title, description, imageUrl, price, className, in
         delay: index * 0.05
       }}
       whileHover={{ y: -4 }}
+      onClick={handleCardClick}
       className={cn(
-        "group flex flex-col h-full relative overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100 transition-all hover:shadow-md hover:border-gray-200", 
+        "group flex flex-col h-full relative overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100 transition-all hover:shadow-md hover:border-gray-200 cursor-pointer", 
         className
       )}
     >

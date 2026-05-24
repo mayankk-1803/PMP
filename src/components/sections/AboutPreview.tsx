@@ -4,67 +4,156 @@ import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "../ui/Button";
-import { ShieldCheck, Truck, Award } from "lucide-react";
+import { 
+  Sparkles, Award, Compass, Workflow, Truck, CheckCircle2 
+} from "lucide-react";
+
+const TIMELINE_SERVICES = [
+  {
+    step: "01",
+    title: "Premium Curation",
+    description: "Our corporate styling experts curate items custom-tailored to your brand aesthetic.",
+    icon: <Compass className="w-4 h-4 text-red-600" />
+  },
+  {
+    step: "02",
+    title: "Global Sourcing",
+    description: "We source authentic products directly from certified co-branded manufacturers.",
+    icon: <Workflow className="w-4 h-4 text-red-600" />
+  },
+  {
+    step: "03",
+    title: "Bespoke Customization",
+    description: "Logo embossing, hot foil stamping, screen print & precision laser engraving.",
+    icon: <Sparkles className="w-4 h-4 text-red-600" />
+  },
+  {
+    step: "04",
+    title: "End-to-End Fulfillment",
+    description: "White-glove quality assurance and direct pan-India individual employee shipping.",
+    icon: <Truck className="w-4 h-4 text-red-600" />
+  }
+];
 
 export function AboutPreview() {
   return (
-    <section className="py-24 bg-gray-50">
+    <section className="py-24 bg-gray-50 overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="text-red-600 text-xs font-bold tracking-widest uppercase mb-3 block">About PacMyProducts</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Your Strategic Partner for <br />
-              <span className="text-red-600">Corporate Gifting & Packaging</span>
-            </h2>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              We specialize in providing end-to-end solutions for corporate gifting and custom packaging. From premium product curation to in-house manufacturing, we ensure your brand leaves a lasting impression.
-            </p>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-              <div className="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                <Award className="w-8 h-8 text-red-600 mb-3" />
-                <span className="text-xs font-bold text-gray-900 uppercase">Premium Quality</span>
-              </div>
-              <div className="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                <ShieldCheck className="w-8 h-8 text-red-600 mb-3" />
-                <span className="text-xs font-bold text-gray-900 uppercase">Trusted Partner</span>
-              </div>
-              <div className="flex flex-col items-center text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                <Truck className="w-8 h-8 text-red-600 mb-3" />
-                <span className="text-xs font-bold text-gray-900 uppercase">Pan-India Delivery</span>
-              </div>
+        <div className="grid lg:grid-cols-12 gap-16 items-center">
+          
+          {/* Left Column: Title & Timeline */}
+          <div className="lg:col-span-6 space-y-8 text-left">
+            <div>
+              <span className="text-red-500 text-xs font-bold tracking-widest uppercase mb-3 block">How We Deliver Excellence</span>
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
+                Your End-to-End Strategic <br />
+                <span className="text-red-600">Corporate Gifting Partner</span>
+              </h2>
+              <p className="text-sm sm:text-base text-gray-600 mt-4 leading-relaxed max-w-xl font-medium">
+                We handle the complete corporate merchandising lifecycle. From design dielines to door-step delivery, we ensure brand consistency and premium B2B execution.
+              </p>
             </div>
 
-            <Button size="lg" className="rounded-lg px-10" asChild>
-              <Link href="/about">Learn More About Us</Link>
-            </Button>
-          </motion.div>
+            {/* Timeline */}
+            <div className="relative border-l border-gray-200 ml-3.5 pl-8 space-y-8">
+              {TIMELINE_SERVICES.map((serv, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: -15 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  className="relative group text-left"
+                >
+                  {/* Timeline Dot Indicator */}
+                  <span className="absolute -left-[45px] top-1 bg-white border-2 border-red-600 w-8 h-8 rounded-full flex items-center justify-center shadow-sm group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+                    <span className="text-[10px] font-extrabold text-gray-900 group-hover:text-white transition-colors">
+                      {serv.step}
+                    </span>
+                  </span>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative"
-          >
-            <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl border-8 border-white">
+                  <div>
+                    <h3 className="text-sm sm:text-base font-bold text-gray-900 flex items-center gap-2 group-hover:text-red-600 transition-colors">
+                      {serv.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed max-w-lg">
+                      {serv.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <Button size="lg" className="rounded-xl px-8 h-12 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-bold shadow-md shadow-red-600/10 border-0" asChild>
+                <Link href="/about">Learn More About Us</Link>
+              </Button>
+              <div className="flex items-center gap-2 text-[10px] sm:text-xs text-gray-400 font-bold uppercase tracking-wider">
+                <CheckCircle2 className="w-4 h-4 text-red-500" /> SLA: 100% Quality Guarantee
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Animated collage */}
+          <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] flex items-center justify-center">
+            
+            {/* Background Base Hamper Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="absolute left-4 top-4 w-[280px] h-[340px] sm:w-[345px] sm:h-[425px] rounded-3xl overflow-hidden shadow-xl border-4 border-white"
+            >
               <img 
-                src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1000&auto=format&fit=crop" 
-                alt="Corporate Gifting Expertise" 
+                src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop" 
+                alt="Corporate Hamper Box" 
                 className="w-full h-full object-cover"
               />
-            </div>
-            <div className="absolute -bottom-6 -right-6 bg-red-600 text-white p-8 rounded-2xl shadow-xl hidden md:block">
-              <div className="text-3xl font-bold mb-1">15+</div>
-              <div className="text-xs font-bold uppercase tracking-wider">Years of Excellence</div>
-            </div>
-          </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+              <div className="absolute bottom-4 left-4 text-white text-left">
+                <span className="text-[9px] font-extrabold uppercase tracking-widest text-amber-300">Festive curations</span>
+                <h4 className="text-sm font-bold mt-0.5">Luxury Gift Curation</h4>
+              </div>
+            </motion.div>
+
+            {/* Overlapping Card 1: Custom Leather Journals */}
+            <motion.div
+              initial={{ opacity: 0, y: 30, x: 20 }}
+              whileInView={{ opacity: 1, y: 0, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="absolute right-4 bottom-4 w-[180px] h-[220px] sm:w-[225px] sm:h-[285px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white group"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=600&auto=format&fit=crop" 
+                alt="Corporate Diary Customization" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+              <div className="absolute bottom-4 left-4 text-white text-left">
+                <span className="text-[9px] font-extrabold uppercase tracking-widest text-amber-300">Premium Branding</span>
+                <h4 className="text-xs font-bold mt-0.5">Leather Journals</h4>
+              </div>
+            </motion.div>
+
+            {/* Overlapping Card 2: Floating Custom badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="absolute right-12 top-16 bg-white p-5 rounded-2xl shadow-xl flex flex-col items-center justify-center text-center border border-gray-100 z-10 hover:scale-105 transition-transform"
+            >
+              <div className="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-500 mb-2">
+                <Award className="w-6 h-6" />
+              </div>
+              <div className="text-lg font-black text-gray-900">15+ Years</div>
+              <div className="text-[9px] font-extrabold text-gray-400 uppercase tracking-widest mt-0.5">Industry Trust</div>
+            </motion.div>
+
+          </div>
+
         </div>
       </div>
     </section>

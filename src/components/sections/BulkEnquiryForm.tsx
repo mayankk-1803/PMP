@@ -161,29 +161,29 @@ export function BulkEnquiryForm() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label htmlFor="name" className="text-sm font-bold text-gray-700">Full Name *</label>
-                        <input required type="text" id="name" name="name" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="John Doe" />
+                        <input suppressHydrationWarning required type="text" id="name" name="name" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="John Doe" />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="company" className="text-sm font-bold text-gray-700">Company Name *</label>
-                        <input required type="text" id="company" name="company" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="Acme Corp" />
+                        <input suppressHydrationWarning required type="text" id="company" name="company" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="Acme Corp" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-bold text-gray-700">Work Email *</label>
-                        <input required type="email" id="email" name="email" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="john@acmecorp.com" />
+                        <input suppressHydrationWarning required type="email" id="email" name="email" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="john@acmecorp.com" />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="phone" className="text-sm font-bold text-gray-700">Phone Number *</label>
-                        <input required type="tel" id="phone" name="phone" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="+91 98765 43210" />
+                        <label htmlFor="phone" className="text-sm font-bold text-gray-750">Phone Number *</label>
+                        <input suppressHydrationWarning required type="tel" id="phone" name="phone" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all font-medium text-gray-900" placeholder="+91 98765 43210" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                       <div className="space-y-2 col-span-1">
                         <label htmlFor="quantity" className="text-sm font-bold text-gray-700">Units *</label>
-                        <select required id="quantity" name="quantity" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none cursor-pointer font-medium text-gray-900">
+                        <select suppressHydrationWarning required id="quantity" name="quantity" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none cursor-pointer font-medium text-gray-900">
                           <option value="">Select</option>
                           <option value="50-100">50 - 100</option>
                           <option value="101-500">101 - 500</option>
@@ -193,7 +193,7 @@ export function BulkEnquiryForm() {
                       </div>
                       <div className="space-y-2 col-span-1">
                         <label htmlFor="budget" className="text-sm font-bold text-gray-700">Per Kit Budget</label>
-                        <select id="budget" name="budget" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none cursor-pointer font-medium text-gray-900">
+                        <select suppressHydrationWarning id="budget" name="budget" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900 transition-all appearance-none cursor-pointer font-medium text-gray-900">
                           <option value="">Select</option>
                           <option value="Under ₹1000">Under ₹1000</option>
                           <option value="₹1000-₹2500">₹1000-₹2500</option>
@@ -202,7 +202,7 @@ export function BulkEnquiryForm() {
                       </div>
                       <div className="space-y-2 col-span-1">
                         <label htmlFor="timeline" className="text-sm font-bold text-gray-700">Delivery Timeline</label>
-                        <select id="timeline" name="timeline" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all appearance-none cursor-pointer font-medium text-gray-900">
+                        <select suppressHydrationWarning id="timeline" name="timeline" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all appearance-none cursor-pointer font-medium text-gray-900">
                           <option value="">Select</option>
                           <option value="Urgent (< 1 week)">Urgent (&lt; 1 week)</option>
                           <option value="1-2 weeks">1-2 weeks</option>
