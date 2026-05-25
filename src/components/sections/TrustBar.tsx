@@ -7,7 +7,7 @@ const METRICS = [
   { value: "500+", label: "Clients Partnered" },
   { value: "10,000+", label: "Hampers Delivered" },
   { value: "100%", label: "Satisfaction Rate" },
-  { value: "Delhi NCR", label: "Delivery Network" },
+  { value: "Pan-India", label: "Delivery Network" },
 ];
 
 const LOGOS = [

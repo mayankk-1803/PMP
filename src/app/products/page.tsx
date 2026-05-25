@@ -228,23 +228,23 @@ function ProductsPageContent() {
               </div>
             </div>
 
-            {/* Delhi NCR Logistics Trust Widget */}
+            {/* Nationwide Logistics Trust Widget */}
             <div className="bg-gradient-to-br from-slate-900 via-gray-900 to-neutral-900 border border-white/10 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden text-left">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-red-650/10 rounded-full blur-xl pointer-events-none" />
+              <div className="absolute top-0 right-0 w-24 h-24 bg-red-600/10 rounded-full blur-xl pointer-events-none" />
               <MapPin className="w-6 h-6 text-red-500 mb-3" />
-              <h4 className="font-extrabold text-xs uppercase tracking-widest text-gray-400 mb-1">NCR Delivery Trust</h4>
-              <h5 className="font-black text-sm mb-1.5 text-white">Direct-to-Office Hand Delivery</h5>
+              <h4 className="font-extrabold text-xs uppercase tracking-widest text-gray-400 mb-1">Logistics Trust</h4>
+              <h5 className="font-black text-sm mb-1.5 text-white">Insured B2B Shipping & Setup</h5>
               <p className="text-[11px] leading-relaxed text-gray-300 font-semibold mb-4">
-                We offer direct fleet hand-delivery and assembly to Delhi, Gurgaon, Noida, Ghaziabad, and Faridabad offices. Desk-to-desk setup is standard.
+                We manage bulk transport and split-shipment dispatch to guarantee safe delivery directly to your offices or employee doors nationwide.
               </p>
               <div className="flex flex-col gap-2 pt-3 border-t border-white/10 text-[10px] text-gray-400 font-bold">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                  <span>Delhi NCR: Direct fleet dispatch</span>
+                  <span>Metro Hubs: Express dispatch SLA</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
-                  <span>Other Regions: Secure B2B shipping</span>
+                  <span>Pan-India: Fully insured B2B shipping</span>
                 </div>
               </div>
             </div>

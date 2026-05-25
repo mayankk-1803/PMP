@@ -538,20 +538,17 @@ function EnquiryFormContainer() {
                         required
                         className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all cursor-pointer font-semibold"
                       >
-                        <option value="">Select Service Area</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Noida">Noida</option>
-                        <option value="Gurgaon">Gurgaon</option>
-                        <option value="Ghaziabad">Ghaziabad</option>
-                        <option value="Faridabad">Faridabad</option>
-                        <option value="Other">Other Region (Outside Delhi NCR)</option>
+                        <option value="">Select Service Area / Region</option>
+                        <option value="Delhi NCR">Delhi NCR</option>
+                        <option value="Maharashtra">Maharashtra (Mumbai, Pune, etc.)</option>
+                        <option value="Karnataka">Karnataka (Bangalore, etc.)</option>
+                        <option value="Telangana">Telangana (Hyderabad, etc.)</option>
+                        <option value="Tamil Nadu">Tamil Nadu (Chennai, etc.)</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Other India State">Other State (Pan-India)</option>
+                        <option value="International">International</option>
                       </select>
-                      
-                      {formData.serviceArea === "Other" && (
-                        <div className="text-amber-700 font-bold text-xs bg-amber-50 p-4 border border-amber-250 rounded-2xl text-left mt-3">
-                          ⚠️ Currently we only serve Delhi NCR regions for bulk corporate gifting & packaging.
-                        </div>
-                      )}
                     </div>
                   </div>
                 )}

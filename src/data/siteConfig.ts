@@ -10,6 +10,7 @@ export const COMPANY_INFO = {
 };
 
 export const CORPORATE_GIFTS = [
+  { name: "Workspace Essentials", slug: "workspace-essentials", href: "/products?category=workspace-essentials" },
   { name: "Pens", slug: "pens", href: "/products?category=pens" },
   { name: "T-Shirts", slug: "t-shirts", href: "/products?category=t-shirts" },
   { name: "Keychains", slug: "keychains", href: "/products?category=keychains" },
@@ -399,6 +400,90 @@ export const PRODUCTS: Record<string, ProductItem> = {
     customizations: ["Blind Debossing", "Gold Foil Hot Stamp", "Silver Foil Stamp"],
     packagings: ["Sleeve wrapping", "Custom Gift Box packaging"],
     moq: 100
+  },
+  "executive-leather-desk-mat": {
+    title: "Executive Leather Desk Mat",
+    category: "workspace-essentials",
+    budget: "₹500 - ₹1000",
+    basePrice: 850,
+    description: "Handcrafted top-grain leather blotter with water-resistant finish, hand-stitched borders, and an anti-slip natural suede backing. Features integrated pen slots and subtle brand logo placement.",
+    images: [
+      "https://images.unsplash.com/photo-1616422285623-13ff0167c95c?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?q=80&w=600&auto=format&fit=crop"
+    ],
+    specs: [
+      { label: "Material", value: "Premium PU Saffiano Leather / Suede backing" },
+      { label: "Dimensions", value: "800mm x 400mm x 2mm" },
+      { label: "Water Resistance", value: "Splash-proof coating" },
+      { label: "Branding Area", value: "80mm x 20mm (Blind debossed/Foil)" },
+      { label: "Production SLA", value: "7-9 Working Days" }
+    ],
+    customizations: ["Blind Debossing", "Metallic Gold Foil Stamp", "Laser Etching"],
+    packagings: ["Eco Kraft Tube Roller", "Luxury Rigid Cardboard Sleeve"],
+    moq: 50
+  },
+  "wireless-charging-wood-organizer": {
+    title: "Solid Wood Wireless Charging Dock",
+    category: "workspace-essentials",
+    budget: "₹1000 - ₹2500",
+    basePrice: 1250,
+    description: "Premium American Walnut desk organizer with integrated 15W Qi fast wireless charging coil, deep pen holders, smartphone stand, and catch-all tray. Combines luxury workspace aesthetics with modern utility.",
+    images: [
+      "https://images.unsplash.com/photo-1516542076529-1ea3854896f2?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?q=80&w=600&auto=format&fit=crop"
+    ],
+    specs: [
+      { label: "Material", value: "Solid American Walnut Wood" },
+      { label: "Charging Speed", value: "15W Fast Wireless Qi Charging" },
+      { label: "Power Source", value: "USB Type-C input (cable included)" },
+      { label: "Branding", value: "Laser Engraved / Metal Badge inlay" },
+      { label: "Production SLA", value: "8-10 Working Days" }
+    ],
+    customizations: ["Laser Wood Engraving", "Metal Logo Inlay", "Silkscreen Printing"],
+    packagings: ["Eco-friendly Kraft Cushion Box", "Luxury Velvet-lined Presentation Case"],
+    moq: 30
+  },
+  "smart-temperature-sipper": {
+    title: "Smart Temperature LED Sipper",
+    category: "workspace-essentials",
+    budget: "₹250 - ₹500",
+    basePrice: 450,
+    description: "Insulated 304 stainless steel vacuum flask featuring an LED touch display on the cap showing current beverage temperature. Elegant matte-black finish customized with high-definition laser branding.",
+    images: [
+      "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=600&auto=format&fit=crop"
+    ],
+    specs: [
+      { label: "Material", value: "304 Food-grade Stainless Steel / ABS LCD Cap" },
+      { label: "Thermal Capacity", value: "Keep hot for 12 hours / cold for 24 hours" },
+      { label: "Capacity", value: "500 ml" },
+      { label: "Battery Life", value: "Up to 2 years (non-replaceable LCD cell)" },
+      { label: "Production SLA", value: "5-7 Working Days" }
+    ],
+    customizations: ["Rotary Laser Engraving", "High-Definition UV Printing"],
+    packagings: ["Individual White Giftbox", "Custom Printed Cardboard Cylinder sleeve"],
+    moq: 100
+  },
+  "aluminum-laptop-stand": {
+    title: "Premium Aluminum Laptop Stand",
+    category: "workspace-essentials",
+    budget: "₹500 - ₹1000",
+    basePrice: 950,
+    description: "Ergonomic foldable laptop riser machined from premium anodized aircraft-grade aluminum. Built with 6-level angle adjustments, silicone anti-slip cushioning pads, and structural heat-dissipation slots.",
+    images: [
+      "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=600&auto=format&fit=crop"
+    ],
+    specs: [
+      { label: "Material", value: "Anodized Aircraft-grade Aluminum" },
+      { label: "Weight Support", value: "Supports up to 20kg load sizes" },
+      { label: "Adjustment", value: "6 Angle Heights (55mm to 155mm)" },
+      { label: "Dimensions", value: "240mm x 45mm x 15mm (Folded)" },
+      { label: "Production SLA", value: "6-8 Working Days" }
+    ],
+    customizations: ["Precision Laser Engraving"],
+    packagings: ["Velvet Drawstring Pouch + White Box", "Custom Corrugated Sleeve box"],
+    moq: 50
   }
 };
 

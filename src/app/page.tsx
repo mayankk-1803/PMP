@@ -4,6 +4,8 @@ import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 import { PremiumBrands } from "@/components/sections/PremiumBrands";
 import { CorporateSolutions } from "@/components/sections/CorporateSolutions";
 import { BentoKitsShowcase } from "@/components/sections/BentoKitsShowcase";
+import { OfficeUtilityShowcase } from "@/components/sections/OfficeUtilityShowcase";
+import { BrandingCapabilities } from "@/components/sections/BrandingCapabilities";
 import { FeaturedHampers } from "@/components/sections/FeaturedHampers";
 import { PackagingSolutions } from "@/components/sections/PackagingSolutions";
 import { AboutPreview } from "@/components/sections/AboutPreview";
@@ -25,12 +27,12 @@ export default function Home() {
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16 text-center max-w-2xl mx-auto">
-            <span className="text-red-600 text-xs font-bold tracking-widest uppercase mb-3 block">Branded Corporate Merchandise</span>
+            <span className="text-red-600 text-xs font-bold tracking-widest uppercase mb-3 block">Branded Corporate Partnerships</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-              Promotional Gifts & <span className="text-red-600">Giveaways</span>
+              Curated Merchandise & <span className="text-red-600">Giveaways</span>
             </h2>
             <p className="text-lg text-gray-600">
-              Explore high-quality merchandise customized with laser engraving, screen printing, or embossing to boost brand visibility.
+              Explore high-quality merchandise co-branded with laser engraving, screen printing, or embroidery to boost brand value.
             </p>
           </div>
           <CorporateSolutions />
@@ -39,6 +41,12 @@ export default function Home() {
 
       {/* 5. Bento Grid Kits Showcase */}
       <BentoKitsShowcase />
+
+      {/* 5.1. Premium Office Utilities Section */}
+      <OfficeUtilityShowcase />
+
+      {/* 5.2. Technical Branding Capabilities Section */}
+      <BrandingCapabilities />
 
       {/* 6. Festive Hampers Carousel */}
       <FeaturedHampers />

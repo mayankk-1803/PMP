@@ -254,19 +254,19 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
 
-            {/* Delhi NCR Direct Delivery SLA */}
+            {/* Nationwide Delivery SLA */}
             <div className="bg-gradient-to-r from-red-950/20 via-neutral-900/5 to-neutral-900/5 border border-red-500/10 p-5 rounded-2xl flex items-start gap-4 text-left shadow-xs">
-              <div className="p-2.5 bg-red-650/10 border border-red-500/20 rounded-xl flex-shrink-0 text-red-650 mt-0.5">
+              <div className="p-2.5 bg-red-600/10 border border-red-500/20 rounded-xl flex-shrink-0 text-red-600 mt-0.5">
                 <Truck className="w-5 h-5" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-extrabold text-red-600 uppercase tracking-widest">Delhi NCR Hub Dispatch</span>
+                  <span className="text-[10px] font-extrabold text-red-600 uppercase tracking-widest">Pan-India Cargo Dispatch</span>
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
-                <h4 className="text-xs font-black text-gray-900">Direct Office Delivery: 3 - 5 Days SLA</h4>
+                <h4 className="text-xs font-black text-gray-900">Enterprise Logistics: 5 - 7 Days SLA</h4>
                 <p className="text-[10px] font-semibold text-gray-500 leading-relaxed">
-                  Fulfilled directly via Gurgaon & Noida logistics nodes. We offer door-to-desk setup, custom labeling, and hand-delivered corporate presentation across Delhi NCR.
+                  Insured cargo shipping with end-to-end tracking. We support custom labeling, split shipments across multiple branch locations, and desktop delivery setups.
                 </p>
               </div>
             </div>
@@ -364,7 +364,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   variant="outline"
                   className="rounded-xl h-13 border-gray-250 hover:bg-gray-50 font-bold transition-all text-gray-700 flex items-center justify-center gap-2"
                 >
-                  <Bookmark className={`w-4 h-4 ${isShortlisted ? "fill-red-600 text-red-655" : ""}`} />
+                  <Bookmark className={`w-4 h-4 ${isShortlisted ? "fill-red-600 text-red-600" : ""}`} />
                   {isShortlisted ? "Saved in Shortlist" : "Add to Shortlist"}
                 </Button>
               </div>

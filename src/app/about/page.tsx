@@ -10,7 +10,7 @@ import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 
 const STATS = [
   { metric: "15+ Years", label: "Experience", icon: <Award className="w-8 h-8"/> },
-  { metric: "Delhi NCR", label: "Fulfillment", icon: <Truck className="w-8 h-8"/> },
+  { metric: "Pan-India", label: "Fulfillment Network", icon: <Truck className="w-8 h-8"/> },
   { metric: "Premium", label: "Brand Partnerships", icon: <ShieldCheck className="w-8 h-8"/> },
   { metric: "100k+", label: "Smiles Delivered", icon: <Users className="w-8 h-8"/> },
 ];

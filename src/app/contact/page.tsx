@@ -81,7 +81,7 @@ export default function ContactPage() {
         <div className="mb-14">
           <SectionHeading 
             title="Connect with Our Gifting Team" 
-            subtitle="Request customized catalogs, arrange physical sample reviews, or speak with an enterprise Account Specialist. Serving businesses across Delhi, Gurgaon, Noida, Ghaziabad & Faridabad." 
+            subtitle="Request customized catalogs, arrange physical sample reviews, or speak with an enterprise Account Specialist. Partnering with premium brands for nationwide delivery and logistics execution." 
             centered 
           />
         </div>
@@ -333,26 +333,26 @@ export default function ContactPage() {
         >
           {/* Floating Location Card */}
           <div className="absolute top-6 left-6 z-20 bg-[#0c0c0e]/95 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.5)] max-w-sm hidden md:block text-left">
-            <span className="text-[9px] font-extrabold uppercase tracking-widest text-red-500 block mb-2">Regional Logistics</span>
-            <h4 className="text-sm font-extrabold text-white mb-2">Bulk Orders & Corporate Deliveries Available Across Delhi NCR</h4>
+            <span className="text-[9px] font-extrabold uppercase tracking-widest text-red-500 block mb-2">Enterprise Logistics</span>
+            <h4 className="text-sm font-extrabold text-white mb-2">Nationwide B2B Shipments & On-Time Direct Delivery</h4>
             <p className="text-xs text-gray-400 leading-relaxed mb-4 font-medium">
-              We manage local warehousing and direct fleet deliveries to guarantee safe transit to branch offices.
+              We manage dedicated fulfillment hubs and shipping networks to guarantee safe transit to corporate offices and residences.
             </p>
             <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-gray-250">
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Delhi
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> North Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Gurgaon (HQ)
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> West Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Noida
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> South Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Ghaziabad
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> East Hub
               </div>
               <div className="flex items-center gap-1.5 col-span-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Faridabad
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Central Hub
               </div>
             </div>
           </div>

@@ -94,7 +94,7 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="fixed top-0 left-0 right-0 z-45 flex flex-col pointer-events-none"
       >
-        {/* Topbar: Delhi NCR status */}
+        {/* Topbar: Premium Brand Partnerships Banner */}
         <AnimatePresence>
           {!scrolled && (
             <motion.div
@@ -105,8 +105,8 @@ export function Navbar() {
               className="w-full bg-[#070708]/90 border-b border-white/5 py-2 text-center backdrop-blur-md overflow-hidden flex-shrink-0 pointer-events-auto"
             >
               <div className="max-w-7xl mx-auto px-4 text-[10px] sm:text-[11px] font-extrabold tracking-widest text-red-500 uppercase flex items-center justify-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-655 animate-pulse" />
-                Serving Delhi • Noida • Gurgaon • Ghaziabad • Faridabad
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                PREMIUM BRANDED PARTNERSHIPS & CUSTOM PACKAGING solutions • NATIONWIDE DELIVERY
               </div>
             </motion.div>
           )}
@@ -418,7 +418,7 @@ export function Navbar() {
                 >
                   <Bookmark className="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   {mounted && items.length > 0 && (
-                    <span className="absolute top-1 right-1 bg-red-650 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-black">
+                    <span className="absolute top-1 right-1 bg-red-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-black">
                       {items.length}
                     </span>
                   )}

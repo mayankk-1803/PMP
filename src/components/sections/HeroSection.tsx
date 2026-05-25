@@ -36,7 +36,7 @@ export function HeroSection() {
             >
               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-200 flex items-center gap-1.5">
-                Delhi NCR Corporate Gifting Experts <Zap className="w-3 h-3 text-red-500 fill-red-500" />
+                Premium Corporate Gifting & Packaging Studio <Zap className="w-3 h-3 text-red-500 fill-red-500" />
               </span>
             </motion.div>
  
@@ -48,11 +48,11 @@ export function HeroSection() {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="text-4xl sm:text-5xl lg:text-6.5xl font-black tracking-tight text-white leading-[1.05]"
               >
-                Delhi NCR&apos;s Premier{" "}
+                Curated Branded Merchandise &{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-amber-300">
-                  Corporate Gifting
+                  Luxury Packaging
                 </span>{" "}
-                & Packaging Partner
+                Studio
               </motion.h1>
               
               <motion.p
@@ -61,7 +61,7 @@ export function HeroSection() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-gray-300 text-sm sm:text-base md:text-lg max-w-xl leading-relaxed font-medium"
               >
-                Bespoke employee welcome kits, luxury festive hampers, and custom packaging boxes manufactured locally for rapid B2B fulfillment across Gurgaon, Noida, Delhi, Faridabad & Ghaziabad.
+                Bespoke employee welcome kits, curated partner brand merchandise, and premium custom packaging boxes. Shipped nationwide with seamless enterprise project execution.
               </motion.p>
             </div>
  
@@ -72,7 +72,7 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.25 }}
               className="flex flex-wrap gap-2.5"
             >
-              {["Serving Delhi NCR Businesses", "Fast Corporate Deliveries Across NCR", "Gurgaon & Noida Direct Dispatch"].map((tag) => (
+              {["Pan-India Enterprise Delivery", "Curated Premium Partner Brands", "Custom Brand Studio & Packaging"].map((tag) => (
                 <span 
                   key={tag}
                   className="text-[11px] font-bold px-3.5 py-1.5 rounded-lg bg-red-600/20 border border-red-500/30 text-red-200 shadow-sm"
@@ -194,7 +194,7 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            {/* Float Card 3: Delhi NCR Delivery */}
+            {/* Float Card 3: Nationwide Delivery */}
             <motion.div
               animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -204,8 +204,8 @@ export function HeroSection() {
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div className="text-left">
-                <div className="text-[11px] font-extrabold text-red-400 uppercase tracking-wide">NCR Dispatch</div>
-                <div className="text-[9px] text-gray-300 mt-0.5 leading-tight font-semibold">Direct fleet delivery to Gurgaon, Noida & Delhi offices.</div>
+                <div className="text-[11px] font-extrabold text-red-400 uppercase tracking-wide">Pan-India Dispatch</div>
+                <div className="text-[9px] text-gray-300 mt-0.5 leading-tight font-semibold">Insured door-to-desk bulk shipping to your offices nationwide.</div>
               </div>
             </motion.div>
           </div>

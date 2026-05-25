@@ -22,8 +22,8 @@ const USPs = [
   },
   {
     icon: <Truck className="w-8 h-8" />,
-    title: "Delhi NCR Delivery",
-    desc: "Logistics infrastructure supporting direct-to-employee doorstep deliveries."
+    title: "Pan-India Shipping",
+    desc: "Robust logistics supporting nationwide direct-to-employee desktop & doorstep deliveries."
   }
 ];
 

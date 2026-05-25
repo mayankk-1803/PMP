@@ -72,7 +72,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md font-medium">
-              Bespoke B2B packaging and luxury corporate gifting solutions. Crafting premium onboarding kits, festive hampers, and rigid custom cartons to elevate your enterprise brand presence. Serving businesses across Delhi NCR (Delhi, Gurgaon, Noida, Ghaziabad, Faridabad).
+              Bespoke B2B packaging and luxury corporate gifting solutions. Crafting premium onboarding kits, custom merchandise, and rigid custom cartons to elevate your enterprise brand presence. Partnering with leading brands for nationwide corporate delivery.
             </p>
             
             {/* Social Icons with micro-animations */}
@@ -243,7 +243,7 @@ export function Footer() {
         <div className="border-t border-white/5 pt-8 mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-gray-600 text-xs flex items-center gap-1">
             <ShieldCheck className="w-3.5 h-3.5 text-red-500/60" />
-            © {new Date().getFullYear()} PACMYPRODUCTS — Delhi NCR's Premium B2B Gifting Partner. All rights reserved.
+            © {new Date().getFullYear()} PACMYPRODUCTS — Premium Enterprise B2B Gifting & Custom Packaging. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-gray-600">
             <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
