@@ -94,30 +94,12 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="fixed top-0 left-0 right-0 z-45 flex flex-col pointer-events-none"
       >
-        {/* Topbar: Premium Brand Partnerships Banner */}
-        <AnimatePresence>
-          {!scrolled && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="w-full bg-[#070708]/90 border-b border-white/5 py-2 text-center backdrop-blur-md overflow-hidden flex-shrink-0 pointer-events-auto"
-            >
-              <div className="max-w-7xl mx-auto px-4 text-[10px] sm:text-[11px] font-extrabold tracking-widest text-red-500 uppercase flex items-center justify-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                PREMIUM BRANDED PARTNERSHIPS & CUSTOM PACKAGING solutions • NATIONWIDE DELIVERY
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Main Navigation Bar */}
         <nav 
-          className={`w-full transition-all duration-500 pointer-events-auto ${
+          className={`w-full transition-all duration-300 pointer-events-auto ${
             scrolled 
-              ? "bg-black/85 border-b border-white/15 shadow-[0_8px_40px_rgba(0,0,0,0.65)] backdrop-blur-3xl" 
-              : "bg-black/45 border-b border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
+              ? "bg-[#0c0a09]/95 border-b border-white/10 shadow-xl backdrop-blur-xl" 
+              : "bg-[#0c0a09]/80 border-b border-white/5 backdrop-blur-md shadow-md"
           }`}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -136,23 +118,23 @@ export function Navbar() {
               </div>
               
               {/* Desktop Mega Menu Navigation */}
-              <div ref={menuRef} className="hidden lg:flex items-center space-x-1">
+              <div ref={menuRef} className="hidden lg:flex items-center space-x-2">
                 
-                {/* 1. Gifts Catalog Dropdown */}
+                {/* 1. Promotional Products Dropdown */}
                 <div className="relative group/nav-item">
                   <button
                     suppressHydrationWarning
                     onClick={() => toggleDropdown("products")}
-                    className={`relative flex items-center gap-1.5 text-[14px] font-semibold tracking-wide px-4 py-2.5 rounded-xl transition-all duration-300 ${
-                      activeDropdown === "products" 
+                    className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
+                      activeDropdown === "products" || pathname.startsWith("/products") || pathname.startsWith("/promotional-merchandise")
                         ? "text-red-500" 
                         : "text-white/90 hover:text-white"
                     }`}
                   >
-                    <span>Gifts Catalog</span>
+                    <span>Promotional Products</span>
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === "products" ? "rotate-180" : ""}`} />
                     <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
-                      activeDropdown === "products" || pathname.startsWith("/products") ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
+                      activeDropdown === "products" || pathname.startsWith("/products") || pathname.startsWith("/promotional-merchandise") ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                     }`} />
                   </button>
                   
@@ -162,12 +144,13 @@ export function Navbar() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
-                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute left-0 mt-3 w-[520px] bg-[#0c0c0e] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-white/10 p-6 z-50 grid grid-cols-2 gap-6 pointer-events-auto"
+                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                        className="absolute left-0 mt-3 w-[720px] bg-white rounded-2xl shadow-2xl border border-black/5 p-6 z-50 grid grid-cols-12 gap-6 pointer-events-auto"
                       >
-                        <div>
-                          <h4 className="text-[11px] font-extrabold text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <Gift className="w-3.5 h-3.5" /> Corporate Gifts
+                        {/* Column 1: Corporate Gifts */}
+                        <div className="col-span-4 text-left">
+                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Gift className="w-3.5 h-3.5 text-red-500" /> Corporate Gifts
                           </h4>
                           <div className="space-y-1">
                             {CORPORATE_GIFTS.slice(0, 7).map((item) => (
@@ -175,35 +158,60 @@ export function Navbar() {
                                 key={item.name}
                                 href={item.href}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block text-[13px] text-gray-400 hover:text-white font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
+                                className="block text-[13px] text-gray-700 hover:text-red-600 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
                               >
                                 {item.name}
                               </Link>
                             ))}
                           </div>
                         </div>
-                        <div className="flex flex-col justify-between">
+
+                        {/* Column 2: Premium Giveaways */}
+                        <div className="col-span-4 text-left">
+                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Award className="w-3.5 h-3.5 text-amber-500" /> Premium Giveaways
+                          </h4>
                           <div className="space-y-1">
-                            <h4 className="text-[11px] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                              <Award className="w-3.5 h-3.5 text-amber-300" /> Premium Giveaways
-                            </h4>
                             {CORPORATE_GIFTS.slice(7).map((item) => (
                               <Link
                                 key={item.name}
                                 href={item.href}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block text-[13px] text-gray-400 hover:text-white font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-amber-500"
+                                className="block text-[13px] text-gray-700 hover:text-red-600 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
                               >
                                 {item.name}
                               </Link>
                             ))}
                           </div>
+                        </div>
+
+                        {/* Column 3: Featured Panel */}
+                        <div className="col-span-4 flex flex-col justify-between bg-gradient-to-br from-red-50/70 to-amber-50/50 rounded-xl p-4 border border-red-100/30 text-left">
+                          <div>
+                            <span className="text-[9px] font-extrabold text-red-600 uppercase tracking-widest block mb-1">Trending Solution</span>
+                            <h4 className="text-[13px] font-bold text-black mb-1.5">
+                              Premium Corporate Gifting
+                            </h4>
+                            <p className="text-[11px] text-gray-650 leading-normal mb-3 font-medium">
+                              Employee welcome kits, executive gift sets, custom branding, premium giveaways.
+                            </p>
+                          </div>
+                          
+                          <div className="relative h-20 w-full rounded-lg overflow-hidden mb-3 bg-neutral-100 shadow-sm">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=600&auto=format&fit=crop"
+                              alt="Premium Gifting"
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+
                           <Link
-                            href="/products"
+                            href="/promotional-merchandise"
                             onClick={() => setActiveDropdown(null)}
-                            className="inline-flex items-center gap-2 text-xs font-bold text-red-500 pt-3 hover:text-red-400 transition-colors uppercase tracking-wider"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors uppercase tracking-wider"
                           >
-                            Explore Full Catalog <ArrowRight className="w-3.5 h-3.5" />
+                            Explore Collection <ArrowRight className="w-3.5 h-3.5" />
                           </Link>
                         </div>
                       </motion.div>
@@ -216,8 +224,8 @@ export function Navbar() {
                   <button
                     suppressHydrationWarning
                     onClick={() => toggleDropdown("kits")}
-                    className={`relative flex items-center gap-1.5 text-[14px] font-semibold tracking-wide px-4 py-2.5 rounded-xl transition-all duration-300 ${
-                      activeDropdown === "kits" 
+                    className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
+                      activeDropdown === "kits" || pathname.startsWith("/corporate-kits")
                         ? "text-red-500" 
                         : "text-white/90 hover:text-white"
                     }`}
@@ -235,50 +243,74 @@ export function Navbar() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
-                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[540px] bg-[#0c0c0e] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-white/10 p-6 z-50 grid grid-cols-2 gap-6 pointer-events-auto"
+                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[720px] bg-white rounded-2xl shadow-2xl border border-black/5 p-6 z-50 grid grid-cols-12 gap-6 pointer-events-auto"
                       >
-                        <div>
-                          <h4 className="text-[11px] font-extrabold text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <Briefcase className="w-3.5 h-3.5" /> Corporate Kits
+                        {/* Column 1: Corporate Kits */}
+                        <div className="col-span-4 text-left">
+                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Briefcase className="w-3.5 h-3.5 text-red-500" /> Corporate Kits
                           </h4>
                           <div className="space-y-1">
-                            {CORPORATE_KITS.slice(0, 6).map((item) => (
+                            {CORPORATE_KITS.slice(0, 7).map((item) => (
                               <Link
                                 key={item.name}
                                 href={item.href}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block text-[13px] text-gray-400 hover:text-white font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
+                                className="block text-[13px] text-gray-750 hover:text-red-600 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
                               >
                                 {item.name}
                               </Link>
                             ))}
                           </div>
                         </div>
-                        <div className="flex flex-col justify-between">
-                          <div>
-                            <h4 className="text-[11px] font-extrabold text-amber-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                              <Sparkles className="w-3.5 h-3.5" /> Festive Hampers
-                            </h4>
-                            <div className="space-y-1">
-                              {OCCASION_HAMPERS.slice(0, 5).map((item) => (
-                                <Link
-                                  key={item.name}
-                                  href={item.href}
-                                  onClick={() => setActiveDropdown(null)}
-                                  className="block text-[13px] text-gray-400 hover:text-white font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-amber-400"
-                                >
-                                  {item.name}
-                                </Link>
-                              ))}
-                            </div>
+
+                        {/* Column 2: Festive Hampers */}
+                        <div className="col-span-4 text-left">
+                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Festive Hampers
+                          </h4>
+                          <div className="space-y-1">
+                            {OCCASION_HAMPERS.slice(0, 7).map((item) => (
+                              <Link
+                                key={item.name}
+                                href={item.href}
+                                onClick={() => setActiveDropdown(null)}
+                                className="block text-[13px] text-gray-750 hover:text-red-650 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
+                              >
+                                {item.name}
+                              </Link>
+                            ))}
                           </div>
+                        </div>
+
+                        {/* Column 3: Featured Panel */}
+                        <div className="col-span-4 flex flex-col justify-between bg-gradient-to-br from-amber-50/70 to-red-50/50 rounded-xl p-4 border border-amber-100/30 text-left">
+                          <div>
+                            <span className="text-[9px] font-extrabold text-amber-600 uppercase tracking-widest block mb-1">Kit Onboarding</span>
+                            <h4 className="text-[13px] font-bold text-black mb-1.5">
+                              Curated Corporate Kits
+                            </h4>
+                            <p className="text-[11px] text-gray-650 leading-normal mb-3 font-medium">
+                              Onboarding kits, dealer welcome packs, startup collections, custom branded hampers.
+                            </p>
+                          </div>
+                          
+                          <div className="relative h-20 w-full rounded-lg overflow-hidden mb-3 bg-neutral-100 shadow-sm">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src="https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=600&q=80"
+                              alt="Corporate Kits"
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+
                           <Link
                             href="/corporate-kits"
                             onClick={() => setActiveDropdown(null)}
-                            className="inline-flex items-center gap-2 text-xs font-bold text-red-500 pt-3 hover:text-red-400 transition-colors uppercase tracking-wider"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors uppercase tracking-wider"
                           >
-                            Explore All Kits <ArrowRight className="w-3.5 h-3.5" />
+                            Explore Collection <ArrowRight className="w-3.5 h-3.5" />
                           </Link>
                         </div>
                       </motion.div>
@@ -291,8 +323,8 @@ export function Navbar() {
                   <button
                     suppressHydrationWarning
                     onClick={() => toggleDropdown("packaging")}
-                    className={`relative flex items-center gap-1.5 text-[14px] font-semibold tracking-wide px-4 py-2.5 rounded-xl transition-all duration-300 ${
-                      activeDropdown === "packaging" 
+                    className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
+                      activeDropdown === "packaging" || pathname.startsWith("/packaging-solutions")
                         ? "text-red-500" 
                         : "text-white/90 hover:text-white"
                     }`}
@@ -310,27 +342,27 @@ export function Navbar() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
-                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute left-0 mt-3 w-[260px] bg-[#0c0c0e] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-white/10 p-4 z-50 space-y-1 pointer-events-auto"
+                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                        className="absolute left-0 mt-3 w-[260px] bg-white rounded-2xl shadow-2xl border border-black/5 p-4 z-50 space-y-1 pointer-events-auto"
                       >
-                        <h4 className="text-[11px] font-extrabold text-red-500 uppercase tracking-widest px-3 py-1 mb-2 flex items-center gap-2">
-                          <Package className="w-3.5 h-3.5" /> Solutions
+                        <h4 className="text-[11px] font-bold text-black uppercase tracking-wide px-3 py-1 mb-2 flex items-center gap-2">
+                          <Package className="w-3.5 h-3.5 text-red-500" /> Solutions
                         </h4>
                         {PACKAGING_SOLUTIONS.map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
                             onClick={() => setActiveDropdown(null)}
-                            className="block text-[13px] text-gray-400 hover:text-white hover:bg-white/5 font-medium px-3 py-2 rounded-lg transition-all"
+                            className="block text-[13px] text-gray-750 hover:text-red-600 hover:bg-black/5 font-medium px-3 py-2 rounded-lg transition-all"
                           >
                             {item.name}
                           </Link>
                         ))}
-                        <div className="border-t border-white/10 my-2 pt-2">
+                        <div className="border-t border-black/5 my-2 pt-2">
                           <Link
                             href="/packaging-solutions"
                             onClick={() => setActiveDropdown(null)}
-                            className="block text-[13px] text-red-500 hover:text-red-400 font-bold px-3 transition-colors"
+                            className="block text-[13px] text-red-600 hover:text-red-700 font-bold px-3 transition-colors"
                           >
                             Explore Packaging →
                           </Link>
@@ -345,8 +377,8 @@ export function Navbar() {
                   <button
                     suppressHydrationWarning
                     onClick={() => toggleDropdown("budget")}
-                    className={`relative flex items-center gap-1.5 text-[14px] font-semibold tracking-wide px-4 py-2.5 rounded-xl transition-all duration-300 ${
-                      activeDropdown === "budget" 
+                    className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
+                      activeDropdown === "budget" || pathname.startsWith("/gifts-by-budget")
                         ? "text-red-500" 
                         : "text-white/90 hover:text-white"
                     }`}
@@ -364,18 +396,18 @@ export function Navbar() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
-                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute right-0 mt-3 w-[240px] bg-[#0c0c0e] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-white/10 p-4 z-50 space-y-1 pointer-events-auto"
+                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                        className="absolute right-0 mt-3 w-[240px] bg-white rounded-2xl shadow-2xl border border-black/5 p-4 z-50 space-y-1 pointer-events-auto"
                       >
-                        <h4 className="text-[11px] font-extrabold text-red-500 uppercase tracking-widest px-3 py-1 mb-2 flex items-center gap-2">
-                          <Coins className="w-3.5 h-3.5" /> Shop by Budget
+                        <h4 className="text-[11px] font-bold text-black uppercase tracking-wide px-3 py-1 mb-2 flex items-center gap-2">
+                          <Coins className="w-3.5 h-3.5 text-amber-500" /> Shop by Budget
                         </h4>
                         {BUDGETS.map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
                             onClick={() => setActiveDropdown(null)}
-                            className="block text-[13px] text-gray-400 hover:text-white hover:bg-white/5 font-medium px-3 py-2 rounded-lg transition-all"
+                            className="block text-[13px] text-gray-750 hover:text-red-650 hover:bg-black/5 font-medium px-3 py-2 rounded-lg transition-all"
                           >
                             {item.name}
                           </Link>
@@ -385,10 +417,25 @@ export function Navbar() {
                   </AnimatePresence>
                 </div>
   
-                {/* 5. Company Link */}
+                {/* 5. Brands Link */}
+                <Link
+                  href="/brands"
+                  className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
+                    pathname === "/brands" ? "text-red-500" : "text-white/90 hover:text-white"
+                  }`}
+                >
+                  <span>Brands</span>
+                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                    pathname === "/brands" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
+                  }`} />
+                </Link>
+
+                {/* 6. Company Link */}
                 <Link
                   href="/about"
-                  className="relative group/nav-item text-white/90 hover:text-white px-4 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 block"
+                  className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
+                    pathname === "/about" ? "text-red-500" : "text-white/90 hover:text-white"
+                  }`}
                 >
                   <span>Company</span>
                   <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
@@ -396,10 +443,12 @@ export function Navbar() {
                   }`} />
                 </Link>
                 
-                {/* 6. Contact Link */}
+                {/* 7. Contact Link */}
                 <Link
                   href="/contact"
-                  className="relative group/nav-item text-white/90 hover:text-white px-4 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 block"
+                  className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
+                    pathname === "/contact" ? "text-red-500" : "text-white/90 hover:text-white"
+                  }`}
                 >
                   <span>Contact</span>
                   <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
@@ -413,7 +462,7 @@ export function Navbar() {
                 <button 
                   suppressHydrationWarning
                   onClick={() => setIsDrawerOpen(true)}
-                  className="relative p-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all focus:outline-none flex items-center justify-center group"
+                  className="relative p-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all focus:outline-none flex items-center justify-center group pointer-events-auto"
                   aria-label="View Shortlist"
                 >
                   <Bookmark className="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
@@ -424,13 +473,13 @@ export function Navbar() {
                   )}
                 </button>
                 
-                <Button variant="default" className="rounded-xl px-6 py-2.5 h-11 text-[13px] font-bold bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-lg shadow-red-600/25 hover:shadow-red-600/35 hover:scale-[1.02] transition-all duration-300 border-0" asChild>
+                <Button variant="default" className="rounded-xl px-6 py-2.5 h-11 text-[13px] font-bold bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-lg shadow-red-600/25 hover:shadow-red-600/35 hover:scale-[1.02] transition-all duration-300 border-0 pointer-events-auto" asChild>
                   <Link href="/enquiry">Get Custom Quote</Link>
                 </Button>
               </div>
 
               {/* Mobile Actions Menu Trigger */}
-              <div className="lg:hidden flex items-center gap-2">
+              <div className="lg:hidden flex items-center gap-2 pointer-events-auto">
                 <button 
                   suppressHydrationWarning
                   onClick={() => setIsDrawerOpen(true)}
@@ -488,14 +537,14 @@ export function Navbar() {
               {/* Collapsible Accordion Navigation Items */}
               <div className="flex-1 px-6 py-6 space-y-2">
                 
-                {/* 1. Gifts Catalog Accordion */}
+                {/* 1. Promotional Products Accordion */}
                 <div className="border-b border-white/10">
                   <button 
                     suppressHydrationWarning
                     onClick={() => toggleSection("products")}
                     className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left focus:outline-none group"
                   >
-                    <span>Gifts Catalog</span>
+                    <span>Promotional Products</span>
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${expandedSection === "products" ? "rotate-180 text-red-500" : "group-hover:text-white"}`} />
                   </button>
                   <AnimatePresence initial={false}>
@@ -780,7 +829,7 @@ export function Navbar() {
                     className="mt-6 border-white/10 hover:border-white text-gray-300 hover:bg-white/5 transition-colors" 
                     onClick={() => setIsDrawerOpen(false)}
                   >
-                    Browse Catalog
+                    Browse Products
                   </Button>
                 </div>
               ) : (

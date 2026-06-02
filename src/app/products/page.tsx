@@ -12,6 +12,7 @@ import { ProductCard } from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { 
   CORPORATE_GIFTS, 
+  PREMIUM_GIVEAWAYS,
   BUDGETS, 
   PRODUCTS 
 } from "@/data/siteConfig";
@@ -19,7 +20,8 @@ import {
 // Re-map categories and budget tiers dynamically
 const CATEGORIES_LIST = [
   { name: "All Categories", slug: "all" },
-  ...CORPORATE_GIFTS.map(c => ({ name: c.name, slug: c.slug }))
+  ...CORPORATE_GIFTS.map(c => ({ name: c.name, slug: c.slug })),
+  ...PREMIUM_GIVEAWAYS.filter((item) => !CORPORATE_GIFTS.some((gift) => gift.slug === item.slug)).map(c => ({ name: c.name, slug: c.slug }))
 ];
 
 const BUDGET_TIERS = [
@@ -109,7 +111,7 @@ function ProductsPageContent() {
   );
 
   return (
-    <div className="pt-28 pb-24 bg-gray-50/50 min-h-screen">
+    <div className="pt-28 pb-24 bg-[#faf9f6] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumbs */}
@@ -124,7 +126,7 @@ function ProductsPageContent() {
         {/* Page Header */}
         <div className="mb-12 text-left">
           <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
-            Corporate Gifting <span className="text-red-600">Catalog</span>
+            Promotional Products <span className="text-red-600">Catalog</span>
           </h1>
           <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-xl leading-relaxed font-semibold">
             High-quality corporate giveaways, employee welcome swag, and luxury promotional items customizable with your company logo.

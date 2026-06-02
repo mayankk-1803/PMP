@@ -26,18 +26,43 @@ export const CORPORATE_GIFTS = [
   { name: "Tissue Boxes", slug: "tissue-boxes", href: "/products?category=tissue-boxes" }
 ];
 
+export const PREMIUM_GIVEAWAYS = [
+  { name: "Backpacks", slug: "backpacks", href: "/products?category=backpacks" },
+  { name: "Drinkware", slug: "drinkware", href: "/products?category=drinkware" },
+  { name: "Customized Gift Sets", slug: "customized-gift-sets", href: "/products?category=customized-gift-sets" }
+];
+
+export const PROMOTIONAL_PRODUCT_GROUPS = [
+  {
+    label: "Corporate Gifts",
+    description: "Daily-use branded merchandise for teams, clients, and events.",
+    items: CORPORATE_GIFTS
+  },
+  {
+    label: "Premium Giveaways",
+    description: "High-impact gifts for launches, onboarding, and executive programs.",
+    items: PREMIUM_GIVEAWAYS
+  }
+];
+
 export const CORPORATE_KITS = [
   { name: "Joining Kits", slug: "joining", href: "/corporate-kits?kit=joining" },
   { name: "Dealer Kits", slug: "dealer", href: "/corporate-kits?kit=dealer" },
   { name: "Distributor Kits", slug: "distributor", href: "/corporate-kits?kit=distributor" },
   { name: "Doctor Kits", slug: "doctor", href: "/corporate-kits?kit=doctor" },
   { name: "Architect Kits", slug: "architect", href: "/corporate-kits?kit=architect" },
-  { name: "Pharma Rep Kit", slug: "pharma", href: "/corporate-kits?kit=pharma" },
-  { name: "Retail Partner Kit", slug: "retail", href: "/corporate-kits?kit=retail" },
-  { name: "Sales Team Kit", slug: "sales", href: "/corporate-kits?kit=sales" },
-  { name: "Plumber Kit", slug: "plumber", href: "/corporate-kits?kit=plumber" },
-  { name: "Mason Kit", slug: "mason", href: "/corporate-kits?kit=mason" },
-  { name: "Electrician Kit", slug: "electrician", href: "/corporate-kits?kit=electrician" }
+  { name: "Contractor Kits", slug: "contractor", href: "/corporate-kits?kit=contractor" },
+  { name: "Mason Kits", slug: "mason", href: "/corporate-kits?kit=mason" },
+  { name: "Electrician Kits", slug: "electrician", href: "/corporate-kits?kit=electrician" },
+  { name: "Interior Designer Kits", slug: "interior-designer", href: "/corporate-kits?kit=interior-designer" },
+  { name: "Pharma Representative Kits", slug: "pharma", href: "/corporate-kits?kit=pharma" },
+  { name: "Hospital Staff Kits", slug: "hospital-staff", href: "/corporate-kits?kit=hospital-staff" },
+  { name: "Training Kits", slug: "training", href: "/corporate-kits?kit=training" },
+  { name: "Seminar Kits", slug: "seminar", href: "/corporate-kits?kit=seminar" },
+  { name: "Startup Employee Onboarding Kits", slug: "startup-onboarding", href: "/corporate-kits?kit=startup-onboarding" },
+  { name: "Partner Kits", slug: "partner", href: "/corporate-kits?kit=partner" },
+  { name: "Sales Team Kits", slug: "sales", href: "/corporate-kits?kit=sales" },
+  { name: "Real Estate Kits", slug: "real-estate", href: "/corporate-kits?kit=real-estate" }
 ];
 
 export const OCCASION_HAMPERS = [
@@ -73,8 +98,9 @@ export const BRANDS = [
   { name: "Beardo", logo: "/logos/beardo.png" },
   { name: "Cello", logo: "/logos/cello.png" },
   { name: "Mokobara", logo: "/logos/mokobara.png" },
+  { name: "VIP", logo: "/logos/fallback.png" },
   { name: "JBL", logo: "/logos/jbl.png" },
-  { name: "U-bon", logo: "/logos/ubon.webp" },
+  { name: "U-Bon", logo: "/logos/ubon.webp" },
   { name: "Borosil", logo: "/logos/borosil.png" },
   { name: "Wildcraft", logo: "/logos/wildcraft.png" },
   { name: "Welspun", logo: "/logos/welspun.png" },
@@ -256,7 +282,7 @@ export const PRODUCTS: Record<string, ProductItem> = {
   "premium-desk-organizer-block": {
     title: "Premium Desk Organizer Block",
     category: "tabletop",
-    budget: "₹500 - ₹1000",
+    budget: "â‚¹500 - â‚¹1000",
     basePrice: 650,
     description: "Sleek wooden desk organizer containing slots for writing pens, business visiting cards, writing pads, and an angled smartphone dock. The ultimate executive table utility accessory.",
     images: [
@@ -277,7 +303,7 @@ export const PRODUCTS: Record<string, ProductItem> = {
   "anti-theft-laptop-backpack": {
     title: "Anti-Theft Laptop Backpack",
     category: "backpacks",
-    budget: "₹1000 - ₹2500",
+    budget: "â‚¹1000 - â‚¹2500",
     basePrice: 1450,
     description: "Waterproof corporate backpack with hidden anti-theft zipper layouts, thick laptop padding sleeve, integrated external USB pass-through, and custom printed branding panels.",
     images: [
@@ -464,6 +490,50 @@ export const PRODUCTS: Record<string, ProductItem> = {
     packagings: ["Individual White Giftbox", "Custom Printed Cardboard Cylinder sleeve"],
     moq: 100
   },
+  "executive-steel-drinkware-set": {
+    title: "Executive Steel Drinkware Set",
+    category: "drinkware",
+    budget: "₹500 - ₹1000",
+    basePrice: 720,
+    description: "Premium insulated bottle and tumbler pairing curated for employee welcome kits, leadership events, and client appreciation programs. Finished in matte corporate colors with precision logo placement.",
+    images: [
+      "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=600&auto=format&fit=crop"
+    ],
+    specs: [
+      { label: "Material", value: "304 Stainless Steel with double-wall vacuum insulation" },
+      { label: "Capacity", value: "Bottle 750 ml + tumbler 350 ml" },
+      { label: "Branding Area", value: "Vertical bottle body and tumbler front face" },
+      { label: "Finish Options", value: "Matte black, pearl white, champagne, navy" },
+      { label: "Production SLA", value: "6-9 Working Days" }
+    ],
+    customizations: ["Rotary Laser Engraving", "UV Logo Printing", "Name Personalization"],
+    packagings: ["Rigid Welcome Box", "Kraft Sleeve Box", "Magnetic Presentation Case"],
+    moq: 50
+  },
+  "customized-executive-gift-set": {
+    title: "Customized Executive Gift Set",
+    category: "customized-gift-sets",
+    budget: "₹1000 - ₹2500",
+    basePrice: 1650,
+    description: "A premium corporate gift set combining a hardbound notebook, executive pen, drinkware, cable organizer, and welcome insert inside a branded rigid box for high-impact onboarding.",
+    images: [
+      "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=600&auto=format&fit=crop"
+    ],
+    specs: [
+      { label: "Included Items", value: "Notebook, metal pen, insulated bottle, tech pouch, welcome card" },
+      { label: "Box Type", value: "Premium rigid board with custom foam or paper insert" },
+      { label: "Branding Area", value: "Outer lid, item surfaces, welcome card, sleeve" },
+      { label: "Ideal For", value: "Employee onboarding, client gifting, leadership summits" },
+      { label: "Production SLA", value: "10-14 Working Days" }
+    ],
+    customizations: ["Full Kit Theme Design", "Foil Stamped Box Lid", "Personalized Name Cards"],
+    packagings: ["Luxury Magnetic Rigid Box", "Eco Kraft Gift Set", "Sleeve + Insert System"],
+    moq: 25
+  },
   "aluminum-laptop-stand": {
     title: "Premium Aluminum Laptop Stand",
     category: "workspace-essentials",
@@ -529,6 +599,14 @@ export const SITE_KITS = [
     slug: "architect"
   },
   {
+    title: "Contractor Kits",
+    price: "Custom Quote",
+    description: "Durable site-ready kits with branded bags, measurement tools, drinkware, and daily-use safety essentials for contractor networks.",
+    imageUrl: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=800&auto=format&fit=crop",
+    category: "industry",
+    slug: "contractor"
+  },
+  {
     title: "Plumber Kits",
     price: "Custom Quote",
     description: "Branded toolbags and functional accessories for plumbing professionals.",
@@ -553,12 +631,52 @@ export const SITE_KITS = [
     slug: "electrician"
   },
   {
-    title: "Pharma Representative Kit",
+    title: "Interior Designer Kits",
+    price: "Custom Quote",
+    description: "Elegant concept presentation kits with swatch organizers, premium notebooks, pens, and presentation folders for interior design professionals.",
+    imageUrl: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop",
+    category: "industry",
+    slug: "interior-designer"
+  },
+  {
+    title: "Pharma Representative Kits",
     price: "Custom Quote",
     description: "Professional bags and daily reporting tools for pharma field teams.",
     imageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop",
     category: "industry",
     slug: "pharma"
+  },
+  {
+    title: "Hospital Staff Kits",
+    price: "Custom Quote",
+    description: "Useful staff appreciation kits with hygienic drinkware, utility pouches, notebooks, wellness items, and branded ID accessories.",
+    imageUrl: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=800&auto=format&fit=crop",
+    category: "industry",
+    slug: "hospital-staff"
+  },
+  {
+    title: "Startup Employee Onboarding Kits",
+    price: "Custom Quote",
+    description: "Modern welcome kits for fast-growing teams with branded notebooks, drinkware, hoodies, stickers, tech organizers, and founder notes.",
+    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop",
+    category: "corporate",
+    slug: "startup-onboarding"
+  },
+  {
+    title: "Training Kits",
+    price: "Custom Quote",
+    description: "Structured learning kits with notebooks, lanyards, writing tools, certificates, drinkware, and branded training folders.",
+    imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop",
+    category: "corporate",
+    slug: "training"
+  },
+  {
+    title: "Seminar Kits",
+    price: "Custom Quote",
+    description: "Event-ready seminar kits with folders, delegate badges, writing tools, agenda inserts, drinkware, and sponsor-branded packaging.",
+    imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop",
+    category: "corporate",
+    slug: "seminar"
   },
   {
     title: "Retail Partner Kit",
@@ -569,12 +687,28 @@ export const SITE_KITS = [
     slug: "retail"
   },
   {
-    title: "Sales Team Kit",
+    title: "Partner Kits",
+    price: "Custom Quote",
+    description: "Premium channel partner kits built for relationship milestones, product launches, annual meets, and loyalty programs.",
+    imageUrl: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=800&auto=format&fit=crop",
+    category: "industry",
+    slug: "partner"
+  },
+  {
+    title: "Sales Team Kits",
     price: "Custom Quote",
     description: "Motivation kits with tech gadgets and high-end lifestyle items for sales professionals.",
     imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
     category: "industry",
     slug: "sales"
+  },
+  {
+    title: "Real Estate Kits",
+    price: "Custom Quote",
+    description: "Premium launch, broker, and handover kits with key boxes, branded folders, drinkware, site merchandise, and executive presentation packaging.",
+    imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=800&auto=format&fit=crop",
+    category: "industry",
+    slug: "real-estate"
   }
 ];
 

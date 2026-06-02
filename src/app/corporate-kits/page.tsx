@@ -29,7 +29,7 @@ export default function CorporateKitsPage() {
   ] as const;
 
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-[#fafafa] overflow-hidden max-w-full">
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#faf9f6] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[140px]" />
       
       {/* Decorative gradient overlay */}

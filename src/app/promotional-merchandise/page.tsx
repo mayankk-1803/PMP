@@ -5,14 +5,14 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { CORPORATE_GIFTS, PRODUCTS } from "@/data/siteConfig";
+import { PROMOTIONAL_PRODUCT_GROUPS, PRODUCTS } from "@/data/siteConfig";
 import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export default function PromoMerchPage() {
   // Dynamically resolve category cards by matching them to products in siteConfig
-  const categories = CORPORATE_GIFTS.map((gift) => {
+  const resolveCategory = (gift: { name: string; slug: string; href: string }) => {
     const matchedProduct = Object.values(PRODUCTS).find(
       (p) => p.category.toLowerCase() === gift.slug.toLowerCase()
     );
@@ -27,10 +27,10 @@ export default function PromoMerchPage() {
         ? matchedProduct.images[0]
         : "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop",
     };
-  });
+  };
 
   return (
-    <div className="pt-32 pb-0 bg-[#fafafa] overflow-hidden max-w-full">
+    <div className="pt-32 pb-0 bg-[#faf9f6] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[140px]" />
       
       {/* Soft overlay */}
@@ -44,56 +44,72 @@ export default function PromoMerchPage() {
             Promotional Giveaways
           </span>
           <SectionHeading 
-            title={<>Custom <span className="text-red-600">Promotional Merchandise</span></>}
-            subtitle="Explore our comprehensive range of office utility, technology gadgets, apparel, and lifestyle items. Fully customized with your company logo using precision methods."
+            title={<>Promotional <span className="text-red-600">Products</span></>}
+            subtitle="Explore corporate gifts and premium giveaways curated for brand launches, employee welcome kits, channel partners, and high-impact event merchandise."
             centered 
           />
         </div>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-24">
-          {categories.map((cat, i) => (
-            <motion.div
-              key={cat.slug}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ delay: (i % 4) * 0.05, duration: 0.5 }}
-              whileHover={{ y: -6 }}
-              className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm hover:shadow-xl hover:border-gray-300 transition-all cursor-pointer relative"
-            >
-              <Link href={cat.href} className="flex flex-col h-full">
-                {/* Image Section */}
-                <div className="relative w-full h-[180px] overflow-hidden bg-gray-50 flex-shrink-0">
-                  <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-black/0 transition-colors duration-500" />
-                  <img
-                    src={cat.imageUrl}
-                    alt={cat.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
-                  />
-                  <div className="absolute bottom-3 right-3 z-20">
-                    <span className="p-2 rounded-xl bg-white/90 backdrop-blur-sm text-gray-900 shadow-sm border border-gray-100 inline-block transition-transform duration-300 group-hover:rotate-45 group-hover:bg-red-600 group-hover:text-white">
-                      <ArrowUpRight className="w-4 h-4" />
-                    </span>
-                  </div>
+        <div className="space-y-20 mb-24">
+          {PROMOTIONAL_PRODUCT_GROUPS.map((group) => (
+            <section key={group.label} className="text-left">
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+                <div>
+                  <span className="text-[10px] font-extrabold text-red-600 uppercase tracking-widest">Promotional Products</span>
+                  <h2 className="text-2xl md:text-3xl font-black text-gray-950 mt-2">{group.label}</h2>
+                  <p className="text-sm text-gray-500 font-medium max-w-2xl mt-2">{group.description}</p>
                 </div>
+                <Link href="/products" className="text-xs font-extrabold text-red-600 uppercase tracking-widest inline-flex items-center gap-1.5">
+                  View Product Catalog <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {group.items.map((item, i) => {
+                  const cat = resolveCategory(item);
+                  return (
+                    <motion.div
+                      key={`${group.label}-${cat.slug}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-20px" }}
+                      transition={{ delay: (i % 4) * 0.05, duration: 0.5 }}
+                      whileHover={{ y: -6 }}
+                      className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm hover:shadow-xl hover:border-gray-300 transition-all cursor-pointer relative"
+                    >
+                      <Link href={cat.href} className="flex flex-col h-full">
+                        <div className="relative w-full h-[180px] overflow-hidden bg-gray-50 flex-shrink-0">
+                          <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-black/0 transition-colors duration-500" />
+                          <img
+                            src={cat.imageUrl}
+                            alt={cat.title}
+                            className="w-full h-full object-cover transition-transform duration-700 ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
+                          />
+                          <div className="absolute bottom-3 right-3 z-20">
+                            <span className="p-2 rounded-xl bg-white/90 backdrop-blur-sm text-gray-900 shadow-sm border border-gray-100 inline-block transition-transform duration-300 group-hover:rotate-45 group-hover:bg-red-600 group-hover:text-white">
+                              <ArrowUpRight className="w-4 h-4" />
+                            </span>
+                          </div>
+                        </div>
 
-                {/* Content Section */}
-                <div className="p-6 flex flex-col flex-grow text-left">
-                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors mb-2 leading-tight">
-                    {cat.title}
-                  </h3>
-                  <p className="text-gray-500 text-xs leading-relaxed line-clamp-3 mb-6 flex-grow font-medium">
-                    {cat.description}
-                  </p>
-                  
-                  <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-red-600">
-                    <span>Explore Products</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+                        <div className="p-6 flex flex-col flex-grow text-left">
+                          <h3 className="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors mb-2 leading-tight">
+                            {cat.title}
+                          </h3>
+                          <p className="text-gray-500 text-xs leading-relaxed line-clamp-3 mb-6 flex-grow font-medium">
+                            {cat.description}
+                          </p>
+                          <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-red-600">
+                            <span>Explore Products</span>
+                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                          </div>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </section>
           ))}
         </div>
 

@@ -19,7 +19,7 @@ export function GiftsByBudget() {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
   return (
-    <div className="w-full py-6 bg-white border-b border-gray-150">
+    <div className="w-full py-6 bg-[#faf9f6] border-b border-gray-150">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           

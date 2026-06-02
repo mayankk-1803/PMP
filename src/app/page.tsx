@@ -1,7 +1,6 @@
 import React from "react";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
-import { PremiumBrands } from "@/components/sections/PremiumBrands";
 import { CorporateSolutions } from "@/components/sections/CorporateSolutions";
 import { BentoKitsShowcase } from "@/components/sections/BentoKitsShowcase";
 import { OfficeUtilityShowcase } from "@/components/sections/OfficeUtilityShowcase";
@@ -20,11 +19,8 @@ export default function Home() {
       {/* 2. Shop by Budget Categories Tabs */}
       <GiftsByBudget />
 
-      {/* 3. Trusted Brands Row (Infinite Marquee) */}
-      <PremiumBrands />
-
-      {/* 4. Corporate Gifting Categories (Hover zoom grid) */}
-      <section className="py-24 bg-white relative">
+      {/* 3. Corporate Gifting Categories (Hover zoom grid) */}
+      <section className="py-24 bg-[#fbfaf8] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16 text-center max-w-2xl mx-auto">
             <span className="text-red-600 text-xs font-bold tracking-widest uppercase mb-3 block">Branded Corporate Partnerships</span>
@@ -39,25 +35,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. Bento Grid Kits Showcase */}
+      {/* 4. Bento Grid Kits Showcase */}
       <BentoKitsShowcase />
 
-      {/* 5.1. Premium Office Utilities Section */}
+      {/* 5. Premium Office Utilities Section */}
       <OfficeUtilityShowcase />
 
-      {/* 5.2. Technical Branding Capabilities Section */}
+      {/* 6. Technical Branding Capabilities Section */}
       <BrandingCapabilities />
 
-      {/* 6. Festive Hampers Carousel */}
+      {/* 7. Festive Hampers Carousel */}
       <FeaturedHampers />
 
-      {/* 7. Interactive Packaging Showcase */}
+      {/* 8. Interactive Packaging Showcase */}
       <PackagingSolutions />
 
-      {/* 8. Services & About Split Layout */}
+      {/* 9. Services & About Split Layout */}
       <AboutPreview />
 
-      {/* 9. CTA Inquiry Section */}
+      {/* 10. CTA Inquiry Section */}
       <CtaSection />
     </div>
   );
