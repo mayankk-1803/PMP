@@ -53,7 +53,7 @@ const CAPABILITIES: Capability[] = [
     title: "Precision Screen Printing",
     subtitle: "Rich Pigmented Mesh Curation",
     desc: "High-tension screen meshes deposit uniform pigment layers directly onto target items. Perfect for high-volume solid color runs requiring exact Pantone color matching.",
-    materials: ["Canvas Tote Bags", "Premium Cardboard Cartons", "Umbrellas"]
+    materials: ["Canvas Tote Bags", "Premium Cardboard Cartons", "Rigid Gift Boxes"]
   },
   {
     icon: <Sparkles className="w-6 h-6 text-yellow-500" />,

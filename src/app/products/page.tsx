@@ -36,7 +36,9 @@ const PRODUCTS_ARRAY = Object.values(PRODUCTS).map(p => ({
   imageUrl: p.images[0],
   category: p.category,
   budget: p.budget,
-  description: p.description
+  description: p.description,
+  moq: p.moq,
+  brandingOptions: p.customizations.slice(0, 2)
 }));
 
 const ITEMS_PER_PAGE = 8;
@@ -291,7 +293,10 @@ function ProductsPageContent() {
                           price={product.price}
                           imageUrl={product.imageUrl}
                           description={product.description}
+                          moq={product.moq}
+                          brandingOptions={product.brandingOptions}
                           index={idx}
+                          category={product.category}
                         />
                       </motion.div>
                     ))}

@@ -44,20 +44,15 @@ export function TrustBar() {
         <div className="text-center w-full relative">
           <p className="text-sm font-semibold tracking-widest uppercase text-gray-400 mb-8">Trusted by industry leaders</p>
           
-          <div className="relative overflow-hidden w-full max-w-[100vw]">
-            <div className="flex gap-16 md:gap-24 animate-marquee w-max items-center hover:[animation-play-state:paused] group">
-              {[...LOGOS, ...LOGOS].map((logo, i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
+              {LOGOS.map((logo, i) => (
                 <img
                   key={i}
                   src={logo}
                   alt="Company Logo"
-                  className="h-6 md:h-8 object-contain opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 pointer-events-auto"
+                  className="h-6 md:h-8 w-full object-contain opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
                 />
               ))}
-            </div>
-            {/* Gradient Edge Fade */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent" />
           </div>
         </div>
       </div>

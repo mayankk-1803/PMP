@@ -16,8 +16,10 @@ import {
   CORPORATE_KITS, 
   OCCASION_HAMPERS, 
   PACKAGING_SOLUTIONS, 
-  BUDGETS 
+  BUDGETS,
+  PRODUCTS
 } from "@/data/siteConfig";
+import { SafeImage } from "../ui/SafeImage";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -836,8 +838,12 @@ export function Navbar() {
                 items.map((item) => (
                   <div key={item.title} className="flex gap-4 p-4 bg-white/5 border border-white/10 rounded-xl shadow-sm group hover:border-red-500/30 transition-all">
                     <div className="w-20 h-20 rounded-lg overflow-hidden bg-white/5 border border-white/10 flex-shrink-0 relative">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+                      <SafeImage 
+                        src={item.imageUrl} 
+                        alt={item.title} 
+                        category={Object.values(PRODUCTS).find(p => p.title === item.title)?.category}
+                        className="w-full h-full object-cover" 
+                      />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-between">
                       <div>

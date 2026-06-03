@@ -9,6 +9,7 @@ import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 import { SITE_PACKAGING, PROCESS_STEPS } from "@/data/siteConfig";
 import { ShieldCheck, Clock, CheckCircle2, ArrowRight } from "lucide-react";
 import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function PackagingSolutionsPage() {
   return (
@@ -48,9 +49,10 @@ export default function PackagingSolutionsPage() {
                 <div className="w-full lg:w-1/2 relative group">
                   <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-gray-200/60 bg-white">
-                    <img 
+                    <SafeImage 
                       src={pkg.img} 
                       alt={pkg.title} 
+                      category="packaging"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                     />
                   </div>

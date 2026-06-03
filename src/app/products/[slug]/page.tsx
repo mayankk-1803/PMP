@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { PRODUCTS } from "@/data/siteConfig";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 // Helper: fallback mapping if slug matches category name directly or normalized titles
 const resolveProduct = (slug: string) => {
@@ -24,17 +25,20 @@ const resolveProduct = (slug: string) => {
 
   // Reverse mapping for category values
   const catMapping: Record<string, string> = {
-    "pens": "executive-metal-pen",
-    "t-shirts": "classic-polo-t-shirt",
+    "pens": "executive-metal-pens",
+    "t-shirts": "polo-t-shirts",
     "keychains": "premium-leather-keychain",
     "diaries": "a5-leatherette-diary-planner",
     "caps": "branded-panel-sports-cap",
     "paper-weights": "crystal-glass-paper-weight",
-    "mouse-pads": "anti-slip-leather-mouse-pad",
     "tabletop": "premium-desk-organizer-block",
+    "workspace-essentials": "executive-leather-desk-mat",
     "backpacks": "anti-theft-laptop-backpack",
-    "coasters": "royal-wooden-coaster-set",
-    "umbrellas": "windproof-corporate-umbrella",
+    "drinkware": "executive-steel-drinkware-set",
+    "executive-gifts": "executive-notebook-desk-kit",
+    "gift-sets": "luxury-curated-gift-set",
+    "audio-gadgets": "premium-audio-gadget-kit",
+    "tech-accessories": "branded-tech-accessory-kit",
     "standees": "retractable-pull-up-standee",
     "raincoats": "heavy-duty-outdoor-raincoat",
     "tissue-boxes": "luxury-leather-tissue-box"
@@ -42,6 +46,19 @@ const resolveProduct = (slug: string) => {
 
   if (catMapping[normalized]) {
     return PRODUCTS[catMapping[normalized]];
+  }
+
+  // Match product cards that generate URLs from visible titles.
+  const foundByTitle = Object.values(PRODUCTS).find((item) => {
+    const titleSlug = item.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+    return titleSlug === normalized;
+  });
+
+  if (foundByTitle) {
+    return foundByTitle;
   }
 
   // Find by scanning keys
@@ -53,7 +70,7 @@ const resolveProduct = (slug: string) => {
     return PRODUCTS[foundKey];
   }
 
-  return PRODUCTS["executive-metal-pen"];
+  return PRODUCTS["executive-metal-pens"];
 };
 
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -153,14 +170,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
           {/* Left Column: Image Galleries */}
           <div className="lg:col-span-6 space-y-6">
             <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-white border border-gray-150 shadow-sm flex items-center justify-center group">
-              <motion.img
+              <SafeImage
                 key={activeImage}
                 src={activeImage}
                 alt={product.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
+                category={product.category}
+                isMotion={true}
+                motionProps={{
+                  className: "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105",
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.4 }
+                }}
               />
               
               <div className="absolute top-4 right-4 z-10">
@@ -191,7 +212,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     activeImage === imgUrl ? "border-red-600 shadow-md" : "border-gray-200 hover:border-gray-400"
                   }`}
                 >
-                  <img src={imgUrl} alt={`${product.title} thumbnail ${idx}`} className="w-full h-full object-cover" />
+                  <SafeImage src={imgUrl} alt={`${product.title} thumbnail ${idx}`} category={product.category} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -419,7 +440,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   className="group cursor-pointer bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all text-left"
                 >
                   <div className="relative aspect-[16/10] w-full bg-gray-50">
-                    <img src={relatedItem.images[0]} alt={relatedItem.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <SafeImage src={relatedItem.images[0]} alt={relatedItem.title} category={relatedItem.category} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
                   <div className="p-5 flex flex-col justify-between">
                     <div>

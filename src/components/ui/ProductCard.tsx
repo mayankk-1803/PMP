@@ -8,20 +8,28 @@ import { Bookmark } from "lucide-react";
 import { useShortlist } from "@/context/ShortlistContext";
 import { useRouter } from "next/navigation";
 
+import { SafeImage } from "./SafeImage";
+import { PRODUCTS } from "@/data/siteConfig";
+
 interface ProductCardProps {
   title: string;
   description?: string;
   imageUrl: string;
   price?: string;
+  moq?: number;
+  brandingOptions?: string[];
   className?: string;
   index?: number;
+  category?: string;
 }
 
-export function ProductCard({ title, description, imageUrl, price, className, index = 0 }: ProductCardProps) {
+export function ProductCard({ title, description, imageUrl, price, moq, brandingOptions = [], className, index = 0, category }: ProductCardProps) {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const router = useRouter();
   
   const isSelected = isInShortlist(title);
+
+  const resolvedCategory = category || Object.values(PRODUCTS).find(p => p.title === title)?.category;
 
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -63,12 +71,15 @@ export function ProductCard({ title, description, imageUrl, price, className, in
       )}
     >
       <div className="relative w-full h-[240px] overflow-hidden bg-gray-50 flex-shrink-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <motion.img 
+        <SafeImage 
           src={imageUrl} 
           alt={title}
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          category={resolvedCategory}
+          isMotion={true}
+          motionProps={{
+            whileHover: { scale: 1.05 },
+            transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+          }}
           className="absolute inset-0 h-full w-full object-cover"
         />
         
@@ -88,7 +99,29 @@ export function ProductCard({ title, description, imageUrl, price, className, in
           <h3 className="text-[17px] font-bold text-red-600 leading-tight line-clamp-2 transition-colors">{title}</h3>
         </div>
         
-        {description && <p className="text-gray-500 text-[13px] mb-6 line-clamp-2 leading-relaxed">{description}</p>}
+        {description && <p className="text-gray-500 text-[13px] mb-4 line-clamp-2 leading-relaxed">{description}</p>}
+
+        {(moq || brandingOptions.length > 0) && (
+          <div className="mb-5 space-y-3">
+            {brandingOptions.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {brandingOptions.slice(0, 2).map((option) => (
+                  <span
+                    key={option}
+                    className="rounded-md border border-gray-100 bg-gray-50 px-2 py-1 text-[9px] font-extrabold uppercase tracking-wider text-gray-500"
+                  >
+                    {option}
+                  </span>
+                ))}
+              </div>
+            )}
+            {moq && (
+              <div className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400">
+                MOQ {moq}+ Units
+              </div>
+            )}
+          </div>
+        )}
         
         <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
           {price ? (

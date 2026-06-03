@@ -3,10 +3,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Sparkles, Shield, Briefcase, Award } from "lucide-react";
 import { Button } from "../ui/Button";
 import { SITE_KITS } from "@/data/siteConfig";
+import { SafeImage } from "../ui/SafeImage";
 
 // Select specifically relevant kits for the home page Bento Grid
 const BENTO_MAPPING = [
@@ -60,7 +60,7 @@ export function BentoKitsShowcase() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl text-left">
-            <span className="text-red-500 text-xs font-bold tracking-widest uppercase mb-3 block">Tailored Merchandise Packages</span>
+            <span className="text-red-500 text-xs font-bold tracking-widest uppercase mb-3 block flex items-center gap-1.5">Tailored Merchandise Packages</span>
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
               Corporate Kits for <span className="text-red-500">Every Field</span>
             </h2>
@@ -90,12 +90,16 @@ export function BentoKitsShowcase() {
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 z-0">
-                  <Image
+                  <SafeImage
                     src={kit.image}
                     alt={kit.title}
-                    fill
+                    category="joining"
+                    useNextImage={true}
+                    nextImageProps={{
+                      fill: true,
+                      unoptimized: true
+                    }}
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    unoptimized
                   />
                   {/* Subtle luxury dark overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 transition-opacity duration-300 group-hover:opacity-95" />

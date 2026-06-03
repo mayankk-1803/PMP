@@ -7,6 +7,7 @@ import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowRight, Eye } from "lucide-react";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const GALLERY_CATEGORIES = [
   { id: "all", label: "All Projects" },
@@ -124,10 +125,11 @@ export default function GalleryPage() {
                   {/* Image wrapper */}
                   <div className="aspect-[4/3] w-full overflow-hidden bg-gray-50 relative">
                     <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-black/0 transition-colors duration-500" />
-                    <img 
+                    <SafeImage 
                       src={item.img} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       alt={item.title}
+                      category={item.category}
                     />
                     
                     {/* Hover eye icon */}

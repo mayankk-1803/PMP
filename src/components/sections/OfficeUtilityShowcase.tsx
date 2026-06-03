@@ -7,6 +7,7 @@ import { Sparkles, ArrowRight, Bookmark, ShieldCheck, ShoppingBag, Eye } from "l
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { PRODUCTS } from "@/data/siteConfig";
+import { SafeImage } from "../ui/SafeImage";
 
 const ACCESSORY_KEYS = [
   "executive-leather-desk-mat",
@@ -83,10 +84,10 @@ export function OfficeUtilityShowcase() {
               >
                 {/* Image Container */}
                 <div className="relative aspect-[4/3] w-full bg-gray-50 overflow-hidden border-b border-gray-150">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <SafeImage
                     src={mainImg}
                     alt={prod.title}
+                    category={prod.category}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
                   />
                   

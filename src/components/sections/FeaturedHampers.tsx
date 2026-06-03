@@ -2,13 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Sparkles, ArrowRight, Bookmark } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { SITE_HAMPERS } from "@/data/siteConfig";
+import { SafeImage } from "../ui/SafeImage";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -33,7 +33,7 @@ export function FeaturedHampers() {
       <div className="absolute top-12 right-12 w-[200px] h-[200px] bg-amber-500/5 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" />
 
       {/* Decorative Ribbon Element */}
-      <div className="absolute -top-16 -right-16 w-44 h-44 bg-gradient-to-br from-red-500/10 to-amber-500/10 rounded-full blur-xl pointer-events-none animate-ribbon" />
+      <div className="absolute -top-16 -right-16 w-44 h-44 bg-gradient-to-br from-red-50/10 to-amber-50/10 rounded-full blur-xl pointer-events-none animate-ribbon" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -84,12 +84,16 @@ export function FeaturedHampers() {
                     
                     {/* Image Box */}
                     <div className="relative aspect-[4/3] w-full bg-neutral-900 overflow-hidden flex-shrink-0 border-b border-white/5">
-                      <Image
+                      <SafeImage
                         src={hamperImg}
                         alt={hamper.title}
-                        fill
+                        category="gift-sets"
+                        useNextImage={true}
+                        nextImageProps={{
+                          fill: true,
+                          unoptimized: true
+                        }}
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        unoptimized
                       />
                       
                       {/* Festive Glow Badge */}

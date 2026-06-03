@@ -150,32 +150,6 @@
   scrollbar-width: none;
 }
 
-/* Animations */
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 35s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-.animate-marquee-slow {
-  display: flex;
-  width: max-content;
-  animation: marquee 55s linear infinite;
-}
-
 @keyframes float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);

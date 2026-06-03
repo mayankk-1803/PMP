@@ -19,9 +19,9 @@ export function GiftsByBudget() {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
   return (
-    <div className="w-full py-6 bg-[#faf9f6] border-b border-gray-150">
+    <div className="w-full max-w-full overflow-hidden py-6 bg-[#faf9f6] border-b border-gray-150">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 min-w-0">
           
           {/* Label */}
           <div className="flex-shrink-0 text-center md:text-left">
@@ -30,7 +30,7 @@ export function GiftsByBudget() {
           </div>
 
           {/* Premium Tab bar */}
-          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1.5 w-full md:w-auto px-1">
+          <div className="grid grid-cols-2 gap-3 w-full max-w-full min-w-0 md:flex md:items-center md:overflow-x-auto md:no-scrollbar md:pb-1.5 md:w-auto md:px-1">
             {BUDGETS.map((item, idx) => {
               const asset = BUDGET_ASSETS[item.value] || { desc: "Premium Gifts", icon: <Gem className="w-4 h-4" /> };
               
@@ -40,7 +40,7 @@ export function GiftsByBudget() {
                   href={item.href}
                   onMouseEnter={() => setActiveIdx(idx)}
                   onMouseLeave={() => setActiveIdx(null)}
-                  className="relative p-3 rounded-xl border border-gray-200/80 hover:border-red-500/20 bg-white transition-all text-left flex-shrink-0 flex items-center gap-3 shadow-xs hover:shadow-md cursor-pointer group min-w-[160px]"
+                  className="relative p-3 rounded-xl border border-gray-200/80 hover:border-red-500/20 bg-white transition-all text-left md:flex-shrink-0 flex items-center gap-3 shadow-xs hover:shadow-md cursor-pointer group min-w-0 md:min-w-[160px]"
                 >
                   {/* Sliding background tab glow */}
                   {activeIdx === idx && (
@@ -58,10 +58,10 @@ export function GiftsByBudget() {
                   </div>
 
                   <div>
-                    <div className="text-xs sm:text-sm font-extrabold text-gray-900 group-hover:text-red-500 transition-colors">
+                    <div className="text-xs sm:text-sm font-extrabold text-gray-900 group-hover:text-red-500 transition-colors leading-tight">
                       {item.name}
                     </div>
-                    <div className="text-[9px] text-gray-400 font-bold mt-0.5 whitespace-nowrap">
+                    <div className="text-[9px] text-gray-400 font-bold mt-0.5 leading-tight">
                       {asset.desc}
                     </div>
                   </div>

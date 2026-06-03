@@ -19,7 +19,7 @@ const PRODUCTS = [
     category: "Tech",
     title: "Premium Tech Kit",
     price: "₹3,200",
-    image: "https://images.pexels.com/photos/34929075/pexels-photo-34929075.jpeg"
+    image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const PRODUCTS = [
     category: "Welcome Kits",
     title: "Eco-Friendly Kit",
     price: "₹1,400",
-    image: "https://images.unsplash.com/photo-1511269524056-bb9bc54b9d03?q=80&w=800&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop"
   }
 ];
 

@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronRight, Star, ShieldCheck, Award, Flame, Volume2, VolumeX, CheckCircle2, Play, Gift, Sparkles } from "lucide-react";
+import { motion, useMotionValue, useTransform, MotionValue } from "framer-motion";
+import { ArrowRight, ChevronRight, Star, ShieldCheck, Flame, CheckCircle2, Sparkles } from "lucide-react";
 import { Button } from "../ui/Button";
 
 // Custom client-side animated counter component for trust metrics
@@ -78,12 +78,208 @@ const ECOSYSTEM_ITEMS = [
     parallaxFactor: 0.6,
     glow: "rgba(212,175,55,0.12)",
     isCenter: false
+  },
+  {
+    id: "desk-organizer",
+    title: "Backpack",
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800&auto=format&fit=crop",
+    width: "w-[92px] sm:w-[115px] lg:w-[150px] xl:w-[165px]",
+    height: "h-[88px] sm:h-[105px] lg:h-[130px] xl:h-[145px]",
+    desktopPos: "left-[50%] top-[4%] sm:left-[52%] sm:top-[6%] lg:left-[50%] lg:top-[8%]",
+    zIndex: "z-25",
+    floatDuration: 8,
+    floatOffset: 7,
+    rotateRange: [-1.5, 2],
+    parallaxFactor: 0.7,
+    glow: "rgba(212,175,55,0.12)",
+    isCenter: false
+  },
+  {
+    id: "bamboo-bottle",
+    title: "Bamboo Bottle",
+    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=800&auto=format&fit=crop",
+    width: "w-[70px] sm:w-[85px] lg:w-[110px] xl:w-[125px]",
+    height: "h-[125px] sm:h-[150px] lg:h-[195px] xl:h-[215px]",
+    desktopPos: "left-[78%] top-[11%] sm:left-[78%] sm:top-[12%] lg:left-[76%] lg:top-[14%]",
+    zIndex: "z-20",
+    floatDuration: 11,
+    floatOffset: 8,
+    rotateRange: [2, -1],
+    parallaxFactor: 0.5,
+    glow: "rgba(34,197,94,0.12)",
+    isCenter: false
+  },
+  {
+    id: "pen-set",
+    title: "Premium Gift Box",
+    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop",
+    width: "w-[95px] sm:w-[115px] lg:w-[150px] xl:w-[165px]",
+    height: "h-[90px] sm:h-[105px] lg:h-[130px] xl:h-[145px]",
+    desktopPos: "left-[34%] top-[58%] sm:left-[36%] sm:top-[60%] lg:left-[38%] lg:top-[61%]",
+    zIndex: "z-25",
+    floatDuration: 9.5,
+    floatOffset: 6,
+    rotateRange: [-2, 1],
+    parallaxFactor: 0.75,
+    glow: "rgba(220,38,38,0.14)",
+    isCenter: false
+  },
+  {
+    id: "tote-bag",
+    title: "Tote Bag",
+    image: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=800&auto=format&fit=crop",
+    width: "w-[82px] sm:w-[100px] lg:w-[135px] xl:w-[150px]",
+    height: "h-[112px] sm:h-[130px] lg:h-[170px] xl:h-[190px]",
+    desktopPos: "left-[72%] top-[58%] sm:left-[73%] sm:top-[59%] lg:left-[71%] lg:top-[59%]",
+    zIndex: "z-20",
+    floatDuration: 10.5,
+    floatOffset: 7,
+    rotateRange: [1.5, -1.5],
+    parallaxFactor: 0.55,
+    glow: "rgba(255,255,255,0.12)",
+    isCenter: false
+  },
+  {
+    id: "calendar-block",
+    title: "Calendar Block",
+    image: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=800&auto=format&fit=crop",
+    width: "w-[78px] sm:w-[95px] lg:w-[120px] xl:w-[135px]",
+    height: "h-[78px] sm:h-[95px] lg:h-[120px] xl:h-[135px]",
+    desktopPos: "left-[18%] top-[64%] sm:left-[20%] sm:top-[66%] lg:left-[22%] lg:top-[66%]",
+    zIndex: "z-20",
+    floatDuration: 8.5,
+    floatOffset: 5,
+    rotateRange: [-1, 2],
+    parallaxFactor: 0.45,
+    glow: "rgba(212,175,55,0.1)",
+    isCenter: false
   }
 ];
+
+const DESKTOP_ECOSYSTEM_ITEMS = ECOSYSTEM_ITEMS.filter((item) =>
+  ["welcome-kit", "notebook", "desk-organizer", "bamboo-bottle", "pen-set"].includes(item.id)
+);
+
+const MOBILE_ECOSYSTEM_ITEMS = [
+  {
+    id: "mobile-welcome-kit",
+    title: "Welcome Kit",
+    image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=600&auto=format&fit=crop",
+    className: "left-[27%] top-[10px] w-[150px] h-[150px] z-30",
+    delay: 0
+  },
+  {
+    id: "mobile-bottle",
+    title: "Bottle",
+    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop",
+    className: "left-[4%] top-[36px] w-[78px] h-[138px] z-20",
+    delay: 0.15
+  },
+  {
+    id: "mobile-notebook",
+    title: "Notebook",
+    image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=600&auto=format&fit=crop",
+    className: "right-[4%] top-[32px] w-[92px] h-[112px] z-20",
+    delay: 0.3
+  },
+  {
+    id: "mobile-tshirt",
+    title: "Gift Box",
+    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=600&auto=format&fit=crop",
+    className: "left-[15%] bottom-[12px] w-[96px] h-[86px] z-25",
+    delay: 0.45
+  },
+  {
+    id: "mobile-backpack",
+    title: "Backpack",
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600&auto=format&fit=crop",
+    className: "right-[13%] bottom-[4px] w-[108px] h-[108px] z-25",
+    delay: 0.6
+  }
+];
+
+function EcosystemCard({
+  item,
+  mouseX,
+  mouseY,
+  prefersReducedMotion
+}: {
+  item: (typeof ECOSYSTEM_ITEMS)[number];
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+  prefersReducedMotion: boolean;
+}) {
+  const floatY = prefersReducedMotion
+    ? [0, 0]
+    : [item.floatOffset, -item.floatOffset, item.floatOffset];
+  const floatRotate = prefersReducedMotion
+    ? [0, 0]
+    : [item.rotateRange[0], item.rotateRange[1], item.rotateRange[0]];
+  const parallaxX = useTransform(mouseX, [-0.5, 0.5], [-20 * item.parallaxFactor, 20 * item.parallaxFactor]);
+  const parallaxY = useTransform(mouseY, [-0.5, 0.5], [-20 * item.parallaxFactor, 20 * item.parallaxFactor]);
+
+  return (
+    <motion.div
+      key={item.id}
+      style={{ x: parallaxX, y: parallaxY }}
+      animate={{
+        y: floatY,
+        rotate: floatRotate
+      }}
+      transition={{
+        y: { duration: item.floatDuration, repeat: Infinity, ease: "easeInOut" },
+        rotate: { duration: item.floatDuration + 1, repeat: Infinity, ease: "easeInOut" }
+      }}
+      whileHover={{
+        scale: item.isCenter ? 1.03 : 1.06,
+        y: -5,
+        zIndex: 40,
+      }}
+      className={`absolute ${item.desktopPos} ${item.width} ${item.height} ${item.zIndex} cursor-pointer group/card pointer-events-auto`}
+    >
+      <div className={`relative w-full h-full rounded-2xl overflow-hidden transition-all duration-300 ${
+        item.isCenter
+          ? "shadow-[0_20px_60px_rgba(220,38,38,0.35),_0_0_50px_rgba(212,175,55,0.25)] border-2 border-red-500/35"
+          : "shadow-[0_20px_60px_rgba(0,0,0,0.35)] hover:shadow-[0_25px_65px_rgba(0,0,0,0.55)] border border-white/5"
+      } bg-neutral-900/60`}>
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-2xl">
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover/card:translate-x-[100%] transition-transform duration-1000 ease-in-out skew-x-12" />
+        </div>
+
+        <Image
+          src={item.image}
+          alt={item.title}
+          fill
+          className="object-cover transition-transform duration-700 group-hover/card:scale-[1.05] filter brightness-110 contrast-105 saturate-105"
+          unoptimized
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none z-1" />
+      </div>
+
+      {item.isCenter && (
+        <div className="hidden sm:block absolute top-[103%] left-0 w-full h-[60px] opacity-15 scale-y-[-1] pointer-events-none select-none blur-[1.5px] z-0 overflow-hidden">
+          <div className="relative w-full h-full">
+            <Image
+              src={item.image}
+              alt=""
+              fill
+              className="object-cover"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/90 to-[#0c0a09]/10" />
+          </div>
+        </div>
+      )}
+    </motion.div>
+  );
+}
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   // Parallax mouse variables
   const mouseX = useMotionValue(0);
@@ -116,6 +312,48 @@ export function HeroSection() {
     };
   }, [mouseX, mouseY]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const playVideo = () => {
+      video.muted = true;
+      video.defaultMuted = true;
+      void video.play().catch(() => {
+        // Muted autoplay can be delayed by a browser, but the video remains the primary mounted asset.
+      });
+    };
+
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.setAttribute("muted", "");
+    video.defaultMuted = true;
+
+    playVideo();
+    const retryTimers = [250, 750, 1500, 3000].map((delay) => window.setTimeout(playVideo, delay));
+    video.addEventListener("loadedmetadata", playVideo);
+    video.addEventListener("canplay", playVideo);
+    video.addEventListener("playing", playVideo);
+
+    return () => {
+      retryTimers.forEach((timer) => window.clearTimeout(timer));
+      video.removeEventListener("loadedmetadata", playVideo);
+      video.removeEventListener("canplay", playVideo);
+      video.removeEventListener("playing", playVideo);
+    };
+  }, []);
+
+  const handleVideoReady = () => {
+    const video = videoRef.current;
+    if (video && video.paused) {
+      video.muted = true;
+      video.defaultMuted = true;
+      void video.play().catch(() => {
+        // Muted autoplay should be allowed, but leave the video mounted if a browser delays playback.
+      });
+    }
+  };
+
 
   // Stagger load anim configurations
   const containerVariants = {
@@ -139,34 +377,39 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-[50vh] sm:min-h-[60vh] lg:min-h-[70vh] pt-20 pb-8 sm:pt-24 sm:pb-12 lg:pt-28 lg:pb-16 flex items-center overflow-hidden bg-[#0c0a09] text-white">
+    <section className="relative min-h-[100svh] lg:min-h-[70vh] pt-[72px] pb-5 sm:pt-[88px] sm:pb-8 lg:pt-28 lg:pb-16 flex items-center overflow-hidden bg-[#0c0a09] text-white">
       
       {/* 1. Cinematic Background Video Layer */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 select-none pointer-events-none">
-        {mounted && !prefersReducedMotion ? (
-          <video
-            src="/gifting.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover opacity-95 transition-opacity duration-1000 object-center"
-            poster="/hero-gift.png"
-          />
-        ) : (
+        <video
+          ref={videoRef}
+          src="/gifting.mp4"
+          preload="auto"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedData={handleVideoReady}
+          onLoadedMetadata={handleVideoReady}
+          onCanPlay={handleVideoReady}
+          onPlaying={handleVideoReady}
+          onError={() => setVideoFailed(true)}
+          className="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-500 object-center"
+        />
+        {videoFailed && (
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-25" 
+            className="absolute inset-0 bg-cover bg-center opacity-100" 
             style={{ backgroundImage: "url('/hero-gift.png')" }} 
           />
         )}
       </div>
 
       {/* 2. Layered Cinematic Overlay System */}
-      <div className="absolute inset-0 bg-black/10 z-1 select-none pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/10 via-[#0c0a09]/35 to-[#0c0a09]/95 z-1 select-none pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(220,38,38,0.14),_transparent_65%)] z-1 select-none pointer-events-none" />
+      <div className="absolute inset-0 bg-black/[0.03] z-1 select-none pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/0 via-[#0c0a09]/18 to-[#0c0a09]/72 z-1 select-none pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(220,38,38,0.10),_transparent_65%)] z-1 select-none pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(212,175,55,0.06),_transparent_55%)] z-1 select-none pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_50%,_rgba(0,0,0,0.35)_100%)] z-1 select-none pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_58%,_rgba(0,0,0,0.16)_100%)] z-1 select-none pointer-events-none" />
 
       {/* 3. Ambient Blinking / Moving Lighting System (Depth layers) */}
       <div className="absolute top-1/4 right-[15%] w-[450px] h-[450px] bg-red-900/10 rounded-full blur-[140px] z-1 select-none pointer-events-none animate-pulse-slow" />
@@ -174,8 +417,126 @@ export function HeroSection() {
       <div className="absolute top-[35%] right-[25%] w-[300px] h-[300px] bg-amber-600/10 rounded-full blur-[100px] z-1 select-none pointer-events-none animate-pulse-slow" style={{ animationDelay: "1s" }} />
       <div className="absolute top-[40%] right-[20%] w-[250px] h-[250px] bg-yellow-500/5 rounded-full blur-[90px] z-1 select-none pointer-events-none animate-pulse-slow" style={{ animationDelay: "3s" }} />
 
-      {/* 4. Grid Container (Content & Ecosystem Showcase) */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 grid lg:grid-cols-12 gap-12 items-center">
+      {/* 4A. Mobile Hero: headline, products, copy, CTA, metrics */}
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:hidden">
+        <div className="mx-auto flex min-h-[calc(100svh-92px)] max-w-md flex-col justify-start">
+          <motion.h1
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="pt-4 text-[30px] min-[375px]:text-[34px] sm:text-[38px] font-black tracking-tight text-white leading-[1.02]"
+          >
+            Premium Corporate Gifts
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-amber-200">
+              & Branded Merchandise
+            </span>
+          </motion.h1>
+
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="relative mt-3 h-[218px] min-[375px]:h-[228px] sm:h-[240px] w-full overflow-visible"
+          >
+            <div className="absolute inset-x-4 top-8 h-32 rounded-full bg-red-500/18 blur-3xl" />
+            <div className="absolute inset-x-12 bottom-8 h-24 rounded-full bg-amber-300/12 blur-2xl" />
+            {MOBILE_ECOSYSTEM_ITEMS.map((item) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 14, scale: 0.94 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.5, delay: item.delay, ease: [0.16, 1, 0.3, 1] }}
+                className={`absolute ${item.className}`}
+              >
+                <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-[0_18px_45px_rgba(0,0,0,0.35)]">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover brightness-110 contrast-105 saturate-105"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/5" />
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.p
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="mt-1 max-w-sm text-[13px] leading-relaxed text-gray-200 font-semibold"
+          >
+            Premium welcome kits, executive gifts, and branded merchandise curated for modern teams.
+          </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="mt-3 flex items-center gap-2"
+          >
+            <Button
+              variant="default"
+              className="h-10 flex-1 rounded-xl font-bold bg-[#dc2626] hover:bg-[#b91c1c] text-white flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(220,38,38,0.28)] border-0 cursor-pointer text-xs"
+              asChild
+            >
+              <Link href="/promotional-merchandise">
+                Explore Products <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </Button>
+
+            <Button
+              variant="outline"
+              className="h-10 shrink-0 rounded-xl px-3 font-bold border border-white/15 text-white bg-white/10 hover:bg-white/15 backdrop-blur-md flex items-center justify-center gap-1.5 text-xs"
+              asChild
+            >
+              <Link href="/enquiry">
+                Quote <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </Button>
+          </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="mt-3 flex flex-wrap gap-1.5"
+          >
+            {["Welcome Kits", "Corporate Gifts", "Premium Giveaways"].map((tag) => (
+              <span
+                key={tag}
+                className="text-[9px] font-bold px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 text-red-100 shadow-sm flex items-center gap-1"
+              >
+                <CheckCircle2 className="w-2.5 h-2.5 text-amber-200" />
+                {tag}
+              </span>
+            ))}
+          </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="mt-4 grid grid-cols-3 gap-2 border-t border-white/10 pt-3"
+          >
+            {[
+              { value: mounted ? <CountUpNumber end={500} suffix="+" duration={1.4} /> : "500+", label: "Clients" },
+              { value: mounted ? <CountUpNumber end={100} suffix="k+" duration={1.4} /> : "100k+", label: "Gifts" },
+              { value: mounted ? <CountUpNumber end={15} suffix="+" duration={1.4} /> : "15+", label: "Years" }
+            ].map((metric) => (
+              <div key={metric.label} className="rounded-xl border border-white/10 bg-white/[0.06] px-2 py-2 text-center">
+                <div className="text-lg font-black text-white leading-none">{metric.value}</div>
+                <div className="text-[9px] font-bold text-gray-300 uppercase tracking-widest mt-1">{metric.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* 4B. Desktop Grid Container (Content & Ecosystem Showcase) */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 hidden lg:grid lg:grid-cols-12 gap-12 items-center">
         
         {/* Left Typography Block */}
         <motion.div
@@ -343,81 +704,15 @@ export function HeroSection() {
             </motion.div>
 
             {/* Product items rendering with Mouse Parallax & float loops */}
-            {ECOSYSTEM_ITEMS.map((item) => {
-              // Calculate independent float motion based on index parameters
-              const floatY = prefersReducedMotion 
-                ? [0, 0] 
-                : [item.floatOffset, -item.floatOffset, item.floatOffset];
-                
-              const floatRotate = prefersReducedMotion 
-                ? [0, 0] 
-                : [item.rotateRange[0], item.rotateRange[1], item.rotateRange[0]];
-
-              // Parallax offset maps
-              const parallaxX = useTransform(mouseX, [-0.5, 0.5], [-20 * item.parallaxFactor, 20 * item.parallaxFactor]);
-              const parallaxY = useTransform(mouseY, [-0.5, 0.5], [-20 * item.parallaxFactor, 20 * item.parallaxFactor]);
-
-              return (
-                <motion.div
-                  key={item.id}
-                  style={{ x: parallaxX, y: parallaxY }}
-                  animate={{ 
-                    y: floatY,
-                    rotate: floatRotate
-                  }}
-                  transition={{ 
-                    y: { duration: item.floatDuration, repeat: Infinity, ease: "easeInOut" },
-                    rotate: { duration: item.floatDuration + 1, repeat: Infinity, ease: "easeInOut" }
-                  }}
-                  whileHover={{ 
-                    scale: item.isCenter ? 1.03 : 1.06,
-                    y: -5,
-                    zIndex: 40,
-                  }}
-                  className={`absolute ${item.desktopPos} ${item.width} ${item.height} ${item.zIndex} cursor-pointer group/card pointer-events-auto`}
-                >
-                  <div className={`relative w-full h-full rounded-2xl overflow-hidden transition-all duration-300 ${
-                    item.isCenter 
-                      ? "shadow-[0_20px_60px_rgba(220,38,38,0.35),_0_0_50px_rgba(212,175,55,0.25)] border-2 border-red-500/35"
-                      : "shadow-[0_20px_60px_rgba(0,0,0,0.35)] hover:shadow-[0_25px_65px_rgba(0,0,0,0.55)] border border-white/5"
-                  } bg-neutral-900/60`}>
-                    
-                    {/* Diagonal shine glossy sheen overlay on hover */}
-                    <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-2xl">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover/card:translate-x-[100%] transition-transform duration-1000 ease-in-out skew-x-12" />
-                    </div>
-
-                    {/* Image rendering */}
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover/card:scale-[1.05] filter brightness-110 contrast-105 saturate-105"
-                      unoptimized
-                    />
-                    
-                    {/* Gentle shadow vignette to anchor edges */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none z-1" />
-                  </div>
-
-                  {/* Flipped luxury showroom floor reflection below the centerpiece kit */}
-                  {item.isCenter && (
-                    <div className="hidden sm:block absolute top-[103%] left-0 w-full h-[60px] opacity-15 scale-y-[-1] pointer-events-none select-none blur-[1.5px] z-0 overflow-hidden">
-                      <div className="relative w-full h-full">
-                        <Image
-                          src={item.image}
-                          alt=""
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-[#0c0a09]/90 to-[#0c0a09]/10" />
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              );
-            })}
+            {DESKTOP_ECOSYSTEM_ITEMS.map((item) => (
+              <EcosystemCard
+                key={item.id}
+                item={item}
+                mouseX={mouseX}
+                mouseY={mouseY}
+                prefersReducedMotion={prefersReducedMotion}
+              />
+            ))}
           </div>
 
         </div>
@@ -426,4 +721,3 @@ export function HeroSection() {
     </section>
   );
 }
-

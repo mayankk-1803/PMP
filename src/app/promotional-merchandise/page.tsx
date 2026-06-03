@@ -9,6 +9,7 @@ import { PROMOTIONAL_PRODUCT_GROUPS, PRODUCTS } from "@/data/siteConfig";
 import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function PromoMerchPage() {
   // Dynamically resolve category cards by matching them to products in siteConfig
@@ -29,8 +30,22 @@ export default function PromoMerchPage() {
     };
   };
 
+  const resolveSpotlights = (slug: string) => {
+    return Object.entries(PRODUCTS)
+      .filter(([, product]) => product.category === slug)
+      .slice(0, 6)
+      .map(([productSlug, product]) => ({
+        title: product.title,
+        description: product.description,
+        imageUrl: product.images[0],
+        cta: "View Product",
+        brandingOptions: product.customizations.slice(0, 2),
+        href: `/products/${productSlug}`,
+      }));
+  };
+
   return (
-    <div className="pt-32 pb-0 bg-[#faf9f6] overflow-hidden max-w-full">
+    <div className="relative isolate pt-32 pb-0 bg-[#faf9f6] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[140px]" />
       
       {/* Soft overlay */}
@@ -80,9 +95,10 @@ export default function PromoMerchPage() {
                       <Link href={cat.href} className="flex flex-col h-full">
                         <div className="relative w-full h-[180px] overflow-hidden bg-gray-50 flex-shrink-0">
                           <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-black/0 transition-colors duration-500" />
-                          <img
+                          <SafeImage
                             src={cat.imageUrl}
                             alt={cat.title}
+                            category={cat.slug}
                             className="w-full h-full object-cover transition-transform duration-700 ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
                           />
                           <div className="absolute bottom-3 right-3 z-20">
@@ -109,6 +125,70 @@ export default function PromoMerchPage() {
                   );
                 })}
               </div>
+              {group.items.some((item) => resolveSpotlights(item.slug).length > 0) && (
+                <div className="mt-12 space-y-12">
+                  {group.items
+                    .map((item) => ({ item, spotlights: resolveSpotlights(item.slug) }))
+                    .filter(({ spotlights }) => spotlights.length > 0)
+                    .map(({ item, spotlights }) => (
+                    <div key={item.slug} className="rounded-2xl bg-white/70 border border-gray-200/80 p-5 sm:p-6 shadow-sm">
+                      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+                        <div>
+                          <span className="text-[10px] font-extrabold text-red-600 uppercase tracking-widest">
+                            {item.name} Collection
+                          </span>
+                          <h3 className="text-xl md:text-2xl font-black text-gray-950 mt-1">
+                            {item.name}
+                          </h3>
+                        </div>
+                        <Link href={`/products?category=${item.slug}`} className="text-xs font-extrabold text-red-600 uppercase tracking-widest inline-flex items-center gap-1.5">
+                          View All <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {spotlights.map((spotlight, index) => (
+                          <motion.div
+                            key={spotlight.title}
+                            initial={{ opacity: 0, y: 18 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-20px" }}
+                            transition={{ delay: (index % 3) * 0.04, duration: 0.45 }}
+                            className="group bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-lg transition-all"
+                          >
+                            <Link href={spotlight.href} className="block h-full">
+                              <div className="relative h-40 bg-gray-100 overflow-hidden">
+                                <SafeImage
+                                  src={spotlight.imageUrl}
+                                  alt={spotlight.title}
+                                  category={item.slug}
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                />
+                              </div>
+                              <div className="p-5">
+                                <h4 className="text-base font-black text-gray-950 group-hover:text-red-600 transition-colors">{spotlight.title}</h4>
+                                <p className="text-xs text-gray-500 leading-relaxed font-medium mt-2">{spotlight.description}</p>
+                                {spotlight.brandingOptions && (
+                                  <div className="flex flex-wrap gap-1.5 mt-4">
+                                    {spotlight.brandingOptions.map((option) => (
+                                      <span key={option} className="text-[9px] font-extrabold uppercase tracking-wider text-gray-500 bg-gray-50 border border-gray-100 rounded-md px-2 py-1">
+                                        {option}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                                <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-red-600">
+                                  <span>{spotlight.cta}</span>
+                                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                </div>
+                              </div>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           ))}
         </div>

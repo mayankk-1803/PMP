@@ -1,0 +1,80 @@
+{
+  "totalProducts": 65,
+  "correctMappings": 65,
+  "brokenImages": 0,
+  "mismatchedImages": 0,
+  "categoryAudit": {
+    "pens": {
+      "products": 9,
+      "correctImages": 9
+    },
+    "t-shirts": {
+      "products": 10,
+      "correctImages": 10
+    },
+    "keychains": {
+      "products": 3,
+      "correctImages": 3
+    },
+    "diaries": {
+      "products": 3,
+      "correctImages": 3
+    },
+    "caps": {
+      "products": 3,
+      "correctImages": 3
+    },
+    "paper-weights": {
+      "products": 1,
+      "correctImages": 1
+    },
+    "tabletop": {
+      "products": 1,
+      "correctImages": 1
+    },
+    "backpacks": {
+      "products": 5,
+      "correctImages": 5
+    },
+    "standees": {
+      "products": 1,
+      "correctImages": 1
+    },
+    "raincoats": {
+      "products": 1,
+      "correctImages": 1
+    },
+    "tissue-boxes": {
+      "products": 1,
+      "correctImages": 1
+    },
+    "workspace-essentials": {
+      "products": 10,
+      "correctImages": 10
+    },
+    "drinkware": {
+      "products": 4,
+      "correctImages": 4
+    },
+    "gift-sets": {
+      "products": 4,
+      "correctImages": 4
+    },
+    "executive-gifts": {
+      "products": 3,
+      "correctImages": 3
+    },
+    "audio-gadgets": {
+      "products": 3,
+      "correctImages": 3
+    },
+    "tech-accessories": {
+      "products": 3,
+      "correctImages": 3
+    }
+  },
+  "productMismatches": [],
+  "kitMismatches": [],
+  "hamperMismatches": [],
+  "packagingMismatches": []
+}
