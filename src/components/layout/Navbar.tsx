@@ -32,7 +32,7 @@ export function Navbar() {
   
   const { items, removeFromShortlist } = useShortlist();
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() || "";
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

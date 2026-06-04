@@ -1,48 +1,46 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/Button";
 
-const CATEGORIES = ["All", "Welcome Kits", "Tech", "Drinkware"];
-
-const PRODUCTS = [
-  {
-    id: 1,
-    category: "Welcome Kits",
-    title: "The Executive Box",
-    price: "₹1,850",
-    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    category: "Tech",
-    title: "Premium Tech Kit",
-    price: "₹3,200",
-    image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    category: "Drinkware",
-    title: "Matte Vacuum Flask",
-    price: "₹850",
-    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 4,
-    category: "Welcome Kits",
-    title: "Eco-Friendly Kit",
-    price: "₹1,400",
-    image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop"
-  }
-];
+interface ShowcaseProduct {
+  id: string;
+  category: string;
+  title: string;
+  image: string;
+}
 
 export function ProductShowcase() {
   const [activeFilter, setActiveFilter] = useState("All");
+  const [products, setProducts] = useState<ShowcaseProduct[]>([]);
 
-  const filteredProducts = PRODUCTS.filter(
-    (product) => activeFilter === "All" || product.category === activeFilter
-  );
+  useEffect(() => {
+    let active = true;
+
+    fetch("/api/catalog/products")
+      .then((response) => response.json())
+      .then((result) => {
+        if (!active) return;
+        setProducts(
+          (result.data ?? []).slice(0, 12).map((product: any) => ({
+            id: product.id,
+            category: product.category,
+            title: product.title,
+            image: product.images[0],
+          }))
+        );
+      })
+      .catch(() => setProducts([]));
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const categories = useMemo(() => ["All", ...Array.from(new Set(products.map((product) => product.category))).slice(0, 4)], [products]);
+
+  const filteredProducts = products.filter((product) => activeFilter === "All" || product.category === activeFilter).slice(0, 4);
 
   return (
     <section className="py-24 bg-gray-50">
@@ -52,9 +50,9 @@ export function ProductShowcase() {
             <h2 className="text-4xl font-bold text-red-600 mb-4">Curated Gifts</h2>
             <p className="text-lg text-gray-600">Explore our premium catalog of best-selling corporate kits.</p>
           </div>
-          
+
           <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveFilter(cat)}
@@ -83,7 +81,7 @@ export function ProductShowcase() {
                 className="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all"
               >
                 <div className="relative h-64 overflow-hidden">
-                  <div 
+                  <div
                     className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
                     style={{ backgroundImage: `url(${product.image})` }}
                   />
@@ -96,7 +94,7 @@ export function ProductShowcase() {
                 <div className="p-6">
                   <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-2">{product.category}</p>
                   <h3 className="text-lg font-bold text-red-600 mb-1">{product.title}</h3>
-                  <p className="text-gray-900 font-semibold">{product.price}</p>
+                  <p className="text-gray-900 font-semibold">Custom Quote</p>
                 </div>
               </motion.div>
             ))}

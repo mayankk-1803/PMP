@@ -25,7 +25,7 @@ const getBudgetIcon = (index: number) => {
 function GiftsByBudgetContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const selectedRange = searchParams.get("range") || "";
+  const selectedRange = searchParams?.get("range") || "";
 
   // Convert products object to array and transform images/price fields
   const allProducts = Object.values(PRODUCTS).map((p) => ({
@@ -49,7 +49,7 @@ function GiftsByBudgetContent() {
     : allProducts;
 
   const handleSelectRange = (rangeValue: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString());
     if (rangeValue) {
       params.set("range", rangeValue);
     } else {

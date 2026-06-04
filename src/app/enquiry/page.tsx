@@ -46,8 +46,8 @@ interface FormDataState {
 
 function EnquiryFormContainer() {
   const searchParams = useSearchParams();
-  const singleProduct = searchParams.get("product");
-  const isShortlistSource = searchParams.get("source") === "shortlist";
+  const singleProduct = searchParams?.get("product");
+  const isShortlistSource = searchParams?.get("source") === "shortlist";
   const { items } = useShortlist();
   
   const [step, setStep] = useState(1);

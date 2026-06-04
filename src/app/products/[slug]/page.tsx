@@ -11,89 +11,86 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
-import { PRODUCTS } from "@/data/siteConfig";
 import { SafeImage } from "@/components/ui/SafeImage";
 
-// Helper: fallback mapping if slug matches category name directly or normalized titles
-const resolveProduct = (slug: string) => {
-  const normalized = slug.toLowerCase();
-  
-  // Direct match
-  if (PRODUCTS[normalized]) {
-    return PRODUCTS[normalized];
-  }
+interface CatalogProduct {
+  title: string;
+  slug: string;
+  description: string;
+  shortDescription?: string;
+  category: string;
+  subcategory: string;
+  images: string[];
+  features: string[];
+  specifications: Record<string, string>;
+  moq: number;
+}
 
-  // Reverse mapping for category values
-  const catMapping: Record<string, string> = {
-    "pens": "executive-metal-pens",
-    "t-shirts": "polo-t-shirts",
-    "keychains": "premium-leather-keychain",
-    "diaries": "a5-leatherette-diary-planner",
-    "caps": "branded-panel-sports-cap",
-    "paper-weights": "crystal-glass-paper-weight",
-    "tabletop": "premium-desk-organizer-block",
-    "workspace-essentials": "executive-leather-desk-mat",
-    "backpacks": "anti-theft-laptop-backpack",
-    "drinkware": "executive-steel-drinkware-set",
-    "executive-gifts": "executive-notebook-desk-kit",
-    "gift-sets": "luxury-curated-gift-set",
-    "audio-gadgets": "premium-audio-gadget-kit",
-    "tech-accessories": "branded-tech-accessory-kit",
-    "standees": "retractable-pull-up-standee",
-    "raincoats": "heavy-duty-outdoor-raincoat",
-    "tissue-boxes": "luxury-leather-tissue-box"
-  };
+const toSpecs = (product: CatalogProduct) =>
+  Object.entries(product.specifications || {}).map(([label, value]) => ({ label, value: String(value) }));
 
-  if (catMapping[normalized]) {
-    return PRODUCTS[catMapping[normalized]];
-  }
-
-  // Match product cards that generate URLs from visible titles.
-  const foundByTitle = Object.values(PRODUCTS).find((item) => {
-    const titleSlug = item.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
-    return titleSlug === normalized;
-  });
-
-  if (foundByTitle) {
-    return foundByTitle;
-  }
-
-  // Find by scanning keys
-  const foundKey = Object.keys(PRODUCTS).find(key => 
-    key.includes(normalized) || normalized.includes(key)
-  );
-
-  if (foundKey) {
-    return PRODUCTS[foundKey];
-  }
-
-  return PRODUCTS["executive-metal-pens"];
-};
+const toDetailProduct = (product: CatalogProduct) => ({
+  ...product,
+  basePrice: product.category === "packaging" ? 45 : 650,
+  specs: toSpecs(product),
+  customizations: product.features.length > 0 ? product.features : ["Logo branding", "Custom packaging"],
+  packagings: ["Premium Gift Box", "Bulk Shipper", "Custom Sleeve"],
+});
 
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const router = useRouter();
-  
-  const product = resolveProduct(slug);
 
-  const [activeImage, setActiveImage] = useState(product.images[0]);
-  const [quantity, setQuantity] = useState(product.moq);
-  const [selectedBranding, setSelectedBranding] = useState(product.customizations[0]);
-  const [selectedPackaging, setSelectedPackaging] = useState(product.packagings[0]);
+  const [product, setProduct] = useState<ReturnType<typeof toDetailProduct> | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<CatalogProduct[]>([]);
+  const [activeImage, setActiveImage] = useState("");
+  const [quantity, setQuantity] = useState(50);
+  const [selectedBranding, setSelectedBranding] = useState("Logo branding");
+  const [selectedPackaging, setSelectedPackaging] = useState("Premium Gift Box");
 
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
-  const isShortlisted = isInShortlist(product.title);
+  const isShortlisted = product ? isInShortlist(product.title) : false;
 
-  // Sync active image if product changes
   useEffect(() => {
-    setActiveImage(product.images[0]);
-    setQuantity(product.moq);
-    setSelectedBranding(product.customizations[0]);
-    setSelectedPackaging(product.packagings[0]);
-  }, [product]);
+    let active = true;
+
+    async function loadProduct() {
+      const productResponse = await fetch(`/api/catalog/products/${slug}`);
+      const productResult = await productResponse.json();
+      const productsResponse = await fetch("/api/catalog/products");
+      const productsResult = await productsResponse.json();
+
+      if (!active || !productResult.success) return;
+      const nextProduct = toDetailProduct(productResult.data);
+      setProduct(nextProduct);
+      setActiveImage(nextProduct.images[0]);
+      setQuantity(nextProduct.moq);
+      setSelectedBranding(nextProduct.customizations[0]);
+      setSelectedPackaging(nextProduct.packagings[0]);
+      setRelatedProducts((productsResult.data ?? []).filter((item: CatalogProduct) => item.slug !== slug && item.category === nextProduct.category).slice(0, 3));
+    }
+
+    loadProduct();
+
+    return () => {
+      active = false;
+    };
+  }, [slug]);
+
+  if (!product) {
+    return (
+      <div className="pt-28 pb-24 bg-gray-50/50 min-h-screen text-left">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link href="/products" className="inline-flex items-center gap-2 text-[10px] font-extrabold text-gray-500 hover:text-red-650 uppercase tracking-widest transition-colors">
+            <ArrowLeft className="w-4 h-4" /> Back to Catalog
+          </Link>
+          <div className="mt-10 rounded-3xl border border-gray-200 bg-white p-12 text-center text-sm font-bold text-gray-500">
+            Loading product from catalog database...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Bulk Discount Bracket calculations
   const getDiscountPercentage = (qty: number) => {
@@ -131,16 +128,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
     });
     router.push(`/enquiry?${query.toString()}`);
   };
-
-  // Resolve related products (filter out current)
-  const relatedKeys = Object.keys(PRODUCTS).filter(k => 
-    PRODUCTS[k].title !== product.title && PRODUCTS[k].category === product.category
-  ).slice(0, 3);
-
-  // Fallback related
-  const finalRelatedKeys = relatedKeys.length > 0 
-    ? relatedKeys 
-    : Object.keys(PRODUCTS).filter(k => PRODUCTS[k].title !== product.title).slice(0, 3);
 
   return (
     <div className="pt-28 pb-24 bg-gray-50/50 min-h-screen text-left">
@@ -430,13 +417,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {finalRelatedKeys.map((key) => {
-              const relatedItem = PRODUCTS[key];
-              const relatedSlug = key;
-              return (
+            {relatedProducts.map((relatedItem) => (
                 <div 
                   key={relatedItem.title}
-                  onClick={() => router.push(`/products/${relatedSlug}`)}
+                  onClick={() => router.push(`/products/${relatedItem.slug}`)}
                   className="group cursor-pointer bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all text-left"
                 >
                   <div className="relative aspect-[16/10] w-full bg-gray-50">
@@ -447,7 +431,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                       <h4 className="font-bold text-gray-900 text-sm mb-1 truncate group-hover:text-red-500 transition-colors">
                         {relatedItem.title}
                       </h4>
-                      <p className="text-gray-400 text-[10px] font-extrabold uppercase tracking-wider">{relatedItem.budget}</p>
+                      <p className="text-gray-400 text-[10px] font-extrabold uppercase tracking-wider">{relatedItem.subcategory}</p>
                     </div>
                     <div className="pt-4 border-t border-gray-100 mt-4 flex items-center justify-between">
                       <span className="text-[10px] font-bold text-gray-400">MOQ: {relatedItem.moq} units</span>
@@ -455,8 +439,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     </div>
                   </div>
                 </div>
-              );
-            })}
+            ))}
           </div>
         </div>
 

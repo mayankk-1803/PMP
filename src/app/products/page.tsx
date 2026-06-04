@@ -10,36 +10,25 @@ import {
 } from "lucide-react";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/Button";
-import { 
-  CORPORATE_GIFTS, 
-  PREMIUM_GIVEAWAYS,
-  BUDGETS, 
-  PRODUCTS 
-} from "@/data/siteConfig";
 
-// Re-map categories and budget tiers dynamically
-const CATEGORIES_LIST = [
-  { name: "All Categories", slug: "all" },
-  ...CORPORATE_GIFTS.map(c => ({ name: c.name, slug: c.slug })),
-  ...PREMIUM_GIVEAWAYS.filter((item) => !CORPORATE_GIFTS.some((gift) => gift.slug === item.slug)).map(c => ({ name: c.name, slug: c.slug }))
-];
+interface CatalogProduct {
+  title: string;
+  slug: string;
+  description: string;
+  shortDescription?: string;
+  category: string;
+  subcategory: string;
+  images: string[];
+  moq: number;
+  features: string[];
+}
 
-const BUDGET_TIERS = [
-  { name: "All Budgets", value: "all" },
-  ...Array.from(new Set(BUDGETS.map(b => b.value))).map(val => ({ name: val, value: val }))
-];
+interface CatalogNode {
+  name: string;
+  slug: string;
+}
 
-// Map dynamic PRODUCTS record into array for list queries
-const PRODUCTS_ARRAY = Object.values(PRODUCTS).map(p => ({
-  title: p.title,
-  price: "Custom Quote",
-  imageUrl: p.images[0],
-  category: p.category,
-  budget: p.budget,
-  description: p.description,
-  moq: p.moq,
-  brandingOptions: p.customizations.slice(0, 2)
-}));
+const BUDGET_TIERS = [{ name: "All Budgets", value: "all" }];
 
 const ITEMS_PER_PAGE = 8;
 
@@ -47,27 +36,62 @@ function ProductsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const initialCategory = searchParams.get("category") || "all";
-  const initialBudget = searchParams.get("range") || "all";
+  const initialCategory = searchParams?.get("category") || "all";
+  const initialBudget = searchParams?.get("range") || "all";
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedBudget, setSelectedBudget] = useState(initialBudget);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [products, setProducts] = useState<CatalogProduct[]>([]);
+  const [categories, setCategories] = useState<CatalogNode[]>([{ name: "All Categories", slug: "all" }]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const cat = searchParams.get("category") || "all";
+    const cat = searchParams?.get("category") || "all";
     setSelectedCategory(cat);
-    const bud = searchParams.get("range") || "all";
+    const bud = searchParams?.get("range") || "all";
     setSelectedBudget(bud);
     setCurrentPage(1);
   }, [searchParams]);
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadCatalog() {
+      setIsLoading(true);
+      const [productsResponse, subcategoriesResponse] = await Promise.all([
+        fetch("/api/catalog/products"),
+        fetch("/api/catalog/subcategories"),
+      ]);
+      const [productsResult, subcategoriesResult] = await Promise.all([
+        productsResponse.json(),
+        subcategoriesResponse.json(),
+      ]);
+
+      if (!active) return;
+      setProducts(productsResult.data ?? []);
+      setCategories([
+        { name: "All Categories", slug: "all" },
+        ...(subcategoriesResult.data ?? []).map((item: CatalogNode) => ({ name: item.name, slug: item.slug })),
+      ]);
+      setIsLoading(false);
+    }
+
+    loadCatalog().catch(() => {
+      if (active) setIsLoading(false);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const handleCategoryChange = (slug: string) => {
     setSelectedCategory(slug);
     setCurrentPage(1);
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString());
     if (slug === "all") {
       params.delete("category");
     } else {
@@ -79,7 +103,7 @@ function ProductsPageContent() {
   const handleBudgetChange = (value: string) => {
     setSelectedBudget(value);
     setCurrentPage(1);
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString());
     if (value === "all") {
       params.delete("range");
     } else {
@@ -97,9 +121,9 @@ function ProductsPageContent() {
   };
 
   // Filter logic
-  const filteredProducts = PRODUCTS_ARRAY.filter((product) => {
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
-    const matchesBudget = selectedBudget === "all" || product.budget === selectedBudget;
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory || product.subcategory === selectedCategory;
+    const matchesBudget = selectedBudget === "all";
     const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesBudget && matchesSearch;
@@ -158,7 +182,7 @@ function ProductsPageContent() {
 
           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
             <div className="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider">
-              Showing {filteredProducts.length} results
+              {isLoading ? "Loading catalog" : `Showing ${filteredProducts.length} results`}
             </div>
 
             <button
@@ -192,7 +216,7 @@ function ProductsPageContent() {
                 )}
               </div>
               <div className="space-y-1 max-h-[360px] overflow-y-auto pr-1">
-                {CATEGORIES_LIST.map((cat) => (
+                {categories.map((cat) => (
                   <button
                     key={cat.slug}
                     onClick={() => handleCategoryChange(cat.slug)}
@@ -258,7 +282,17 @@ function ProductsPageContent() {
           {/* Right Area: Grid & Pagination */}
           <main className="lg:col-span-9 space-y-10 text-left">
             
-            {filteredProducts.length === 0 ? (
+            {isLoading ? (
+              <div className="bg-white border border-gray-200 p-12 rounded-3xl text-center space-y-4 shadow-sm">
+                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-300">
+                  <Search className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-800">Loading catalog from database</h3>
+                <p className="text-xs sm:text-sm text-gray-400 max-w-sm mx-auto leading-relaxed font-semibold">
+                  Fetching products, categories, images, and subcategories from the catalog API.
+                </p>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <div className="bg-white border border-gray-200 p-12 rounded-3xl text-center space-y-4 shadow-sm">
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-300">
                   <Search className="w-8 h-8" />
@@ -281,7 +315,7 @@ function ProductsPageContent() {
                   <AnimatePresence mode="popLayout">
                     {paginatedProducts.map((product, idx) => (
                       <motion.div
-                        key={product.title}
+                        key={product.slug}
                         layout
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -290,11 +324,11 @@ function ProductsPageContent() {
                       >
                         <ProductCard
                           title={product.title}
-                          price={product.price}
-                          imageUrl={product.imageUrl}
-                          description={product.description}
+                          price="Custom Quote"
+                          imageUrl={product.images[0]}
+                          description={product.shortDescription || product.description}
                           moq={product.moq}
-                          brandingOptions={product.brandingOptions}
+                          brandingOptions={product.features.slice(0, 2)}
                           index={idx}
                           category={product.category}
                         />
@@ -377,7 +411,7 @@ function ProductsPageContent() {
                 <div className="space-y-3">
                   <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-red-500">Categories</h4>
                   <div className="grid grid-cols-2 gap-2">
-                    {CATEGORIES_LIST.map((cat) => (
+                    {categories.map((cat) => (
                       <button
                         key={cat.slug}
                         onClick={() => { handleCategoryChange(cat.slug); setShowMobileFilters(false); }}

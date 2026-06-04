@@ -12,19 +12,36 @@ export const COMPANY_INFO = {
 export const CORPORATE_GIFTS = [
   { name: "Workspace Essentials", slug: "workspace-essentials", href: "/products?category=workspace-essentials" },
   { name: "Pens", slug: "pens", href: "/products?category=pens" },
+  { name: "Diaries", slug: "diaries", href: "/products?category=diaries" },
+  { name: "Notebooks", slug: "notebooks", href: "/products?category=notebooks" },
   { name: "T-Shirts", slug: "t-shirts", href: "/products?category=t-shirts" },
   { name: "Keychains", slug: "keychains", href: "/products?category=keychains" },
-  { name: "Diaries", slug: "diaries", href: "/products?category=diaries" },
-  { name: "Caps", slug: "caps", href: "/products?category=caps" }
+  { name: "Caps", slug: "caps", href: "/products?category=caps" },
+  { name: "Desk Accessories", slug: "desk-accessories", href: "/products?category=desk-accessories" },
+  { name: "Executive Organizers", slug: "executive-organizers", href: "/products?category=executive-organizers" },
+  { name: "Mouse Pads", slug: "mouse-pads", href: "/products?category=mouse-pads" },
+  { name: "USB Drives", slug: "usb-drives", href: "/products?category=usb-drives" },
+  { name: "Power Banks", slug: "power-banks", href: "/products?category=power-banks" },
+  { name: "Corporate Stationery", slug: "corporate-stationery", href: "/products?category=corporate-stationery" }
 ];
 
 export const PREMIUM_GIVEAWAYS = [
-  { name: "Backpacks & Bags", slug: "backpacks", href: "/products?category=backpacks" },
+  { name: "Backpacks", slug: "backpacks", href: "/products?category=backpacks" },
+  { name: "Laptop Bags", slug: "laptop-bags", href: "/products?category=laptop-bags" },
+  { name: "Travel Bags", slug: "travel-bags", href: "/products?category=travel-bags" },
   { name: "Drinkware", slug: "drinkware", href: "/products?category=drinkware" },
+  { name: "Premium Bottles", slug: "premium-bottles", href: "/products?category=premium-bottles" },
+  { name: "Mugs", slug: "mugs", href: "/products?category=mugs" },
+  { name: "Tumblers", slug: "tumblers", href: "/products?category=tumblers" },
   { name: "Executive Gifts", slug: "executive-gifts", href: "/products?category=executive-gifts" },
   { name: "Gift Sets", slug: "gift-sets", href: "/products?category=gift-sets" },
   { name: "Audio Gadgets", slug: "audio-gadgets", href: "/products?category=audio-gadgets" },
-  { name: "Tech Accessories", slug: "tech-accessories", href: "/products?category=tech-accessories" }
+  { name: "Bluetooth Speakers", slug: "bluetooth-speakers", href: "/products?category=bluetooth-speakers" },
+  { name: "Headphones", slug: "headphones", href: "/products?category=headphones" },
+  { name: "Tech Accessories", slug: "tech-accessories", href: "/products?category=tech-accessories" },
+  { name: "Smart Accessories", slug: "smart-accessories", href: "/products?category=smart-accessories" },
+  { name: "Mobile Accessories", slug: "mobile-accessories", href: "/products?category=mobile-accessories" },
+  { name: "Travel Accessories", slug: "travel-accessories", href: "/products?category=travel-accessories" }
 ];
 
 export const PROMOTIONAL_PRODUCT_GROUPS = [
@@ -52,9 +69,14 @@ export const CORPORATE_KITS = [
   { name: "Interior Designer Kits", slug: "interior-designer", href: "/corporate-kits?kit=interior-designer" },
   { name: "Pharma Representative Kits", slug: "pharma", href: "/corporate-kits?kit=pharma" },
   { name: "Hospital Staff Kits", slug: "hospital-staff", href: "/corporate-kits?kit=hospital-staff" },
+  { name: "Channel Partner Kits", slug: "channel-partner", href: "/corporate-kits?kit=channel-partner" },
   { name: "Training Kits", slug: "training", href: "/corporate-kits?kit=training" },
   { name: "Seminar Kits", slug: "seminar", href: "/corporate-kits?kit=seminar" },
   { name: "Startup Employee Onboarding Kits", slug: "startup-onboarding", href: "/corporate-kits?kit=startup-onboarding" },
+  { name: "Employee Welcome Kits", slug: "employee-welcome", href: "/corporate-kits?kit=employee-welcome" },
+  { name: "Leadership Kits", slug: "leadership", href: "/corporate-kits?kit=leadership" },
+  { name: "Executive Kits", slug: "executive", href: "/corporate-kits?kit=executive" },
+  { name: "Remote Onboarding Kits", slug: "remote-onboarding", href: "/corporate-kits?kit=remote-onboarding" },
   { name: "Partner Kits", slug: "partner", href: "/corporate-kits?kit=partner" },
   { name: "Sales Team Kits", slug: "sales", href: "/corporate-kits?kit=sales" },
   { name: "Real Estate Kits", slug: "real-estate", href: "/corporate-kits?kit=real-estate" }
@@ -66,14 +88,52 @@ export const OCCASION_HAMPERS = [
   { name: "Eid Kits", slug: "eid", href: "/corporate-kits?kit=eid" },
   { name: "Women's Day Gifts", slug: "womens", href: "/corporate-kits?kit=womens" },
   { name: "Christmas Kits", slug: "christmas", href: "/corporate-kits?kit=christmas" },
-  { name: "New Year Gifts", slug: "newyear", href: "/corporate-kits?kit=newyear" },
-  { name: "Welcome Hampers", slug: "welcome", href: "/corporate-kits?kit=welcome" }
+  { name: "New Year Hampers", slug: "newyear", href: "/corporate-kits?kit=newyear" },
+  { name: "Corporate Celebration Hampers", slug: "celebration", href: "/corporate-kits?kit=celebration" },
+  { name: "Welcome Hampers", slug: "welcome", href: "/corporate-kits?kit=welcome" },
+  { name: "Luxury Hampers", slug: "luxury", href: "/corporate-kits?kit=luxury" },
+  { name: "Premium Gourmet Hampers", slug: "premium-gourmet", href: "/corporate-kits?kit=premium-gourmet" },
+  { name: "Dry Fruit Hampers", slug: "dry-fruit", href: "/corporate-kits?kit=dry-fruit" },
+  { name: "Tea & Coffee Hampers", slug: "tea-coffee", href: "/corporate-kits?kit=tea-coffee" }
 ];
 
 export const PACKAGING_SOLUTIONS = [
   { name: "Mono Cartons", slug: "mono", href: "/packaging-solutions?type=mono" },
   { name: "Rigid Boxes", slug: "rigid", href: "/packaging-solutions?type=rigid" },
-  { name: "Corrugated Cartons", slug: "corrugated", href: "/packaging-solutions?type=corrugated" }
+  { name: "Corrugated Cartons", slug: "corrugated", href: "/packaging-solutions?type=corrugated" },
+  { name: "Luxury Gift Boxes", slug: "luxury-gift-boxes", href: "/packaging-solutions?type=luxury-gift-boxes" },
+  { name: "Magnetic Boxes", slug: "magnetic-boxes", href: "/packaging-solutions?type=magnetic-boxes" },
+  { name: "Mailer Boxes", slug: "mailer-boxes", href: "/packaging-solutions?type=mailer-boxes" },
+  { name: "Premium Packaging", slug: "premium-packaging", href: "/packaging-solutions?type=premium-packaging" },
+  { name: "Custom Packaging", slug: "custom-packaging", href: "/packaging-solutions?type=custom-packaging" },
+  { name: "Retail Packaging", slug: "retail-packaging", href: "/packaging-solutions?type=retail-packaging" },
+  { name: "Ecommerce Packaging", slug: "ecommerce-packaging", href: "/packaging-solutions?type=ecommerce-packaging" }
+];
+
+export const PRODUCT_HIERARCHY = [
+  {
+    name: "Promotional Products",
+    slug: "promotional-products",
+    categories: [
+      { name: "Corporate Gifts", slug: "corporate-gifts", subcategories: CORPORATE_GIFTS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) },
+      { name: "Premium Giveaways", slug: "premium-giveaways", subcategories: PREMIUM_GIVEAWAYS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) }
+    ]
+  },
+  {
+    name: "Kits & Hampers",
+    slug: "kits-hampers",
+    categories: [
+      { name: "Corporate Kits", slug: "corporate-kits", subcategories: CORPORATE_KITS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) },
+      { name: "Festive Hampers", slug: "festive-hampers", subcategories: OCCASION_HAMPERS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) }
+    ]
+  },
+  {
+    name: "Packaging",
+    slug: "packaging",
+    categories: [
+      { name: "Packaging", slug: "packaging", subcategories: PACKAGING_SOLUTIONS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) }
+    ]
+  }
 ];
 
 export const BUDGETS = [
@@ -203,6 +263,7 @@ export interface SpecItem {
 export interface ProductItem {
   title: string;
   category: string;
+  subcategory?: string;
   budget: string;
   basePrice: number;
   description: string;
@@ -1018,13 +1079,67 @@ const CATEGORY_IMAGE_LIBRARY: Record<string, string[]> = {
   ]
 };
 
+const PRODUCT_CATEGORY_OVERRIDES: Record<string, { category: string; subcategory: string }> = {
+  "weatherproof-raincoat": { category: "raincoats", subcategory: "raincoats" },
+  "premium-luggage-tag": { category: "travel-accessories", subcategory: "travel-accessories" },
+  "branded-tote-bag": { category: "travel-bags", subcategory: "travel-bags" },
+  "wireless-charging-mousepad": { category: "mouse-pads", subcategory: "mouse-pads" },
+  "power-bank-10000mah": { category: "power-banks", subcategory: "power-banks" },
+  "bluetooth-speaker": { category: "bluetooth-speakers", subcategory: "bluetooth-speakers" },
+  "wireless-earbuds": { category: "headphones", subcategory: "headphones" },
+  "ceramic-coffee-mug": { category: "mugs", subcategory: "mugs" },
+  "vacuum-insulated-bottle": { category: "premium-bottles", subcategory: "premium-bottles" },
+  "travel-tumbler": { category: "tumblers", subcategory: "tumblers" },
+  "usb-c-hub": { category: "usb-drives", subcategory: "usb-drives" },
+  "a5-hardbound-notebook": { category: "notebooks", subcategory: "notebooks" },
+  "custom-tabletop-calendar": { category: "desk-accessories", subcategory: "desk-accessories" },
+  "bamboo-desk-organizer": { category: "desk-accessories", subcategory: "desk-accessories" },
+  "executive-desk-clock": { category: "executive-organizers", subcategory: "executive-organizers" },
+};
+
+const PRODUCT_IMAGE_OVERRIDES: Record<string, string[]> = {
+  "weatherproof-raincoat": ["https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000&auto=format&fit=crop"],
+  "premium-luggage-tag": ["https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?q=80&w=1000&auto=format&fit=crop"],
+  "branded-tote-bag": ["https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop"],
+  "wireless-charging-mousepad": ["https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=1000&auto=format&fit=crop"],
+  "power-bank-10000mah": ["https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=1000&auto=format&fit=crop"],
+  "bluetooth-speaker": ["https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=1000&auto=format&fit=crop"],
+  "wireless-earbuds": ["https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?q=80&w=1000&auto=format&fit=crop"],
+  "ceramic-coffee-mug": ["https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=1000&auto=format&fit=crop"],
+  "vacuum-insulated-bottle": ["https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=1000&auto=format&fit=crop"],
+  "travel-tumbler": ["https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?q=80&w=1000&auto=format&fit=crop"],
+  "usb-c-hub": ["https://images.unsplash.com/photo-1625842268584-8f3296236761?q=80&w=1000&auto=format&fit=crop"],
+  "a5-hardbound-notebook": ["https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=1000&auto=format&fit=crop"],
+  "executive-leather-desk-mat": ["https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop"],
+  "wireless-charging-wood-organizer": ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop"],
+  "smart-temperature-sipper": ["https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=1000&auto=format&fit=crop"],
+  "aluminum-laptop-stand": ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop"],
+};
+
+const deriveSubcategory = (category: string) => {
+  const aliases: Record<string, string> = {
+    tabletop: "desk-accessories",
+    "paper-weights": "desk-accessories",
+    "tissue-boxes": "desk-accessories",
+    standees: "retail-packaging",
+  };
+  return aliases[category] || category;
+};
+
 const normalizeProductImages = (products: Record<string, ProductItem>) => {
   return Object.fromEntries(
     Object.entries(products).map(([key, product], index) => {
-      if (product.images && product.images.length > 0) {
-        return [key, product];
+      const taxonomy = PRODUCT_CATEGORY_OVERRIDES[key] ?? { category: product.category, subcategory: product.subcategory || deriveSubcategory(product.category) };
+      const imageOverride = PRODUCT_IMAGE_OVERRIDES[key];
+      if (imageOverride) {
+        return [key, { ...product, ...taxonomy, images: imageOverride }];
       }
-      const library = CATEGORY_IMAGE_LIBRARY[product.category] || CATEGORY_IMAGE_LIBRARY["gift-sets"];
+
+      if (product.images && product.images.length > 0) {
+        return [key, { ...product, ...taxonomy }];
+      }
+
+      const library = CATEGORY_IMAGE_LIBRARY[taxonomy.category] || CATEGORY_IMAGE_LIBRARY[product.category] || CATEGORY_IMAGE_LIBRARY["gift-sets"];
       const startIndex = index % library.length;
       const images = [
         library[startIndex],
@@ -1032,12 +1147,20 @@ const normalizeProductImages = (products: Record<string, ProductItem>) => {
         library[(startIndex + 2) % library.length]
       ].filter((image, imageIndex, self) => self.indexOf(image) === imageIndex);
 
-      return [key, { ...product, images }];
+      return [key, { ...product, ...taxonomy, images }];
     })
   ) as Record<string, ProductItem>;
 };
 
 export const PRODUCTS: Record<string, ProductItem> = normalizeProductImages(RAW_PRODUCTS);
+
+export const CMS_PRODUCT_DATA = Object.entries(PRODUCTS).map(([slug, product]) => ({
+  slug,
+  title: product.title,
+  category: product.category,
+  subcategory: product.subcategory || deriveSubcategory(product.category),
+  image: product.images[0],
+}));
 
 const BASE_SITE_KITS = [
   {
@@ -1225,8 +1348,8 @@ const RAW_SITE_KITS = [
 
 const KIT_IMAGE_LIBRARY = {
   joining: [
-    "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1000&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=1000&auto=format&fit=crop"
   ],
   doctor: [
     "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1000&auto=format&fit=crop",
@@ -1248,7 +1371,7 @@ const KIT_IMAGE_LIBRARY = {
   ],
   sales: [
     "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=1000&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=1000&auto=format&fit=crop"
   ],
   partner: [
     "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1000&auto=format&fit=crop",
@@ -1278,9 +1401,6 @@ const kitImageGroup = (kit: { title: string; slug: string }) => {
 };
 
 export const SITE_KITS = RAW_SITE_KITS.map((kit) => {
-  if (kit.imageUrl) {
-    return kit;
-  }
   const images = kitImageGroup(kit);
   return { ...kit, imageUrl: images[0] };
 });
@@ -1452,7 +1572,7 @@ const RAW_SITE_PACKAGING = [
 
 const PACKAGING_IMAGE_LIBRARY = {
   mono: [
-    "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1000&auto=format&fit=crop"
   ],
   rigid: [
@@ -1460,7 +1580,6 @@ const PACKAGING_IMAGE_LIBRARY = {
     "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1000&auto=format&fit=crop"
   ],
   corrugated: [
-    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop"
   ],
   insert: [
@@ -1481,9 +1600,6 @@ const packagingImageGroup = (pkg: { id: string; title: string }) => {
 };
 
 export const SITE_PACKAGING = RAW_SITE_PACKAGING.map((pkg) => {
-  if (pkg.img) {
-    return pkg;
-  }
   const images = packagingImageGroup(pkg);
   return { ...pkg, img: images[0] };
 });

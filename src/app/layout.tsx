@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
-import { MobileStickyCTA } from "@/components/ui/MobileStickyCTA";
-import { ShortlistProvider } from "@/context/ShortlistContext";
+import { AppChrome } from "@/components/layout/AppChrome";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,15 +25,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col relative bg-white text-gray-900 selection:bg-gray-900 selection:text-white overflow-x-hidden max-w-full">
-        <ShortlistProvider>
-          <Navbar />
-          <main className="flex-1 flex flex-col pt-20">
-            {children}
-          </main>
-          <Footer />
-          <FloatingWhatsApp />
-          <MobileStickyCTA />
-        </ShortlistProvider>
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

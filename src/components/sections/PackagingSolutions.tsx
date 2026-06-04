@@ -3,12 +3,12 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { 
   Package, Settings, CheckCircle2, ArrowRight, Box, Layers, HelpCircle
 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { SITE_PACKAGING, PROCESS_STEPS } from "@/data/siteConfig";
+import { SafeImage } from "../ui/SafeImage";
 
 export function PackagingSolutions() {
   const [activeTab, setActiveTab] = useState("mono");
@@ -51,32 +51,41 @@ export function PackagingSolutions() {
         </div>
 
         {/* Interactive Layout Grid */}
-        <div className="grid lg:grid-cols-12 gap-12 items-start mb-20">
+        <div className="grid gap-8 xl:grid-cols-12 xl:items-start xl:gap-12 mb-20">
           
           {/* Left Column: Tab Selectors & Swageazy Specs Accordion */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="space-y-3">
-              {SITE_PACKAGING.map((prod) => (
-                <button
-                  key={prod.id}
-                  onClick={() => setActiveTab(prod.id)}
-                  className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${
-                    activeTab === prod.id
-                      ? "bg-red-50/50 border-red-600/30 shadow-md shadow-red-600/5 text-gray-950"
-                      : "bg-white border-gray-200 hover:bg-gray-50 text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <div className="text-left">
-                    <h3 className={`font-bold text-[16px] ${activeTab === prod.id ? "text-red-600" : "text-gray-900 group-hover:text-red-600 transition-colors"}`}>
-                      {prod.title}
-                    </h3>
-                    <p className="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-wider">{prod.tagline}</p>
-                  </div>
-                  <ArrowRight className={`w-4 h-4 transition-all ${
-                    activeTab === prod.id ? "translate-x-1 text-red-600" : "text-gray-300 group-hover:text-gray-600 group-hover:translate-x-0.5"
-                  }`} />
-                </button>
-              ))}
+          <div className="xl:col-span-4 space-y-5 xl:sticky xl:top-28">
+            <div className="rounded-3xl border border-gray-200 bg-white p-3 shadow-sm">
+              <div className="flex items-center justify-between gap-3 px-2 pb-3">
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-600">Packaging Types</span>
+                  <p className="mt-1 text-xs font-semibold text-gray-500">{SITE_PACKAGING.length} options available</p>
+                </div>
+                <span className="rounded-full bg-gray-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-gray-500">Scroll</span>
+              </div>
+              <div className="max-h-[360px] space-y-2 overflow-y-auto pr-1 sm:max-h-[430px] xl:max-h-[520px]">
+                {SITE_PACKAGING.map((prod) => (
+                  <button
+                    key={prod.id}
+                    onClick={() => setActiveTab(prod.id)}
+                    className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-center justify-between gap-3 group ${
+                      activeTab === prod.id
+                        ? "bg-red-50/70 border-red-600/30 shadow-sm text-gray-950"
+                        : "bg-white border-gray-200 hover:bg-gray-50 text-gray-500 hover:text-gray-900"
+                    }`}
+                  >
+                    <div className="min-w-0 text-left">
+                      <h3 className={`truncate font-bold text-[14px] ${activeTab === prod.id ? "text-red-600" : "text-gray-900 group-hover:text-red-600 transition-colors"}`}>
+                        {prod.title}
+                      </h3>
+                      <p className="mt-1 truncate text-[9px] text-gray-400 font-bold uppercase tracking-wider">{prod.tagline}</p>
+                    </div>
+                    <ArrowRight className={`h-4 w-4 flex-shrink-0 transition-all ${
+                      activeTab === prod.id ? "translate-x-1 text-red-600" : "text-gray-300 group-hover:text-gray-600 group-hover:translate-x-0.5"
+                    }`} />
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Accordion Specifications Panel */}
@@ -125,7 +134,7 @@ export function PackagingSolutions() {
           </div>
 
           {/* Right Column: 3D Isometric Interactive Showcase */}
-          <div className="lg:col-span-7">
+          <div className="xl:col-span-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
@@ -133,17 +142,21 @@ export function PackagingSolutions() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.3 }}
-                className="grid md:grid-cols-12 gap-8 bg-gray-50 p-6 sm:p-8 rounded-3xl border border-gray-150 shadow-sm"
+                className="grid md:grid-cols-12 gap-8 bg-gray-50 p-6 sm:p-8 rounded-3xl border border-gray-150 shadow-sm xl:min-h-[520px]"
               >
                 {/* Isometric 3D image preview container */}
                 <div className="md:col-span-5 relative aspect-square sm:aspect-[4/5] md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-sm box-isometric-container flex items-center justify-center group/iso min-h-[300px]">
                   <div className="absolute inset-0 z-0">
-                    <Image
+                    <SafeImage
                       src={currentProduct.img}
                       alt={currentProduct.title}
-                      fill
+                      category={currentProduct.id}
+                      useNextImage
                       className="object-cover transition-transform duration-700 group-hover/iso:scale-105"
-                      unoptimized
+                      nextImageProps={{
+                        fill: true,
+                        unoptimized: true,
+                      }}
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent pointer-events-none" />

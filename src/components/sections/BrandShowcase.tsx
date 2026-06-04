@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, BadgeCheck, BriefcaseBusiness, Headphones, Luggage, PenLine, ShieldCheck, Sparkles, Trophy } from "lucide-react";
-import { BRANDS } from "@/data/siteConfig";
 import { Button } from "../ui/Button";
 
 const SHOWCASE_SECTIONS = [
@@ -45,8 +44,24 @@ interface BrandShowcaseProps {
   compact?: boolean;
 }
 
+interface BrandRecord {
+  id: string;
+  name: string;
+  slug: string;
+  logo?: string;
+  description?: string;
+}
+
 export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
-  const brandByName = new Map(BRANDS.map((brand) => [brand.name, brand]));
+  const [brands, setBrands] = useState<BrandRecord[]>([]);
+  const brandByName = new Map(brands.map((brand) => [brand.name, brand]));
+
+  useEffect(() => {
+    fetch("/api/catalog/brands")
+      .then((response) => response.json())
+      .then((payload) => setBrands(payload.data ?? []))
+      .catch(() => setBrands([]));
+  }, []);
 
   return (
     <section className={compact ? "bg-[#faf9f6] py-20 overflow-hidden" : "bg-[#f8f4ef] py-24 overflow-hidden"}>
@@ -73,7 +88,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
-          {BRANDS.map((brand, index) => (
+          {brands.map((brand, index) => (
             <motion.div
               key={brand.name}
               initial={{ opacity: 0, y: 18 }}
@@ -83,11 +98,11 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
               className="h-full rounded-xl bg-white border border-black/5 shadow-sm p-4 hover:-translate-y-1 hover:shadow-lg transition-all text-left"
             >
               <div className="relative h-12 w-full mb-4">
-                <Image src={brand.logo} alt={`${brand.name} logo`} fill className="object-contain object-left" unoptimized />
+                {brand.logo ? <Image src={brand.logo} alt={`${brand.name} logo`} fill className="object-contain object-left" unoptimized /> : null}
               </div>
               <h3 className="text-sm font-black text-gray-950">{brand.name}</h3>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-red-600 mt-1">{brand.category}</p>
-              <p className="text-xs text-gray-500 font-medium leading-relaxed mt-3">{brand.branding}</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-widest text-red-600 mt-1">{brand.slug}</p>
+              <p className="text-xs text-gray-500 font-medium leading-relaxed mt-3">{brand.description || "Managed brand partner"}</p>
             </motion.div>
           ))}
         </div>
@@ -118,11 +133,11 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
                     return (
                       <div key={`${section.title}-${brand.name}`} className="rounded-xl bg-white border border-black/5 p-5 shadow-sm text-left">
                         <div className="relative h-10 w-full mb-4">
-                          <Image src={brand.logo} alt={`${brand.name} logo`} fill className="object-contain object-left" unoptimized />
+                          {brand.logo ? <Image src={brand.logo} alt={`${brand.name} logo`} fill className="object-contain object-left" unoptimized /> : null}
                         </div>
                         <h4 className="text-sm font-black text-gray-950">{brand.name}</h4>
-                        <p className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 mt-1">{brand.category}</p>
-                        <p className="text-xs text-gray-600 font-medium leading-relaxed mt-3">{brand.branding}</p>
+                        <p className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 mt-1">{brand.slug}</p>
+                        <p className="text-xs text-gray-600 font-medium leading-relaxed mt-3">{brand.description || "Managed brand partner"}</p>
                       </div>
                     );
                   })}

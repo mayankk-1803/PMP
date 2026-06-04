@@ -92,7 +92,7 @@ const matchesOption = (item: { title: string; slug: string }, selectedKit: strin
 function CorporateKitsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const selectedKit = searchParams.get("kit") || "";
+  const selectedKit = searchParams?.get("kit") || "";
   const selectedCorporateOption = CORPORATE_KITS.find((item) => item.slug === selectedKit);
   const selectedHamperOption = OCCASION_HAMPERS.find((item) => item.slug === selectedKit);
 

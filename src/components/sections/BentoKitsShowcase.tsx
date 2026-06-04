@@ -93,7 +93,7 @@ export function BentoKitsShowcase() {
                   <SafeImage
                     src={kit.image}
                     alt={kit.title}
-                    category="joining"
+                    category={kit.slug}
                     useNextImage={true}
                     nextImageProps={{
                       fill: true,

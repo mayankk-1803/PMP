@@ -9,7 +9,6 @@ import { useShortlist } from "@/context/ShortlistContext";
 import { useRouter } from "next/navigation";
 
 import { SafeImage } from "./SafeImage";
-import { PRODUCTS } from "@/data/siteConfig";
 
 interface ProductCardProps {
   title: string;
@@ -28,8 +27,6 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
   const router = useRouter();
   
   const isSelected = isInShortlist(title);
-
-  const resolvedCategory = category || Object.values(PRODUCTS).find(p => p.title === title)?.category;
 
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -74,7 +71,7 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
         <SafeImage 
           src={imageUrl} 
           alt={title}
-          category={resolvedCategory}
+          category={category}
           isMotion={true}
           motionProps={{
             whileHover: { scale: 1.05 },
