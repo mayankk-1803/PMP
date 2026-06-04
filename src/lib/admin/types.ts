@@ -69,9 +69,12 @@ export interface SubcategoryRecord {
   id: string;
   name: string;
   slug: string;
+  categoryId?: string;
   category: string;
   parentGroup: string;
+  description?: string;
   image: string;
+  featuredImage?: string;
   active: boolean;
   createdAt: string;
 }
@@ -81,6 +84,9 @@ export interface BrandRecord {
   name: string;
   slug: string;
   logo?: string;
+  cloudinaryPublicId?: string;
+  industry?: string;
+  category?: string;
   description?: string;
   active: boolean;
   createdAt: string;

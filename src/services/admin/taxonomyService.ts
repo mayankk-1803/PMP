@@ -20,9 +20,12 @@ const mapSubcategory = (subcategory: any): SubcategoryRecord => ({
   id: String(subcategory._id),
   name: subcategory.name,
   slug: subcategory.slug,
+  categoryId: subcategory.categoryId ? String(subcategory.categoryId) : undefined,
   category: subcategory.category,
   parentGroup: subcategory.parentGroup || "",
+  description: subcategory.description,
   image: subcategory.image || "",
+  featuredImage: subcategory.featuredImage,
   active: subcategory.active !== false,
   createdAt: toIso(subcategory.createdAt),
 });

@@ -15,28 +15,32 @@ const BENTO_MAPPING = [
     badge: "Most Popular",
     size: "large",
     icon: <Briefcase className="w-5 h-5" />,
-    color: "from-red-600 to-rose-500"
+    color: "from-red-600 to-rose-500",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
   },
   {
     slug: "doctor",
     badge: "Industry Favorite",
     size: "medium",
     icon: <Award className="w-5 h-5" />,
-    color: "from-amber-600 to-yellow-500"
+    color: "from-amber-600 to-yellow-500",
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=900&auto=format&fit=crop"
   },
   {
     slug: "dealer",
     badge: "B2B Channels",
     size: "medium",
     icon: <Shield className="w-5 h-5" />,
-    color: "from-blue-600 to-indigo-500"
+    color: "from-blue-600 to-indigo-500",
+    image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=900&auto=format&fit=crop"
   },
   {
     slug: "sales",
     badge: "Field Ops",
     size: "large",
     icon: <Sparkles className="w-5 h-5" />,
-    color: "from-neutral-900 to-neutral-700"
+    color: "from-neutral-900 to-neutral-700",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop"
   }
 ];
 
@@ -48,7 +52,7 @@ export function BentoKitsShowcase() {
       ...config,
       title: data.title,
       desc: data.description,
-      image: data.imageUrl,
+      image: config.image,
       href: `/corporate-kits?kit=${config.slug}`
     };
   });
@@ -102,7 +106,8 @@ export function BentoKitsShowcase() {
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Subtle luxury dark overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 transition-opacity duration-300 group-hover:opacity-95" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/20 transition-opacity duration-300 group-hover:opacity-95" />
+                  <div className="absolute inset-0 bg-black/15" />
                 </div>
 
                 {/* Content Overlay */}
@@ -120,10 +125,10 @@ export function BentoKitsShowcase() {
                   {/* Text Details & Actions */}
                   <div className="space-y-4 text-left">
                     <div className="space-y-2">
-                      <h3 className="text-xl sm:text-2xl font-black leading-tight tracking-tight">
+                      <h3 className="text-xl sm:text-2xl font-black leading-tight tracking-tight text-white drop-shadow-md">
                         {kit.title}
                       </h3>
-                      <p className="text-gray-300 text-xs sm:text-sm max-w-xl leading-relaxed">
+                      <p className="text-white/90 text-xs sm:text-sm max-w-xl leading-relaxed font-medium drop-shadow-sm">
                         {kit.desc}
                       </p>
                     </div>

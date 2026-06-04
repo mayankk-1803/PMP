@@ -4,41 +4,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BadgeCheck, BriefcaseBusiness, Headphones, Luggage, PenLine, ShieldCheck, Sparkles, Trophy } from "lucide-react";
+import { ArrowRight, BadgeCheck, Headphones, Sparkles } from "lucide-react";
 import { Button } from "../ui/Button";
-
-const SHOWCASE_SECTIONS = [
-  {
-    title: "Featured Brand Partners",
-    description: "High-recognition brands for anchor kits, leadership gifting, and campaign centerpiece products.",
-    icon: <ShieldCheck className="w-4 h-4" />,
-    brands: ["JBL", "boAt", "Mokobara", "Parker"]
-  },
-  {
-    title: "Corporate Merchandise Brands",
-    description: "Apparel, wearables, and everyday merchandise that teams can use beyond the event day.",
-    icon: <BriefcaseBusiness className="w-4 h-4" />,
-    brands: ["Adidas", "Noise", "Wildcraft"]
-  },
-  {
-    title: "Travel & Lifestyle Brands",
-    description: "Travelware and lifestyle pieces suited to sales teams, channel partners, and milestone rewards.",
-    icon: <Luggage className="w-4 h-4" />,
-    brands: ["Mokobara", "American Tourister", "Wildcraft"]
-  },
-  {
-    title: "Drinkware & Utility Brands",
-    description: "Reliable drinkware and daily utility products for onboarding kits and desk-ready gift sets.",
-    icon: <Trophy className="w-4 h-4" />,
-    brands: ["Milton", "Portronics", "boAt"]
-  },
-  {
-    title: "Executive Gift Brands",
-    description: "Premium writing, desk, tech, and lifestyle products for leadership and client appreciation programs.",
-    icon: <PenLine className="w-4 h-4" />,
-    brands: ["Parker", "JBL", "Portronics", "Noise"]
-  }
-];
 
 interface BrandShowcaseProps {
   compact?: boolean;
@@ -49,12 +16,12 @@ interface BrandRecord {
   name: string;
   slug: string;
   logo?: string;
-  description?: string;
+  industry?: string;
+  category?: string;
 }
 
 export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
   const [brands, setBrands] = useState<BrandRecord[]>([]);
-  const brandByName = new Map(brands.map((brand) => [brand.name, brand]));
 
   useEffect(() => {
     fetch("/api/catalog/brands")
@@ -64,7 +31,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
   }, []);
 
   return (
-    <section className={compact ? "bg-[#faf9f6] py-20 overflow-hidden" : "bg-[#f8f4ef] py-24 overflow-hidden"}>
+    <section className={compact ? "bg-[#faf9f6] py-16 overflow-hidden" : "bg-[#f8f4ef] py-16 md:py-20 overflow-hidden"}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
           <div className="max-w-3xl text-left">
@@ -87,7 +54,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
           )}
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 mb-14">
           {brands.map((brand, index) => (
             <motion.div
               key={brand.name}
@@ -95,60 +62,20 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: (index % 5) * 0.03 }}
-              className="h-full rounded-xl bg-white border border-black/5 shadow-sm p-4 hover:-translate-y-1 hover:shadow-lg transition-all text-left"
+              className="h-full min-h-[190px] rounded-xl bg-white border border-black/5 shadow-sm p-5 hover:-translate-y-1 hover:shadow-lg transition-all text-left flex flex-col justify-between"
             >
-              <div className="relative h-12 w-full mb-4">
-                {brand.logo ? <Image src={brand.logo} alt={`${brand.name} logo`} fill className="object-contain object-left" unoptimized /> : null}
-              </div>
-              <h3 className="text-sm font-black text-gray-950">{brand.name}</h3>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-red-600 mt-1">{brand.slug}</p>
-              <p className="text-xs text-gray-500 font-medium leading-relaxed mt-3">{brand.description || "Managed brand partner"}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="space-y-8">
-          {SHOWCASE_SECTIONS.map((section, sectionIndex) => (
-            <motion.div
-              key={section.title}
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.45, delay: sectionIndex * 0.04 }}
-              className="border-t border-gray-200 pt-8"
-            >
-              <div className="grid lg:grid-cols-12 gap-6 items-start">
-                <div className="lg:col-span-4 text-left">
-                  <div className="inline-flex items-center gap-2 text-red-600 text-[10px] font-extrabold uppercase tracking-widest mb-3">
-                    {section.icon} Partner Segment
-                  </div>
-                  <h3 className="text-2xl font-black text-gray-950">{section.title}</h3>
-                  <p className="text-sm text-gray-600 font-medium leading-relaxed mt-3">{section.description}</p>
-                </div>
-                <div className="lg:col-span-8 grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                  {section.brands.map((brandName) => {
-                    const brand = brandByName.get(brandName);
-                    if (!brand) return null;
-
-                    return (
-                      <div key={`${section.title}-${brand.name}`} className="rounded-xl bg-white border border-black/5 p-5 shadow-sm text-left">
-                        <div className="relative h-10 w-full mb-4">
-                          {brand.logo ? <Image src={brand.logo} alt={`${brand.name} logo`} fill className="object-contain object-left" unoptimized /> : null}
-                        </div>
-                        <h4 className="text-sm font-black text-gray-950">{brand.name}</h4>
-                        <p className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 mt-1">{brand.slug}</p>
-                        <p className="text-xs text-gray-600 font-medium leading-relaxed mt-3">{brand.description || "Managed brand partner"}</p>
-                      </div>
-                    );
-                  })}
-                </div>
+              <BrandLogo brand={brand} className="mb-5 h-20 md:h-24" />
+              <div>
+                <h3 className="text-sm md:text-base font-black text-gray-950">{brand.name}</h3>
+                <p className="text-[10px] font-extrabold uppercase tracking-widest text-red-600 mt-1">{brand.industry || brand.slug}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-1">{brand.category}</p>
               </div>
             </motion.div>
           ))}
         </div>
 
         {!compact && (
-          <div className="mt-14 rounded-2xl bg-gradient-to-br from-gray-950 via-neutral-900 to-red-950 p-8 md:p-10 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="mt-8 rounded-2xl bg-gradient-to-br from-gray-950 via-neutral-900 to-red-950 p-8 md:p-10 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 text-amber-300 text-[10px] font-extrabold uppercase tracking-widest mb-3">
                 <Headphones className="w-4 h-4" /> Partner Showcase
@@ -165,5 +92,25 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
         )}
       </div>
     </section>
+  );
+}
+
+function BrandLogo({ brand, className }: { brand: BrandRecord; className?: string }) {
+  const [failed, setFailed] = useState(false);
+
+  if (brand.logo && !failed) {
+    return (
+      <div className={`relative w-full ${className || ""}`}>
+        <Image src={brand.logo} alt={`${brand.name} logo`} fill className="object-contain object-left" sizes="(max-width: 768px) 40vw, 220px" unoptimized onError={() => setFailed(true)} />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex w-full items-center ${className || ""}`}>
+      <span className="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-red-100 bg-red-50 px-3 text-sm font-black tracking-widest text-red-600">
+        {brand.name.slice(0, 2).toUpperCase()}
+      </span>
+    </div>
   );
 }

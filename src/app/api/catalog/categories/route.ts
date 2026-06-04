@@ -13,6 +13,7 @@ export async function GET() {
         id: String(category._id),
         name: category.name,
         slug: category.slug,
+        parentGroup: category.parentGroup,
         description: category.description,
         image: category.image,
       })),

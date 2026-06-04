@@ -13,8 +13,12 @@ export async function GET() {
         id: String(subcategory._id),
         name: subcategory.name,
         slug: subcategory.slug,
+        categoryId: subcategory.categoryId ? String(subcategory.categoryId) : undefined,
         category: subcategory.category,
+        parentGroup: subcategory.parentGroup,
+        description: subcategory.description,
         image: subcategory.image,
+        featuredImage: subcategory.featuredImage,
       })),
     });
   }

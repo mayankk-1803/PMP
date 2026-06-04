@@ -36,7 +36,7 @@ function ProductsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const initialCategory = searchParams?.get("category") || "all";
+  const initialCategory = searchParams?.get("category") || searchParams?.get("subcategory") || "all";
   const initialBudget = searchParams?.get("range") || "all";
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -49,7 +49,7 @@ function ProductsPageContent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const cat = searchParams?.get("category") || "all";
+    const cat = searchParams?.get("category") || searchParams?.get("subcategory") || "all";
     setSelectedCategory(cat);
     const bud = searchParams?.get("range") || "all";
     setSelectedBudget(bud);

@@ -34,6 +34,8 @@ interface BrandRecord {
   name: string;
   slug: string;
   logo?: string;
+  industry?: string;
+  category?: string;
   description?: string;
   active: boolean;
   createdAt?: string;
@@ -138,8 +140,8 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
       name: record.name,
       slug: record.slug,
       description: "description" in record ? record.description || "" : "",
-      category: "category" in record ? record.category : "",
-      parentGroup: "parentGroup" in record ? record.parentGroup || "" : "",
+      category: "category" in record ? record.category || "" : "",
+      parentGroup: "industry" in record ? record.industry || "" : "parentGroup" in record ? record.parentGroup || "" : "",
       image: "image" in record ? record.image || "" : "",
       logo: "logo" in record ? record.logo || "" : "",
       active: record.active,
@@ -201,6 +203,7 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
       parentGroup: form.parentGroup,
       image: isBrand ? undefined : form.image,
       logo: isBrand ? form.logo : undefined,
+      industry: isBrand ? form.parentGroup : undefined,
       active: form.active,
     };
 
@@ -238,16 +241,16 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
           <table className="w-full min-w-[860px] border-collapse text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
               <tr>
-                {(isBrand ? ["Logo", "Name", "Slug", "Active", "Actions"] : isSubcategory ? ["Image", "Name", "Slug", "Category", "Parent Group", "Active", "Actions"] : ["Image", "Name", "Slug", "Parent Group", "Active", "Actions"]).map((column) => (
+                {(isBrand ? ["Logo", "Name", "Industry", "Category", "Active", "Actions"] : isSubcategory ? ["Image", "Name", "Slug", "Category", "Parent Group", "Active", "Actions"] : ["Image", "Name", "Slug", "Parent Group", "Active", "Actions"]).map((column) => (
                   <th key={column} className="px-4 py-3 font-bold">{column}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
               {loading ? (
-                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 7 : isBrand ? 5 : 6}>Loading {mode} from MongoDB...</td></tr>
+                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 7 : isBrand ? 6 : 6}>Loading {mode} from MongoDB...</td></tr>
               ) : records.length === 0 ? (
-                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 7 : isBrand ? 5 : 6}>No {mode} yet.</td></tr>
+                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 7 : isBrand ? 6 : 6}>No {mode} yet.</td></tr>
               ) : (
                 records.map((record) => (
                   <tr key={record.id} className="text-slate-700">
@@ -255,7 +258,14 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                       {("logo" in record ? record.logo : "image" in record ? record.image : "") ? <img src={"logo" in record ? record.logo : "image" in record ? record.image : ""} alt={record.name} className="h-12 w-12 rounded-md object-cover" /> : <div className="flex h-12 w-12 items-center justify-center rounded-md bg-slate-100 text-slate-400"><ImagePlus className="h-4 w-4" /></div>}
                     </td>
                     <td className="px-4 py-3 font-bold">{record.name}</td>
-                    <td className="px-4 py-3">{record.slug}</td>
+                    {isBrand ? (
+                      <>
+                        <td className="px-4 py-3">{"industry" in record ? record.industry : ""}</td>
+                        <td className="px-4 py-3">{"category" in record ? record.category : ""}</td>
+                      </>
+                    ) : (
+                      <td className="px-4 py-3">{record.slug}</td>
+                    )}
                     {isSubcategory && <td className="px-4 py-3">{"category" in record ? record.category : ""}</td>}
                     {!isBrand && <td className="px-4 py-3">{"parentGroup" in record ? record.parentGroup : ""}</td>}
                     <td className="px-4 py-3">{record.active ? "Yes" : "No"}</td>
@@ -287,7 +297,12 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
             <form onSubmit={saveRecord} className="grid gap-4 md:grid-cols-2">
               <Input label="Name" value={form.name} onChange={(value) => updateForm("name", value)} required />
               <Input label="Slug" value={form.slug} onChange={(value) => updateForm("slug", value)} required />
-              {isSubcategory ? (
+              {isBrand ? (
+                <>
+                  <Input label="Industry" value={form.parentGroup} onChange={(value) => updateForm("parentGroup", value)} />
+                  <Input label="Brand Category" value={form.category} onChange={(value) => updateForm("category", value)} />
+                </>
+              ) : isSubcategory ? (
                 <Select label="Category" value={"category" in form ? form.category : ""} options={categories} onChange={(value) => updateForm("category", value)} required />
               ) : (
                 <TextArea label="Description" value={"description" in form ? form.description : ""} onChange={(value) => updateForm("description", value)} />

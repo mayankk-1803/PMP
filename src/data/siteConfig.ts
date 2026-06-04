@@ -10,38 +10,18 @@ export const COMPANY_INFO = {
 };
 
 export const CORPORATE_GIFTS = [
-  { name: "Workspace Essentials", slug: "workspace-essentials", href: "/products?category=workspace-essentials" },
   { name: "Pens", slug: "pens", href: "/products?category=pens" },
-  { name: "Diaries", slug: "diaries", href: "/products?category=diaries" },
-  { name: "Notebooks", slug: "notebooks", href: "/products?category=notebooks" },
   { name: "T-Shirts", slug: "t-shirts", href: "/products?category=t-shirts" },
   { name: "Keychains", slug: "keychains", href: "/products?category=keychains" },
+  { name: "Diaries / Notebooks", slug: "diaries-notebooks", href: "/products?category=diaries-notebooks" },
   { name: "Caps", slug: "caps", href: "/products?category=caps" },
-  { name: "Desk Accessories", slug: "desk-accessories", href: "/products?category=desk-accessories" },
-  { name: "Executive Organizers", slug: "executive-organizers", href: "/products?category=executive-organizers" },
-  { name: "Mouse Pads", slug: "mouse-pads", href: "/products?category=mouse-pads" },
-  { name: "USB Drives", slug: "usb-drives", href: "/products?category=usb-drives" },
-  { name: "Power Banks", slug: "power-banks", href: "/products?category=power-banks" },
-  { name: "Corporate Stationery", slug: "corporate-stationery", href: "/products?category=corporate-stationery" }
+  { name: "Paper Weights", slug: "paper-weights", href: "/products?category=paper-weights" },
+  { name: "Mouse Pads / Table Mats", slug: "mouse-pads-table-mats", href: "/products?category=mouse-pads-table-mats" }
 ];
 
 export const PREMIUM_GIVEAWAYS = [
-  { name: "Backpacks", slug: "backpacks", href: "/products?category=backpacks" },
-  { name: "Laptop Bags", slug: "laptop-bags", href: "/products?category=laptop-bags" },
-  { name: "Travel Bags", slug: "travel-bags", href: "/products?category=travel-bags" },
-  { name: "Drinkware", slug: "drinkware", href: "/products?category=drinkware" },
-  { name: "Premium Bottles", slug: "premium-bottles", href: "/products?category=premium-bottles" },
-  { name: "Mugs", slug: "mugs", href: "/products?category=mugs" },
-  { name: "Tumblers", slug: "tumblers", href: "/products?category=tumblers" },
-  { name: "Executive Gifts", slug: "executive-gifts", href: "/products?category=executive-gifts" },
-  { name: "Gift Sets", slug: "gift-sets", href: "/products?category=gift-sets" },
-  { name: "Audio Gadgets", slug: "audio-gadgets", href: "/products?category=audio-gadgets" },
-  { name: "Bluetooth Speakers", slug: "bluetooth-speakers", href: "/products?category=bluetooth-speakers" },
-  { name: "Headphones", slug: "headphones", href: "/products?category=headphones" },
-  { name: "Tech Accessories", slug: "tech-accessories", href: "/products?category=tech-accessories" },
-  { name: "Smart Accessories", slug: "smart-accessories", href: "/products?category=smart-accessories" },
-  { name: "Mobile Accessories", slug: "mobile-accessories", href: "/products?category=mobile-accessories" },
-  { name: "Travel Accessories", slug: "travel-accessories", href: "/products?category=travel-accessories" }
+  { name: "Table Top Items", slug: "table-top-items", href: "/products?category=table-top-items" },
+  { name: "Backpacks / Bags", slug: "backpacks-bags", href: "/products?category=backpacks-bags" }
 ];
 
 export const PROMOTIONAL_PRODUCT_GROUPS = [
@@ -536,7 +516,7 @@ const BASE_PRODUCTS: Record<string, ProductItem> = {
     basePrice: 90,
     description: "Bespoke key fob handmade from oil-pullup genuine leather. Outfitted with rust-resistant matte silver loops and deep blind embossing of your company symbol.",
     images: [
-      "https://images.unsplash.com/photo-1575880911432-843818617882?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=600&auto=format&fit=crop"
     ],
     specs: [
@@ -685,7 +665,7 @@ const BASE_PRODUCTS: Record<string, ProductItem> = {
     basePrice: 420,
     description: "High-grade waterproof raincoat with heat-sealed seams, reflective neon brand stripes on back, double layer zipper-button protection, and custom screen printed corporate logos.",
     images: [
-      "https://images.unsplash.com/photo-1542156822-6924d1a71aba?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1508873696983-2df519f0397e?q=80&w=600&auto=format&fit=crop"
     ],
     specs: [
@@ -727,7 +707,7 @@ const BASE_PRODUCTS: Record<string, ProductItem> = {
     basePrice: 850,
     description: "Handcrafted top-grain leather blotter with water-resistant finish, hand-stitched borders, and an anti-slip natural suede backing. Features integrated pen slots and subtle brand logo placement.",
     images: [
-      "https://images.unsplash.com/photo-1616422285623-13ff0167c95c?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?q=80&w=600&auto=format&fit=crop"
     ],
     specs: [
@@ -748,8 +728,8 @@ const BASE_PRODUCTS: Record<string, ProductItem> = {
     basePrice: 1250,
     description: "Premium American Walnut desk organizer with integrated 15W Qi fast wireless charging coil, deep pen holders, smartphone stand, and catch-all tray. Combines luxury workspace aesthetics with modern utility.",
     images: [
-      "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1622445262465-2481c4574875?q=80&w=600&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=600&auto=format&fit=crop"
     ],
     specs: [
       { label: "Material", value: "Solid American Walnut Wood" },
@@ -900,8 +880,8 @@ const BASE_PRODUCTS: Record<string, ProductItem> = {
     basePrice: 950,
     description: "Ergonomic foldable laptop riser machined from premium anodized aircraft-grade aluminum. Built with 6-level angle adjustments, silicone anti-slip cushioning pads, and structural heat-dissipation slots.",
     images: [
-      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=600&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=600&auto=format&fit=crop"
     ],
     specs: [
       { label: "Material", value: "Anodized Aircraft-grade Aluminum" },
@@ -941,8 +921,8 @@ const standardSpecs = (material: string, branding: string, idealFor: string): Sp
 const productSeeds: ProductSeed[] = [
   { key: "welcome-desk-kit", title: "Welcome Desk Kit", category: "workspace-essentials", budget: "₹1000 - ₹2500", basePrice: 1450, description: "Desk-ready onboarding set with notebook, pen, organizer, name card, and branded presentation sleeve.", image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("Notebook, pen, organizer and paper inserts", "Notebook cover, pen barrel, sleeve, welcome card", "Employee onboarding, campus hiring, startup welcome kits"), customizations: ["UV Print", "Foil Logo", "Personalized Name Card"], packagings: ["Rigid Welcome Box", "Kraft Mailer", "Sleeve Box"], moq: 50 },
   { key: "bamboo-desk-organizer", title: "Bamboo Desk Organizer", category: "workspace-essentials", budget: "₹500 - ₹1000", basePrice: 780, description: "Natural bamboo desk organizer for pens, phone, cards, and daily office utilities with subtle logo engraving.", image: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("Bamboo wood with smooth matte finish", "Front face and side panel", "Eco-conscious desk gifting and welcome desks"), customizations: ["Laser Engraving", "Screen Print", "Custom Insert Card"], packagings: ["Kraft Box", "Rigid Desk Kit"], moq: 100 },
-  { key: "wireless-charging-mousepad", title: "Wireless Charging Mousepad", category: "workspace-essentials", budget: "₹1000 - ₹2500", basePrice: 1250, description: "Premium PU mousepad with integrated wireless charging zone for executive desks and hybrid work kits.", image: "https://images.unsplash.com/photo-1616422285623-13ff0167c95c?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("PU leather surface with wireless charging module", "Corner deboss and sleeve print", "Leadership gifting and hybrid work desks"), customizations: ["Debossing", "Foil Logo", "Printed Sleeve"], packagings: ["Magnetic Rigid Box", "Tech Sleeve"], moq: 50 },
-  { key: "foldable-phone-stand", title: "Foldable Phone Stand", category: "workspace-essentials", budget: "Under ₹250", basePrice: 190, description: "Compact foldable phone stand for desks, events, and welcome kits with high-visibility logo placement.", image: "https://images.unsplash.com/photo-1512499617640-c2f999098c01?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("ABS body with silicone grip pads", "Back panel and base plate", "Events, training programs, desk utility giveaways"), customizations: ["Pad Print", "UV Print", "Gift Sleeve"], packagings: ["Printed Sleeve", "Kraft Box"], moq: 250 },
+  { key: "wireless-charging-mousepad", title: "Wireless Charging Mousepad", category: "workspace-essentials", budget: "₹1000 - ₹2500", basePrice: 1250, description: "Premium PU mousepad with integrated wireless charging zone for executive desks and hybrid work kits.", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("PU leather surface with wireless charging module", "Corner deboss and sleeve print", "Leadership gifting and hybrid work desks"), customizations: ["Debossing", "Foil Logo", "Printed Sleeve"], packagings: ["Magnetic Rigid Box", "Tech Sleeve"], moq: 50 },
+  { key: "foldable-phone-stand", title: "Foldable Phone Stand", category: "workspace-essentials", budget: "Under ₹250", basePrice: 190, description: "Compact foldable phone stand for desks, events, and welcome kits with high-visibility logo placement.", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("ABS body with silicone grip pads", "Back panel and base plate", "Events, training programs, desk utility giveaways"), customizations: ["Pad Print", "UV Print", "Gift Sleeve"], packagings: ["Printed Sleeve", "Kraft Box"], moq: 250 },
   { key: "executive-desk-clock", title: "Executive Desk Clock", category: "workspace-essentials", budget: "₹500 - ₹1000", basePrice: 850, description: "Elegant desktop clock with branding plate for long-life executive desk presence and award kits.", image: "https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Metal and acrylic desk clock body", "Metal plate and box sleeve", "Milestone rewards and client appreciation"), customizations: ["Metal Plate Engraving", "Foil Box Logo", "Name Personalization"], packagings: ["Rigid Gift Box", "Velvet Tray Box"], moq: 50 },
   { key: "stylus-ball-pen", title: "Stylus Ball Pen", category: "pens", budget: "Under ₹250", basePrice: 85, description: "Dual-purpose stylus pen for touchscreens and everyday writing, suited to conferences and onboarding kits.", image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Metal barrel with stylus tip", "Barrel laser area", "Conference giveaways and tech teams"), customizations: ["Laser Engraving", "Pad Print", "Color Matched Barrel"], packagings: ["Velvet Sleeve", "Printed Card Sleeve"], moq: 250 },
   { key: "bamboo-eco-pen", title: "Bamboo Eco Pen", category: "pens", budget: "Under ₹250", basePrice: 55, description: "Eco-friendly bamboo body pen with smooth writing refill for sustainability campaigns and green gifting.", image: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Bamboo barrel with metal clip", "Laser area on barrel", "CSR events and eco welcome kits"), customizations: ["Laser Engraving", "Screen Print", "Kraft Card Mount"], packagings: ["Kraft Sleeve", "Eco Tube"], moq: 500 },
@@ -950,7 +930,7 @@ const productSeeds: ProductSeed[] = [
   { key: "cotton-oversized-t-shirt", title: "Cotton Oversized T-Shirt", category: "t-shirts", budget: "₹250 - ₹500", basePrice: 420, description: "Modern oversized cotton tee for brand drops, startup culture kits, and youth-focused event merchandise.", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("220 GSM cotton jersey", "Chest, back, sleeve, neck label", "Brand drops, college campaigns, team merchandise"), customizations: ["Screen Print", "DTF Transfer", "Woven Label"], packagings: ["Poly Bag", "Kraft Apparel Sleeve"], moq: 100 },
   { key: "polo-performance-t-shirt", title: "Performance Polo T-Shirt", category: "t-shirts", budget: "₹500 - ₹1000", basePrice: 620, description: "Moisture-wicking polo with embroidered logo for sales teams, channel events, and uniforms.", image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Dry-fit polyester pique", "Chest embroidery and sleeve print", "Sales teams, field staff, events"), customizations: ["Embroidery", "Heat Transfer", "Custom Collar Tape"], packagings: ["Apparel Pouch", "Branded Sleeve"], moq: 100 },
   { key: "event-volunteer-t-shirt", title: "Event Volunteer T-Shirt", category: "t-shirts", budget: "Under ₹250", basePrice: 230, description: "Budget-friendly branded event tee with clear color coding for teams, crews, and campaign staff.", image: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Cotton blend single jersey", "Front, back, sleeve print", "Marathons, expos, activations, internal events"), customizations: ["Screen Print", "DTF Print", "Size Stickers"], packagings: ["Bulk Poly Pack", "Individual Sleeve"], moq: 250 },
-  { key: "metal-rotating-keychain", title: "Metal Rotating Keychain", category: "keychains", budget: "Under ₹250", basePrice: 95, description: "Durable rotating metal keychain with polished brand plate for dealer programs and everyday giveaways.", image: "https://images.unsplash.com/photo-1575880911432-843818617882?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Zinc alloy metal body", "Front and back metal plate", "Dealer gifts, real estate handovers, event giveaways"), customizations: ["Laser Engraving", "Domed Logo", "Enamel Fill"], packagings: ["Velvet Pouch", "Rigid Mini Box"], moq: 250 },
+  { key: "metal-rotating-keychain", title: "Metal Rotating Keychain", category: "keychains", budget: "Under ₹250", basePrice: 95, description: "Durable rotating metal keychain with polished brand plate for dealer programs and everyday giveaways.", image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Zinc alloy metal body", "Front and back metal plate", "Dealer gifts, real estate handovers, event giveaways"), customizations: ["Laser Engraving", "Domed Logo", "Enamel Fill"], packagings: ["Velvet Pouch", "Rigid Mini Box"], moq: 250 },
   { key: "leather-loop-keychain", title: "Leather Loop Keychain", category: "keychains", budget: "Under ₹250", basePrice: 140, description: "PU leather loop keychain with metal rivet branding for premium but compact corporate gifting.", image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("PU leather and metal clasp", "Leather loop and metal tag", "Client gifts and welcome kits"), customizations: ["Debossing", "Foil Stamp", "Laser Metal Tag"], packagings: ["Kraft Box", "Velvet Pouch"], moq: 200 },
   { key: "a5-hardbound-notebook", title: "A5 Hardbound Notebook", category: "diaries", budget: "Under ₹250", basePrice: 210, description: "Hardbound A5 notebook with elastic closure and brandable cover for onboarding, seminars, and training kits.", image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Hardbound paper notebook with elastic", "Front cover and first page", "Training, onboarding, seminar giveaways"), customizations: ["Foil Logo", "UV Print", "Custom Insert Pages"], packagings: ["Paper Belly Band", "Kraft Sleeve"], moq: 200 },
   { key: "undated-planner", title: "Undated Planner", category: "diaries", budget: "₹250 - ₹500", basePrice: 360, description: "Premium undated planner with monthly goals, notes, and brand pages for year-round corporate use.", image: "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Hardcase planner with ruled and goal pages", "Cover, inside pages, sleeve", "Annual gifting and leadership desk kits"), customizations: ["Debossed Cover", "Custom Pages", "Foil Belly Band"], packagings: ["Rigid Planner Box", "Kraft Sleeve"], moq: 100 },
@@ -971,7 +951,7 @@ const productSeeds: ProductSeed[] = [
   { key: "gourmet-dry-fruit-set", title: "Gourmet Dry Fruit Set", category: "gift-sets", budget: "₹1000 - ₹2500", basePrice: 1750, description: "Premium dry fruit gift set with reusable jars, custom sleeve, and festive corporate presentation box.", image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Assorted dry fruits in reusable jars", "Jar labels, sleeve, and greeting card", "Festive gifting and premium client hampers"), customizations: ["Custom Jar Labels", "Foil Sleeve", "Greeting Card"], packagings: ["Rigid Hamper Box", "Drawer Box"], moq: 50 },
   { key: "executive-notebook-pen-set", title: "Executive Notebook Pen Set", category: "gift-sets", budget: "₹500 - ₹1000", basePrice: 720, description: "Notebook and pen combo in a compact box for seminars, leadership meets, and everyday corporate gifting.", image: "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=900&auto=format&fit=crop", specs: standardSpecs("Notebook, metal pen and box", "Notebook, pen, box top", "Seminars, welcome kits, leadership events"), customizations: ["Foil Logo", "Pen Engraving", "Box Sleeve"], packagings: ["Magnetic Box", "Kraft Combo Box"], moq: 100 },
   { key: "custom-tabletop-calendar", title: "Custom Tabletop Calendar", category: "workspace-essentials", budget: "Under ₹250", basePrice: 180, description: "Branded tabletop calendar with monthly artwork pages for desk visibility across the year.", image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("Art card calendar with metal wiro", "Base, monthly pages, cover", "Annual gifting and office desks"), customizations: ["Full Color Print", "Custom Month Pages", "Foil Cover"], packagings: ["Shrink Wrap", "Kraft Sleeve"], moq: 250 },
-  { key: "weatherproof-raincoat", title: "Weatherproof Raincoat", category: "t-shirts", budget: "₹500 - ₹1000", basePrice: 650, description: "Durable branded rainwear for field teams, delivery crews, dealers, and outdoor activation staff.", image: "https://images.unsplash.com/photo-1542156822-6924d1a71aba?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("Water-resistant polyester rainwear", "Chest, back, sleeve", "Field teams and monsoon campaigns"), customizations: ["Heat Transfer", "Reflective Logo", "Size Label"], packagings: ["Carry Pouch", "Bulk Field Pack"], moq: 100 },
+  { key: "weatherproof-raincoat", title: "Weatherproof Raincoat", category: "t-shirts", budget: "₹500 - ₹1000", basePrice: 650, description: "Durable branded rainwear for field teams, delivery crews, dealers, and outdoor activation staff.", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("Water-resistant polyester rainwear", "Chest, back, sleeve", "Field teams and monsoon campaigns"), customizations: ["Heat Transfer", "Reflective Logo", "Size Label"], packagings: ["Carry Pouch", "Bulk Field Pack"], moq: 100 },
   { key: "premium-luggage-tag", title: "Premium Luggage Tag", category: "backpacks", budget: "Under ₹250", basePrice: 160, description: "Leatherette luggage tag with privacy flap and branded metal buckle for travel kits and rewards.", image: "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("PU leatherette travel tag", "Front flap and backing card", "Travel rewards and conference kits"), customizations: ["Debossing", "Foil Logo", "Name Card"], packagings: ["Kraft Sleeve", "Travel Kit Box"], moq: 200 },
   { key: "branded-tote-bag", title: "Branded Cotton Tote Bag", category: "backpacks", budget: "Under ₹250", basePrice: 180, description: "Reusable cotton tote with generous print area for events, retail drops, and sustainable campaigns.", image: "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?q=80&w=1000&auto=format&fit=crop", specs: standardSpecs("Cotton canvas tote fabric", "Front and back panels", "Events, launches, retail promotions"), customizations: ["Screen Print", "DTF Print", "Woven Label"], packagings: ["Bulk Pack", "Paper Belly Band"], moq: 250 }
 ];
@@ -1020,7 +1000,7 @@ const CATEGORY_IMAGE_LIBRARY: Record<string, string[]> = {
     "https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=1000&auto=format&fit=crop"
   ],
   keychains: [
-    "https://images.unsplash.com/photo-1575880911432-843818617882?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000&auto=format&fit=crop"
   ],
   diaries: [
@@ -1111,9 +1091,9 @@ const PRODUCT_IMAGE_OVERRIDES: Record<string, string[]> = {
   "usb-c-hub": ["https://images.unsplash.com/photo-1625842268584-8f3296236761?q=80&w=1000&auto=format&fit=crop"],
   "a5-hardbound-notebook": ["https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=1000&auto=format&fit=crop"],
   "executive-leather-desk-mat": ["https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop"],
-  "wireless-charging-wood-organizer": ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop"],
+  "wireless-charging-wood-organizer": ["https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=1000&auto=format&fit=crop"],
   "smart-temperature-sipper": ["https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=1000&auto=format&fit=crop"],
-  "aluminum-laptop-stand": ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop"],
+  "aluminum-laptop-stand": ["https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=1000&auto=format&fit=crop"],
 };
 
 const deriveSubcategory = (category: string) => {

@@ -14,6 +14,10 @@ export async function GET() {
         name: brand.name,
         slug: brand.slug,
         logo: brand.logo,
+        cloudinaryPublicId: brand.cloudinaryPublicId,
+        industry: brand.industry,
+        category: brand.category,
+        description: brand.description,
       })),
     });
   }

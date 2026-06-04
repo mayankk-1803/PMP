@@ -30,9 +30,12 @@ const SubcategorySchema = new Schema(
   {
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true, index: true },
+    categoryId: { type: Schema.Types.ObjectId, ref: "Category", index: true },
     category: { type: String, required: true, index: true },
     parentGroup: { type: String, index: true },
+    description: String,
     image: String,
+    featuredImage: String,
     active: { type: Boolean, default: true },
   },
   timestamps
@@ -43,6 +46,9 @@ const BrandSchema = new Schema(
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true, index: true },
     logo: String,
+    cloudinaryPublicId: String,
+    industry: String,
+    category: String,
     description: String,
     active: { type: Boolean, default: true },
   },

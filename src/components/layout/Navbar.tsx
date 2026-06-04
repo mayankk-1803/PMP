@@ -6,26 +6,33 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Menu, X, Gift, Bookmark, Trash2, ArrowRight, ChevronDown, 
-  Package, Briefcase, Sparkles, Coins, Phone, Mail, Award
+  Package, Briefcase, Sparkles, Coins, Phone, Mail
 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { 
   COMPANY_INFO, 
-  CORPORATE_GIFTS, 
-  CORPORATE_KITS, 
-  OCCASION_HAMPERS, 
   PACKAGING_SOLUTIONS, 
   BUDGETS,
   PRODUCTS
 } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
 
+interface MenuSubcategory {
+  name: string;
+  slug: string;
+  category?: string;
+  parentGroup?: string;
+}
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [promotionalMenu, setPromotionalMenu] = useState<MenuSubcategory[]>([]);
+  const [corporateKitMenu, setCorporateKitMenu] = useState<MenuSubcategory[]>([]);
+  const [hamperMenu, setHamperMenu] = useState<MenuSubcategory[]>([]);
   
   const [mounted, setMounted] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -42,6 +49,28 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/catalog/subcategories")
+      .then((response) => response.json())
+      .then((payload) => {
+        const subcategories = (payload.data ?? []) as MenuSubcategory[];
+        setPromotionalMenu(
+          subcategories.filter((item) => item.parentGroup === "Promotional Products")
+        );
+        setCorporateKitMenu(
+          subcategories.filter((item) => item.category === "corporate-kits" || item.parentGroup === "Corporate Kits")
+        );
+        setHamperMenu(
+          subcategories.filter((item) => item.category === "festive-hampers" || item.parentGroup === "Festive Hampers")
+        );
+      })
+      .catch(() => {
+        setPromotionalMenu([]);
+        setCorporateKitMenu([]);
+        setHamperMenu([]);
+      });
   }, []);
 
   // Prevent background scrolling when mobile menu or shortlist drawer is open
@@ -87,6 +116,17 @@ export function Navbar() {
       setExpandedSection(section);
     }
   };
+
+  const menuHref = (item: MenuSubcategory) => `/products?subcategory=${encodeURIComponent(item.slug)}`;
+  const kitHref = (item: MenuSubcategory) => `/corporate-kits?kit=${item.slug.replace(/-kits$|-hampers$|-gifts$/g, "")}`;
+  const promotionalGroups = promotionalMenu.reduce<Record<string, MenuSubcategory[]>>((groups, item) => {
+    const key = item.category || "promotional-products";
+    groups[key] = groups[key] || [];
+    groups[key].push(item);
+    return groups;
+  }, {});
+  const promotionalGroupEntries = Object.entries(promotionalGroups);
+  const formatGroupLabel = (value: string) => value.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 
   return (
     <>
@@ -147,42 +187,31 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute left-0 mt-3 w-[720px] bg-white rounded-2xl shadow-2xl border border-black/5 p-6 z-50 grid grid-cols-12 gap-6 pointer-events-auto"
+                        className="absolute left-0 mt-3 w-[min(980px,calc(100vw-2rem))] max-h-[72vh] overflow-hidden rounded-2xl border border-black/5 bg-white p-5 shadow-2xl z-50 grid grid-cols-12 gap-5 pointer-events-auto"
                       >
-                        {/* Column 1: Corporate Gifts */}
-                        <div className="col-span-4 text-left">
+                        <div className="col-span-8 text-left">
                           <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Gift className="w-3.5 h-3.5 text-red-500" /> Corporate Gifts
+                            <Gift className="w-3.5 h-3.5 text-red-500" /> Product Subcategories
                           </h4>
-                          <div className="space-y-1">
-                            {CORPORATE_GIFTS.slice(0, 7).map((item) => (
-                              <Link
-                                key={item.name}
-                                href={item.href}
-                                onClick={() => setActiveDropdown(null)}
-                                className="block text-[13px] text-gray-700 hover:text-red-600 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
-                              >
-                                {item.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Column 2: Premium Giveaways */}
-                        <div className="col-span-4 text-left">
-                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Award className="w-3.5 h-3.5 text-amber-500" /> Premium Giveaways
-                          </h4>
-                          <div className="space-y-1">
-                            {CORPORATE_GIFTS.slice(7).map((item) => (
-                              <Link
-                                key={item.name}
-                                href={item.href}
-                                onClick={() => setActiveDropdown(null)}
-                                className="block text-[13px] text-gray-700 hover:text-red-600 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
-                              >
-                                {item.name}
-                              </Link>
+                          <div className="grid max-h-[52vh] grid-cols-2 gap-x-6 gap-y-5 overflow-y-auto pr-2">
+                            {promotionalGroupEntries.map(([group, entries]) => (
+                              <div key={group} className="min-w-0">
+                                <div className="mb-2 text-[10px] font-extrabold uppercase tracking-widest text-red-600">
+                                  {formatGroupLabel(group)}
+                                </div>
+                                <div className="space-y-1">
+                                  {entries.map((item) => (
+                                    <Link
+                                      key={item.name}
+                                      href={menuHref(item)}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-700 transition-colors hover:border-red-500 hover:bg-red-50 hover:text-red-600"
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
                             ))}
                           </div>
                         </div>
@@ -246,20 +275,20 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[720px] bg-white rounded-2xl shadow-2xl border border-black/5 p-6 z-50 grid grid-cols-12 gap-6 pointer-events-auto"
+                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[min(980px,calc(100vw-2rem))] max-h-[72vh] overflow-hidden rounded-2xl border border-black/5 bg-white p-5 shadow-2xl z-50 grid grid-cols-12 gap-5 pointer-events-auto"
                       >
                         {/* Column 1: Corporate Kits */}
-                        <div className="col-span-4 text-left">
+                        <div className="col-span-5 text-left">
                           <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
                             <Briefcase className="w-3.5 h-3.5 text-red-500" /> Corporate Kits
                           </h4>
-                          <div className="space-y-1">
-                            {CORPORATE_KITS.slice(0, 7).map((item) => (
+                          <div className="grid max-h-[52vh] grid-cols-2 gap-x-4 gap-y-1 overflow-y-auto pr-2">
+                            {corporateKitMenu.map((item) => (
                               <Link
                                 key={item.name}
-                                href={item.href}
+                                href={kitHref(item)}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block text-[13px] text-gray-750 hover:text-red-600 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
+                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-750 transition-colors hover:border-red-500 hover:bg-red-50 hover:text-red-600"
                               >
                                 {item.name}
                               </Link>
@@ -272,13 +301,13 @@ export function Navbar() {
                           <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
                             <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Festive Hampers
                           </h4>
-                          <div className="space-y-1">
-                            {OCCASION_HAMPERS.slice(0, 7).map((item) => (
+                          <div className="max-h-[52vh] space-y-1 overflow-y-auto pr-2">
+                            {hamperMenu.map((item) => (
                               <Link
                                 key={item.name}
-                                href={item.href}
+                                href={kitHref(item)}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block text-[13px] text-gray-750 hover:text-red-650 font-medium py-1.5 transition-colors pl-2 border-l border-transparent hover:border-red-500"
+                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-750 transition-colors hover:border-red-500 hover:bg-amber-50 hover:text-red-650"
                               >
                                 {item.name}
                               </Link>
@@ -287,7 +316,7 @@ export function Navbar() {
                         </div>
 
                         {/* Column 3: Featured Panel */}
-                        <div className="col-span-4 flex flex-col justify-between bg-gradient-to-br from-amber-50/70 to-red-50/50 rounded-xl p-4 border border-amber-100/30 text-left">
+                        <div className="col-span-3 flex flex-col justify-between rounded-xl border border-amber-100/30 bg-gradient-to-br from-amber-50/70 to-red-50/50 p-4 text-left">
                           <div>
                             <span className="text-[9px] font-extrabold text-amber-600 uppercase tracking-widest block mb-1">Kit Onboarding</span>
                             <h4 className="text-[13px] font-bold text-black mb-1.5">
@@ -567,10 +596,10 @@ export function Navbar() {
                           >
                             Explore All Products <ArrowRight className="w-3 h-3" />
                           </Link>
-                          {CORPORATE_GIFTS.map((item) => (
+                              {promotionalMenu.map((item) => (
                             <Link
                               key={item.name}
-                              href={item.href}
+                              href={menuHref(item)}
                               onClick={() => setIsOpen(false)}
                               className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
                             >
@@ -606,10 +635,10 @@ export function Navbar() {
                           <div>
                             <h4 className="text-[10px] font-extrabold text-red-500 uppercase tracking-widest mb-2">Corporate Kits</h4>
                             <div className="grid grid-cols-2 gap-2">
-                              {CORPORATE_KITS.map((item) => (
+                              {corporateKitMenu.map((item) => (
                                 <Link
                                   key={item.name}
-                                  href={item.href}
+                                  href={kitHref(item)}
                                   onClick={() => setIsOpen(false)}
                                   className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
                                 >
@@ -621,10 +650,10 @@ export function Navbar() {
                           <div className="pt-2 border-t border-white/5">
                             <h4 className="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest mb-2">Festive Hampers</h4>
                             <div className="grid grid-cols-2 gap-2">
-                              {OCCASION_HAMPERS.map((item) => (
+                              {hamperMenu.map((item) => (
                                 <Link
                                   key={item.name}
-                                  href={item.href}
+                                  href={kitHref(item)}
                                   onClick={() => setIsOpen(false)}
                                   className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
                                 >

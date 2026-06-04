@@ -5,14 +5,14 @@ import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { Award, Truck, ShieldCheck, Users, Gift, Box } from "lucide-react";
+import { Award, ClipboardCheck, ShieldCheck, Users, Gift, Box } from "lucide-react";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 
 const STATS = [
   { metric: "15+ Years", label: "Experience", icon: <Award className="w-8 h-8"/> },
-  { metric: "Pan-India", label: "Fulfillment Network", icon: <Truck className="w-8 h-8"/> },
+  { metric: "Curated", label: "Gifting Programs", icon: <Gift className="w-8 h-8"/> },
   { metric: "Premium", label: "Brand Partnerships", icon: <ShieldCheck className="w-8 h-8"/> },
-  { metric: "100k+", label: "Smiles Delivered", icon: <Users className="w-8 h-8"/> },
+  { metric: "100k+", label: "Projects Served", icon: <Users className="w-8 h-8"/> },
 ];
 
 const EXPERTISE = [
@@ -27,9 +27,9 @@ const EXPERTISE = [
     icon: <Box className="w-8 h-8 text-red-500" />
   },
   {
-    title: "Logistics & Pan-India Dispatch",
-    desc: "End-to-end management of storage, assembly, and pan-India delivery directly to branch offices or individual employee doorsteps.",
-    icon: <Truck className="w-8 h-8 text-red-500" />
+    title: "Quality-Controlled Execution",
+    desc: "Structured sampling, artwork checks, vendor coordination, and production tracking keep every gifting program consistent.",
+    icon: <ClipboardCheck className="w-8 h-8 text-red-500" />
   }
 ];
 
@@ -60,7 +60,7 @@ export default function AboutPage() {
               PacMyProduct is India's leading B2B platform specializing in end-to-end corporate gifting expertise and advanced packaging solutions capability. We help brands strengthen their professional relationships through thoughtfully curated gifts and premium presentation.
             </p>
             <p className="text-gray-500 text-sm sm:text-base leading-relaxed mb-8 font-medium">
-              From conceptualizing employee welcome kits to manufacturing high-volume corrugated cartons for industrial shipping, our integrated approach ensures quality, consistency, and on-time delivery across India.
+              From conceptualizing employee welcome kits to manufacturing high-volume corrugated cartons for enterprise programs, our integrated approach keeps quality, consistency, and presentation aligned from brief to final handover.
             </p>
             <Button size="lg" className="rounded-xl text-sm px-10 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-bold shadow-md shadow-red-600/10 border-0 py-4" asChild>
               <Link href="/enquiry">Partner With Us</Link>

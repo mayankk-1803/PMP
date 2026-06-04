@@ -11,6 +11,9 @@ export async function POST(req: Request) {
     name: data.name,
     slug: data.slug,
     logo: data.logo,
+    cloudinaryPublicId: data.cloudinaryPublicId,
+    industry: data.industry,
+    category: data.category,
     description: data.description,
     active: data.active ?? true,
   });

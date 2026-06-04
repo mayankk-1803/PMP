@@ -72,7 +72,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md font-medium">
-              Bespoke B2B packaging and luxury corporate gifting solutions. Crafting premium onboarding kits, custom merchandise, and rigid custom cartons to elevate your enterprise brand presence. Partnering with leading brands for nationwide corporate delivery.
+              Bespoke B2B packaging and luxury corporate gifting solutions. Crafting premium onboarding kits, custom merchandise, and rigid custom cartons to elevate your enterprise brand presence.
             </p>
             
             {/* Social Icons with micro-animations */}

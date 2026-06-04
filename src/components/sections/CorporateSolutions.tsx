@@ -3,9 +3,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight, MessageSquare } from "lucide-react";
-import { Button } from "../ui/Button";
+import { SafeImage } from "../ui/SafeImage";
 
 const PRODUCT_CATEGORIES = [
   {
@@ -23,7 +22,7 @@ const PRODUCT_CATEGORIES = [
   {
     title: "Keychains",
     desc: "Premium metal, leather & acrylic custom keyrings.",
-    image: "https://images.unsplash.com/photo-1575880911432-843818617882?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format&fit=crop",
     href: "/products?category=keychains",
   },
   {
@@ -39,46 +38,28 @@ const PRODUCT_CATEGORIES = [
     href: "/products?category=caps",
   },
   {
-    title: "Workspace Essentials",
-    desc: "Desk organizers, executive accessories & office utility kits.",
-    image: "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=600&auto=format&fit=crop",
-    href: "/products?category=workspace-essentials",
+    title: "Paper Weights",
+    desc: "Executive desk paper weights with precision logo placement.",
+    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=600&auto=format&fit=crop",
+    href: "/products?category=paper-weights",
+  },
+  {
+    title: "Mouse Pads / Table Mats",
+    desc: "Branded desk mats, table mats, and mouse pads.",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=600&auto=format&fit=crop",
+    href: "/products?category=mouse-pads-table-mats",
+  },
+  {
+    title: "Table Top Items",
+    desc: "Desk organizers, pen stands, and compact office utilities.",
+    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=600&auto=format&fit=crop",
+    href: "/products?category=table-top-items",
   },
   {
     title: "Backpacks / Bags",
     desc: "Durable travel backpacks, laptop sleeves & duffels.",
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600&auto=format&fit=crop",
     href: "/products?category=backpacks",
-  },
-  {
-    title: "Drinkware",
-    desc: "Bottles, tumblers and mugs for employee welcome kits.",
-    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=600&auto=format&fit=crop",
-    href: "/products?category=drinkware",
-  },
-  {
-    title: "Executive Gifts",
-    desc: "Notebook, diary and desk kits for leadership gifting.",
-    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=600&auto=format&fit=crop",
-    href: "/products?category=executive-gifts",
-  },
-  {
-    title: "Gift Sets",
-    desc: "Luxury curated hampers with branded premium packaging.",
-    image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=600&auto=format&fit=crop",
-    href: "/products?category=gift-sets",
-  },
-  {
-    title: "Audio Gadgets",
-    desc: "Premium earbuds and speakers for high-recall giveaways.",
-    image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=600&auto=format&fit=crop",
-    href: "/products?category=audio-gadgets",
-  },
-  {
-    title: "Tech Accessories",
-    desc: "Modern desk-tech bundles, organizers and charging kits.",
-    image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?q=80&w=600&auto=format&fit=crop",
-    href: "/products?category=tech-accessories",
   },
 ];
 
@@ -96,12 +77,11 @@ export function CorporateSolutions() {
         >
           {/* Card Image Container */}
           <div className="absolute inset-0 z-0">
-            <Image
+            <SafeImage
               src={cat.image}
               alt={cat.title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              unoptimized
+              category={cat.href.split("category=")[1]}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent transition-opacity duration-300" />

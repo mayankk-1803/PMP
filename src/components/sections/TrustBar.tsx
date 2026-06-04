@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 
 const METRICS = [
   { value: "500+", label: "Clients Partnered" },
-  { value: "10,000+", label: "Hampers Delivered" },
+  { value: "10,000+", label: "Kits Produced" },
   { value: "100%", label: "Satisfaction Rate" },
-  { value: "Pan-India", label: "Delivery Network" },
+  { value: "Premium", label: "Brand Network" },
 ];
 
 const LOGOS = [
