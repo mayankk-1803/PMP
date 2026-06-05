@@ -68,7 +68,7 @@ export function Footer() {
           <div className="lg:col-span-5 space-y-5">
             <Link href="/" className="inline-block">
               <span className="font-extrabold text-2xl tracking-tight text-white flex items-center gap-2">
-                PACMY<span className="text-red-500">PRODUCTS</span>
+                PACMY<span className="text-red-500">PRODUCT</span>
               </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md font-medium">
@@ -243,7 +243,7 @@ export function Footer() {
         <div className="border-t border-white/5 pt-8 mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-gray-600 text-xs flex items-center gap-1">
             <ShieldCheck className="w-3.5 h-3.5 text-red-500/60" />
-            © {new Date().getFullYear()} PACMYPRODUCTS — Premium Enterprise B2B Gifting & Custom Packaging. All rights reserved.
+            © {new Date().getFullYear()} PACMYPRODUCT — Premium Enterprise B2B Gifting & Custom Packaging. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-gray-600">
             <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>

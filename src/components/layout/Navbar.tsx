@@ -6,13 +6,12 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Menu, X, Gift, Bookmark, Trash2, ArrowRight, ChevronDown, 
-  Package, Briefcase, Sparkles, Coins, Phone, Mail
+  Briefcase, Sparkles, Coins, Phone, Mail
 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { 
   COMPANY_INFO, 
-  PACKAGING_SOLUTIONS, 
   BUDGETS,
   PRODUCTS
 } from "@/data/siteConfig";
@@ -154,7 +153,7 @@ export function Navbar() {
                     <Gift className="h-5 w-5 text-white" />
                   </div>
                   <span className="font-black text-xl tracking-wider text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.15)] transition-colors">
-                    PACMY<span className="text-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.2)]">PRODUCTS</span>
+                    PACMY<span className="text-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.2)]">PRODUCT</span>
                   </span>
                 </Link>
               </div>
@@ -349,59 +348,6 @@ export function Navbar() {
                   </AnimatePresence>
                 </div>
   
-                {/* 3. Packaging Solutions */}
-                <div className="relative group/nav-item">
-                  <button
-                    suppressHydrationWarning
-                    onClick={() => toggleDropdown("packaging")}
-                    className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
-                      activeDropdown === "packaging" || pathname.startsWith("/packaging-solutions")
-                        ? "text-red-500" 
-                        : "text-white/90 hover:text-white"
-                    }`}
-                  >
-                    <span>Packaging</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === "packaging" ? "rotate-180" : ""}`} />
-                    <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
-                      activeDropdown === "packaging" || pathname.startsWith("/packaging-solutions") ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
-                    }`} />
-                  </button>
-                  
-                  <AnimatePresence>
-                    {activeDropdown === "packaging" && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 15 }}
-                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute left-0 mt-3 w-[260px] bg-white rounded-2xl shadow-2xl border border-black/5 p-4 z-50 space-y-1 pointer-events-auto"
-                      >
-                        <h4 className="text-[11px] font-bold text-black uppercase tracking-wide px-3 py-1 mb-2 flex items-center gap-2">
-                          <Package className="w-3.5 h-3.5 text-red-500" /> Solutions
-                        </h4>
-                        {PACKAGING_SOLUTIONS.map((item) => (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            onClick={() => setActiveDropdown(null)}
-                            className="block text-[13px] text-gray-750 hover:text-red-600 hover:bg-black/5 font-medium px-3 py-2 rounded-lg transition-all"
-                          >
-                            {item.name}
-                          </Link>
-                        ))}
-                        <div className="border-t border-black/5 my-2 pt-2">
-                          <Link
-                            href="/packaging-solutions"
-                            onClick={() => setActiveDropdown(null)}
-                            className="block text-[13px] text-red-600 hover:text-red-700 font-bold px-3 transition-colors"
-                          >
-                            Explore Packaging →
-                          </Link>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
   
                 {/* 4. Budget Dropdown */}
                 <div className="relative group/nav-item">
@@ -553,7 +499,7 @@ export function Navbar() {
                     <Gift className="h-5 w-5 text-white" />
                   </div>
                   <span className="font-black text-xl tracking-wider text-white">
-                    PACMY<span className="text-red-600">PRODUCTS</span>
+                    PACMY<span className="text-red-600">PRODUCT</span>
                   </span>
                 </Link>
                 <button
@@ -676,53 +622,7 @@ export function Navbar() {
                   </AnimatePresence>
                 </div>
 
-                {/* 3. Packaging Accordion */}
-                <div className="border-b border-white/10">
-                  <button 
-                    suppressHydrationWarning
-                    onClick={() => toggleSection("packaging")}
-                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left focus:outline-none group"
-                  >
-                    <span>Packaging</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${expandedSection === "packaging" ? "rotate-180 text-red-500" : "group-hover:text-white"}`} />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {expandedSection === "packaging" && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                        className="overflow-hidden pb-4"
-                      >
-                        <div className="pl-2 space-y-2.5 pt-1">
-                          <Link
-                            key="explore-packaging-solutions"
-                            href="/packaging-solutions"
-                            onClick={() => setIsOpen(false)}
-                            className="block text-xs font-extrabold text-red-500 hover:text-red-400 uppercase tracking-widest py-1 flex items-center gap-1"
-                          >
-                            Explore Packaging Solutions <ArrowRight className="w-3 h-3" />
-                          </Link>
-                          <div className="grid grid-cols-1 gap-2">
-                            {PACKAGING_SOLUTIONS.map((item) => (
-                              <Link
-                                key={item.name}
-                                href={item.href}
-                                onClick={() => setIsOpen(false)}
-                                className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
-                              >
-                                {item.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* 4. Budget Accordion */}
+                {/* 3. Budget Accordion */}
                 <div className="border-b border-white/10">
                   <button 
                     suppressHydrationWarning

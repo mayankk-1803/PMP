@@ -359,7 +359,7 @@ export default function ContactPage() {
 
           <div className="h-[450px] w-full rounded-2xl overflow-hidden relative">
             <iframe 
-              title="PacMyProducts Corporate Office Map"
+              title="PacMyProduct Corporate Office Map"
               src={COMPANY_INFO.mapsUrl} 
               width="100%" 
               height="100%" 

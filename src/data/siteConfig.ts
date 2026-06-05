@@ -1,6 +1,6 @@
 export const COMPANY_INFO = {
   name: "PacMyProduct",
-  address: "Digital Greens, Tower A, Sector-61, Gurgaon, Haryana-122102",
+  address: "Of-653, 6Th Floor, Satya The Hive Sector 102, Dwarka expressway Gurgaon Haryana India-122006",
   phone: "+91 9818601834",
   email: "pacmyproduct@gmail.com",
   whatsapp: "https://wa.me/919818601834?text=Hi%2C%20I%20am%20interested%20in%20corporate%20gifting%20and%20packaging%20solutions.",
@@ -81,13 +81,7 @@ export const PACKAGING_SOLUTIONS = [
   { name: "Mono Cartons", slug: "mono", href: "/packaging-solutions?type=mono" },
   { name: "Rigid Boxes", slug: "rigid", href: "/packaging-solutions?type=rigid" },
   { name: "Corrugated Cartons", slug: "corrugated", href: "/packaging-solutions?type=corrugated" },
-  { name: "Luxury Gift Boxes", slug: "luxury-gift-boxes", href: "/packaging-solutions?type=luxury-gift-boxes" },
-  { name: "Magnetic Boxes", slug: "magnetic-boxes", href: "/packaging-solutions?type=magnetic-boxes" },
-  { name: "Mailer Boxes", slug: "mailer-boxes", href: "/packaging-solutions?type=mailer-boxes" },
-  { name: "Premium Packaging", slug: "premium-packaging", href: "/packaging-solutions?type=premium-packaging" },
-  { name: "Custom Packaging", slug: "custom-packaging", href: "/packaging-solutions?type=custom-packaging" },
-  { name: "Retail Packaging", slug: "retail-packaging", href: "/packaging-solutions?type=retail-packaging" },
-  { name: "Ecommerce Packaging", slug: "ecommerce-packaging", href: "/packaging-solutions?type=ecommerce-packaging" }
+  { name: "Luxury Gift Boxes", slug: "luxury-gift-boxes", href: "/packaging-solutions?type=luxury-gift-boxes" }
 ];
 
 export const PRODUCT_HIERARCHY = [

@@ -6,7 +6,6 @@ import { BentoKitsShowcase } from "@/components/sections/BentoKitsShowcase";
 import { OfficeUtilityShowcase } from "@/components/sections/OfficeUtilityShowcase";
 import { BrandingCapabilities } from "@/components/sections/BrandingCapabilities";
 import { FeaturedHampers } from "@/components/sections/FeaturedHampers";
-import { PackagingSolutions } from "@/components/sections/PackagingSolutions";
 import { AboutPreview } from "@/components/sections/AboutPreview";
 import { CtaSection } from "@/components/sections/CtaSection";
 
@@ -47,13 +46,10 @@ export default function Home() {
       {/* 7. Festive Hampers Carousel */}
       <FeaturedHampers />
 
-      {/* 8. Interactive Packaging Showcase */}
-      <PackagingSolutions />
-
-      {/* 9. Services & About Split Layout */}
+      {/* 8. Services & About Split Layout */}
       <AboutPreview />
 
-      {/* 10. CTA Inquiry Section */}
+      {/* 9. CTA Inquiry Section */}
       <CtaSection />
     </div>
   );
