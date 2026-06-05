@@ -1,4 +1,5 @@
 import type { BrandRecord, CategoryRecord, ProductRecord, SubcategoryRecord } from "./types";
+import { realCatalogImage } from "@/lib/catalogImages";
 
 const now = "2026-06-04T00:00:00.000Z";
 
@@ -195,7 +196,12 @@ const generatedProducts = [
 
 export const PROFESSIONAL_PRODUCTS: ProductRecord[] = generatedProducts.map(([title, category, subcategory, imageType], index) => {
   const pool = imagePools[imageType];
-  const image = pool[index % pool.length];
+  const image = realCatalogImage(title, category, subcategory, `${title}-${index}`);
+  const galleryImages = [
+    image,
+    realCatalogImage(title, category, subcategory, `${title}-${index}-detail`),
+    realCatalogImage(title, category, subcategory, `${title}-${index}-packaging`),
+  ];
   return {
     id: `prod_${index + 1}`,
     title,
@@ -206,8 +212,8 @@ export const PROFESSIONAL_PRODUCTS: ProductRecord[] = generatedProducts.map(([ti
     subcategory,
     brand: index % 3 === 0 ? "PacMyProduct" : index % 3 === 1 ? "Premium Corporate" : "Eco Select",
     featuredImage: image,
-    galleryImages: [image, ...pool.filter((item) => item !== image).slice(0, 2)],
-    images: [image, ...pool.filter((item) => item !== image).slice(0, 2)],
+    galleryImages,
+    images: galleryImages,
     features: ["Logo branding", "Bulk fulfilment", "Premium packaging"],
     specifications: { MOQ: "50+", Branding: "Logo customization", Quality: "Corporate grade" },
     tags: [category, subcategory, title.toLowerCase()],

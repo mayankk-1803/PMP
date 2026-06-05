@@ -113,7 +113,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <span className="text-[9px] text-emerald-800 font-extrabold uppercase tracking-wider block">Chat on WhatsApp</span>
-                      <span className="text-sm font-bold text-gray-900">+91 9818601834</span>
+                      <span className="text-sm font-bold text-gray-900">{COMPANY_INFO.phone}</span>
                     </div>
                   </div>
                   <ExternalLink className="w-4 h-4 text-emerald-600 transition-transform group-hover:translate-x-0.5" />

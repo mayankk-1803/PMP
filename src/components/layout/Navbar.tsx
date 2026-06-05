@@ -226,16 +226,6 @@ export function Navbar() {
                               Employee welcome kits, executive gift sets, custom branding, premium giveaways.
                             </p>
                           </div>
-                          
-                          <div className="relative h-20 w-full rounded-lg overflow-hidden mb-3 bg-neutral-100 shadow-sm">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=600&auto=format&fit=crop"
-                              alt="Premium Gifting"
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-
                           <Link
                             href="/promotional-merchandise"
                             onClick={() => setActiveDropdown(null)}
@@ -325,16 +315,6 @@ export function Navbar() {
                               Onboarding kits, dealer welcome packs, startup collections, custom branded hampers.
                             </p>
                           </div>
-                          
-                          <div className="relative h-20 w-full rounded-lg overflow-hidden mb-3 bg-neutral-100 shadow-sm">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src="https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=600&q=80"
-                              alt="Corporate Kits"
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-
                           <Link
                             href="/corporate-kits"
                             onClick={() => setActiveDropdown(null)}

@@ -1,9 +1,11 @@
+import { realCatalogImage } from "@/lib/catalogImages";
+
 export const COMPANY_INFO = {
   name: "PacMyProduct",
   address: "Of-653, 6Th Floor, Satya The Hive Sector 102, Dwarka expressway Gurgaon Haryana India-122006",
-  phone: "+91 9818601834",
+  phone: "+91 9599139303",
   email: "pacmyproduct@gmail.com",
-  whatsapp: "https://wa.me/919818601834?text=Hi%2C%20I%20am%20interested%20in%20corporate%20gifting%20and%20packaging%20solutions.",
+  whatsapp: "https://wa.me/919599139303?text=Hi%2C%20I%20am%20interested%20in%20corporate%20gifting%20and%20packaging%20solutions.",
   gst: "Registered enterprise billing with full GST input tax credits.",
   mapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3509.302324905183!2d77.07923487629579!3d28.409395275787126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d221800000001%3A0xb3debb96a099a9a3!2sDigital%20Greens!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
   timings: "Monday to Saturday: 10:00 AM — 7:00 PM (IST)"
@@ -1105,21 +1107,15 @@ const normalizeProductImages = (products: Record<string, ProductItem>) => {
     Object.entries(products).map(([key, product], index) => {
       const taxonomy = PRODUCT_CATEGORY_OVERRIDES[key] ?? { category: product.category, subcategory: product.subcategory || deriveSubcategory(product.category) };
       const imageOverride = PRODUCT_IMAGE_OVERRIDES[key];
-      if (imageOverride) {
-        return [key, { ...product, ...taxonomy, images: imageOverride }];
-      }
-
-      if (product.images && product.images.length > 0) {
-        return [key, { ...product, ...taxonomy }];
-      }
-
+      const titleMatchedRealImage = realCatalogImage(product.title, taxonomy.category, taxonomy.subcategory, key);
       const library = CATEGORY_IMAGE_LIBRARY[taxonomy.category] || CATEGORY_IMAGE_LIBRARY[product.category] || CATEGORY_IMAGE_LIBRARY["gift-sets"];
       const startIndex = index % library.length;
-      const images = [
+      const supportingImages = imageOverride || product.images || [
         library[startIndex],
         library[(startIndex + 1) % library.length],
         library[(startIndex + 2) % library.length]
-      ].filter((image, imageIndex, self) => self.indexOf(image) === imageIndex);
+      ];
+      const images = [titleMatchedRealImage, ...supportingImages].filter((image, imageIndex, self) => self.indexOf(image) === imageIndex);
 
       return [key, { ...product, ...taxonomy, images }];
     })
@@ -1333,6 +1329,10 @@ const KIT_IMAGE_LIBRARY = {
     "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=1000&auto=format&fit=crop"
   ],
+  mason: [
+    "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop"
+  ],
   field: [
     "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1000&auto=format&fit=crop"
@@ -1364,6 +1364,7 @@ const kitImageGroup = (kit: { title: string; slug: string }) => {
   const haystack = `${kit.title} ${kit.slug}`.toLowerCase();
   if (haystack.includes("doctor") || haystack.includes("hospital")) return KIT_IMAGE_LIBRARY.doctor;
   if (haystack.includes("architect") || haystack.includes("interior")) return KIT_IMAGE_LIBRARY.architect;
+  if (haystack.includes("mason")) return KIT_IMAGE_LIBRARY.mason;
   if (haystack.includes("contractor") || haystack.includes("electrician") || haystack.includes("mason")) return KIT_IMAGE_LIBRARY.field;
   if (haystack.includes("real-estate") || haystack.includes("handover")) return KIT_IMAGE_LIBRARY.realEstate;
   if (haystack.includes("pharma")) return KIT_IMAGE_LIBRARY.pharma;
@@ -1376,7 +1377,8 @@ const kitImageGroup = (kit: { title: string; slug: string }) => {
 
 export const SITE_KITS = RAW_SITE_KITS.map((kit) => {
   const images = kitImageGroup(kit);
-  return { ...kit, imageUrl: images[0] };
+  const imageUrl = realCatalogImage(kit.title, "corporate-kits", kit.slug, kit.slug);
+  return { ...kit, imageUrl, image: imageUrl, fallbackImageUrl: images[0] };
 });
 
 const BASE_SITE_HAMPERS = [
@@ -1478,7 +1480,7 @@ const HAMPER_IMAGE_LIBRARY = [
 ];
 
 export const SITE_HAMPERS = RAW_SITE_HAMPERS.map((hamper) => {
-  const image = hamper.imageUrl || hamper.image || HAMPER_IMAGE_LIBRARY[0];
+  const image = realCatalogImage(hamper.title, "festive-hampers", hamper.slug, hamper.slug);
   return { ...hamper, imageUrl: image, image };
 });
 

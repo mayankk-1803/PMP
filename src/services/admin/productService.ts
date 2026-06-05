@@ -1,5 +1,6 @@
 import { createRecord, deleteRecord, listRecords, updateRecord } from "@/repositories/adminRepository";
 import type { ProductRecord } from "@/lib/admin/types";
+import { realCatalogImage } from "@/lib/catalogImages";
 import { connectMongoDB } from "@/lib/mongodb";
 import { ProductModel } from "@/models/cmsModels";
 
@@ -25,27 +26,42 @@ const normalizeSpecifications = (specifications: any) => {
   return specifications;
 };
 
-const mapMongoProduct = (product: any): ProductRecord => ({
-  id: String(product._id),
-  title: product.name || product.title,
-  slug: product.slug,
-  description: product.description || "",
-  shortDescription: product.shortDescription,
-  category: product.category || "",
-  subcategory: product.subcategory || "",
-  brand: product.brand,
-  featuredImage: product.featuredImage || product.galleryImages?.[0] || product.images?.[0],
-  galleryImages: product.galleryImages || product.images || [],
-  images: product.galleryImages?.length ? product.galleryImages : product.images?.length ? product.images : product.featuredImage ? [product.featuredImage] : [],
-  features: product.features || [],
-  specifications: normalizeSpecifications(product.specifications),
-  tags: product.tags || [],
-  moq: product.moq || 1,
-  featured: Boolean(product.featured),
-  active: product.status !== "HIDDEN",
-  createdAt: product.createdAt?.toISOString?.() || new Date().toISOString(),
-  updatedAt: product.updatedAt?.toISOString?.() || new Date().toISOString(),
-});
+const mapMongoProduct = (product: any): ProductRecord => {
+  const title = product.name || product.title || "";
+  const category = product.category || "";
+  const subcategory = product.subcategory || "";
+  const matchedImage = realCatalogImage(title, category, subcategory, product.slug || title);
+  const sourceImages = product.galleryImages?.length
+    ? product.galleryImages
+    : product.images?.length
+      ? product.images
+      : product.featuredImage
+        ? [product.featuredImage]
+        : [];
+  const images = [matchedImage, ...sourceImages].filter((image, index, self) => self.indexOf(image) === index);
+
+  return {
+    id: String(product._id),
+    title,
+    slug: product.slug,
+    description: product.description || "",
+    shortDescription: product.shortDescription,
+    category,
+    subcategory,
+    brand: product.brand,
+    featuredImage: matchedImage,
+    galleryImages: images,
+    images,
+    features: product.features || [],
+    specifications: normalizeSpecifications(product.specifications),
+    tags: product.tags || [],
+    moq: product.moq || 1,
+    featured: Boolean(product.featured),
+    active: product.status !== "HIDDEN",
+    createdAt: product.createdAt?.toISOString?.() || new Date().toISOString(),
+    updatedAt: product.updatedAt?.toISOString?.() || new Date().toISOString(),
+  };
+};
 
 export async function getCatalogProducts(): Promise<ProductRecord[]> {
   if (!process.env.MONGODB_URI) return listProducts();
