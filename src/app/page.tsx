@@ -4,7 +4,6 @@ import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 import { CorporateSolutions } from "@/components/sections/CorporateSolutions";
 import { BentoKitsShowcase } from "@/components/sections/BentoKitsShowcase";
 import { OfficeUtilityShowcase } from "@/components/sections/OfficeUtilityShowcase";
-import { BrandingCapabilities } from "@/components/sections/BrandingCapabilities";
 import { FeaturedHampers } from "@/components/sections/FeaturedHampers";
 import { AboutPreview } from "@/components/sections/AboutPreview";
 import { CtaSection } from "@/components/sections/CtaSection";
@@ -40,16 +39,13 @@ export default function Home() {
       {/* 5. Premium Office Utilities Section */}
       <OfficeUtilityShowcase />
 
-      {/* 6. Technical Branding Capabilities Section */}
-      <BrandingCapabilities />
-
-      {/* 7. Festive Hampers Carousel */}
+      {/* 6. Festive Hampers Carousel */}
       <FeaturedHampers />
 
-      {/* 8. Services & About Split Layout */}
+      {/* 7. Services & About Split Layout */}
       <AboutPreview />
 
-      {/* 9. CTA Inquiry Section */}
+      {/* 8. CTA Inquiry Section */}
       <CtaSection />
     </div>
   );
