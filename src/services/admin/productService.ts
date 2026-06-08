@@ -1,11 +1,44 @@
 import { createRecord, deleteRecord, listRecords, updateRecord } from "@/repositories/adminRepository";
 import type { ProductRecord } from "@/lib/admin/types";
 import { realCatalogImage } from "@/lib/catalogImages";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 import { connectMongoDB } from "@/lib/mongodb";
 import { ProductModel } from "@/models/cmsModels";
 
+const SUPPLEMENTAL_CATALOG_PRODUCTS: ProductRecord[] = [
+  {
+    id: "supp_christmas_kits",
+    title: "Christmas Kits",
+    slug: "christmas-kits",
+    description: "Christmas gourmet hamper with cookies, cocoa, candles, ornaments, greeting card, and winter-themed premium packaging for corporate gifting.",
+    shortDescription: "Christmas kits for branded festive corporate gifting.",
+    category: "festive-hampers",
+    subcategory: "christmas-kits",
+    brand: "PacMyProduct",
+    featuredImage: "/images/christmaskit.png",
+    galleryImages: ["/images/christmaskit.png"],
+    images: ["/images/christmaskit.png"],
+    features: ["Logo Branding", "Bulk Packaging", "Corporate Customization"],
+    specifications: {},
+    tags: ["festive-hampers", "christmas-kits"],
+    moq: 50,
+    featured: true,
+    active: true,
+    createdAt: "2026-06-08T00:00:00.000Z",
+    updatedAt: "2026-06-08T00:00:00.000Z",
+  },
+];
+
+const withSupplementalProducts = (products: ProductRecord[]) => {
+  const existingSlugs = new Set(products.map((product) => product.slug));
+  return [
+    ...SUPPLEMENTAL_CATALOG_PRODUCTS.filter((product) => !existingSlugs.has(product.slug)),
+    ...products,
+  ];
+};
+
 export function listProducts(): ProductRecord[] {
-  return listRecords("products").filter((product) => product.active);
+  return withSupplementalProducts(listRecords("products").filter((product) => product.active));
 }
 
 export async function listAllProducts(): Promise<ProductRecord[]> {
@@ -30,7 +63,7 @@ const mapMongoProduct = (product: any): ProductRecord => {
   const title = product.name || product.title || "";
   const category = product.category || "";
   const subcategory = product.subcategory || "";
-  const matchedImage = realCatalogImage(title, category, subcategory, product.slug || title);
+  const matchedImage = localCatalogImage(title) || realCatalogImage(title, category, subcategory, product.slug || title);
   const sourceImages = product.galleryImages?.length
     ? product.galleryImages
     : product.images?.length
@@ -67,14 +100,15 @@ export async function getCatalogProducts(): Promise<ProductRecord[]> {
   if (!process.env.MONGODB_URI) return listProducts();
   await connectMongoDB();
   const products = await ProductModel.find({ status: "PUBLISHED" }).sort({ createdAt: -1 }).lean<any[]>();
-  return products.map(mapMongoProduct);
+  return withSupplementalProducts(products.map(mapMongoProduct));
 }
 
 export async function getCatalogProductBySlug(slug: string): Promise<ProductRecord | null> {
-  if (!process.env.MONGODB_URI) return getProductBySlug(slug);
+  const supplementalProduct = SUPPLEMENTAL_CATALOG_PRODUCTS.find((product) => product.slug === slug);
+  if (!process.env.MONGODB_URI) return getProductBySlug(slug) ?? supplementalProduct ?? null;
   await connectMongoDB();
   const product = await ProductModel.findOne({ slug, status: "PUBLISHED" }).lean<any>();
-  return product ? mapMongoProduct(product) : null;
+  return product ? mapMongoProduct(product) : supplementalProduct ?? null;
 }
 
 export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt" | "updatedAt">) {

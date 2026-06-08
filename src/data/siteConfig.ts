@@ -1,41 +1,5 @@
 import { realCatalogImage } from "@/lib/catalogImages";
-
-const normalizeImageTitle = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
-
-const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
-  [normalizeImageTitle("Executive Leather Desk Mat")]: "/images/leathermat.png",
-  [normalizeImageTitle("Solid Wood Wireless Charging Dock")]: "/images/wirelesscharging.png",
-  [normalizeImageTitle("Smart Temperature LED Sipper")]: "/images/smartsipper.png",
-  [normalizeImageTitle("Premium Aluminum Laptop Stand")]: "/images/laptopstand.png",
-  [normalizeImageTitle("Metal Rotating Keychain")]: "/images/keychain.png",
-  [normalizeImageTitle("Wireless Charging Mousepad")]: "/images/mousepad.png",
-  [normalizeImageTitle("Custom Tabletop Calendar")]: "/images/tabletopup.png",
-  [normalizeImageTitle("Joining Kits")]: "/images/joiningkit.png",
-  [normalizeImageTitle("Dealer Kits")]: "/images/dealerkit.png",
-  [normalizeImageTitle("Doctor Kits")]: "/images/doctorkit.png",
-  [normalizeImageTitle("Sales Team Kits")]: "/images/salesteamkit.png",
-  [normalizeImageTitle("Diwali Hampers")]: "/images/diwalihampers.png",
-  [normalizeImageTitle("Holi Hampers")]: "/images/holihampers.png",
-  [normalizeImageTitle("Eid Kits")]: "/images/eidkits.png",
-  [normalizeImageTitle("Women's Day Gifts")]: "/images/womensdaykit.png",
-  [normalizeImageTitle("Christmas Kits")]: "/images/christmaskit.png",
-  [normalizeImageTitle("New Year Gifts")]: "/images/newyeargifts.png",
-  [normalizeImageTitle("New Year Hampers")]: "/images/newyeargifts.png",
-  [normalizeImageTitle("Employee Welcome Hampers")]: "/images/employeewelcome.png",
-  [normalizeImageTitle("Welcome Hampers")]: "/images/employeewelcome.png",
-  [normalizeImageTitle("Diwali Premium Dry Fruit Hamper")]: "/images/premiumdryfruithamper.png",
-  [normalizeImageTitle("Diwali Wellness Hamper")]: "/images/diwaliwellnesshamper.png",
-  [normalizeImageTitle("Holi Organic Color Hamper")]: "/images/holiorganiccolorhamper.png",
-  [normalizeImageTitle("Eid Gourmet Hamper")]: "/images/eidgourmenthamper.png",
-  [normalizeImageTitle("Women Day Appreciation Hamper")]: "/images/womenappreciationhamper.png",
-  [normalizeImageTitle("Christmas Gourmet Hamper")]: "/images/christmasgourmethamper.png",
-  [normalizeImageTitle("New Year Desk Hamper")]: "/images/newyeardeskhamper.png",
-  [normalizeImageTitle("Client Thank You Hamper")]: "/images/clientthankyouhamper.png",
-  [normalizeImageTitle("Employee Milestone Hamper")]: "/images/employeemilestonehamper.png",
-  [normalizeImageTitle("Leadership Retreat Hamper")]: "/images/leadershipretreat.png",
-};
-
-const localCatalogImage = (title: string) => LOCAL_CATALOG_IMAGES_BY_TITLE[normalizeImageTitle(title)];
+import { localCatalogImage } from "@/lib/localCatalogImages";
 
 export const COMPANY_INFO = {
   name: "PacMyProduct",

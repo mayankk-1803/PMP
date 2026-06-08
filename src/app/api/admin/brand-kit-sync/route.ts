@@ -7,6 +7,7 @@ import {
   PROMOTIONAL_CATEGORIES,
   PROMOTIONAL_SUBCATEGORIES,
 } from "@/lib/admin/brandKitSyncData";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 import { connectMongoDB } from "@/lib/mongodb";
 import { BrandModel, CategoryModel, ProductModel, SubcategoryModel } from "@/models/cmsModels";
 
@@ -198,7 +199,7 @@ export async function POST() {
       return PRODUCT_VARIANTS.map((variant, index) => {
         const title = `${variant} ${subcategoryName}`;
         const slug = `pmp-${subcategorySlug}-${slugify(variant)}`;
-        const image = images[index % images.length];
+        const image = localCatalogImage(title) || images[index % images.length];
 
         return ProductModel.findOneAndUpdate(
           { slug },
