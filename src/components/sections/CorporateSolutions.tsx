@@ -22,7 +22,7 @@ const PRODUCT_CATEGORIES = [
   {
     title: "Keychains",
     desc: "Premium metal, leather & acrylic custom keyrings.",
-    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format&fit=crop",
+    image: "/images/keychain.png",
     href: "/products?category=keychains",
   },
   {
@@ -40,19 +40,19 @@ const PRODUCT_CATEGORIES = [
   {
     title: "Paper Weights",
     desc: "Executive desk paper weights with precision logo placement.",
-    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=600&auto=format&fit=crop",
+    image: "/images/paperweight.png",
     href: "/products?category=paper-weights",
   },
   {
     title: "Mouse Pads / Table Mats",
     desc: "Branded desk mats, table mats, and mouse pads.",
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=600&auto=format&fit=crop",
+    image: "/images/mousepad.png",
     href: "/products?category=mouse-pads-table-mats",
   },
   {
     title: "Table Top Items",
     desc: "Desk organizers, pen stands, and compact office utilities.",
-    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=600&auto=format&fit=crop",
+    image: "/images/tabletopup.png",
     href: "/products?category=table-top-items",
   },
   {

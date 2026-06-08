@@ -1,5 +1,42 @@
 import { realCatalogImage } from "@/lib/catalogImages";
 
+const normalizeImageTitle = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
+  [normalizeImageTitle("Executive Leather Desk Mat")]: "/images/leathermat.png",
+  [normalizeImageTitle("Solid Wood Wireless Charging Dock")]: "/images/wirelesscharging.png",
+  [normalizeImageTitle("Smart Temperature LED Sipper")]: "/images/smartsipper.png",
+  [normalizeImageTitle("Premium Aluminum Laptop Stand")]: "/images/laptopstand.png",
+  [normalizeImageTitle("Metal Rotating Keychain")]: "/images/keychain.png",
+  [normalizeImageTitle("Wireless Charging Mousepad")]: "/images/mousepad.png",
+  [normalizeImageTitle("Custom Tabletop Calendar")]: "/images/tabletopup.png",
+  [normalizeImageTitle("Joining Kits")]: "/images/joiningkit.png",
+  [normalizeImageTitle("Dealer Kits")]: "/images/dealerkit.png",
+  [normalizeImageTitle("Doctor Kits")]: "/images/doctorkit.png",
+  [normalizeImageTitle("Sales Team Kits")]: "/images/salesteamkit.png",
+  [normalizeImageTitle("Diwali Hampers")]: "/images/diwalihampers.png",
+  [normalizeImageTitle("Holi Hampers")]: "/images/holihampers.png",
+  [normalizeImageTitle("Eid Kits")]: "/images/eidkits.png",
+  [normalizeImageTitle("Women's Day Gifts")]: "/images/womensdaykit.png",
+  [normalizeImageTitle("Christmas Kits")]: "/images/christmaskit.png",
+  [normalizeImageTitle("New Year Gifts")]: "/images/newyeargifts.png",
+  [normalizeImageTitle("New Year Hampers")]: "/images/newyeargifts.png",
+  [normalizeImageTitle("Employee Welcome Hampers")]: "/images/employeewelcome.png",
+  [normalizeImageTitle("Welcome Hampers")]: "/images/employeewelcome.png",
+  [normalizeImageTitle("Diwali Premium Dry Fruit Hamper")]: "/images/premiumdryfruithamper.png",
+  [normalizeImageTitle("Diwali Wellness Hamper")]: "/images/diwaliwellnesshamper.png",
+  [normalizeImageTitle("Holi Organic Color Hamper")]: "/images/holiorganiccolorhamper.png",
+  [normalizeImageTitle("Eid Gourmet Hamper")]: "/images/eidgourmenthamper.png",
+  [normalizeImageTitle("Women Day Appreciation Hamper")]: "/images/womenappreciationhamper.png",
+  [normalizeImageTitle("Christmas Gourmet Hamper")]: "/images/christmasgourmethamper.png",
+  [normalizeImageTitle("New Year Desk Hamper")]: "/images/newyeardeskhamper.png",
+  [normalizeImageTitle("Client Thank You Hamper")]: "/images/clientthankyouhamper.png",
+  [normalizeImageTitle("Employee Milestone Hamper")]: "/images/employeemilestonehamper.png",
+  [normalizeImageTitle("Leadership Retreat Hamper")]: "/images/leadershipretreat.png",
+};
+
+const localCatalogImage = (title: string) => LOCAL_CATALOG_IMAGES_BY_TITLE[normalizeImageTitle(title)];
+
 export const COMPANY_INFO = {
   name: "PacMyProduct",
   address: "Of-653, 6Th Floor, Satya The Hive Sector 102, Dwarka expressway Gurgaon Haryana India-122006",
@@ -99,8 +136,8 @@ export const PRODUCT_HIERARCHY = [
     name: "Kits & Hampers",
     slug: "kits-hampers",
     categories: [
-      { name: "Corporate Kits", slug: "corporate-kits", subcategories: CORPORATE_KITS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) },
-      { name: "Festive Hampers", slug: "festive-hampers", subcategories: OCCASION_HAMPERS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) }
+      { name: "Corporate Kits", slug: "corporate-kits", subcategories: CORPORATE_KITS.map((item) => ({ ...item, image: localCatalogImage(item.name) || `/category-images/${item.slug}.jpg` })) },
+      { name: "Festive Hampers", slug: "festive-hampers", subcategories: OCCASION_HAMPERS.map((item) => ({ ...item, image: localCatalogImage(item.name) || `/category-images/${item.slug}.jpg` })) }
     ]
   },
   {
@@ -1107,7 +1144,7 @@ const normalizeProductImages = (products: Record<string, ProductItem>) => {
     Object.entries(products).map(([key, product], index) => {
       const taxonomy = PRODUCT_CATEGORY_OVERRIDES[key] ?? { category: product.category, subcategory: product.subcategory || deriveSubcategory(product.category) };
       const imageOverride = PRODUCT_IMAGE_OVERRIDES[key];
-      const titleMatchedRealImage = realCatalogImage(product.title, taxonomy.category, taxonomy.subcategory, key);
+      const titleMatchedImage = localCatalogImage(product.title) || realCatalogImage(product.title, taxonomy.category, taxonomy.subcategory, key);
       const library = CATEGORY_IMAGE_LIBRARY[taxonomy.category] || CATEGORY_IMAGE_LIBRARY[product.category] || CATEGORY_IMAGE_LIBRARY["gift-sets"];
       const startIndex = index % library.length;
       const supportingImages = imageOverride || product.images || [
@@ -1115,7 +1152,7 @@ const normalizeProductImages = (products: Record<string, ProductItem>) => {
         library[(startIndex + 1) % library.length],
         library[(startIndex + 2) % library.length]
       ];
-      const images = [titleMatchedRealImage, ...supportingImages].filter((image, imageIndex, self) => self.indexOf(image) === imageIndex);
+      const images = [titleMatchedImage, ...supportingImages].filter((image, imageIndex, self) => self.indexOf(image) === imageIndex);
 
       return [key, { ...product, ...taxonomy, images }];
     })
@@ -1377,7 +1414,7 @@ const kitImageGroup = (kit: { title: string; slug: string }) => {
 
 export const SITE_KITS = RAW_SITE_KITS.map((kit) => {
   const images = kitImageGroup(kit);
-  const imageUrl = realCatalogImage(kit.title, "corporate-kits", kit.slug, kit.slug);
+  const imageUrl = localCatalogImage(kit.title) || realCatalogImage(kit.title, "corporate-kits", kit.slug, kit.slug);
   return { ...kit, imageUrl, image: imageUrl, fallbackImageUrl: images[0] };
 });
 
@@ -1480,7 +1517,7 @@ const HAMPER_IMAGE_LIBRARY = [
 ];
 
 export const SITE_HAMPERS = RAW_SITE_HAMPERS.map((hamper) => {
-  const image = realCatalogImage(hamper.title, "festive-hampers", hamper.slug, hamper.slug);
+  const image = localCatalogImage(hamper.title) || realCatalogImage(hamper.title, "festive-hampers", hamper.slug, hamper.slug);
   return { ...hamper, imageUrl: image, image };
 });
 

@@ -16,7 +16,7 @@ const BENTO_MAPPING = [
     size: "large",
     icon: <Briefcase className="w-5 h-5" />,
     color: "from-red-600 to-rose-500",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
+    image: "/images/joiningkit.png"
   },
   {
     slug: "doctor",
@@ -24,7 +24,7 @@ const BENTO_MAPPING = [
     size: "medium",
     icon: <Award className="w-5 h-5" />,
     color: "from-amber-600 to-yellow-500",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=900&auto=format&fit=crop"
+    image: "/images/doctorkit.png"
   },
   {
     slug: "dealer",
@@ -32,7 +32,7 @@ const BENTO_MAPPING = [
     size: "medium",
     icon: <Shield className="w-5 h-5" />,
     color: "from-blue-600 to-indigo-500",
-    image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=900&auto=format&fit=crop"
+    image: "/images/dealerkit.png"
   },
   {
     slug: "sales",
@@ -40,7 +40,7 @@ const BENTO_MAPPING = [
     size: "large",
     icon: <Sparkles className="w-5 h-5" />,
     color: "from-neutral-900 to-neutral-700",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop"
+    image: "/images/salesteamkit.png"
   }
 ];
 
