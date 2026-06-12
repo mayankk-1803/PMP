@@ -1,13 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Sparkles, ArrowRight, Bookmark } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
-import { SITE_HAMPERS } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
 
 import "swiper/css";
@@ -16,6 +15,24 @@ import "swiper/css/navigation";
 
 export function FeaturedHampers() {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
+  const [hampers, setHampers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/catalog/subcategories")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          const festive = res.data.filter((s: any) => s.category === "festive-hampers" || s.parentGroup === "Festive Hampers");
+          setHampers(festive);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setHampers([]);
+        setLoading(false);
+      });
+  }, []);
 
   const handleToggleShortlist = (title: string, image: string, price: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -25,6 +42,20 @@ export function FeaturedHampers() {
       addToShortlist({ title, imageUrl: image, price });
     }
   };
+
+  if (loading) {
+    return (
+      <section className="py-24 bg-[#0a0a0c] text-white border-y border-white/5 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-[380px] rounded-2xl bg-white/5 animate-pulse border border-white/10" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-24 bg-[#0a0a0c] text-white border-y border-white/5 relative overflow-hidden">
@@ -70,13 +101,12 @@ export function FeaturedHampers() {
             }}
             className="pb-16"
           >
-            {SITE_HAMPERS.map((hamper) => {
-              const isSelected = isInShortlist(hamper.title);
-              // Use fallback fields safely matching schema
-              const hamperPrice = hamper.price;
-              const hamperBadge = hamper.badge || "Festive Star";
-              const hamperDesc = hamper.desc || hamper.description;
-              const hamperImg = hamper.image || hamper.imageUrl;
+            {hampers.map((hamper) => {
+              const isSelected = isInShortlist(hamper.name);
+              const hamperPrice = "Custom Quote";
+              const hamperBadge = "Festive Hamper";
+              const hamperDesc = hamper.description || "Premium custom-branded festive corporate gift hampers.";
+              const hamperImg = hamper.image || "/images/joiningkit.png";
 
               return (
                 <SwiperSlide key={hamper.slug} className="h-auto">
@@ -86,7 +116,7 @@ export function FeaturedHampers() {
                     <div className="relative aspect-[4/3] w-full bg-neutral-900 overflow-hidden flex-shrink-0 border-b border-white/5">
                       <SafeImage
                         src={hamperImg}
-                        alt={hamper.title}
+                        alt={hamper.name}
                         category="gift-sets"
                         useNextImage={true}
                         nextImageProps={{
@@ -103,7 +133,7 @@ export function FeaturedHampers() {
 
                       {/* Bookmark Icon */}
                       <button
-                        onClick={(e) => handleToggleShortlist(hamper.title, hamperImg, hamperPrice, e)}
+                        onClick={(e) => handleToggleShortlist(hamper.name, hamperImg, hamperPrice, e)}
                         className="absolute top-4 right-4 p-2.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 text-white hover:bg-red-600 transition-colors z-20"
                         title="Shortlist Hamper"
                       >
@@ -115,7 +145,7 @@ export function FeaturedHampers() {
                     <div className="p-6 flex flex-col flex-grow text-left">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="font-bold text-white text-base leading-tight group-hover:text-red-400 transition-colors">
-                          {hamper.title}
+                          {hamper.name}
                         </h3>
                         <span className="font-extrabold text-amber-400 text-xs tracking-wider uppercase bg-amber-400/10 px-2.5 py-1 rounded-md">{hamperPrice}</span>
                       </div>
@@ -125,7 +155,7 @@ export function FeaturedHampers() {
 
                       <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
                         <Link
-                          href={`/enquiry?product=${encodeURIComponent(hamper.title)}`}
+                          href={`/enquiry?product=${encodeURIComponent(hamper.name)}`}
                           className="text-[10px] font-extrabold uppercase tracking-widest text-gray-300 hover:text-red-400 transition-all flex items-center gap-1 group/link"
                         >
                           Request Customization <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />

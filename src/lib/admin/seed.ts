@@ -25,7 +25,7 @@ export const DEFAULT_ADMINS: AdminUser[] = [
     id: "admin_1",
     name: "Super Admin",
     email: "pmpadmin@gmail.com",
-    passwordHash: "$2b$12$Ke6F3jJvIn/Pdm/s7gDjgOC53wnltEWVIlA6XMdtFvjQkRPHWYUAu",
+    passwordHash: "$2b$12$zz2.mXfen1bSv2jhEpUAPOaD.3hmEm7rEuelXLQutAIF7w1JmtdC6",
     role: "SUPER_ADMIN",
     active: true,
     createdAt: now,

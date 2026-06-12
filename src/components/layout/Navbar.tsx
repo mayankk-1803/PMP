@@ -29,9 +29,8 @@ export function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [promotionalMenu, setPromotionalMenu] = useState<MenuSubcategory[]>([]);
-  const [corporateKitMenu, setCorporateKitMenu] = useState<MenuSubcategory[]>([]);
-  const [hamperMenu, setHamperMenu] = useState<MenuSubcategory[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
   
   const [mounted, setMounted] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -51,24 +50,17 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/catalog/subcategories")
-      .then((response) => response.json())
-      .then((payload) => {
-        const subcategories = (payload.data ?? []) as MenuSubcategory[];
-        setPromotionalMenu(
-          subcategories.filter((item) => item.parentGroup === "Promotional Products")
-        );
-        setCorporateKitMenu(
-          subcategories.filter((item) => item.category === "corporate-kits" || item.parentGroup === "Corporate Kits")
-        );
-        setHamperMenu(
-          subcategories.filter((item) => item.category === "festive-hampers" || item.parentGroup === "Festive Hampers")
-        );
+    Promise.all([
+      fetch("/api/catalog/categories").then((res) => res.json()),
+      fetch("/api/catalog/subcategories").then((res) => res.json())
+    ])
+      .then(([catRes, subRes]) => {
+        setCategories(catRes.success && catRes.data ? catRes.data : []);
+        setSubcategories(subRes.success && subRes.data ? subRes.data : []);
       })
       .catch(() => {
-        setPromotionalMenu([]);
-        setCorporateKitMenu([]);
-        setHamperMenu([]);
+        setCategories([]);
+        setSubcategories([]);
       });
   }, []);
 
@@ -116,16 +108,26 @@ export function Navbar() {
     }
   };
 
-  const menuHref = (item: MenuSubcategory) => `/products?subcategory=${encodeURIComponent(item.slug)}`;
-  const kitHref = (item: MenuSubcategory) => `/corporate-kits?kit=${item.slug.replace(/-kits$|-hampers$|-gifts$/g, "")}`;
-  const promotionalGroups = promotionalMenu.reduce<Record<string, MenuSubcategory[]>>((groups, item) => {
-    const key = item.category || "promotional-products";
-    groups[key] = groups[key] || [];
-    groups[key].push(item);
-    return groups;
-  }, {});
-  const promotionalGroupEntries = Object.entries(promotionalGroups);
-  const formatGroupLabel = (value: string) => value.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
+  const menuHref = (item: any) => `/products?subcategory=${encodeURIComponent(item.slug)}`;
+  const kitHref = (item: any) => `/corporate-kits?kit=${item.slug.replace(/-kits$|-hampers$|-gifts$/g, "")}`;
+
+  const promotionalCats = categories
+    .filter((cat) => cat.parentGroup === "Promotional Products")
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  const getSubcategories = (catSlug: string) => {
+    return subcategories
+      .filter((sub) => sub.category === catSlug)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+  };
+
+  const corporateKits = subcategories
+    .filter((sub) => sub.category === "corporate-kits" || sub.parentGroup === "Corporate Kits")
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  const festiveHampers = subcategories
+    .filter((sub) => sub.category === "festive-hampers" || sub.parentGroup === "Festive Hampers")
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   return (
     <>
@@ -190,28 +192,37 @@ export function Navbar() {
                       >
                         <div className="col-span-8 text-left">
                           <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Gift className="w-3.5 h-3.5 text-red-500" /> Product Subcategories
+                            <Gift className="w-3.5 h-3.5 text-red-500" /> Promotional Categories
                           </h4>
-                          <div className="grid max-h-[52vh] grid-cols-2 gap-x-6 gap-y-5 overflow-y-auto pr-2">
-                            {promotionalGroupEntries.map(([group, entries]) => (
-                              <div key={group} className="min-w-0">
-                                <div className="mb-2 text-[10px] font-extrabold uppercase tracking-widest text-red-600">
-                                  {formatGroupLabel(group)}
+                          <div className="grid max-h-[52vh] grid-cols-3 gap-x-6 gap-y-5 overflow-y-auto pr-2">
+                            {promotionalCats.map((cat) => {
+                              const subs = getSubcategories(cat.slug);
+                              return (
+                                <div key={cat.slug} className="min-w-0">
+                                  <Link
+                                    href={`/products?category=${cat.slug}`}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className="mb-2 block text-[10px] font-extrabold uppercase tracking-widest text-red-600 hover:text-red-750 transition-colors"
+                                  >
+                                    {cat.name}
+                                  </Link>
+                                  {subs.length > 0 && (
+                                    <div className="space-y-1">
+                                      {subs.map((item) => (
+                                        <Link
+                                          key={item.name}
+                                          href={menuHref(item)}
+                                          onClick={() => setActiveDropdown(null)}
+                                          className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-750 transition-colors hover:border-red-500 hover:bg-red-50 hover:text-red-600"
+                                        >
+                                          {item.name}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
-                                <div className="space-y-1">
-                                  {entries.map((item) => (
-                                    <Link
-                                      key={item.name}
-                                      href={menuHref(item)}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-700 transition-colors hover:border-red-500 hover:bg-red-50 hover:text-red-600"
-                                    >
-                                      {item.name}
-                                    </Link>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
 
@@ -272,7 +283,7 @@ export function Navbar() {
                             <Briefcase className="w-3.5 h-3.5 text-red-500" /> Corporate Kits
                           </h4>
                           <div className="grid max-h-[52vh] grid-cols-2 gap-x-4 gap-y-1 overflow-y-auto pr-2">
-                            {corporateKitMenu.map((item) => (
+                            {corporateKits.map((item) => (
                               <Link
                                 key={item.name}
                                 href={kitHref(item)}
@@ -291,12 +302,12 @@ export function Navbar() {
                             <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Festive Hampers
                           </h4>
                           <div className="max-h-[52vh] space-y-1 overflow-y-auto pr-2">
-                            {hamperMenu.map((item) => (
+                            {festiveHampers.map((item) => (
                               <Link
                                 key={item.name}
                                 href={kitHref(item)}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-750 transition-colors hover:border-red-500 hover:bg-amber-50 hover:text-red-650"
+                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-755 transition-colors hover:border-red-500 hover:bg-amber-50 hover:text-red-655"
                               >
                                 {item.name}
                               </Link>
@@ -374,6 +385,19 @@ export function Navbar() {
                   </AnimatePresence>
                 </div>
   
+                {/* 3. Packaging Link */}
+                <Link
+                  href="/packaging-solutions"
+                  className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
+                    pathname === "/packaging-solutions" ? "text-red-500" : "text-white/90 hover:text-white"
+                  }`}
+                >
+                  <span>Packaging</span>
+                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                    pathname === "/packaging-solutions" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
+                  }`} />
+                </Link>
+
                 {/* 5. Brands Link */}
                 <Link
                   href="/brands"
@@ -522,16 +546,23 @@ export function Navbar() {
                           >
                             Explore All Products <ArrowRight className="w-3 h-3" />
                           </Link>
-                              {promotionalMenu.map((item) => (
-                            <Link
-                              key={item.name}
-                              href={menuHref(item)}
-                              onClick={() => setIsOpen(false)}
-                              className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
+                            {promotionalCats.map((cat) => (
+                              <div key={cat.slug} className="col-span-2 mt-2 first:mt-0">
+                                <h5 className="text-[10px] font-extrabold text-red-500 uppercase tracking-wider mb-1">{cat.name}</h5>
+                                <div className="grid grid-cols-2 gap-2">
+                                  {getSubcategories(cat.slug).map((item) => (
+                                    <Link
+                                      key={item.name}
+                                      href={menuHref(item)}
+                                      onClick={() => setIsOpen(false)}
+                                      className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
                         </div>
                       </motion.div>
                     )}
@@ -561,7 +592,7 @@ export function Navbar() {
                           <div>
                             <h4 className="text-[10px] font-extrabold text-red-500 uppercase tracking-widest mb-2">Corporate Kits</h4>
                             <div className="grid grid-cols-2 gap-2">
-                              {corporateKitMenu.map((item) => (
+                              {corporateKits.map((item) => (
                                 <Link
                                   key={item.name}
                                   href={kitHref(item)}
@@ -576,7 +607,7 @@ export function Navbar() {
                           <div className="pt-2 border-t border-white/5">
                             <h4 className="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest mb-2">Festive Hampers</h4>
                             <div className="grid grid-cols-2 gap-2">
-                              {hamperMenu.map((item) => (
+                              {festiveHampers.map((item) => (
                                 <Link
                                   key={item.name}
                                   href={kitHref(item)}
@@ -636,6 +667,18 @@ export function Navbar() {
                       </motion.div>
                     )}
                   </AnimatePresence>
+                </div>
+
+                {/* 3. Direct Link: Packaging */}
+                <div className="border-b border-white/10">
+                  <Link
+                    key="packaging-solutions"
+                    href="/packaging-solutions"
+                    onClick={() => setIsOpen(false)}
+                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left hover:text-red-500 transition-colors"
+                  >
+                    Packaging
+                  </Link>
                 </div>
 
                 {/* 5. Direct Link: Company */}

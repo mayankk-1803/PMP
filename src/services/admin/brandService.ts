@@ -12,6 +12,7 @@ const mapBrand = (brand: any): BrandRecord => ({
   industry: brand.industry,
   category: brand.category,
   description: brand.description,
+  order: brand.order || 0,
   active: brand.active !== false,
   createdAt: brand.createdAt?.toISOString?.() || new Date().toISOString(),
 });
@@ -19,7 +20,7 @@ const mapBrand = (brand: any): BrandRecord => ({
 export async function listAllBrands() {
   if (!process.env.MONGODB_URI) return listRecords("brands");
   await connectMongoDB();
-  const brands = await BrandModel.find({}).sort({ createdAt: -1 }).lean<any[]>();
+  const brands = await BrandModel.find({}).sort({ order: 1, name: 1 }).lean<any[]>();
   return brands.map(mapBrand);
 }
 

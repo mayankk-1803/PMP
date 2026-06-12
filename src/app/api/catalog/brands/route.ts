@@ -6,7 +6,7 @@ import { BrandModel } from "@/models/cmsModels";
 export async function GET() {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const brands = await BrandModel.find({ active: true }).sort({ name: 1 }).lean<any[]>();
+    const brands = await BrandModel.find({ active: true }).sort({ order: 1, name: 1 }).lean<any[]>();
     return NextResponse.json({
       success: true,
       data: brands.map((brand) => ({
@@ -18,9 +18,13 @@ export async function GET() {
         industry: brand.industry,
         category: brand.category,
         description: brand.description,
+        order: brand.order || 0,
       })),
     });
   }
 
-  return NextResponse.json({ success: true, data: listRecords("brands").filter((brand) => brand.active) });
+  const staticBrands = listRecords("brands").filter((brand) => brand.active);
+  staticBrands.sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
+
+  return NextResponse.json({ success: true, data: staticBrands });
 }

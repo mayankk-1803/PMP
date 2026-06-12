@@ -1,150 +1,162 @@
 "use client";
 
-import React, { Suspense, useMemo } from "react";
+import React, { Suspense, useEffect, useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { CORPORATE_KITS, OCCASION_HAMPERS, SITE_KITS, SITE_HAMPERS } from "@/data/siteConfig";
-import { Briefcase, HardHat, Gift, ArrowRight } from "lucide-react";
+import { Briefcase, HardHat, Gift, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 type ActiveTab = "corporate" | "industry" | "festive";
 
 const INDUSTRY_SLUGS = new Set([
-  "doctor",
-  "architect",
-  "contractor",
-  "mason",
-  "electrician",
-  "interior-designer",
-  "pharma",
-  "hospital-staff",
-  "real-estate"
+  "doctor-kits",
+  "architect-kits",
+  "contractor-kits",
+  "mason-kits",
+  "electrician-kits",
+  "interior-designer-kits",
+  "pharma-representative-kits",
+  "hospital-staff-kits",
+  "plumber-kits",
+  "real-estate-builder-kit"
 ]);
 
-const KIT_KEYWORDS: Record<string, string[]> = {
-  joining: ["joining", "welcome", "onboarding", "employee", "campus", "remote"],
-  dealer: ["dealer"],
-  distributor: ["distributor"],
-  doctor: ["doctor", "clinic"],
-  architect: ["architect", "studio"],
-  contractor: ["contractor", "field"],
-  mason: ["mason"],
-  electrician: ["electrician", "safety"],
-  "interior-designer": ["interior", "designer"],
-  pharma: ["pharma", "representative"],
-  "hospital-staff": ["hospital", "staff"],
-  training: ["training", "delegate"],
-  seminar: ["seminar", "conference", "speaker"],
-  "startup-onboarding": ["startup", "culture", "onboarding"],
-  partner: ["partner", "appreciation"],
-  sales: ["sales"],
-  "real-estate": ["real estate", "real-estate", "handover"],
-  diwali: ["diwali"],
-  holi: ["holi"],
-  eid: ["eid"],
-  womens: ["women", "women's"],
-  christmas: ["christmas"],
-  newyear: ["new year", "newyear"],
-  welcome: ["welcome", "employee"]
-};
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  parentGroup?: string;
+  order?: number;
+}
 
-const optionDescription = (slug: string, label: string) => {
-  const descriptions: Record<string, string> = {
-    joining: "Welcome kits, onboarding boxes, campus hire kits, and remote employee packages.",
-    dealer: "Dealer launch kits, sales collateral, partner folders, and channel welcome packs.",
-    distributor: "Distributor growth kits, travel utilities, trophies, and campaign literature.",
-    doctor: "Medical-themed doctor kits with planners, desk utilities, pens, and clinic-ready presentation.",
-    architect: "Sketchbooks, planners, design tools, swatches, and studio presentation kits.",
-    contractor: "Rugged field kits with caps, rainwear, tools, notebooks, and durable packaging.",
-    mason: "Recognition kits with workwear, bottles, caps, certificates, and field-ready packaging.",
-    electrician: "Safety and utility kits with gloves, testers, caps, notepads, and branded field packs.",
-    "interior-designer": "Designer sample kits with swatches, notebooks, rulers, pens, and presentation boxes.",
-    pharma: "Pharma representative kits with folders, sample inserts, planners, and branded cartons.",
-    "hospital-staff": "Hospital staff appreciation kits with bottles, badge reels, notebooks, and care cards.",
-    training: "Training delegate kits with notebooks, pens, agendas, badges, and tote packaging.",
-    seminar: "Seminar and conference kits with speaker gifts, folders, bottles, and certificate cases.",
-    "startup-onboarding": "Startup culture kits with tees, stickers, tumblers, notebooks, and modern packaging.",
-    partner: "Partner appreciation kits with premium treats, awards, desk gifts, and thank-you cards.",
-    sales: "Sales team starter kits with polos, backpacks, bottles, planners, and pitch material.",
-    "real-estate": "Real estate launch and handover kits with key boxes, folders, pens, and luxury packaging.",
-    diwali: "Diwali dry fruit, wellness, diya, and festive premium corporate hampers.",
-    holi: "Holi hampers with organic colors, snacks, thandai mixes, and colorful branded boxes.",
-    eid: "Eid gourmet hampers with dates, nuts, sweets, and elegant themed presentation.",
-    womens: "Women's Day appreciation hampers with self-care, candles, chocolates, and custom cards.",
-    christmas: "Christmas gourmet hampers with cookies, cocoa, candles, ornaments, and winter sleeves.",
-    newyear: "New Year desk hampers with planners, calendars, tumblers, and premium treats.",
-    welcome: "Welcome hampers with office essentials, snacks, notebooks, bottles, and branded desk items."
-  };
+interface Subcategory {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  parentGroup: string;
+  description?: string;
+  image?: string;
+  order?: number;
+}
 
-  return descriptions[slug] || `Curated ${label.toLowerCase()} with brandable products, packaging, and bulk fulfillment.`;
-};
-
-const matchesOption = (item: { title: string; slug: string }, selectedKit: string) => {
-  const haystack = `${item.title} ${item.slug}`.toLowerCase();
-  const keywords = KIT_KEYWORDS[selectedKit] || [selectedKit];
-  return keywords.some((keyword) => haystack.includes(keyword.toLowerCase()));
-};
+interface Product {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  subcategory: string;
+  featuredImage?: string;
+  images: string[];
+  price?: number;
+}
 
 function CorporateKitsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedKit = searchParams?.get("kit") || "";
-  const selectedCorporateOption = CORPORATE_KITS.find((item) => item.slug === selectedKit);
-  const selectedHamperOption = OCCASION_HAMPERS.find((item) => item.slug === selectedKit);
 
-  const activeTab: ActiveTab = selectedHamperOption
-    ? "festive"
-    : selectedCorporateOption && INDUSTRY_SLUGS.has(selectedCorporateOption.slug)
-      ? "industry"
-      : selectedCorporateOption
-        ? "corporate"
-        : "corporate";
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const corporateKits = SITE_KITS.filter((kit) => kit.category === "corporate");
-  const industryKits = SITE_KITS.filter((kit) => kit.category === "industry");
-  const festiveHampers = SITE_HAMPERS.map((h) => ({
-    title: h.title,
-    description: h.desc || h.description,
-    imageUrl: h.imageUrl || h.image,
-    price: h.price,
-    slug: h.slug,
-    category: "gift-sets"
-  }));
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/catalog/categories").then((res) => res.json()),
+      fetch("/api/catalog/subcategories").then((res) => res.json()),
+      fetch("/api/catalog/products").then((res) => res.json())
+    ])
+      .then(([catRes, subRes, prodRes]) => {
+        if (catRes.success && catRes.data) setCategories(catRes.data);
+        if (subRes.success && subRes.data) setSubcategories(subRes.data);
+        if (prodRes.success && prodRes.data) setProducts(prodRes.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const corporateOptions = useMemo(() => {
+    return subcategories.filter(
+      (sub) => sub.category === "corporate-kits" || sub.parentGroup === "Corporate Kits"
+    );
+  }, [subcategories]);
+
+  const festiveOptions = useMemo(() => {
+    return subcategories.filter(
+      (sub) => sub.category === "festive-hampers" || sub.parentGroup === "Festive Hampers"
+    );
+  }, [subcategories]);
+
+  const selectedSubcategory = useMemo(() => {
+    return subcategories.find((sub) => sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$/g, "") === selectedKit);
+  }, [subcategories, selectedKit]);
+
+  const activeTab: ActiveTab = useMemo(() => {
+    if (selectedSubcategory) {
+      if (selectedSubcategory.category === "festive-hampers") return "festive";
+      if (INDUSTRY_SLUGS.has(selectedSubcategory.slug)) return "industry";
+      return "corporate";
+    }
+    return "corporate";
+  }, [selectedSubcategory]);
 
   const visibleItems = useMemo(() => {
-    if (selectedHamperOption) {
-      const filtered = festiveHampers.filter((hamper) => matchesOption(hamper, selectedHamperOption.slug));
-      return filtered.length ? filtered : festiveHampers;
+    let filtered = products;
+    if (selectedSubcategory) {
+      filtered = products.filter((p) => p.subcategory === selectedSubcategory.slug);
+    } else {
+      const activeOptions = 
+        activeTab === "festive"
+          ? festiveOptions
+          : activeTab === "industry"
+            ? corporateOptions.filter((s) => INDUSTRY_SLUGS.has(s.slug))
+            : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
+      const activeSlugs = new Set(activeOptions.map((s) => s.slug));
+      filtered = products.filter((p) => activeSlugs.has(p.subcategory));
     }
 
-    if (selectedCorporateOption) {
-      const source = INDUSTRY_SLUGS.has(selectedCorporateOption.slug) ? industryKits : corporateKits;
-      const filtered = source.filter((kit) => matchesOption(kit, selectedCorporateOption.slug));
-      return filtered.length ? filtered : source;
-    }
+    return filtered.map((p) => ({
+      title: p.title,
+      description: p.description,
+      imageUrl: p.featuredImage || p.images[0] || "/images/joiningkit.png",
+      price: p.price ? `₹${p.price}` : "Custom Quote",
+      slug: p.slug,
+      category: p.category
+    }));
+  }, [activeTab, corporateOptions, festiveOptions, products, selectedSubcategory]);
 
-    return activeTab === "industry" ? industryKits : corporateKits;
-  }, [activeTab, corporateKits, festiveHampers, industryKits, selectedCorporateOption, selectedHamperOption]);
-
-  const selectedLabel = selectedCorporateOption?.name || selectedHamperOption?.name || "Corporate Kits";
-  const selectedDescription = selectedKit
-    ? optionDescription(selectedKit, selectedLabel)
-    : "Explore premium, custom-branded onboarding kits, specialized field employee kits, and luxury festive hampers curated to elevate your brand perception.";
+  const selectedLabel = selectedSubcategory?.name || "Corporate Kits";
+  const selectedDescription = selectedSubcategory?.description || 
+    "Explore premium, custom-branded onboarding kits, specialized field employee kits, and luxury festive hampers curated to elevate your brand perception.";
 
   const tabItems = [
     { id: "corporate", label: "Employee & Joining Kits", icon: <Briefcase className="w-4 h-4" />, href: "/corporate-kits" },
-    { id: "industry", label: "Field & Industry Kits", icon: <HardHat className="w-4 h-4" />, href: "/corporate-kits?kit=doctor" },
-    { id: "festive", label: "Festive & Occasion Hampers", icon: <Gift className="w-4 h-4" />, href: "/corporate-kits?kit=diwali" },
+    { id: "industry", label: "Field & Industry Kits", icon: <HardHat className="w-4 h-4" />, href: "/corporate-kits?kit=doctor-kits" },
+    { id: "festive", label: "Festive & Occasion Hampers", icon: <Gift className="w-4 h-4" />, href: "/corporate-kits?kit=diwali-hampers" },
   ] as const;
 
-  const optionGroups = [
-    { label: "Corporate Kits", items: CORPORATE_KITS, accent: "text-red-600" },
-    { label: "Festive Hampers", items: OCCASION_HAMPERS, accent: "text-amber-600" }
-  ];
+  const currentOptions = activeTab === "festive"
+    ? festiveOptions
+    : activeTab === "industry"
+      ? corporateOptions.filter((s) => INDUSTRY_SLUGS.has(s.slug))
+      : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#faf9f6]">
+        <Loader2 className="w-8 h-8 text-red-600 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="pt-32 pb-24 relative min-h-screen bg-[#faf9f6] overflow-hidden max-w-full">
@@ -157,7 +169,7 @@ function CorporateKitsContent() {
             Curated Gift Sets
           </span>
           <SectionHeading
-            title={<>{selectedKit ? selectedLabel : "Corporate"} <span className="text-red-600">{selectedKit ? "" : "Kits & Hampers"}</span></>}
+            title={<>{selectedSubcategory ? selectedLabel : "Corporate"} <span className="text-red-600">{selectedSubcategory ? "" : "Kits & Hampers"}</span></>}
             subtitle={selectedDescription}
             centered
           />
@@ -185,38 +197,35 @@ function CorporateKitsContent() {
           </div>
         </div>
 
-        <div className="mb-14 grid lg:grid-cols-2 gap-5">
-          {optionGroups.map((group) => (
-            <section key={group.label} className="rounded-2xl bg-white border border-gray-200/80 p-5 shadow-sm text-left">
-              <div className={`text-[10px] font-extrabold uppercase tracking-widest mb-4 ${group.accent}`}>
-                {group.label}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {group.items.map((item) => {
-                  const isSelected = selectedKit === item.slug;
-                  return (
-                    <Link
-                      key={item.slug}
-                      href={item.href}
-                      className={`rounded-xl border px-3.5 py-2 text-xs font-bold transition-all ${
-                        isSelected
-                          ? "border-red-600 bg-red-50 text-red-600 shadow-sm"
-                          : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300 hover:bg-white hover:text-gray-950"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+        {/* Dynamic DB-driven Pills Selection */}
+        <div className="mb-14 rounded-2xl bg-white border border-gray-200/80 p-5 shadow-sm text-left">
+          <div className="text-[10px] font-extrabold uppercase tracking-widest mb-4 text-red-600">
+            {activeTab === "festive" ? "Festive Hamper Collections" : "Corporate Kit Options"}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {currentOptions.map((item) => {
+              const isSelected = selectedSubcategory?.slug === item.slug;
+              return (
+                <Link
+                  key={item.slug}
+                  href={`/corporate-kits?kit=${item.slug}`}
+                  className={`rounded-xl border px-3.5 py-2 text-xs font-bold transition-all ${
+                    isSelected
+                      ? "border-red-600 bg-red-50 text-red-600 shadow-sm"
+                      : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300 hover:bg-white hover:text-gray-950"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
         <div className="mb-6 flex items-center justify-between gap-4 text-left">
           <div>
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-600">
-              {selectedKit ? "Selected Collection" : "Featured Collection"}
+              {selectedSubcategory ? "Selected Collection" : "Featured Collection"}
             </span>
             <h2 className="mt-1 text-2xl md:text-3xl font-black text-gray-950">
               {selectedLabel}

@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Shield, Briefcase, Award } from "lucide-react";
 import { Button } from "../ui/Button";
-import { SITE_KITS } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
 
 // Select specifically relevant kits for the home page Bento Grid
@@ -45,17 +44,53 @@ const BENTO_MAPPING = [
 ];
 
 export function BentoKitsShowcase() {
-  // Map our visual configurations with the detailed data from SITE_KITS
-  const bentoKits = BENTO_MAPPING.map(config => {
-    const data = SITE_KITS.find(k => k.slug === config.slug) || SITE_KITS[0];
-    return {
-      ...config,
-      title: data.title,
-      desc: data.description,
-      image: config.image,
-      href: `/corporate-kits?kit=${config.slug}`
-    };
-  });
+  const [bentoKits, setBentoKits] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/catalog/subcategories")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          const subcats = res.data;
+          const mapped = BENTO_MAPPING.map(config => {
+            const dbSlug = config.slug === "joining" ? "joining-kits"
+                         : config.slug === "doctor" ? "doctor-kits"
+                         : config.slug === "dealer" ? "dealer-kits"
+                         : config.slug === "sales" ? "sales-team-kit"
+                         : "";
+            const item = subcats.find((s: any) => s.slug === dbSlug);
+            return {
+              ...config,
+              title: item?.name || (config.slug.charAt(0).toUpperCase() + config.slug.slice(1) + " Kit"),
+              desc: item?.description || "Curated premium corporate onboarding and channel gifting kits.",
+              image: item?.image || config.image,
+              href: `/corporate-kits?kit=${dbSlug}`
+            };
+          });
+          setBentoKits(mapped);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setBentoKits([]);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-24 bg-gray-50 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-[380px] rounded-2xl bg-gray-200 animate-pulse border border-gray-300" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-24 bg-gray-50 overflow-hidden">

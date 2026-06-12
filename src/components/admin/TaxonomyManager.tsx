@@ -13,6 +13,7 @@ interface CategoryRecord {
   parentGroup?: string;
   image?: string;
   active: boolean;
+  order?: number;
   createdAt?: string;
 }
 
@@ -24,6 +25,7 @@ interface SubcategoryRecord {
   parentGroup?: string;
   image?: string;
   active: boolean;
+  order?: number;
   createdAt?: string;
 }
 
@@ -38,6 +40,7 @@ interface BrandRecord {
   category?: string;
   description?: string;
   active: boolean;
+  order?: number;
   createdAt?: string;
 }
 
@@ -57,6 +60,7 @@ interface TaxonomyForm {
   image: string;
   logo: string;
   active: boolean;
+  order: number;
 }
 
 const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -72,6 +76,7 @@ const emptyCategory: TaxonomyForm = {
   image: "",
   logo: "",
   active: true,
+  order: 0,
 };
 
 const emptySubcategory: TaxonomyForm = {
@@ -83,6 +88,7 @@ const emptySubcategory: TaxonomyForm = {
   image: "",
   logo: "",
   active: true,
+  order: 0,
 };
 
 const emptyBrand: TaxonomyForm = {
@@ -94,6 +100,7 @@ const emptyBrand: TaxonomyForm = {
   image: "",
   logo: "",
   active: true,
+  order: 0,
 };
 
 export function TaxonomyManager({ mode }: { mode: Mode }) {
@@ -145,13 +152,14 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
       image: "image" in record ? record.image || "" : "",
       logo: "logo" in record ? record.logo || "" : "",
       active: record.active,
+      order: "order" in record ? Number(record.order) || 0 : 0,
     });
     setUploadError("");
     setUploadSuccess("");
     setModalOpen(true);
   };
 
-  const updateForm = (field: keyof TaxonomyForm, value: string | boolean) => {
+  const updateForm = (field: keyof TaxonomyForm, value: string | boolean | number) => {
     setForm((current) => {
       const next = { ...current, [field]: value };
       if (field === "name" && !editingId) next.slug = slugify(String(value));
@@ -198,13 +206,14 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
     const payload = {
       name: form.name,
       slug: form.slug,
-      description: "description" in form ? form.description : undefined,
+      description: form.description,
       category: "category" in form ? form.category : undefined,
       parentGroup: form.parentGroup,
       image: isBrand ? undefined : form.image,
       logo: isBrand ? form.logo : undefined,
       industry: isBrand ? form.parentGroup : undefined,
       active: form.active,
+      order: Number(form.order) || 0,
     };
 
     await fetch(editingId ? `/api/admin/${mode}/${editingId}` : `/api/admin/${mode}`, {
@@ -241,16 +250,21 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
           <table className="w-full min-w-[860px] border-collapse text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
               <tr>
-                {(isBrand ? ["Logo", "Name", "Industry", "Category", "Active", "Actions"] : isSubcategory ? ["Image", "Name", "Slug", "Category", "Parent Group", "Active", "Actions"] : ["Image", "Name", "Slug", "Parent Group", "Active", "Actions"]).map((column) => (
+                {(isBrand 
+                  ? ["Logo", "Name", "Industry", "Category", "Order", "Active", "Actions"] 
+                  : isSubcategory 
+                    ? ["Image", "Name", "Slug", "Category", "Parent Group", "Order", "Active", "Actions"] 
+                    : ["Image", "Name", "Slug", "Parent Group", "Order", "Active", "Actions"]
+                ).map((column) => (
                   <th key={column} className="px-4 py-3 font-bold">{column}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
               {loading ? (
-                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 7 : isBrand ? 6 : 6}>Loading {mode} from MongoDB...</td></tr>
+                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 8 : isBrand ? 7 : 7}>Loading {mode} from MongoDB...</td></tr>
               ) : records.length === 0 ? (
-                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 7 : isBrand ? 6 : 6}>No {mode} yet.</td></tr>
+                <tr><td className="px-4 py-5 text-slate-500" colSpan={isSubcategory ? 8 : isBrand ? 7 : 7}>No {mode} yet.</td></tr>
               ) : (
                 records.map((record) => (
                   <tr key={record.id} className="text-slate-700">
@@ -268,6 +282,7 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                     )}
                     {isSubcategory && <td className="px-4 py-3">{"category" in record ? record.category : ""}</td>}
                     {!isBrand && <td className="px-4 py-3">{"parentGroup" in record ? record.parentGroup : ""}</td>}
+                    <td className="px-4 py-3">{"order" in record ? record.order : 0}</td>
                     <td className="px-4 py-3">{record.active ? "Yes" : "No"}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
@@ -303,11 +318,15 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                   <Input label="Brand Category" value={form.category} onChange={(value) => updateForm("category", value)} />
                 </>
               ) : isSubcategory ? (
-                <Select label="Category" value={"category" in form ? form.category : ""} options={categories} onChange={(value) => updateForm("category", value)} required />
+                <>
+                  <Select label="Category" value={"category" in form ? form.category : ""} options={categories} onChange={(value) => updateForm("category", value)} required />
+                  <Input label="Parent Group" value={form.parentGroup} onChange={(value) => updateForm("parentGroup", value)} />
+                </>
               ) : (
-                <TextArea label="Description" value={"description" in form ? form.description : ""} onChange={(value) => updateForm("description", value)} />
+                <Input label="Parent Group" value={form.parentGroup} onChange={(value) => updateForm("parentGroup", value)} />
               )}
-              {!isBrand && <Input label="Parent Group" value={form.parentGroup} onChange={(value) => updateForm("parentGroup", value)} />}
+              <TextArea label="Description" value={form.description} onChange={(value) => updateForm("description", value)} />
+              <Input label="Order/Position" type="number" value={String(form.order)} onChange={(value) => updateForm("order", Number(value) || 0)} required />
               <label className="flex items-center gap-2 pt-7 text-sm font-bold text-slate-700">
                 <input type="checkbox" checked={form.active} onChange={(event) => updateForm("active", event.target.checked)} />
                 Active

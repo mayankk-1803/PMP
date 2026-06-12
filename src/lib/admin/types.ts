@@ -61,6 +61,7 @@ export interface CategoryRecord {
   description?: string;
   parentGroup?: string;
   image?: string;
+  order?: number;
   active: boolean;
   createdAt: string;
 }
@@ -75,6 +76,7 @@ export interface SubcategoryRecord {
   description?: string;
   image: string;
   featuredImage?: string;
+  order?: number;
   active: boolean;
   createdAt: string;
 }
@@ -88,6 +90,7 @@ export interface BrandRecord {
   industry?: string;
   category?: string;
   description?: string;
+  order?: number;
   active: boolean;
   createdAt: string;
 }

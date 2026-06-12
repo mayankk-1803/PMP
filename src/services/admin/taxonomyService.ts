@@ -12,6 +12,7 @@ const mapCategory = (category: any): CategoryRecord => ({
   description: category.description,
   parentGroup: category.parentGroup,
   image: category.image,
+  order: category.order || 0,
   active: category.active !== false,
   createdAt: toIso(category.createdAt),
 });
@@ -26,6 +27,7 @@ const mapSubcategory = (subcategory: any): SubcategoryRecord => ({
   description: subcategory.description,
   image: subcategory.image || "",
   featuredImage: subcategory.featuredImage,
+  order: subcategory.order || 0,
   active: subcategory.active !== false,
   createdAt: toIso(subcategory.createdAt),
 });
@@ -33,7 +35,7 @@ const mapSubcategory = (subcategory: any): SubcategoryRecord => ({
 export async function listAllCategories() {
   if (!process.env.MONGODB_URI) return listRecords("categories");
   await connectMongoDB();
-  const categories = await CategoryModel.find({}).sort({ createdAt: -1 }).lean<any[]>();
+  const categories = await CategoryModel.find({}).sort({ order: 1, name: 1 }).lean<any[]>();
   return categories.map(mapCategory);
 }
 
@@ -61,7 +63,7 @@ export async function deleteCategory(id: string) {
 export async function listAllSubcategories() {
   if (!process.env.MONGODB_URI) return listRecords("subcategories");
   await connectMongoDB();
-  const subcategories = await SubcategoryModel.find({}).sort({ createdAt: -1 }).lean<any[]>();
+  const subcategories = await SubcategoryModel.find({}).sort({ order: 1, name: 1 }).lean<any[]>();
   return subcategories.map(mapSubcategory);
 }
 

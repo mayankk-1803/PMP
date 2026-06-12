@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     parentGroup: data.parentGroup,
     image: data.image,
     active: data.active ?? true,
+    order: Number(data.order) || 0,
   });
   return NextResponse.json({ success: true, data: category }, { status: 201 });
 }

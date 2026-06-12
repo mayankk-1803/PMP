@@ -21,6 +21,7 @@ const CategorySchema = new Schema(
     parentGroup: { type: String, index: true },
     description: String,
     image: String,
+    order: { type: Number, default: 0 },
     active: { type: Boolean, default: true },
   },
   timestamps
@@ -36,6 +37,7 @@ const SubcategorySchema = new Schema(
     description: String,
     image: String,
     featuredImage: String,
+    order: { type: Number, default: 0 },
     active: { type: Boolean, default: true },
   },
   timestamps
@@ -50,6 +52,7 @@ const BrandSchema = new Schema(
     industry: String,
     category: String,
     description: String,
+    order: { type: Number, default: 0 },
     active: { type: Boolean, default: true },
   },
   timestamps

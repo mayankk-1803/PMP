@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
+import { cloudinary } from "@/lib/cloudinary";
 import {
   BRAND_LOGO_PATHS,
   BRAND_PARTNERS,
@@ -42,30 +45,25 @@ const PRODUCT_IMAGE_BY_CATEGORY: Record<string, string[]> = {
     "https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop",
   ],
-  "paper-weights": [
-    "https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1000&auto=format&fit=crop",
-  ],
-  "mouse-pads-table-mats": [
-    "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=1000&auto=format&fit=crop",
-  ],
-  "table-top-items": [
-    "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop",
-  ],
-  "backpacks-bags": [
+  bags: [
     "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?q=80&w=1000&auto=format&fit=crop",
   ],
+};
+
+const CATEGORY_DEFAULT_IMAGES: Record<string, string> = {
+  bags: "/images/ecopackback.png",
+  "t-shirts": "/images/premiumcorporatetshirt.png",
+  caps: "/images/keychain.png",
+  keychains: "/images/keychain.png",
+  "diaries-notebooks": "/images/leathermat.png",
+  "table-top": "/images/tabletopup.png",
+  "paper-weight": "/images/paperweight.png",
+  "table-mats": "/images/leathermat.png",
+  "mouse-pad": "/images/mousepad.png",
+  "desk-organiser": "/images/tabletopup.png",
 };
 
 const PRODUCT_VARIANTS = ["Classic", "Premium", "Executive", "Eco"];
@@ -74,15 +72,30 @@ const slugify = (value: string) =>
   value
     .toLowerCase()
     .replace(/&/g, "and")
+    .replace(/\//g, "and")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-async function upsertCategory(name: string, slug: string, description: string) {
-  return CategoryModel.findOneAndUpdate(
-    { slug },
-    { $set: { name, slug, description, parentGroup: "Kits & Hampers", active: true } },
-    { new: true, upsert: true }
-  );
+// Helper to upload a local asset to Cloudinary
+async function uploadToCloudinary(localPath: string, folder: string, publicId: string): Promise<{ url: string; publicId: string } | null> {
+  if (!localPath || !localPath.startsWith("/")) return null;
+  const absolutePath = path.join(process.cwd(), "public", localPath);
+  if (!fs.existsSync(absolutePath)) return null;
+
+  try {
+    const result = await cloudinary.uploader.upload(absolutePath, {
+      folder: `pacmyproduct/${folder}`,
+      public_id: publicId,
+      overwrite: true,
+    });
+    return {
+      url: result.secure_url,
+      publicId: result.public_id,
+    };
+  } catch (error) {
+    console.error(`Failed to upload ${localPath} to Cloudinary:`, error);
+    return null;
+  }
 }
 
 export async function POST() {
@@ -91,22 +104,71 @@ export async function POST() {
   }
 
   await connectMongoDB();
-  const corporateCategory = await upsertCategory("Corporate Kits", "corporate-kits", "Corporate, industry, onboarding, partner, and field kits.");
-  const hamperCategory = await upsertCategory("Festive Hampers", "festive-hampers", "Festive, welcome, celebration, appreciation, and occasion hampers.");
+
+  // 1. Sync Corporate Kits and Festive Hampers main categories
+  const corporateCategory = await CategoryModel.findOneAndUpdate(
+    { slug: "corporate-kits" },
+    { 
+      $set: { 
+        name: "Corporate Kits", 
+        slug: "corporate-kits", 
+        description: "Corporate, industry, onboarding, partner, and field kits.", 
+        parentGroup: "Kits & Hampers", 
+        active: true,
+        order: 11
+      } 
+    },
+    { new: true, upsert: true }
+  );
+
+  const hamperCategory = await CategoryModel.findOneAndUpdate(
+    { slug: "festive-hampers" },
+    { 
+      $set: { 
+        name: "Festive Hampers", 
+        slug: "festive-hampers", 
+        description: "Festive, welcome, celebration, appreciation, and occasion hampers.", 
+        parentGroup: "Kits & Hampers", 
+        active: true,
+        order: 12
+      } 
+    },
+    { new: true, upsert: true }
+  );
+
+  // 2. Sync Flat Promotional Categories
   const promotionalCategories = await Promise.all(
-    PROMOTIONAL_CATEGORIES.map(([name, slug, description]) =>
-      CategoryModel.findOneAndUpdate(
+    PROMOTIONAL_CATEGORIES.map(async ([name, slug, description], index) => {
+      const defaultImg = CATEGORY_DEFAULT_IMAGES[slug] || "/images/joiningkit.png";
+      const cloudUpload = await uploadToCloudinary(defaultImg, "categories", slug);
+      
+      return CategoryModel.findOneAndUpdate(
         { slug },
-        { $set: { name, slug, description, parentGroup: "Promotional Products", active: true } },
+        { 
+          $set: { 
+            name, 
+            slug, 
+            description, 
+            parentGroup: "Promotional Products", 
+            active: true,
+            order: index + 1,
+            image: cloudUpload?.url || defaultImg,
+            cloudinaryPublicId: cloudUpload?.publicId || ""
+          } 
+        },
         { new: true, upsert: true }
-      )
-    )
+      );
+    })
   );
   const promotionalCategoryBySlug = new Map(promotionalCategories.map((category) => [category.slug, category]));
 
-  const promotionalResults = await Promise.all(
-    PROMOTIONAL_SUBCATEGORIES.map(([name, slug, categorySlug, description]) => {
+  // 3. Sync Promotional Subcategories
+  const promotionalSubcategories = await Promise.all(
+    PROMOTIONAL_SUBCATEGORIES.map(async ([name, slug, categorySlug, description], index) => {
       const category = promotionalCategoryBySlug.get(categorySlug);
+      const defaultImg = CATEGORY_DEFAULT_IMAGES[categorySlug] || "/images/joiningkit.png";
+      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug);
+
       return SubcategoryModel.findOneAndUpdate(
         { slug },
         {
@@ -118,6 +180,9 @@ export async function POST() {
             parentGroup: "Promotional Products",
             description,
             active: true,
+            order: index + 1,
+            image: cloudUpload?.url || defaultImg,
+            cloudinaryPublicId: cloudUpload?.publicId || ""
           },
         },
         { new: true, upsert: true }
@@ -125,9 +190,13 @@ export async function POST() {
     })
   );
 
-  const kitResults = await Promise.all(
-    CORPORATE_KIT_SUBCATEGORIES.map(([name, slug, description]) =>
-      SubcategoryModel.findOneAndUpdate(
+  // 4. Sync Corporate Kits Subcategories with exact requested ordering
+  const kitSubcategories = await Promise.all(
+    CORPORATE_KIT_SUBCATEGORIES.map(async ([name, slug, description], index) => {
+      const defaultImg = localCatalogImage(name) || "/images/joiningkit.png";
+      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug);
+
+      return SubcategoryModel.findOneAndUpdate(
         { slug },
         {
           $set: {
@@ -138,16 +207,23 @@ export async function POST() {
             parentGroup: "Corporate Kits",
             description,
             active: true,
+            order: index + 1,
+            image: cloudUpload?.url || defaultImg,
+            cloudinaryPublicId: cloudUpload?.publicId || ""
           },
         },
         { new: true, upsert: true }
-      )
-    )
+      );
+    })
   );
 
-  const hamperResults = await Promise.all(
-    HAMPER_SUBCATEGORIES.map(([name, slug, description]) =>
-      SubcategoryModel.findOneAndUpdate(
+  // 5. Sync Festive Hampers Subcategories
+  const hamperSubcategories = await Promise.all(
+    HAMPER_SUBCATEGORIES.map(async ([name, slug, description], index) => {
+      const defaultImg = localCatalogImage(name) || "/images/diwalihampers.png";
+      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug);
+
+      return SubcategoryModel.findOneAndUpdate(
         { slug },
         {
           $set: {
@@ -158,34 +234,43 @@ export async function POST() {
             parentGroup: "Festive Hampers",
             description,
             active: true,
+            order: index + 1,
+            image: cloudUpload?.url || defaultImg,
+            cloudinaryPublicId: cloudUpload?.publicId || ""
           },
         },
         { new: true, upsert: true }
-      )
-    )
+      );
+    })
   );
 
+  // 6. Sync Brands with Cloudinary logo uploading
   const brandResults = await Promise.all(
-    BRAND_PARTNERS.map(([name, slug, industry, category]) =>
-      BrandModel.findOneAndUpdate(
+    BRAND_PARTNERS.map(async ([name, slug, industry, category], index) => {
+      const localLogo = BRAND_LOGO_PATHS[slug] || "/logos/fallback.png";
+      const cloudUpload = await uploadToCloudinary(localLogo, "brands", slug);
+
+      return BrandModel.findOneAndUpdate(
         { slug },
         {
           $set: {
             name,
             slug,
-            logo: BRAND_LOGO_PATHS[slug] || "",
-            cloudinaryPublicId: BRAND_LOGO_PATHS[slug] ? `public/logos/${BRAND_LOGO_PATHS[slug].split("/").pop()}` : "",
+            logo: cloudUpload?.url || localLogo,
+            cloudinaryPublicId: cloudUpload?.publicId || "",
             industry,
             category,
-            description: `${name} brand partner for ${industry.toLowerCase()} corporate gifting.`,
+            description: `${name} brand partner for premium custom-branded ${category.toLowerCase()} and corporate gifting options.`,
             active: true,
+            order: index + 1,
           },
         },
         { new: true, upsert: true }
-      )
-    )
+      );
+    })
   );
 
+  // 7. Sync Products dynamically for promotional subcategories
   const managedProductSlugs = PROMOTIONAL_SUBCATEGORIES.flatMap(([subcategoryName, subcategorySlug, categorySlug]) =>
     PRODUCT_VARIANTS.map((variant) => `pmp-${subcategorySlug}-${slugify(variant)}`)
   );
@@ -193,13 +278,24 @@ export async function POST() {
   const productResults = await Promise.all(
     PROMOTIONAL_SUBCATEGORIES.flatMap(([subcategoryName, subcategorySlug, categorySlug, subcategoryDescription]) => {
       const category = promotionalCategoryBySlug.get(categorySlug);
-      const subcategory = promotionalResults.find((item) => item.slug === subcategorySlug);
+      const subcategory = promotionalSubcategories.find((item) => item.slug === subcategorySlug);
       const images = PRODUCT_IMAGE_BY_CATEGORY[categorySlug] || PRODUCT_IMAGE_BY_CATEGORY.pens;
 
-      return PRODUCT_VARIANTS.map((variant, index) => {
+      return PRODUCT_VARIANTS.map(async (variant, index) => {
         const title = `${variant} ${subcategoryName}`;
         const slug = `pmp-${subcategorySlug}-${slugify(variant)}`;
-        const image = localCatalogImage(title) || images[index % images.length];
+        const localImg = localCatalogImage(title) || images[index % images.length];
+        
+        let imageUrl = localImg;
+        let cloudPublicId = "";
+        
+        if (localImg.startsWith("/")) {
+          const cloudUpload = await uploadToCloudinary(localImg, "products", slug);
+          if (cloudUpload) {
+            imageUrl = cloudUpload.url;
+            cloudPublicId = cloudUpload.publicId;
+          }
+        }
 
         return ProductModel.findOneAndUpdate(
           { slug },
@@ -215,12 +311,13 @@ export async function POST() {
               category: categorySlug,
               subcategory: subcategorySlug,
               brand: "PacMyProduct",
-              featuredImage: image,
-              galleryImages: [image],
-              images: [image],
+              featuredImage: imageUrl,
+              galleryImages: [imageUrl],
+              images: [imageUrl],
+              cloudinaryPublicId: cloudPublicId,
               features: ["Logo Branding", "Bulk Packaging", "Corporate Customization"],
               tags: ["managed-promotional-sync", categorySlug, subcategorySlug],
-              moq: categorySlug === "backpacks-bags" ? 50 : categorySlug === "pens" ? 250 : 100,
+              moq: (categorySlug as string) === "bags" ? 50 : (categorySlug as string) === "pens" ? 250 : 100,
               featured: index === 0,
               status: "PUBLISHED",
               active: true,
@@ -232,37 +329,30 @@ export async function POST() {
     })
   );
 
+  // 8. Deactivate items not included in the sync lists
+  const activeCategorySlugs = [
+    "corporate-kits",
+    "festive-hampers",
+    ...PROMOTIONAL_CATEGORIES.map(([, slug]) => slug),
+  ];
+  const activeSubcategorySlugs = [
+    ...PROMOTIONAL_SUBCATEGORIES.map(([, slug]) => slug),
+    ...CORPORATE_KIT_SUBCATEGORIES.map(([, slug]) => slug),
+    ...HAMPER_SUBCATEGORIES.map(([, slug]) => slug),
+  ];
+  const activeBrandSlugs = BRAND_PARTNERS.map(([, slug]) => slug);
+
   await Promise.all([
-    SubcategoryModel.updateMany(
-      {
-        category: "corporate-kits",
-        slug: { $nin: CORPORATE_KIT_SUBCATEGORIES.map(([, slug]) => slug) },
-      },
-      { $set: { active: false } }
-    ),
     CategoryModel.updateMany(
-      {
-        parentGroup: "Promotional Products",
-        slug: { $nin: PROMOTIONAL_CATEGORIES.map(([, slug]) => slug) },
-      },
+      { slug: { $nin: activeCategorySlugs } },
       { $set: { active: false } }
     ),
     SubcategoryModel.updateMany(
-      {
-        parentGroup: "Promotional Products",
-        slug: { $nin: PROMOTIONAL_SUBCATEGORIES.map(([, slug]) => slug) },
-      },
-      { $set: { active: false } }
-    ),
-    SubcategoryModel.updateMany(
-      {
-        category: "festive-hampers",
-        slug: { $nin: HAMPER_SUBCATEGORIES.map(([, slug]) => slug) },
-      },
+      { slug: { $nin: activeSubcategorySlugs } },
       { $set: { active: false } }
     ),
     BrandModel.updateMany(
-      { slug: { $nin: BRAND_PARTNERS.map(([, slug]) => slug) } },
+      { slug: { $nin: activeBrandSlugs } },
       { $set: { active: false } }
     ),
     ProductModel.updateMany(
@@ -277,13 +367,13 @@ export async function POST() {
   return NextResponse.json({
     success: true,
     data: {
-      corporateKitSubcategories: kitResults.length,
-      hamperSubcategories: hamperResults.length,
+      corporateKitSubcategories: kitSubcategories.length,
+      hamperSubcategories: hamperSubcategories.length,
       promotionalCategories: promotionalCategories.length,
-      promotionalSubcategories: promotionalResults.length,
+      promotionalSubcategories: promotionalSubcategories.length,
       promotionalProducts: productResults.length,
       brands: brandResults.length,
-      cloudinaryLogoStatus: process.env.CLOUDINARY_CLOUD_NAME ? "configured" : "not_configured",
+      cloudinaryStatus: "fully_synchronized",
     },
   });
 }

@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     category: data.category,
     description: data.description,
     active: data.active ?? true,
+    order: Number(data.order) || 0,
   });
   return NextResponse.json({ success: true, data: brand }, { status: 201 });
 }

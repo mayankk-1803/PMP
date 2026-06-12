@@ -6,23 +6,43 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, Bookmark, ShieldCheck, ShoppingBag, Eye } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
-import { PRODUCTS } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
-
-const ACCESSORY_KEYS = [
-  "executive-leather-desk-mat",
-  "wireless-charging-wood-organizer",
-  "smart-temperature-sipper",
-  "aluminum-laptop-stand"
-];
 
 export function OfficeUtilityShowcase() {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setMounted(true);
+    fetch("/api/catalog/products")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          const mapped = res.data
+            .filter((p: any) => p.category === "workspace-essentials" || ["executive-leather-desk-mat", "wireless-charging-wood-organizer", "smart-temperature-sipper", "aluminum-laptop-stand"].includes(p.slug))
+            .slice(0, 4)
+            .map((p: any) => ({
+              key: p.slug,
+              title: p.title,
+              category: p.category,
+              images: p.galleryImages?.length ? p.galleryImages : p.images?.length ? p.images : [p.featuredImage || "/images/joiningkit.png"],
+              moq: p.moq || 50,
+              description: p.description || p.shortDescription || "",
+              basePrice: p.price || 450,
+              customizations: p.features?.length ? p.features : ["Logo branding", "Custom packaging"],
+              specs: Object.entries(p.specifications || {}).map(([label, value]) => ({ label, value: String(value) }))
+            }));
+          setProducts(mapped);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setProducts([]);
+        setLoading(false);
+      });
   }, []);
 
   const handleToggleShortlist = (title: string, image: string, basePrice: number, e: React.MouseEvent) => {
@@ -34,11 +54,19 @@ export function OfficeUtilityShowcase() {
     }
   };
 
-  // Filter our target products
-  const workspaceProducts = ACCESSORY_KEYS.map((key) => ({
-    key,
-    ...PRODUCTS[key]
-  })).filter(p => p.title !== undefined);
+  if (loading) {
+    return (
+      <section className="py-24 bg-[#fafafa] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-[460px] rounded-2xl bg-gray-250 animate-pulse border border-gray-300" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-24 bg-[#fafafa] relative overflow-hidden">
@@ -67,7 +95,7 @@ export function OfficeUtilityShowcase() {
 
         {/* Editorial Product Cards Layout */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {workspaceProducts.map((prod, idx) => {
+          {products.map((prod, idx) => {
             const isShortlisted = mounted && isInShortlist(prod.title);
             const mainImg = prod.images[0];
 
@@ -103,7 +131,7 @@ export function OfficeUtilityShowcase() {
                       >
                         <div className="space-y-2 mb-2">
                           <span className="text-[9px] font-extrabold uppercase tracking-widest text-red-400 block border-b border-white/10 pb-1">Tech Specs:</span>
-                          {prod.specs.slice(0, 3).map((sp) => (
+                          {prod.specs.slice(0, 3).map((sp: any) => (
                             <div key={sp.label} className="flex justify-between text-[10px] font-semibold text-gray-200">
                               <span className="text-gray-400 font-bold uppercase tracking-wider">{sp.label}:</span>
                               <span>{sp.value}</span>
@@ -143,7 +171,7 @@ export function OfficeUtilityShowcase() {
 
                   {/* Customization Bullet List */}
                   <div className="py-3 border-y border-gray-100 flex flex-wrap gap-2">
-                    {prod.customizations.slice(0, 2).map((custom) => (
+                    {prod.customizations.slice(0, 2).map((custom: string) => (
                       <span 
                         key={custom} 
                         className="text-[9px] font-extrabold text-gray-500 uppercase tracking-wider bg-gray-100 px-2 py-0.5 rounded"

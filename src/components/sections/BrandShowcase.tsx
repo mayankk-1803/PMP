@@ -18,6 +18,7 @@ interface BrandRecord {
   logo?: string;
   industry?: string;
   category?: string;
+  description?: string;
 }
 
 export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
@@ -62,13 +63,19 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: (index % 5) * 0.03 }}
-              className="h-full min-h-[190px] rounded-xl bg-white border border-black/5 shadow-sm p-5 hover:-translate-y-1 hover:shadow-lg transition-all text-left flex flex-col justify-between"
+              className="h-full min-h-[220px] rounded-xl bg-white border border-black/5 shadow-sm p-5 hover:-translate-y-1 hover:shadow-lg transition-all text-left flex flex-col justify-between"
             >
-              <BrandLogo brand={brand} className="mb-5 h-20 md:h-24" />
+              <BrandLogo brand={brand} className="mb-4 h-16 md:h-20" />
               <div>
                 <h3 className="text-sm md:text-base font-black text-gray-950">{brand.name}</h3>
-                <p className="text-[10px] font-extrabold uppercase tracking-widest text-red-600 mt-1">{brand.industry || brand.slug}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-1">{brand.category}</p>
+                <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                  <span className="text-[9px] font-extrabold uppercase tracking-wider text-red-600">{brand.industry || brand.slug}</span>
+                  <span className="text-[9px] text-gray-300">&bull;</span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400">{brand.category}</span>
+                </div>
+                {brand.description && (
+                  <p className="text-[11px] text-gray-500 mt-2 line-clamp-2 leading-relaxed">{brand.description}</p>
+                )}
               </div>
             </motion.div>
           ))}
