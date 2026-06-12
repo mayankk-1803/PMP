@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-06-12T09:18:44.896Z",
+  "categories": {
+    "collection": "categories",
+    "updated": 10,
+    "skipped": 0,
+    "failed": 0,
+    "failures": []
+  },
+  "subcategories": {
+    "collection": "subcategories",
+    "updated": 49,
+    "skipped": 0,
+    "failed": 0,
+    "failures": []
+  }
+}

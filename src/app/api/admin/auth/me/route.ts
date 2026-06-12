@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { verifyAdminAccessToken } from "@/lib/admin/apiAuth";
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -10,22 +10,17 @@ export async function GET() {
     return NextResponse.json({ success: false, message: "Not authenticated" }, { status: 401 });
   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "development-access-secret") as {
-      sub: string;
-      role: string;
-      email?: string;
-    };
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        id: decoded.sub,
-        email: decoded.email || "pmpadmin@gmail.com",
-        role: decoded.role,
-      },
-    });
-  } catch {
+  const decoded = verifyAdminAccessToken(token);
+  if (!decoded) {
     return NextResponse.json({ success: false, message: "Invalid session" }, { status: 401 });
   }
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      id: decoded.sub,
+      email: decoded.email || "pmpadmin@gmail.com",
+      role: decoded.role,
+    },
+  });
 }

@@ -1,0 +1,78 @@
+{
+  "startedAt": "2026-06-12T09:23:01.536Z",
+  "baseUrl": "http://127.0.0.1:3001",
+  "lifecycle": {
+    "upload1": {
+      "publicId": "pacmyproduct/products/p39qxwmmbxxmdtlivnqb",
+      "url": "https://res.cloudinary.com/dncupx9ul/image/upload/v1781256183/pacmyproduct/products/p39qxwmmbxxmdtlivnqb.jpg",
+      "exists": true
+    },
+    "create": {
+      "apiStatus": 201,
+      "apiOk": true,
+      "savedInMongo": true,
+      "cloudinaryPublicIdSaved": true,
+      "galleryPublicIdsSaved": true,
+      "assetExists": true,
+      "frontend": {
+        "status": 200,
+        "visible": true,
+        "imageReferenceVisible": true
+      },
+      "activityLogs": 6
+    },
+    "upload2": {
+      "publicId": "pacmyproduct/products/c8q55h86z4e2shp0v5jr",
+      "url": "https://res.cloudinary.com/dncupx9ul/image/upload/v1781256187/pacmyproduct/products/c8q55h86z4e2shp0v5jr.jpg",
+      "exists": true
+    },
+    "replace": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "newPublicIdSaved": true,
+      "galleryPublicIdsSaved": true,
+      "oldAssetDeleted": true,
+      "newAssetExists": true,
+      "frontend": {
+        "status": 200,
+        "visible": true,
+        "imageReferenceVisible": true
+      },
+      "activityLogs": 2
+    },
+    "softDelete": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "remainsInMongo": true,
+      "isDeleted": true,
+      "assetRemains": true,
+      "frontend": {
+        "status": 200,
+        "visible": false,
+        "imageReferenceVisible": false
+      },
+      "activityLogs": 4
+    },
+    "restore": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "mongoRestored": true,
+      "frontend": {
+        "status": 200,
+        "visible": true,
+        "imageReferenceVisible": true
+      },
+      "activityLogs": 4
+    },
+    "permanentDelete": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "mongoRemoved": true,
+      "activeAssetDeleted": true,
+      "oldAssetStillDeleted": true,
+      "activityLogs": 6
+    }
+  },
+  "cleanup": {},
+  "completedAt": "2026-06-12T09:23:15.996Z"
+}

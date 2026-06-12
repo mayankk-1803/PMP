@@ -3,49 +3,134 @@ import type { ProductRecord } from "@/lib/admin/types";
 import { realCatalogImage } from "@/lib/catalogImages";
 import { localCatalogImage } from "@/lib/localCatalogImages";
 import { connectMongoDB } from "@/lib/mongodb";
+import { destroyCloudinaryAssets, uniquePublicIds } from "@/lib/admin/cloudinaryLifecycle";
 import { ProductModel } from "@/models/cmsModels";
 
-const SUPPLEMENTAL_CATALOG_PRODUCTS: ProductRecord[] = [
-  {
-    id: "supp_christmas_kits",
-    title: "Christmas Kits",
-    slug: "christmas-kits",
-    description: "Christmas gourmet hamper with cookies, cocoa, candles, ornaments, greeting card, and winter-themed premium packaging for corporate gifting.",
-    shortDescription: "Christmas kits for branded festive corporate gifting.",
-    category: "festive-hampers",
-    subcategory: "christmas-kits",
-    brand: "PacMyProduct",
-    featuredImage: "/images/christmaskit.png",
-    galleryImages: ["/images/christmaskit.png"],
-    images: ["/images/christmaskit.png"],
-    features: ["Logo Branding", "Bulk Packaging", "Corporate Customization"],
-    specifications: {},
-    tags: ["festive-hampers", "christmas-kits"],
-    moq: 50,
-    featured: true,
-    active: true,
-    createdAt: "2026-06-08T00:00:00.000Z",
-    updatedAt: "2026-06-08T00:00:00.000Z",
-  },
-];
-
-const withSupplementalProducts = (products: ProductRecord[]) => {
-  const existingSlugs = new Set(products.map((product) => product.slug));
-  return [
-    ...SUPPLEMENTAL_CATALOG_PRODUCTS.filter((product) => !existingSlugs.has(product.slug)),
-    ...products,
-  ];
-};
-
 export function listProducts(): ProductRecord[] {
-  return withSupplementalProducts(listRecords("products").filter((product) => product.active));
+  return listRecords("products").filter((product) => product.active);
 }
 
 export async function listAllProducts(): Promise<ProductRecord[]> {
   if (!process.env.MONGODB_URI) return listRecords("products");
   await connectMongoDB();
-  const products = await ProductModel.find({}).sort({ createdAt: -1 }).lean<any[]>();
+  const products = await ProductModel.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 }).lean<any[]>();
   return products.map(mapMongoProduct);
+}
+
+export async function searchProducts(options: {
+  search?: string;
+  category?: string;
+  subcategory?: string;
+  brand?: string;
+  active?: string;
+  featured?: string;
+  sortBy?: string;
+  page?: number;
+  limit?: number;
+}) {
+  await connectMongoDB();
+
+  const page = Math.max(1, Number(options.page) || 1);
+  const limit = Math.min(100, Math.max(1, Number(options.limit) || 20));
+  const query: Record<string, any> = { isDeleted: { $ne: true } };
+
+  if (options.search) {
+    query.$text = { $search: options.search };
+  }
+  if (options.category) query.category = options.category;
+  if (options.subcategory) query.subcategory = options.subcategory;
+  if (options.brand) query.brand = options.brand;
+  if (options.active === "true") query.status = { $ne: "HIDDEN" };
+  if (options.active === "false") query.status = "HIDDEN";
+  if (options.featured === "true") query.featured = true;
+  if (options.featured === "false") query.featured = { $ne: true };
+
+  const sortMap: Record<string, Record<string, 1 | -1>> = {
+    name: { title: 1, name: 1 },
+    oldest: { createdAt: 1 },
+    moq: { moq: 1 },
+    price: { price: 1 },
+    order: { order: 1, createdAt: -1 },
+    newest: { createdAt: -1 },
+  };
+  const sort = sortMap[options.sortBy || "newest"] || sortMap.newest;
+  const projection = options.search ? { score: { $meta: "textScore" } } : undefined;
+  const mongoSort: any = options.search && !options.sortBy ? { score: { $meta: "textScore" }, createdAt: -1 } : sort;
+
+  const [products, total] = await Promise.all([
+    ProductModel.find(query, projection)
+      .sort(mongoSort)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean<any[]>(),
+    ProductModel.countDocuments(query),
+  ]);
+
+  return {
+    data: products.map(mapMongoProduct),
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.max(1, Math.ceil(total / limit)),
+    },
+  };
+}
+
+export async function searchCatalogProducts(options: {
+  search?: string;
+  category?: string;
+  subcategory?: string;
+  brand?: string;
+  featured?: string;
+  sortBy?: string;
+  page?: number;
+  limit?: number;
+}) {
+  await connectMongoDB();
+
+  const page = Math.max(1, Number(options.page) || 1);
+  const limit = Math.min(100, Math.max(1, Number(options.limit) || 100));
+  const query: Record<string, any> = { status: "PUBLISHED", isDeleted: { $ne: true } };
+
+  if (options.search) query.$text = { $search: options.search };
+  const activeFilter = options.subcategory || options.category;
+  if (activeFilter && activeFilter !== "all") {
+    query.$and = [{ $or: [{ category: activeFilter }, { subcategory: activeFilter }] }];
+  }
+  if (options.brand) query.brand = options.brand;
+  if (options.featured === "true") query.featured = true;
+  if (options.featured === "false") query.featured = { $ne: true };
+
+  const sortMap: Record<string, Record<string, 1 | -1>> = {
+    name: { title: 1, name: 1 },
+    oldest: { createdAt: 1 },
+    moq: { moq: 1 },
+    price: { price: 1 },
+    order: { order: 1, createdAt: -1 },
+    newest: { createdAt: -1 },
+  };
+  const projection = options.search ? { score: { $meta: "textScore" } } : undefined;
+  const sort: any = options.search && !options.sortBy ? { score: { $meta: "textScore" }, createdAt: -1 } : sortMap[options.sortBy || "order"] || sortMap.order;
+
+  const [products, total] = await Promise.all([
+    ProductModel.find(query, projection)
+      .sort(sort)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean<any[]>(),
+    ProductModel.countDocuments(query),
+  ]);
+
+  return {
+    data: products.map(mapMongoProduct),
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.max(1, Math.ceil(total / limit)),
+    },
+  };
 }
 
 export function getProductBySlug(slug: string): ProductRecord | null {
@@ -84,13 +169,18 @@ const mapMongoProduct = (product: any): ProductRecord => {
     brand: product.brand,
     featuredImage: matchedImage,
     galleryImages: images,
+    cloudinaryPublicId: product.cloudinaryPublicId,
+    galleryPublicIds: product.galleryPublicIds || [],
     images,
     features: product.features || [],
     specifications: normalizeSpecifications(product.specifications),
     tags: product.tags || [],
     moq: product.moq || 1,
+    price: product.price,
     featured: Boolean(product.featured),
     active: product.status !== "HIDDEN",
+    status: product.status,
+    order: product.order || 0,
     createdAt: product.createdAt?.toISOString?.() || new Date().toISOString(),
     updatedAt: product.updatedAt?.toISOString?.() || new Date().toISOString(),
   };
@@ -99,22 +189,26 @@ const mapMongoProduct = (product: any): ProductRecord => {
 export async function getCatalogProducts(): Promise<ProductRecord[]> {
   if (!process.env.MONGODB_URI) return listProducts();
   await connectMongoDB();
-  const products = await ProductModel.find({ status: "PUBLISHED" }).sort({ createdAt: -1 }).lean<any[]>();
-  return withSupplementalProducts(products.map(mapMongoProduct));
+  const products = await ProductModel.find({ status: "PUBLISHED", isDeleted: { $ne: true } }).sort({ order: 1, createdAt: -1 }).lean<any[]>();
+  return products.map(mapMongoProduct);
 }
 
 export async function getCatalogProductBySlug(slug: string): Promise<ProductRecord | null> {
-  const supplementalProduct = SUPPLEMENTAL_CATALOG_PRODUCTS.find((product) => product.slug === slug);
-  if (!process.env.MONGODB_URI) return getProductBySlug(slug) ?? supplementalProduct ?? null;
+  if (!process.env.MONGODB_URI) return getProductBySlug(slug);
   await connectMongoDB();
-  const product = await ProductModel.findOne({ slug, status: "PUBLISHED" }).lean<any>();
-  return product ? mapMongoProduct(product) : supplementalProduct ?? null;
+  const product = await ProductModel.findOne({ slug, status: "PUBLISHED", isDeleted: { $ne: true } }).lean<any>();
+  return product ? mapMongoProduct(product) : null;
 }
 
 export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt" | "updatedAt">) {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
     const images = input.galleryImages?.length ? input.galleryImages : input.images ?? [];
+    const galleryPublicIds = input.galleryPublicIds?.length
+      ? input.galleryPublicIds
+      : input.cloudinaryPublicId
+        ? [input.cloudinaryPublicId]
+        : [];
     const product = await ProductModel.create({
       name: input.title,
       title: input.title,
@@ -126,14 +220,18 @@ export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt
       brand: input.brand,
       featuredImage: input.featuredImage || images[0],
       galleryImages: images,
+      cloudinaryPublicId: input.cloudinaryPublicId || galleryPublicIds[0],
+      galleryPublicIds,
       images,
       features: input.features,
       specifications: input.specifications,
       tags: input.tags,
       moq: input.moq,
+      price: input.price,
       featured: input.featured,
       status: input.active ? "PUBLISHED" : "HIDDEN",
       active: input.active,
+      order: input.order || 0,
     });
     return mapMongoProduct(product.toObject());
   }
@@ -145,11 +243,18 @@ export async function updateProduct(id: string, patch: Partial<ProductRecord> & 
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
     const images = patch.galleryImages?.length ? patch.galleryImages : patch.images;
+    const galleryPublicIds = patch.galleryPublicIds?.length
+      ? patch.galleryPublicIds
+      : patch.cloudinaryPublicId
+        ? [patch.cloudinaryPublicId]
+        : undefined;
     const update: Record<string, unknown> = {
       ...patch,
       name: patch.title,
       featuredImage: patch.featuredImage || images?.[0],
       galleryImages: images,
+      cloudinaryPublicId: patch.cloudinaryPublicId || galleryPublicIds?.[0],
+      galleryPublicIds,
       status: patch.status ?? (patch.active === false ? "HIDDEN" : patch.active === true ? "PUBLISHED" : undefined),
     };
 
@@ -161,11 +266,26 @@ export async function updateProduct(id: string, patch: Partial<ProductRecord> & 
   return updateRecord("products", id, patch);
 }
 
-export async function deleteProduct(id: string) {
+export async function deleteProduct(id: string, permanent: boolean = false, adminId?: string) {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const result = await ProductModel.deleteOne({ _id: id });
-    return result.deletedCount > 0;
+    if (permanent) {
+      const product = await ProductModel.findById(id).lean<any>();
+      if (product) {
+        await destroyCloudinaryAssets(uniquePublicIds([product.cloudinaryPublicId, ...(product.galleryPublicIds || [])]));
+      }
+      const result = await ProductModel.deleteOne({ _id: id });
+      return result.deletedCount > 0;
+    } else {
+      const result = await ProductModel.findByIdAndUpdate(id, {
+        $set: {
+          isDeleted: true,
+          deletedAt: new Date(),
+          deletedBy: adminId,
+        },
+      });
+      return !!result;
+    }
   }
 
   return deleteRecord("products", id);

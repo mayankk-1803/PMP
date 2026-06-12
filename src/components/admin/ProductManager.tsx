@@ -1,7 +1,9 @@
 "use client";
 
-import { ArrowDown, ArrowUp, ImagePlus, Pencil, Plus, Trash2, UploadCloud, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowDown, ArrowUp, ImagePlus, Pencil, Plus, Trash2, UploadCloud, X, Search, Filter, ArrowLeft, ArrowRight, Loader2, Download, Upload, GripVertical, Check, Eye } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import * as XLSX from "xlsx";
 
 interface ProductRecord {
   id: string;
@@ -14,10 +16,16 @@ interface ProductRecord {
   brand?: string;
   featuredImage?: string;
   galleryImages?: string[];
+  cloudinaryPublicId?: string;
+  galleryPublicIds?: string[];
   images: string[];
   moq: number;
+  price?: number;
   featured: boolean;
   active: boolean;
+  order?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface OptionRecord {
@@ -34,14 +42,17 @@ const emptyProduct = {
   subcategory: "",
   brand: "",
   moq: 50,
+  price: 0,
   status: "PUBLISHED",
   featured: false,
   featuredImage: "",
   galleryImages: [] as string[],
+  cloudinaryPublicId: "",
+  galleryPublicIds: [] as string[],
 };
 
 const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const maxImageSize = 5 * 1024 * 1024;
+const maxImageSize = 5 * 1024 * 1024; // 5MB
 const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 export function ProductManager() {
@@ -49,44 +60,100 @@ export function ProductManager() {
   const [categories, setCategories] = useState<OptionRecord[]>([]);
   const [subcategories, setSubcategories] = useState<OptionRecord[]>([]);
   const [brands, setBrands] = useState<OptionRecord[]>([]);
+  
+  const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  
+  // Advanced Search & Filter States
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [filterSubcategory, setFilterSubcategory] = useState("");
+  const [filterBrand, setFilterBrand] = useState("");
+  const [filterActive, setFilterActive] = useState(""); // "", "true", "false"
+  const [filterFeatured, setFilterFeatured] = useState(""); // "", "true", "false"
+  const [sortBy, setSortBy] = useState("newest"); // name, newest, oldest, moq, price
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  // CRUD States
   const [form, setForm] = useState(emptyProduct);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<ProductRecord | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState<"featured" | "gallery" | null>(null);
+
+  // Image Upload Pending States (Preview before upload)
+  const [featuredFile, setFeaturedFile] = useState<File | null>(null);
+  const [featuredPreviewUrl, setFeaturedPreviewUrl] = useState("");
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
+  
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
 
+  // Import / Export Tool States
+  const [importExportModalOpen, setImportExportModalOpen] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [importPreview, setImportPreview] = useState<any[]>([]);
+  const [importingType, setImportingType] = useState("products"); // products, brands, categories
+  const [importSummary, setImportSummary] = useState<any | null>(null);
+  const [importErrors, setImportErrors] = useState<string[]>([]);
+  const [importLoading, setImportLoading] = useState(false);
+
+  // Export filters
+  const [exportFormat, setExportFormat] = useState("csv"); // csv, xlsx
+  const [exportActiveOnly, setExportActiveOnly] = useState(false);
+  const [exportCategory, setExportCategory] = useState("");
+  const [exportStartDate, setExportStartDate] = useState("");
+  const [exportEndDate, setExportEndDate] = useState("");
+
+  const featuredFileInputRef = useRef<HTMLInputElement>(null);
+  const galleryFileInputRef = useRef<HTMLInputElement>(null);
+  const importFileInputRef = useRef<HTMLInputElement>(null);
+
   const load = async () => {
     setLoading(true);
-    const [productRes, categoryRes, subcategoryRes, brandRes] = await Promise.all([
-      fetch("/api/admin/products"),
-      fetch("/api/catalog/categories"),
-      fetch("/api/catalog/subcategories"),
-      fetch("/api/catalog/brands"),
-    ]);
-    const [productData, categoryData, subcategoryData, brandData] = await Promise.all([
-      productRes.json(),
-      categoryRes.json(),
-      subcategoryRes.json(),
-      brandRes.json(),
-    ]);
-    setProducts(productData.data ?? []);
-    setCategories(categoryData.data ?? []);
-    setSubcategories(subcategoryData.data ?? []);
-    setBrands(brandData.data ?? []);
-    setLoading(false);
+    try {
+      const [productRes, categoryRes, subcategoryRes, brandRes] = await Promise.all([
+        fetch("/api/admin/products"),
+        fetch("/api/catalog/categories"),
+        fetch("/api/catalog/subcategories"),
+        fetch("/api/catalog/brands"),
+      ]);
+      const [productData, categoryData, subcategoryData, brandData] = await Promise.all([
+        productRes.json(),
+        categoryRes.json(),
+        subcategoryRes.json(),
+        brandRes.json(),
+      ]);
+
+      // Sort products by order field if available, else date
+      const fetchedProducts = productData.data ?? [];
+      fetchedProducts.sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
+
+      setProducts(fetchedProducts);
+      setCategories(categoryData.data ?? []);
+      setSubcategories(subcategoryData.data ?? []);
+      setBrands(brandData.data ?? []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
+    setMounted(true);
     load();
   }, []);
 
   const openCreate = () => {
     setEditingId(null);
     setForm(emptyProduct);
+    setFeaturedFile(null);
+    setFeaturedPreviewUrl("");
+    setGalleryFiles([]);
+    setGalleryPreviewUrls([]);
     setUploadError("");
     setUploadSuccess("");
     setModalOpen(true);
@@ -95,6 +162,7 @@ export function ProductManager() {
   const openEdit = (product: ProductRecord) => {
     const images = product.galleryImages?.length ? product.galleryImages : product.images || [];
     const featuredImage = product.featuredImage || images[0] || "";
+    
     setEditingId(product.id);
     setForm({
       title: product.title,
@@ -105,17 +173,25 @@ export function ProductManager() {
       subcategory: product.subcategory,
       brand: product.brand || "",
       moq: product.moq,
+      price: product.price || 0,
       status: product.active ? "PUBLISHED" : "HIDDEN",
       featured: product.featured,
       featuredImage,
       galleryImages: images.filter((image) => image !== featuredImage),
+      cloudinaryPublicId: product.cloudinaryPublicId || "",
+      galleryPublicIds: product.galleryPublicIds || [],
     });
+
+    setFeaturedFile(null);
+    setFeaturedPreviewUrl("");
+    setGalleryFiles([]);
+    setGalleryPreviewUrls([]);
     setUploadError("");
     setUploadSuccess("");
     setModalOpen(true);
   };
 
-  const updateForm = (field: keyof typeof emptyProduct, value: string | boolean | number | string[]) => {
+  const updateForm = (field: keyof typeof emptyProduct, value: any) => {
     setForm((current) => {
       const next = { ...current, [field]: value };
       if (field === "title" && !editingId) next.slug = slugify(String(value));
@@ -123,24 +199,66 @@ export function ProductManager() {
     });
   };
 
-  const validateFiles = (files: File[]) => {
-    const invalid = files.find((file) => !allowedTypes.includes(file.type));
-    if (invalid) return "Only jpg, jpeg, png, and webp images are allowed.";
-    const tooLarge = files.find((file) => file.size > maxImageSize);
-    if (tooLarge) return "Each image must be 5MB or smaller.";
-    return "";
-  };
-
-  const uploadFiles = async (files: File[], target: "featured" | "gallery") => {
+  // 1. IMAGE PREVIEW BEFORE UPLOAD HANDLERS
+  const handleFeaturedImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUploadError("");
     setUploadSuccess("");
-    const validationError = validateFiles(files);
-    if (validationError) {
-      setUploadError(validationError);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError("Only jpg, jpeg, png, and webp images are allowed.");
+      return;
+    }
+    if (file.size > maxImageSize) {
+      setUploadError("The image must be 5MB or smaller.");
       return;
     }
 
-    setUploading(target);
+    setFeaturedFile(file);
+    setFeaturedPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUploadError("");
+    setUploadSuccess("");
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    const validFiles: File[] = [];
+    const newUrls: string[] = [];
+
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        setUploadError("Only jpg, jpeg, png, and webp images are allowed.");
+        continue;
+      }
+      if (file.size > maxImageSize) {
+        setUploadError("Each gallery image must be 5MB or smaller.");
+        continue;
+      }
+      validFiles.push(file);
+      newUrls.push(URL.createObjectURL(file));
+    }
+
+    setGalleryFiles((prev) => [...prev, ...validFiles]);
+    setGalleryPreviewUrls((prev) => [...prev, ...newUrls]);
+  };
+
+  const removePendingFeatured = () => {
+    setFeaturedFile(null);
+    setFeaturedPreviewUrl("");
+    if (featuredFileInputRef.current) featuredFileInputRef.current.value = "";
+  };
+
+  const removePendingGallery = (index: number) => {
+    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
+    setGalleryPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Helper function to upload files to Cloudinary and get URLs
+  const uploadFilesToServer = async (files: File[]): Promise<Array<{ url: string; publicId: string }>> => {
+    if (files.length === 0) return [];
     const body = new FormData();
     files.forEach((file) => body.append("files", file));
 
@@ -149,50 +267,89 @@ export function ProductManager() {
       body,
     });
     const result = await response.json();
-    setUploading(null);
-
     if (!response.ok || !result.success) {
-      setUploadError(result.message || "Upload failed.");
-      return;
+      throw new Error(result.message || "Upload failed");
     }
-
-    const urls = result.data.map((item: { secure_url: string }) => item.secure_url);
-    if (target === "featured") {
-      updateForm("featuredImage", urls[0]);
-    } else {
-      updateForm("galleryImages", [...form.galleryImages, ...urls]);
-    }
-    setUploadSuccess(`${urls.length} image${urls.length > 1 ? "s" : ""} uploaded successfully.`);
+    return result.data.map((item: any) => ({ url: item.secure_url, publicId: item.public_id }));
   };
 
   const saveProduct = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSaving(true);
-    const galleryImages = [form.featuredImage, ...form.galleryImages].filter(Boolean);
-    const payload = {
-      name: form.title,
-      title: form.title,
-      slug: form.slug,
-      description: form.description,
-      shortDescription: form.shortDescription,
-      category: form.category,
-      subcategory: form.subcategory,
-      brand: form.brand,
-      moq: Number(form.moq),
-      status: form.status,
-      featured: form.featured,
-      featuredImage: form.featuredImage,
-      galleryImages,
-    };
+    setUploadError("");
+    setUploadSuccess("");
 
-    await fetch(editingId ? `/api/admin/products/${editingId}` : "/api/admin/products", {
-      method: editingId ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    setSaving(false);
-    setModalOpen(false);
-    await load();
+    try {
+      // 1. Upload featured image if pending
+      let finalFeaturedImage = form.featuredImage;
+      let finalCloudinaryPublicId = form.cloudinaryPublicId;
+      if (featuredFile) {
+        const [uploaded] = await uploadFilesToServer([featuredFile]);
+        finalFeaturedImage = uploaded.url;
+        finalCloudinaryPublicId = uploaded.publicId;
+      }
+
+      // 2. Upload gallery images if pending
+      let uploadedGallery: Array<{ url: string; publicId: string }> = [];
+      if (galleryFiles.length > 0) {
+        uploadedGallery = await uploadFilesToServer(galleryFiles);
+      }
+
+      const finalGalleryImages = [
+        finalFeaturedImage,
+        ...form.galleryImages,
+        ...uploadedGallery.map((item) => item.url)
+      ].filter(Boolean);
+      const existingGalleryPublicIds = featuredFile
+        ? form.galleryPublicIds.filter((publicId) => publicId !== form.cloudinaryPublicId)
+        : form.galleryPublicIds;
+      const finalGalleryPublicIds = [
+        finalCloudinaryPublicId,
+        ...existingGalleryPublicIds,
+        ...uploadedGallery.map((item) => item.publicId),
+      ].filter(Boolean);
+
+      const payload = {
+        name: form.title,
+        title: form.title,
+        slug: form.slug,
+        description: form.description,
+        shortDescription: form.shortDescription,
+        category: form.category,
+        subcategory: form.subcategory,
+        brand: form.brand,
+        moq: Number(form.moq),
+        price: Number(form.price),
+        status: form.status,
+        featured: form.featured,
+        featuredImage: finalFeaturedImage,
+        galleryImages: finalGalleryImages,
+        cloudinaryPublicId: finalCloudinaryPublicId,
+        galleryPublicIds: finalGalleryPublicIds,
+      };
+
+      const res = await fetch(editingId ? `/api/admin/products/${editingId}` : "/api/admin/products", {
+        method: editingId ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || "Failed to save product record");
+      }
+
+      setSaving(false);
+      setModalOpen(false);
+      setFeaturedFile(null);
+      setFeaturedPreviewUrl("");
+      setGalleryFiles([]);
+      setGalleryPreviewUrls([]);
+      await load();
+    } catch (err: any) {
+      setUploadError(err.message || "An error occurred while saving the product.");
+      setSaving(false);
+    }
   };
 
   const deleteProduct = async () => {
@@ -202,226 +359,765 @@ export function ProductManager() {
     await load();
   };
 
-  const removeGalleryImage = (url: string) => {
-    updateForm("galleryImages", form.galleryImages.filter((image) => image !== url));
+  // 2. DRAG & DROP REORDER PERSISTENCE
+  const onDragEnd = async (result: any) => {
+    if (!result.destination) return;
+    const reordered = Array.from(filteredProducts);
+    const [removed] = reordered.splice(result.source.index, 1);
+    reordered.splice(result.destination.index, 0, removed);
+
+    // Save instant local frontend state
+    const updatedProductsMap = new Map(reordered.map((item, index) => [item.id, index + 1]));
+    const allUpdated = products.map((prod) => {
+      if (updatedProductsMap.has(prod.id)) {
+        return { ...prod, order: updatedProductsMap.get(prod.id) };
+      }
+      return prod;
+    });
+    allUpdated.sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
+    setProducts(allUpdated);
+
+    // Send ordering list to server
+    const ids = reordered.map((p) => p.id);
+    await fetch("/api/admin/catalog/reorder", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ entityType: "Product", ids }),
+    });
   };
 
-  const moveGalleryImage = (index: number, direction: -1 | 1) => {
-    const nextIndex = index + direction;
-    if (nextIndex < 0 || nextIndex >= form.galleryImages.length) return;
-    const next = [...form.galleryImages];
-    [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
-    updateForm("galleryImages", next);
+  // 3. SPREADSHEET IMPORT & EXPORT HANDLERS
+  const handleImportFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImportSummary(null);
+    setImportErrors([]);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = new Uint8Array(event.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const parsedData = XLSX.utils.sheet_to_json<any>(worksheet);
+        setImportPreview(parsedData);
+        setImportFile(file);
+      } catch (err) {
+        alert("Failed to parse file. Make sure it is a valid CSV or Excel document.");
+      }
+    };
+    reader.readAsArrayBuffer(file);
   };
+
+  const submitImport = async () => {
+    if (!importFile) return;
+    setImportLoading(true);
+    setImportSummary(null);
+    setImportErrors([]);
+
+    const body = new FormData();
+    body.append("file", importFile);
+    body.append("entityType", importingType);
+
+    try {
+      const res = await fetch("/api/admin/catalog/import", {
+        method: "POST",
+        body,
+      });
+      const result = await res.json();
+      if (result.success) {
+        setImportSummary(result.summary);
+        setImportErrors(result.errors || []);
+        if (result.summary.created > 0 || result.summary.updated > 0) {
+          await load();
+        }
+      } else {
+        setImportErrors([result.message || "Failed to process import file"]);
+      }
+    } catch (err) {
+      setImportErrors(["Connection error while submitting spreadsheet data."]);
+    } finally {
+      setImportLoading(false);
+    }
+  };
+
+  const submitExport = () => {
+    const params = new URLSearchParams({
+      entityType: "products",
+      format: exportFormat,
+      activeOnly: String(exportActiveOnly),
+      category: exportCategory,
+      startDate: exportStartDate,
+      endDate: exportEndDate,
+    });
+
+    window.open(`/api/admin/catalog/export?${params.toString()}`);
+  };
+
+  // 4. FILTER, SEARCH, SORT, PAGINATION PROCESSOR
+  const filteredProducts = products.filter((prod) => {
+    const title = prod.title || "";
+    const slug = prod.slug || "";
+    const brand = prod.brand || "";
+
+    const matchesSearch =
+      !searchQuery ||
+      title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      brand.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory = !filterCategory || prod.category === filterCategory;
+    const matchesSubcategory = !filterSubcategory || prod.subcategory === filterSubcategory;
+    const matchesBrand = !filterBrand || prod.brand === filterBrand;
+    const matchesActive =
+      !filterActive ||
+      (filterActive === "true" && prod.active) ||
+      (filterActive === "false" && !prod.active);
+    const matchesFeatured =
+      !filterFeatured ||
+      (filterFeatured === "true" && prod.featured) ||
+      (filterFeatured === "false" && !prod.featured);
+
+    return matchesSearch && matchesCategory && matchesSubcategory && matchesBrand && matchesActive && matchesFeatured;
+  });
+
+  // Sorting
+  filteredProducts.sort((a, b) => {
+    if (sortBy === "name") return a.title.localeCompare(b.title);
+    if (sortBy === "oldest") return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    if (sortBy === "moq") return a.moq - b.moq;
+    if (sortBy === "price") return (a.price || 0) - (b.price || 0);
+    // default/newest
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  // Pagination bounds
+  const totalItems = filteredProducts.length;
+  const totalPages = Math.ceil(totalItems / limit) || 1;
+  const paginatedProducts = filteredProducts.slice((page - 1) * limit, page * limit);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, filterCategory, filterSubcategory, filterBrand, filterActive, filterFeatured, sortBy, limit]);
+
+  if (!mounted) return null;
 
   return (
     <div className="space-y-5">
-      <div className="flex justify-end">
-        <button onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-black text-white hover:bg-red-500">
-          <Plus className="h-4 w-4" />
-          Add Product
+      
+      {/* Action Header Button Controls */}
+      <div className="flex flex-wrap justify-between items-center gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div className="flex gap-2">
+          <button onClick={() => setImportExportModalOpen(true)} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-black uppercase text-slate-700 hover:bg-slate-50 shadow-sm">
+            <Upload className="h-4 w-4" /> Import / Export Tools
+          </button>
+        </div>
+        <button onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-xs font-black uppercase text-white hover:bg-red-500 shadow-md">
+          <Plus className="h-4 w-4" /> Add Product
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[1040px] border-collapse text-left text-sm">
-            <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
-              <tr>
-                {["Thumbnail", "Product", "Slug", "Category", "Subcategory", "Brand", "MOQ", "Active", "Actions"].map((column) => (
-                  <th key={column} className="px-4 py-3 font-bold">{column}</th>
+      {/* Filters & Search Panel */}
+      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6 text-left">
+          
+          {/* Search Box */}
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Search Catalog</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search by Title, Slug, SKU, Brand..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 py-2.5 text-sm outline-none focus:border-red-400"
+              />
+            </div>
+          </div>
+
+          {/* Category Filter */}
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Category</label>
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400"
+            >
+              <option value="">All Categories</option>
+              {categories.map((c) => (
+                <option key={c.slug} value={c.slug}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Subcategory Filter */}
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Subcategory</label>
+            <select
+              value={filterSubcategory}
+              onChange={(e) => setFilterSubcategory(e.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400"
+            >
+              <option value="">All Subcategories</option>
+              {subcategories
+                .filter((sub: any) => !filterCategory || sub.category === filterCategory)
+                .map((s) => (
+                  <option key={s.slug} value={s.slug}>{s.name}</option>
                 ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {loading ? (
-                <tr><td className="px-4 py-5 text-slate-500" colSpan={9}>Loading products from MongoDB...</td></tr>
-              ) : products.length === 0 ? (
-                <tr><td className="px-4 py-5 text-slate-500" colSpan={9}>No products yet.</td></tr>
-              ) : (
-                products.map((product) => (
-                  <tr key={product.id} className="text-slate-700">
-                    <td className="px-4 py-3">
-                      {product.images?.[0] ? <img src={product.images[0]} alt={product.title} className="h-12 w-12 rounded-md object-cover" /> : <div className="flex h-12 w-12 items-center justify-center rounded-md bg-slate-100 text-slate-400"><ImagePlus className="h-4 w-4" /></div>}
-                    </td>
-                    <td className="px-4 py-3 font-bold">{product.title}</td>
-                    <td className="px-4 py-3">{product.slug}</td>
-                    <td className="px-4 py-3">{product.category}</td>
-                    <td className="px-4 py-3">{product.subcategory}</td>
-                    <td className="px-4 py-3">{product.brand}</td>
-                    <td className="px-4 py-3">{product.moq}</td>
-                    <td className="px-4 py-3">{product.active ? "Yes" : "No"}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2">
-                        <button onClick={() => openEdit(product)} className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50">
-                          <Pencil className="h-3 w-3" /> Edit
-                        </button>
-                        <button onClick={() => setDeleteTarget(product)} className="inline-flex items-center gap-1 rounded-md border border-red-200 px-2 py-1 text-xs font-bold text-red-600 hover:bg-red-50">
-                          <Trash2 className="h-3 w-3" /> Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+            </select>
+          </div>
+
+          {/* Brand Filter */}
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Brand</label>
+            <select
+              value={filterBrand}
+              onChange={(e) => setFilterBrand(e.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400"
+            >
+              <option value="">All Brands</option>
+              {brands.map((b) => (
+                <option key={b.slug} value={b.name}>{b.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Active status */}
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Status</label>
+            <select
+              value={filterActive}
+              onChange={(e) => setFilterActive(e.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400"
+            >
+              <option value="">All Statuses</option>
+              <option value="true">Active Only</option>
+              <option value="false">Inactive Only</option>
+            </select>
+          </div>
+
+        </div>
+
+        {/* Sorting and Page limits control */}
+        <div className="flex flex-wrap justify-between items-center pt-3 border-t border-slate-100 gap-3 text-left">
+          <div className="flex gap-4">
+            
+            {/* Sorting */}
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 mr-2">Sort:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-700 outline-none"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="name">Name (A-Z)</option>
+                <option value="moq">MOQ (Low to High)</option>
+                <option value="price">Starting Price</option>
+              </select>
+            </div>
+
+            {/* Limit Selector */}
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 mr-2">Rows:</span>
+              <select
+                value={limit}
+                onChange={(e) => setLimit(Number(e.target.value))}
+                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-700 outline-none"
+              >
+                <option value={10}>10 rows</option>
+                <option value={25}>25 rows</option>
+                <option value={50}>50 rows</option>
+              </select>
+            </div>
+
+            {/* Featured filter */}
+            <div>
+              <label className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-bold text-slate-700 pt-1">
+                <input
+                  type="checkbox"
+                  checked={filterFeatured === "true"}
+                  onChange={(e) => setFilterFeatured(e.target.checked ? "true" : "")}
+                  className="rounded border-slate-350"
+                />
+                Featured Items Only
+              </label>
+            </div>
+
+          </div>
+
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{totalItems} Products found</span>
         </div>
       </div>
 
+      {/* Drag and Drop sorting context layout */}
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="overflow-x-auto">
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="products-list">
+              {(provided) => (
+                <table className="w-full min-w-[1040px] border-collapse text-left text-sm" ref={provided.innerRef} {...provided.droppableProps}>
+                  <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-250">
+                    <tr>
+                      <th className="px-4 py-3 font-bold w-12 text-center">Move</th>
+                      <th className="px-4 py-3 font-bold">Thumbnail</th>
+                      <th className="px-4 py-3 font-bold">Product Title</th>
+                      <th className="px-4 py-3 font-bold">Slug/SKU</th>
+                      <th className="px-4 py-3 font-bold">Category</th>
+                      <th className="px-4 py-3 font-bold">Subcategory</th>
+                      <th className="px-4 py-3 font-bold">Brand</th>
+                      <th className="px-4 py-3 font-bold">MOQ</th>
+                      <th className="px-4 py-3 font-bold">Starting Price</th>
+                      <th className="px-4 py-3 font-bold">Status</th>
+                      <th className="px-4 py-3 font-bold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {loading ? (
+                      <tr><td className="px-4 py-8 text-center text-slate-500" colSpan={11}><Loader2 className="h-5 w-5 animate-spin mx-auto text-red-600 mb-2" />Loading product catalog database...</td></tr>
+                    ) : paginatedProducts.length === 0 ? (
+                      <tr><td className="px-4 py-8 text-center text-slate-400 font-bold" colSpan={11}>No matching products yet. Create or import spreadsheet rows above.</td></tr>
+                    ) : (
+                      paginatedProducts.map((product, idx) => (
+                        <Draggable key={product.id} draggableId={product.id} index={idx}>
+                          {(dragProvided) => (
+                            <tr ref={dragProvided.innerRef} {...dragProvided.draggableProps} className="text-slate-700 hover:bg-slate-50/40 transition">
+                              <td className="px-4 py-3 text-center" {...dragProvided.dragHandleProps}>
+                                <GripVertical className="h-4 w-4 text-slate-400 hover:text-slate-700 mx-auto cursor-grab" />
+                              </td>
+                              <td className="px-4 py-3">
+                                {product.featuredImage ? (
+                                  <img src={product.featuredImage} alt={product.title} className="h-11 w-11 rounded-lg object-cover border border-slate-150" />
+                                ) : (
+                                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-slate-100 text-slate-400"><ImagePlus className="h-4 w-4" /></div>
+                                )}
+                              </td>
+                              <td className="px-4 py-3 font-bold text-slate-900">{product.title}</td>
+                              <td className="px-4 py-3 text-xs font-mono">{product.slug}</td>
+                              <td className="px-4 py-3"><span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 font-semibold">{product.category}</span></td>
+                              <td className="px-4 py-3 text-slate-500 font-medium">{product.subcategory}</td>
+                              <td className="px-4 py-3 font-semibold text-slate-800">{product.brand || "PacMyProduct"}</td>
+                              <td className="px-4 py-3 font-bold">{product.moq} Units</td>
+                              <td className="px-4 py-3 font-black text-slate-900">₹{product.price || 0}</td>
+                              <td className="px-4 py-3">
+                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${product.active ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
+                                  {product.active ? "Active" : "Hidden"}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3">
+                                <div className="flex gap-2">
+                                  <button onClick={() => openEdit(product)} className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-sm">
+                                    <Pencil className="h-3 w-3" /> Edit
+                                  </button>
+                                  <button onClick={() => setDeleteTarget(product)} className="inline-flex items-center gap-1 rounded-md border border-red-100 bg-white px-2 py-1 text-xs font-bold text-red-600 hover:bg-red-50 shadow-sm">
+                                    <Trash2 className="h-3 w-3" /> Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </Draggable>
+                      ))
+                    )}
+                    {provided.placeholder}
+                  </tbody>
+                </table>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
+
+        {/* Pagination navigation controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between border-t border-slate-200 bg-slate-50 px-5 py-4">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              Showing {(page - 1) * limit + 1} to {Math.min(page * limit, totalItems)} of {totalItems} items
+            </span>
+            <div className="flex gap-2">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" /> Previous
+              </button>
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+              >
+                Next <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Import / Export Spreadsheet Modal */}
+      {importExportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl border border-slate-200 bg-white p-6 text-slate-950 shadow-2xl space-y-6">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <h2 className="text-lg font-black uppercase tracking-wider text-slate-900">Spreadsheet Catalog Manager</h2>
+              <button onClick={() => { setImportExportModalOpen(false); setImportFile(null); setImportPreview([]); setImportSummary(null); }} className="rounded-lg p-1.5 border border-slate-200 hover:bg-slate-100"><X className="h-5 w-5" /></button>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2 text-left">
+              
+              {/* Export Panel */}
+              <div className="space-y-4 rounded-xl border border-slate-200 p-5 bg-slate-50/30">
+                <h3 className="text-sm font-black uppercase tracking-widest text-slate-800 flex items-center gap-2">
+                  <Download className="h-4.5 w-4.5 text-red-600" /> Export Catalog Data
+                </h3>
+                <p className="text-xs text-slate-500">Download active products in CSV or Excel file spreadsheet format.</p>
+
+                <div className="space-y-3">
+                  <label className="block text-xs font-bold text-slate-700">
+                    File Format:
+                    <select value={exportFormat} onChange={(e) => setExportFormat(e.target.value)} className="mt-1.5 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm">
+                      <option value="csv">CSV (Comma Separated Values)</option>
+                      <option value="xlsx">Excel File (.xlsx)</option>
+                    </select>
+                  </label>
+
+                  <label className="block text-xs font-bold text-slate-700">
+                    Category Filter:
+                    <select value={exportCategory} onChange={(e) => setExportCategory(e.target.value)} className="mt-1.5 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm">
+                      <option value="">All Categories</option>
+                      {categories.map((c) => (
+                        <option key={c.slug} value={c.slug}>{c.name}</option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className="block text-xs font-bold text-slate-700">
+                      From Date:
+                      <input type="date" value={exportStartDate} onChange={(e) => setExportStartDate(e.target.value)} className="mt-1.5 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-xs" />
+                    </label>
+                    <label className="block text-xs font-bold text-slate-700">
+                      To Date:
+                      <input type="date" value={exportEndDate} onChange={(e) => setExportEndDate(e.target.value)} className="mt-1.5 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-xs" />
+                    </label>
+                  </div>
+
+                  <label className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer pt-2">
+                    <input type="checkbox" checked={exportActiveOnly} onChange={(e) => setExportActiveOnly(e.target.checked)} className="rounded" />
+                    Active/Published items only
+                  </label>
+                </div>
+
+                <button onClick={submitExport} className="w-full mt-4 bg-slate-900 text-white rounded-lg px-4 py-2.5 text-xs font-black uppercase hover:bg-slate-800 transition">
+                  Export Catalog
+                </button>
+              </div>
+
+              {/* Import Panel */}
+              <div className="space-y-4 rounded-xl border border-slate-200 p-5 bg-slate-50/30">
+                <h3 className="text-sm font-black uppercase tracking-widest text-slate-800 flex items-center gap-2">
+                  <Upload className="h-4.5 w-4.5 text-emerald-600" /> Bulk Import Spreadsheet
+                </h3>
+                <p className="text-xs text-slate-500">Upload CSV or XLSX templates to create or update catalog records in bulk.</p>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-700">1. Download Blank Templates:</span>
+                    <select onChange={(e) => { if (e.target.value) window.open(`/api/admin/catalog/import?template=${e.target.value}`); }} className="rounded-lg border border-slate-250 bg-white px-2 py-1 text-xs font-bold text-slate-700">
+                      <option value="">Download Template...</option>
+                      <option value="products">Products Template</option>
+                      <option value="brands">Brands Template</option>
+                      <option value="categories">Categories Template</option>
+                      <option value="subcategories">Subcategories Template</option>
+                    </select>
+                  </div>
+
+                  <label className="block text-xs font-bold text-slate-700">
+                    2. Import Target Entity:
+                    <select value={importingType} onChange={(e) => { setImportingType(e.target.value); setImportPreview([]); setImportFile(null); }} className="mt-1.5 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm">
+                      <option value="products">Products</option>
+                      <option value="brands">Brands</option>
+                      <option value="categories">Categories</option>
+                      <option value="subcategories">Subcategories</option>
+                    </select>
+                  </label>
+
+                  <div className="border border-dashed border-slate-350 rounded-lg p-4 bg-white flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 transition relative">
+                    <UploadCloud className="h-6 w-6 text-slate-400 mb-2" />
+                    <span className="text-xs font-bold text-slate-900">{importFile ? importFile.name : "Select Spreadsheet File"}</span>
+                    <span className="text-[10px] text-slate-400 mt-1">Supports CSV, XLSX. Max 5MB.</span>
+                    <input ref={importFileInputRef} type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={handleImportFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                  </div>
+                </div>
+
+                {importFile && (
+                  <button onClick={submitImport} disabled={importLoading} className="w-full mt-4 bg-emerald-600 text-white rounded-lg px-4 py-2.5 text-xs font-black uppercase hover:bg-emerald-500 transition disabled:opacity-50">
+                    {importLoading ? "Uploading & Importing..." : "Confirm & Import into MongoDB"}
+                  </button>
+                )}
+              </div>
+
+            </div>
+
+            {/* Import results summary */}
+            {importSummary && (
+              <div className="rounded-xl border border-slate-200 bg-white p-5 text-left space-y-3 shadow-sm">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Import Summary</h4>
+                <div className="grid grid-cols-4 gap-4 text-center">
+                  <div className="rounded-lg bg-emerald-50 p-3"><span className="block text-lg font-black text-emerald-700">{importSummary.created}</span><span className="text-[10px] uppercase font-bold text-slate-500">Created</span></div>
+                  <div className="rounded-lg bg-blue-50 p-3"><span className="block text-lg font-black text-blue-700">{importSummary.updated}</span><span className="text-[10px] uppercase font-bold text-slate-500">Updated</span></div>
+                  <div className="rounded-lg bg-slate-100 p-3"><span className="block text-lg font-black text-slate-600">{importSummary.skipped}</span><span className="text-[10px] uppercase font-bold text-slate-500">Skipped</span></div>
+                  <div className="rounded-lg bg-red-50 p-3"><span className="block text-lg font-black text-red-700">{importSummary.failed}</span><span className="text-[10px] uppercase font-bold text-slate-500">Failed</span></div>
+                </div>
+
+                {importErrors.length > 0 && (
+                  <div className="rounded-lg bg-red-50 border border-red-100 p-3.5 space-y-1.5 text-xs text-red-700 font-semibold max-h-40 overflow-y-auto">
+                    <div className="font-bold text-red-800">Validation Failures / Alerts:</div>
+                    {importErrors.map((err, i) => <div key={i}>&bull; {err}</div>)}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Spreadsheet row preview */}
+            {importPreview.length > 0 && !importSummary && (
+              <div className="rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Previewing Spreadsheet Rows ({importPreview.length}):</span>
+                <div className="max-h-56 overflow-auto border border-slate-150 rounded-lg">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-50 font-bold border-b border-slate-200">
+                      <tr>
+                        {Object.keys(importPreview[0] || {}).slice(0, 6).map((k) => <th key={k} className="px-3 py-2 border-r border-slate-200">{k}</th>)}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-600 font-mono">
+                      {importPreview.slice(0, 10).map((row, i) => (
+                        <tr key={i}>
+                          {Object.values(row).slice(0, 6).map((v: any, j) => <td key={j} className="px-3 py-2 border-r border-slate-100 truncate max-w-[120px]">{String(v)}</td>)}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {importPreview.length > 10 && <div className="text-center text-[10px] text-slate-400 font-bold p-2 bg-slate-50 border-t border-slate-150">And {importPreview.length - 10} more rows...</div>}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Product Creation / Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
-          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-lg border border-slate-200 bg-white p-6 text-slate-950 shadow-2xl">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-xl font-black">{editingId ? "Edit Product" : "Add Product"}</h2>
-              <button onClick={() => setModalOpen(false)} className="rounded-md p-2 hover:bg-slate-100"><X className="h-5 w-5" /></button>
+          <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-slate-200 bg-white p-6 text-slate-950 shadow-2xl">
+            <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-3">
+              <h2 className="text-xl font-black">{editingId ? "Edit Product Record" : "Add Product to Catalog"}</h2>
+              <button onClick={() => setModalOpen(false)} className="rounded-md p-1.5 hover:bg-slate-100"><X className="h-5 w-5" /></button>
             </div>
-            <form onSubmit={saveProduct} className="grid gap-4 md:grid-cols-2">
-              <Input label="Product Name" value={form.title} onChange={(value) => updateForm("title", value)} required />
-              <Input label="Slug" value={form.slug} onChange={(value) => updateForm("slug", value)} required />
-              <TextArea label="Short Description" value={form.shortDescription} onChange={(value) => updateForm("shortDescription", value)} />
-              <TextArea label="Description" value={form.description} onChange={(value) => updateForm("description", value)} />
-              <Select label="Category" value={form.category} options={categories} onChange={(value) => updateForm("category", value)} />
-              <Select label="Subcategory" value={form.subcategory} options={subcategories} onChange={(value) => updateForm("subcategory", value)} />
-              <Select label="Brand" value={form.brand} options={brands} onChange={(value) => updateForm("brand", value)} />
-              <Input label="MOQ" type="number" value={String(form.moq)} onChange={(value) => updateForm("moq", Number(value))} />
-              <Select label="Status" value={form.status} options={[{ name: "Published", slug: "PUBLISHED" }, { name: "Draft", slug: "DRAFT" }, { name: "Hidden", slug: "HIDDEN" }]} onChange={(value) => updateForm("status", value)} />
-              <label className="flex items-center gap-2 pt-7 text-sm font-bold text-slate-700">
-                <input type="checkbox" checked={form.featured} onChange={(event) => updateForm("featured", event.target.checked)} />
-                Featured Product
+            
+            <form onSubmit={saveProduct} className="grid gap-4 md:grid-cols-2 text-left">
+              
+              <label className="block text-sm font-bold text-slate-700">
+                Product Title
+                <input required type="text" value={form.title} onChange={(e) => updateForm("title", e.target.value)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm outline-none focus:border-red-400" />
               </label>
 
-              <div className="md:col-span-2">
-                <FileDropzone
-                  label="Featured Image Upload"
-                  multiple={false}
-                  uploading={uploading === "featured"}
-                  onFiles={(files) => uploadFiles(files, "featured")}
-                />
-                {form.featuredImage && (
-                  <div className="mt-3 relative h-44 w-44 overflow-hidden rounded-lg border border-slate-200">
-                    <img src={form.featuredImage} alt="Featured product preview" className="h-full w-full object-cover" />
-                    <button type="button" onClick={() => updateForm("featuredImage", "")} className="absolute right-2 top-2 rounded-md bg-white/90 p-1 text-slate-700 shadow"><X className="h-4 w-4" /></button>
-                  </div>
-                )}
+              <label className="block text-sm font-bold text-slate-700">
+                Slug
+                <input required type="text" value={form.slug} onChange={(e) => updateForm("slug", e.target.value)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm outline-none focus:border-red-400" />
+              </label>
+
+              <label className="block text-sm font-bold text-slate-700">
+                Category
+                <select required value={form.category} onChange={(e) => updateForm("category", e.target.value)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400">
+                  <option value="">Select Category</option>
+                  {categories.map((c) => (
+                    <option key={c.slug} value={c.slug}>{c.name}</option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block text-sm font-bold text-slate-700">
+                Subcategory
+                <select required value={form.subcategory} onChange={(e) => updateForm("subcategory", e.target.value)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400">
+                  <option value="">Select Subcategory</option>
+                  {subcategories
+                    .filter((sub: any) => !form.category || sub.category === form.category)
+                    .map((s) => (
+                      <option key={s.slug} value={s.slug}>{s.name}</option>
+                    ))}
+                </select>
+              </label>
+
+              <label className="block text-sm font-bold text-slate-700">
+                Brand Partner
+                <select value={form.brand} onChange={(e) => updateForm("brand", e.target.value)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400">
+                  <option value="">Select Brand (Optional)</option>
+                  <option value="PacMyProduct">PacMyProduct (Own)</option>
+                  {brands.map((b) => (
+                    <option key={b.slug} value={b.name}>{b.name}</option>
+                  ))}
+                </select>
+              </label>
+
+              <div className="grid grid-cols-2 gap-2">
+                <label className="block text-sm font-bold text-slate-700">
+                  MOQ (Units)
+                  <input required type="number" value={form.moq} onChange={(e) => updateForm("moq", Number(e.target.value) || 0)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm outline-none focus:border-red-400" />
+                </label>
+                <label className="block text-sm font-bold text-slate-700">
+                  Base Price (₹)
+                  <input required type="number" value={form.price} onChange={(e) => updateForm("price", Number(e.target.value) || 0)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm outline-none focus:border-red-400" />
+                </label>
               </div>
 
               <div className="md:col-span-2">
-                <FileDropzone
-                  label="Gallery Image Upload"
-                  multiple
-                  uploading={uploading === "gallery"}
-                  onFiles={(files) => uploadFiles(files, "gallery")}
-                />
-                {form.galleryImages.length > 0 && (
-                  <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-                    {form.galleryImages.map((url, index) => (
-                      <div key={url} className="relative overflow-hidden rounded-lg border border-slate-200">
-                        <img src={url} alt="Gallery product preview" className="h-32 w-full object-cover" />
-                        <div className="absolute inset-x-2 top-2 flex justify-between">
-                          <button type="button" onClick={() => moveGalleryImage(index, -1)} className="rounded bg-white/90 p-1 text-slate-700 shadow disabled:opacity-30" disabled={index === 0}><ArrowUp className="h-3 w-3" /></button>
-                          <button type="button" onClick={() => moveGalleryImage(index, 1)} className="rounded bg-white/90 p-1 text-slate-700 shadow disabled:opacity-30" disabled={index === form.galleryImages.length - 1}><ArrowDown className="h-3 w-3" /></button>
-                          <button type="button" onClick={() => removeGalleryImage(url)} className="rounded bg-white/90 p-1 text-slate-700 shadow"><X className="h-3 w-3" /></button>
+                <label className="block text-sm font-bold text-slate-700">
+                  Description
+                  <textarea value={form.description} onChange={(e) => updateForm("description", e.target.value)} rows={3} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2 text-sm outline-none focus:border-red-400" />
+                </label>
+              </div>
+
+              <label className="flex items-center gap-2 pt-6 text-sm font-bold text-slate-700 cursor-pointer">
+                <input type="checkbox" checked={form.featured} onChange={(e) => updateForm("featured", e.target.checked)} />
+                Featured Item (Homepage Showcase)
+              </label>
+
+              <label className="block text-sm font-bold text-slate-700">
+                Publish Status
+                <select value={form.status} onChange={(e) => updateForm("status", e.target.value)} className="mt-2 w-full rounded-lg border border-slate-250 bg-white px-3 py-2.5 text-sm outline-none focus:border-red-400">
+                  <option value="PUBLISHED">Published</option>
+                  <option value="HIDDEN">Hidden/Draft</option>
+                </select>
+              </label>
+
+              {/* 5. IMAGE PREVIEW BEFORE UPLOAD INPUTS */}
+              <div className="md:col-span-2 border-t border-slate-100 pt-4 space-y-4">
+                
+                {/* Featured Image Upload */}
+                <div>
+                  <span className="block text-sm font-bold text-slate-700 mb-2">Featured Image</span>
+                  <div className="flex flex-wrap items-center gap-4">
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-3 hover:bg-white hover:border-slate-400 transition">
+                      <ImagePlus className="h-5 w-5 text-red-600" />
+                      <span className="text-xs font-black uppercase text-slate-800">Select Image</span>
+                      <input ref={featuredFileInputRef} type="file" accept="image/*" onChange={handleFeaturedImageChange} className="hidden" />
+                    </label>
+
+                    {/* Pre-existing URL preview if available */}
+                    {form.featuredImage && !featuredPreviewUrl && (
+                      <div className="relative h-20 w-20 rounded-lg overflow-hidden border border-slate-200">
+                        <img src={form.featuredImage} alt="Featured preview" className="h-full w-full object-cover" />
+                        <button type="button" onClick={() => updateForm("featuredImage", "")} className="absolute right-1 top-1 bg-white/90 p-0.5 rounded shadow text-slate-600 hover:text-red-600"><X className="h-3 w-3" /></button>
+                      </div>
+                    )}
+
+                    {/* Pending upload preview */}
+                    {featuredPreviewUrl && (
+                      <div className="flex items-center gap-3 bg-red-50/40 border border-red-100 rounded-lg p-2 max-w-sm">
+                        <img src={featuredPreviewUrl} alt="Pending upload" className="h-14 w-14 rounded object-cover" />
+                        <div className="min-w-0 text-left">
+                          <div className="text-xs font-bold text-slate-900 truncate">{featuredFile?.name}</div>
+                          <div className="text-[10px] text-slate-500 font-semibold">{featuredFile ? (featuredFile.size / 1024).toFixed(1) : 0} KB</div>
+                          <button type="button" onClick={removePendingFeatured} className="text-[10px] text-red-600 hover:text-red-700 font-black uppercase tracking-wider mt-1.5 block">Remove File</button>
                         </div>
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
+                </div>
+
+                {/* Gallery Images Upload */}
+                <div>
+                  <span className="block text-sm font-bold text-slate-700 mb-2">Gallery Images</span>
+                  <div className="flex flex-wrap items-center gap-4">
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-3 hover:bg-white hover:border-slate-400 transition">
+                      <ImagePlus className="h-5 w-5 text-red-600" />
+                      <span className="text-xs font-black uppercase text-slate-800">Add Gallery Files</span>
+                      <input ref={galleryFileInputRef} type="file" multiple accept="image/*" onChange={handleGalleryImagesChange} className="hidden" />
+                    </label>
+                  </div>
+
+                  {/* Pre-existing gallery preview */}
+                  {form.galleryImages.length > 0 && (
+                    <div className="mt-3">
+                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Saved Gallery:</div>
+                      <div className="flex flex-wrap gap-2">
+                        {form.galleryImages.map((img, i) => (
+                          <div key={img} className="relative h-14 w-14 rounded-lg overflow-hidden border border-slate-200">
+                            <img src={img} alt="gallery" className="h-full w-full object-cover" />
+                            <button type="button" onClick={() => updateForm("galleryImages", form.galleryImages.filter((_, idx) => idx !== i))} className="absolute right-0.5 top-0.5 bg-white/90 p-0.5 rounded shadow text-slate-600 hover:text-red-600"><X className="h-3 w-3" /></button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pending gallery previews */}
+                  {galleryPreviewUrls.length > 0 && (
+                    <div className="mt-3">
+                      <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1.5">Pending upload ({galleryFiles.length} files):</div>
+                      <div className="flex flex-wrap gap-2">
+                        {galleryPreviewUrls.map((url, i) => (
+                          <div key={url} className="relative h-14 w-14 rounded-lg overflow-hidden border border-emerald-200 bg-emerald-50">
+                            <img src={url} alt="pending gallery" className="h-full w-full object-cover" />
+                            <div className="absolute inset-x-0 bottom-0 bg-black/60 text-white text-[8px] text-center truncate px-0.5 font-mono">
+                              {(galleryFiles[i]?.size / 1024).toFixed(0)}K
+                            </div>
+                            <button type="button" onClick={() => removePendingGallery(i)} className="absolute right-0.5 top-0.5 bg-white/95 p-0.5 rounded shadow text-slate-600 hover:text-red-600"><X className="h-3 w-3" /></button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+
               </div>
 
+              {/* Status errors & success displays */}
               {(uploadError || uploadSuccess) && (
-                <div className={`md:col-span-2 rounded-lg px-3 py-2 text-sm font-bold ${uploadError ? "bg-red-50 text-red-700" : "bg-emerald-50 text-emerald-700"}`}>
+                <div className={`md:col-span-2 rounded-lg px-3 py-2 text-xs font-bold ${uploadError ? "bg-red-50 text-red-700" : "bg-emerald-50 text-emerald-700"}`}>
                   {uploadError || uploadSuccess}
                 </div>
               )}
 
-              <div className="md:col-span-2 flex justify-end gap-3 pt-2">
+              {/* Footer action buttons */}
+              <div className="md:col-span-2 flex justify-end gap-3 border-t border-slate-100 pt-4">
                 <button type="button" onClick={() => setModalOpen(false)} className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">Cancel</button>
-                <button disabled={saving || Boolean(uploading)} type="submit" className="rounded-lg bg-red-600 px-4 py-2 text-sm font-black text-white hover:bg-red-500 disabled:opacity-60">
-                  {saving ? "Saving..." : editingId ? "Save Changes" : "Create Product"}
+                <button disabled={saving} type="submit" className="rounded-lg bg-red-600 px-5 py-2 text-sm font-black text-white hover:bg-red-500 disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
+                  {saving ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Saving...
+                    </>
+                  ) : (
+                    editingId ? "Save Product" : "Create Product"
+                  )}
                 </button>
               </div>
+
             </form>
           </div>
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
-          <div className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 text-slate-950 shadow-2xl">
-            <h2 className="text-lg font-black">Are you sure you want to delete this product?</h2>
-            <p className="mt-2 text-sm text-slate-500">{deleteTarget.title}</p>
+          <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 text-slate-950 shadow-2xl text-left">
+            <h2 className="text-lg font-black text-slate-900">Archive catalog item?</h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Are you sure you want to delete <strong>{deleteTarget.title}</strong>? It will be moved to the Trash Bin and hidden from the store.
+            </p>
             <div className="mt-6 flex justify-end gap-3">
               <button onClick={() => setDeleteTarget(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">Cancel</button>
-              <button onClick={deleteProduct} className="rounded-lg bg-red-600 px-4 py-2 text-sm font-black text-white hover:bg-red-500">Delete</button>
+              <button onClick={deleteProduct} className="rounded-lg bg-red-600 px-4 py-2 text-sm font-black text-white hover:bg-red-500">Confirm Archive</button>
             </div>
           </div>
         </div>
       )}
+
     </div>
-  );
-}
-
-function FileDropzone({ label, multiple, uploading, onFiles }: { label: string; multiple: boolean; uploading: boolean; onFiles: (files: File[]) => void }) {
-  const [dragging, setDragging] = useState(false);
-
-  const handleFiles = (fileList: FileList | null) => {
-    if (!fileList) return;
-    onFiles(Array.from(fileList));
-  };
-
-  return (
-    <label
-      onDragOver={(event) => {
-        event.preventDefault();
-        setDragging(true);
-      }}
-      onDragLeave={() => setDragging(false)}
-      onDrop={(event) => {
-        event.preventDefault();
-        setDragging(false);
-        handleFiles(event.dataTransfer.files);
-      }}
-      className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-6 text-center transition ${
-        dragging ? "border-red-400 bg-red-50" : "border-slate-300 bg-slate-50 hover:bg-white"
-      }`}
-    >
-      <UploadCloud className="mb-2 h-6 w-6 text-red-600" />
-      <span className="text-sm font-black text-slate-950">{uploading ? "Uploading..." : label}</span>
-      <span className="mt-1 text-xs font-semibold text-slate-500">Drag files here or click to upload. JPG, PNG, WEBP. Max 5MB each.</span>
-      <input className="hidden" type="file" accept="image/jpeg,image/jpg,image/png,image/webp" multiple={multiple} onChange={(event) => handleFiles(event.target.files)} />
-    </label>
-  );
-}
-
-function Input({ label, value, onChange, type = "text", required = false }: { label: string; value: string; onChange: (value: string) => void; type?: string; required?: boolean }) {
-  return (
-    <label className="block text-sm font-bold text-slate-700">
-      {label}
-      <input required={required} type={type} value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-950 outline-none focus:border-red-400" />
-    </label>
-  );
-}
-
-function TextArea({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
-  return (
-    <label className="block text-sm font-bold text-slate-700">
-      {label}
-      <textarea value={value} onChange={(event) => onChange(event.target.value)} rows={3} className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-950 outline-none focus:border-red-400" />
-    </label>
-  );
-}
-
-function Select({ label, value, options, onChange }: { label: string; value: string; options: OptionRecord[]; onChange: (value: string) => void }) {
-  return (
-    <label className="block text-sm font-bold text-slate-700">
-      {label}
-      <select value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-950 outline-none focus:border-red-400">
-        <option value="">Select {label}</option>
-        {options.map((option) => (
-          <option key={option.slug} value={option.slug}>{option.name}</option>
-        ))}
-      </select>
-    </label>
   );
 }

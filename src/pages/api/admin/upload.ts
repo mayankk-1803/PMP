@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import multer from "multer";
 import { cloudinary, assertCloudinaryConfigured } from "@/lib/cloudinary";
+import { canAccessAdminApi, verifyAdminAccessToken } from "@/lib/admin/apiAuth";
 
 export const config = {
   api: {
@@ -9,6 +10,13 @@ export const config = {
 };
 
 const allowedMimeTypes = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
+const allowedFolders = new Set([
+  "pacmyproduct/admin",
+  "pacmyproduct/products",
+  "pacmyproduct/categories",
+  "pacmyproduct/subcategories",
+  "pacmyproduct/brands",
+]);
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -59,6 +67,15 @@ const uploadBuffer = (file: Express.Multer.File, folder: string) =>
   });
 
 export default async function handler(req: MulterRequest, res: NextApiResponse) {
+  const token = req.cookies.pmp_admin_access || "";
+  const admin = verifyAdminAccessToken(token);
+  if (!admin) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+  if (!canAccessAdminApi(admin.role, "/api/admin/upload", req.method || "GET")) {
+    return res.status(403).json({ success: false, message: "Forbidden" });
+  }
+
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ success: false, message: "Method not allowed" });
@@ -73,7 +90,8 @@ export default async function handler(req: MulterRequest, res: NextApiResponse) 
       return res.status(400).json({ success: false, message: "No images uploaded" });
     }
 
-    const folder = typeof req.query.folder === "string" ? req.query.folder : "pacmyproduct/admin";
+    const requestedFolder = typeof req.query.folder === "string" ? req.query.folder : "pacmyproduct/admin";
+    const folder = allowedFolders.has(requestedFolder) ? requestedFolder : "pacmyproduct/admin";
     const uploads = await Promise.all(files.map((file) => uploadBuffer(file, folder)));
 
     return res.status(200).json({ success: true, data: uploads });

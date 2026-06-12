@@ -1,6 +1,7 @@
 import { createRecord, deleteRecord, listRecords, updateRecord } from "@/repositories/adminRepository";
 import type { BrandRecord } from "@/lib/admin/types";
 import { connectMongoDB } from "@/lib/mongodb";
+import { destroyCloudinaryAssets } from "@/lib/admin/cloudinaryLifecycle";
 import { BrandModel } from "@/models/cmsModels";
 
 const mapBrand = (brand: any): BrandRecord => ({
@@ -20,7 +21,7 @@ const mapBrand = (brand: any): BrandRecord => ({
 export async function listAllBrands() {
   if (!process.env.MONGODB_URI) return listRecords("brands");
   await connectMongoDB();
-  const brands = await BrandModel.find({}).sort({ order: 1, name: 1 }).lean<any[]>();
+  const brands = await BrandModel.find({ isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
   return brands.map(mapBrand);
 }
 
@@ -38,9 +39,24 @@ export async function updateBrand(id: string, patch: Partial<BrandRecord>) {
   return brand ? mapBrand(brand) : null;
 }
 
-export async function deleteBrand(id: string) {
+export async function deleteBrand(id: string, permanent: boolean = false, adminId?: string) {
   if (!process.env.MONGODB_URI) return deleteRecord("brands", id);
   await connectMongoDB();
-  const result = await BrandModel.deleteOne({ _id: id });
-  return result.deletedCount > 0;
+  if (permanent) {
+    const brand = await BrandModel.findById(id).lean<any>();
+    if (brand?.cloudinaryPublicId) {
+      await destroyCloudinaryAssets([brand.cloudinaryPublicId]);
+    }
+    const result = await BrandModel.deleteOne({ _id: id });
+    return result.deletedCount > 0;
+  } else {
+    const result = await BrandModel.findByIdAndUpdate(id, {
+      $set: {
+        isDeleted: true,
+        deletedAt: new Date(),
+        deletedBy: adminId,
+      },
+    });
+    return !!result;
+  }
 }

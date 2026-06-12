@@ -1,0 +1,26 @@
+{
+  "startedAt": "2026-06-12T09:25:48.554Z",
+  "baseUrl": "http://127.0.0.1:3001",
+  "create": {
+    "status": 201,
+    "ok": true,
+    "saved": true,
+    "publicIdSaved": true,
+    "assetExists": true
+  },
+  "replace": {
+    "status": 200,
+    "ok": true,
+    "publicIdUpdated": true,
+    "oldDeletedAfterReplace": true,
+    "newExistsAfterReplace": true
+  },
+  "permanentDelete": {
+    "status": 200,
+    "ok": true,
+    "mongoRemoved": true,
+    "newDeletedAfterPermanent": true
+  },
+  "activityLogs": 3,
+  "completedAt": "2026-06-12T09:25:58.616Z"
+}

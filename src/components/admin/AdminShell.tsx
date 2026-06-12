@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { BarChart3, Boxes, Building2, Gauge, Inbox, Layers3, PackageCheck, Shield, ShoppingBag } from "lucide-react";
+import { Activity, BarChart3, Boxes, Building2, Gauge, Inbox, Layers3, PackageCheck, Shield, ShoppingBag, Trash2 } from "lucide-react";
 import { AdminAccountMenu } from "./AdminAccountMenu";
+import { useEffect, useState } from "react";
 
 const navItems = [
   { href: "/87564/admin/dashboard", label: "Dashboard", icon: Gauge },
@@ -11,17 +14,40 @@ const navItems = [
   { href: "/87564/admin/orders", label: "Orders", icon: ShoppingBag },
   { href: "/87564/admin/quotes", label: "Quotes", icon: PackageCheck },
   { href: "/87564/admin/enquiries", label: "Enquiries", icon: Inbox },
+  { href: "/87564/admin/activity-logs", label: "Audit Logs", icon: Activity },
+  { href: "/87564/admin/trash", label: "Trash Bin", icon: Trash2 },
   { href: "/87564/admin/analytics", label: "Analytics", icon: BarChart3 },
 ];
 
 export function AdminShell({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
+  const [role, setRole] = useState("VIEWER");
+
+  useEffect(() => {
+    fetch("/api/admin/auth/me")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          setRole(res.data.role);
+        }
+      })
+      .catch(() => setRole("VIEWER"));
+  }, []);
+
+  // Filter sidebar navigation depending on RBAC role
+  const visibleNavItems = navItems.filter((item) => {
+    if (role === "EDITOR" || role === "VIEWER") {
+      return !["Audit Logs", "Trash Bin"].includes(item.label);
+    }
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950">
       <div className="grid lg:grid-cols-[280px_1fr]">
         <aside className="border-r border-slate-200 bg-white px-4 py-6 shadow-sm">
           <Link href="/87564/admin/dashboard" className="mb-8 flex items-center gap-3 px-2">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-600">
-              <Shield className="h-5 w-5" />
+              <Shield className="h-5 w-5 text-white" />
             </span>
             <span>
               <span className="block text-sm font-black uppercase tracking-wider">PacMyProduct</span>
@@ -29,7 +55,7 @@ export function AdminShell({ title, subtitle, children }: { title: string; subti
             </span>
           </Link>
           <nav className="space-y-1">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon;
               return (
                 <Link key={item.href} href={item.href} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-red-50 hover:text-red-700">

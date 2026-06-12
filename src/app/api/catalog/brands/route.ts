@@ -6,7 +6,7 @@ import { BrandModel } from "@/models/cmsModels";
 export async function GET() {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const brands = await BrandModel.find({ active: true }).sort({ order: 1, name: 1 }).lean<any[]>();
+    const brands = await BrandModel.find({ active: true, isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
     return NextResponse.json({
       success: true,
       data: brands.map((brand) => ({

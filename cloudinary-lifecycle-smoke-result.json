@@ -1,0 +1,327 @@
+{
+  "startedAt": "2026-06-12T09:07:52.367Z",
+  "lifecycle": {
+    "upload1": {
+      "publicId": "pacmyproduct/products/grgbn6g88qmni6fbdghy",
+      "url": "https://res.cloudinary.com/dncupx9ul/image/upload/v1781255274/pacmyproduct/products/grgbn6g88qmni6fbdghy.jpg",
+      "exists": true
+    },
+    "create": {
+      "apiStatus": 201,
+      "apiOk": true,
+      "savedInMongo": true,
+      "productId": "6a2bcc6d5c03a77df552334a",
+      "featuredImageMatches": true,
+      "cloudinaryPublicId": null,
+      "cloudinaryPublicIdSaved": false,
+      "frontend": {
+        "status": 200,
+        "visible": true,
+        "imageReferenceVisible": true
+      },
+      "activityLogCount": 2
+    },
+    "upload2": {
+      "publicId": "pacmyproduct/products/dqnhpayrr6iqbghtskxw",
+      "url": "https://res.cloudinary.com/dncupx9ul/image/upload/v1781255277/pacmyproduct/products/dqnhpayrr6iqbghtskxw.jpg",
+      "exists": true
+    },
+    "replace": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "mongoUpdated": true,
+      "cloudinaryPublicIdUpdated": true,
+      "oldCloudinaryAssetStillExists": true,
+      "newCloudinaryAssetExists": true,
+      "frontend": {
+        "status": 200,
+        "visible": true,
+        "imageReferenceVisible": true
+      },
+      "activityLogCount": 2
+    },
+    "softDelete": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "remainsInMongo": true,
+      "isDeleted": true,
+      "frontend": {
+        "status": 200,
+        "visible": false,
+        "imageReferenceVisible": false
+      },
+      "appearsInTrash": true,
+      "activityLogCount": 3
+    },
+    "restore": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "mongoRestored": true,
+      "frontend": {
+        "status": 200,
+        "visible": true,
+        "imageReferenceVisible": true
+      },
+      "activityLogCount": 2
+    },
+    "permanentDelete": {
+      "apiStatus": 200,
+      "apiOk": true,
+      "mongoRemoved": true,
+      "oldAssetExistsAfterPermanentDelete": true,
+      "activeAssetExistsAfterPermanentDelete": true,
+      "activityLogCount": 2
+    }
+  },
+  "orphanAudit": {
+    "products": {
+      "sampled": 4,
+      "missingPublicIds": 0,
+      "brokenPublicIds": 0,
+      "sampleIssues": []
+    },
+    "categories": {
+      "sampled": 10,
+      "missingPublicIds": 10,
+      "brokenPublicIds": 0,
+      "sampleIssues": [
+        {
+          "id": "6a21118dab2adbb485e37ad8",
+          "name": "T-Shirts",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37ad9",
+          "name": "Caps",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a218869c5da392c386ab0d0",
+          "name": "Diaries / Notebooks",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a218869c5da392c386ab0d4",
+          "name": "Keychains",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a2ba44e1ca31b37bfafa66d",
+          "name": "Paper Weight",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a2ba44e1ca31b37bfafa66e",
+          "name": "Table Top",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a2ba44e1ca31b37bfafa66f",
+          "name": "Bags",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a2ba44f1ca31b37bfafa670",
+          "name": "Desk Organiser",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a2ba44f1ca31b37bfafa671",
+          "name": "Table Mats",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a2ba44f1ca31b37bfafa672",
+          "name": "Mouse Pad",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        }
+      ]
+    },
+    "subcategories": {
+      "sampled": 49,
+      "missingPublicIds": 49,
+      "brokenPublicIds": 0,
+      "sampleIssues": [
+        {
+          "id": "6a21118dab2adbb485e37ae9",
+          "name": "Polo T-Shirts",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37aef",
+          "name": "Sports Caps",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37af1",
+          "name": "Executive Diaries",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37b01",
+          "name": "Joining Kits",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37b02",
+          "name": "Dealer Kits",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37b03",
+          "name": "Distributor Kits",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37b04",
+          "name": "Doctor Kits",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37b05",
+          "name": "Architect Kits",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37b06",
+          "name": "Contractor Kits",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        },
+        {
+          "id": "6a21118dab2adbb485e37b07",
+          "name": "Mason Kits",
+          "hasCloudinaryUrl": true,
+          "cloudinaryPublicId": null,
+          "publicIdAssetExists": null,
+          "missingPublicId": true,
+          "brokenPublicId": false
+        }
+      ]
+    },
+    "brands": {
+      "sampled": 27,
+      "missingPublicIds": 0,
+      "brokenPublicIds": 0,
+      "sampleIssues": []
+    }
+  },
+  "security": {
+    "unauthProducts": {
+      "status": 401,
+      "ok": false
+    },
+    "unauthUpload": {
+      "status": 401,
+      "ok": false
+    },
+    "viewerReadProducts": {
+      "status": 200,
+      "ok": true
+    },
+    "viewerWriteCategory": {
+      "status": 403,
+      "ok": false
+    },
+    "viewerActivityLogs": {
+      "status": 403,
+      "ok": false
+    },
+    "editorDeleteOrder": {
+      "status": 403,
+      "ok": false
+    },
+    "adminPermanentDelete": {
+      "status": 403,
+      "ok": false
+    },
+    "superAdminPermanentDeletePath": {
+      "status": 404,
+      "ok": false
+    }
+  },
+  "cleanup": {
+    "pacmyproduct/products/grgbn6g88qmni6fbdghy": {
+      "result": "ok"
+    },
+    "pacmyproduct/products/dqnhpayrr6iqbghtskxw": {
+      "result": "ok"
+    }
+  },
+  "completedAt": "2026-06-12T09:08:19.381Z"
+}

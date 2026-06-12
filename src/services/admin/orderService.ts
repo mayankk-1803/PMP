@@ -19,7 +19,7 @@ const mapOrder = (order: any): OrderRecord => ({
 export async function listOrders() {
   if (!process.env.MONGODB_URI) return listRecords("orders");
   await connectMongoDB();
-  const orders = await OrderModel.find({}).sort({ createdAt: -1 }).lean<any[]>();
+  const orders = await OrderModel.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 }).lean<any[]>();
   return orders.map(mapOrder);
 }
 
@@ -64,11 +64,22 @@ export async function updateOrder(id: string, patch: Partial<OrderRecord> & { st
   return updateRecord("orders", id, patch);
 }
 
-export async function deleteOrder(id: string) {
+export async function deleteOrder(id: string, permanent: boolean = false, adminId?: string) {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const result = await OrderModel.deleteOne({ _id: id });
-    return result.deletedCount > 0;
+    if (permanent) {
+      const result = await OrderModel.deleteOne({ _id: id });
+      return result.deletedCount > 0;
+    } else {
+      const result = await OrderModel.findByIdAndUpdate(id, {
+        $set: {
+          isDeleted: true,
+          deletedAt: new Date(),
+          deletedBy: adminId,
+        },
+      });
+      return !!result;
+    }
   }
   return deleteRecord("orders", id);
 }

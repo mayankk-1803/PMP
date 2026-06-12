@@ -6,7 +6,7 @@ import { SubcategoryModel } from "@/models/cmsModels";
 export async function GET() {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const subcategories = await SubcategoryModel.find({ active: true }).sort({ order: 1, name: 1 }).lean<any[]>();
+    const subcategories = await SubcategoryModel.find({ active: true, isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
     return NextResponse.json({
       success: true,
       data: subcategories.map((subcategory) => ({

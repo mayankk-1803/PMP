@@ -6,7 +6,7 @@ import { CategoryModel } from "@/models/cmsModels";
 export async function GET() {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const categories = await CategoryModel.find({ active: true }).sort({ order: 1, name: 1 }).lean<any[]>();
+    const categories = await CategoryModel.find({ active: true, isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
     return NextResponse.json({
       success: true,
       data: categories.map((category) => ({

@@ -42,14 +42,18 @@ export interface ProductRecord {
   brand?: string;
   featuredImage?: string;
   galleryImages?: string[];
+  cloudinaryPublicId?: string;
+  galleryPublicIds?: string[];
   images: string[];
   features: string[];
   specifications: Record<string, string>;
   tags: string[];
   moq: number;
+  price?: number;
   featured: boolean;
   active: boolean;
   status?: "DRAFT" | "PUBLISHED" | "HIDDEN";
+  order?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -61,6 +65,7 @@ export interface CategoryRecord {
   description?: string;
   parentGroup?: string;
   image?: string;
+  cloudinaryPublicId?: string;
   order?: number;
   active: boolean;
   createdAt: string;
@@ -76,6 +81,7 @@ export interface SubcategoryRecord {
   description?: string;
   image: string;
   featuredImage?: string;
+  cloudinaryPublicId?: string;
   order?: number;
   active: boolean;
   createdAt: string;

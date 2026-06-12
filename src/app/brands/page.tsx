@@ -1,5 +1,4 @@
 import React from "react";
-import { BrandShowcase } from "@/components/sections/BrandShowcase";
 
 export default function BrandsPage() {
   return (
@@ -20,7 +19,15 @@ export default function BrandsPage() {
           </div>
         </div>
       </section>
-      <BrandShowcase />
+      <section className="py-12 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <img
+            src="/images/pacmyproductlogos.png"
+            alt="PacMyProduct Brand Partners"
+            className="w-full max-w-[1400px] h-auto mx-auto object-contain"
+          />
+        </div>
+      </section>
     </main>
   );
 }

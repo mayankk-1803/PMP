@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdminRequest } from "@/lib/admin/apiAuth";
 import { connectMongoDB } from "@/lib/mongodb";
 import { AdminModel, BrandModel, CategoryModel, ProductModel, SubcategoryModel } from "@/models/cmsModels";
 import { DEFAULT_ADMINS } from "@/lib/admin/seed";
@@ -10,7 +11,10 @@ import {
   PROFESSIONAL_SUBCATEGORIES,
 } from "@/lib/admin/professionalCatalogSeed";
 
-export async function POST() {
+export async function POST(req: Request) {
+  const auth = await requireAdminRequest(req);
+  if (auth.response) return auth.response;
+
   if (!process.env.MONGODB_URI) {
     return NextResponse.json({ success: false, message: "MONGODB_URI is not configured" }, { status: 503 });
   }

@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
+import { requireAdminRequest } from "@/lib/admin/apiAuth";
 import { createQuote, listQuotes } from "@/services/admin/quoteService";
 import { sendQuoteWorkflow } from "@/services/email/emailService";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const auth = await requireAdminRequest(req);
+  if (auth.response) return auth.response;
+
   return NextResponse.json({ success: true, data: await listQuotes() });
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAdminRequest(req);
+  if (auth.response) return auth.response;
+
   const data = await req.json();
   const quote = await createQuote({
     customerName: data.customerName ?? data.name,

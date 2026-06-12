@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requireAdminRequest } from "@/lib/admin/apiAuth";
 import fs from "fs";
 import path from "path";
 import { cloudinary } from "@/lib/cloudinary";
@@ -98,7 +99,10 @@ async function uploadToCloudinary(localPath: string, folder: string, publicId: s
   }
 }
 
-export async function POST() {
+export async function POST(req: Request) {
+  const auth = await requireAdminRequest(req);
+  if (auth.response) return auth.response;
+
   if (!process.env.MONGODB_URI) {
     return NextResponse.json({ success: false, message: "MONGODB_URI is not configured" }, { status: 500 });
   }

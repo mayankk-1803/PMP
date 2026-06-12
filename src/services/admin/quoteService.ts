@@ -21,7 +21,7 @@ const mapQuote = (quote: any): QuoteRecord => ({
 export async function listQuotes(): Promise<QuoteRecord[]> {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const quotes = await QuoteModel.find({}).sort({ createdAt: -1 }).lean<any[]>();
+    const quotes = await QuoteModel.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 }).lean<any[]>();
     return quotes.map(mapQuote);
   }
   return listRecords("quotes");
@@ -62,11 +62,22 @@ export async function updateQuote(id: string, patch: Partial<QuoteRecord> & { st
   return updateRecord("quotes", id, patch);
 }
 
-export async function deleteQuote(id: string) {
+export async function deleteQuote(id: string, permanent: boolean = false, adminId?: string) {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
-    const result = await QuoteModel.deleteOne({ _id: id });
-    return result.deletedCount > 0;
+    if (permanent) {
+      const result = await QuoteModel.deleteOne({ _id: id });
+      return result.deletedCount > 0;
+    } else {
+      const result = await QuoteModel.findByIdAndUpdate(id, {
+        $set: {
+          isDeleted: true,
+          deletedAt: new Date(),
+          deletedBy: adminId,
+        },
+      });
+      return !!result;
+    }
   }
   return deleteRecord("quotes", id);
 }
