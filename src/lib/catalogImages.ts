@@ -20,16 +20,20 @@ const pick = (pool: string[], title: string, seed: string) => pool[uniqueIndex(t
 
 const POOLS = {
   keychain: [
-    unsplashPhoto("dKRNe47ror4"),
-    unsplashPhoto("LkbMO84Weiw"),
-    unsplashPhoto("QB3-E0GEBIw"),
-    unsplashPhoto("7ApjiItz0co"),
+    "/images/executivemetalkeychain.png",
+    "/images/premiummetalkeychain.png",
+    "/images/leatherkeychain.png",
+    "/images/plastickeychain.png",
+    "/images/woodenkeychain.png",
+    "/images/ecoacrylickeychain.png",
   ],
   tshirt: [
-    image("photo-1521572163474-6864f9cf17ab"),
-    image("photo-1503341504253-dff4815485f1"),
-    image("photo-1523381294911-8d3cead13475"),
-    image("photo-1489987707025-afc232f7ea0f"),
+    "/images/polotshirt.png",
+    "/images/roundnecktshirt.png",
+    "/images/classictimelesspolotshirt.png",
+    "/images/tshirtblue.png",
+    "/images/tshirtgreen.png",
+    "/images/tshirtyellow.png",
   ],
   caps: [
     pexelsPhoto("20316377"),
@@ -61,10 +65,11 @@ const POOLS = {
     image("photo-1517971129774-8a2b38fa128e"),
   ],
   pens: [
-    image("photo-1585336261022-680e295ce3fe"),
-    image("photo-1455390582262-044cdead277a"),
-    image("photo-1583485088034-697b5bc54ccd"),
-    image("photo-1569003339405-ea396a5a8a90"),
+    "/images/pen1.png",
+    "/images/pen2.png",
+    "/images/pen3.png",
+    "/images/pen4.png",
+    "/images/pen5.png",
   ],
   desk: [
     image("photo-1542744094-3a31f103e35f"),
@@ -73,10 +78,12 @@ const POOLS = {
     image("photo-1501139083538-0139583c060f"),
   ],
   drinkware: [
-    image("photo-1602143407151-7111542de6e8"),
-    image("photo-1523362628745-0c100150b504"),
-    image("photo-1605276374104-dee2a0ed3cd6"),
-    image("photo-1564507004663-b6dfb3c824d5"),
+    "/images/sportsbottle.png",
+    "/images/sportsbottle1.png",
+    "/images/steelbottle.png",
+    "/images/flaskbottle.png",
+    "/images/copperbottleset.png",
+    "/images/premiumvaccumflask.png",
   ],
   tech: [
     image("photo-1608043152269-423dbba4e7e1"),

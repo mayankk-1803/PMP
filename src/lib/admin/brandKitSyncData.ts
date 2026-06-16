@@ -1,4 +1,6 @@
 export const PROMOTIONAL_CATEGORIES = [
+  ["Pens", "pens", "Premium, eco, gift-box, and engraved pens for corporate branding."],
+  ["Drinkware", "drinkware", "Branded bottles, flasks, and mugs for office, travel, and event gifting."],
   ["Bags", "bags", "Premium backpacks, travel bags, duffel bags, trolley bags, and sling bags."],
   ["T-Shirts", "t-shirts", "Custom collared polo and round-neck branded t-shirts."],
   ["Caps", "caps", "Branded cotton, sports, and promotional caps for events."],
@@ -12,6 +14,18 @@ export const PROMOTIONAL_CATEGORIES = [
 ] as const;
 
 export const PROMOTIONAL_SUBCATEGORIES = [
+  // Pens
+  ["Premium Pens", "premium-pens", "pens", "Premium writing instruments for executive and corporate gifting."],
+  ["Eco Pens", "eco-pens", "pens", "Eco-friendly branded pens for sustainable promotional campaigns."],
+  ["Gift Box Pens", "gift-box-pens", "Boxed pen sets for client gifting and milestone programs."],
+  ["Engraved Pens", "engraved-pens", "Engraved pens with polished finishes for long-term brand recall."],
+
+  // Drinkware
+  ["Flasks", "flasks", "drinkware", "Premium vacuum flasks and sippers for office and travel use."],
+  ["Bottles", "bottles", "drinkware", "Reusable branded bottles for employee, dealer, and event gifting."],
+  ["Coffee Mugs", "coffee-mugs", "drinkware", "Custom coffee mugs for desks, onboarding kits, and events."],
+  ["Travel Mugs", "travel-mugs", "drinkware", "Travel mugs and tumblers for mobile teams and conferences."],
+
   // Bags
   ["Laptop Bags", "laptop-bags", "bags", "Premium laptop bags for business professionals."],
   ["Travel Bags", "travel-bags", "bags", "Durable travel bags for corporate trips."],
