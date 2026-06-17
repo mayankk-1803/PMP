@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Bookmark } from "lucide-react";
 import { useShortlist } from "@/context/ShortlistContext";
 import { useRouter } from "next/navigation";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 
 import { SafeImage } from "./SafeImage";
 
@@ -20,20 +21,22 @@ interface ProductCardProps {
   className?: string;
   index?: number;
   category?: string;
+  href?: string;
 }
 
-export function ProductCard({ title, description, imageUrl, price, moq, brandingOptions = [], className, index = 0, category }: ProductCardProps) {
+export function ProductCard({ title, description, imageUrl, price, moq, brandingOptions = [], className, index = 0, category, href }: ProductCardProps) {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const router = useRouter();
   
   const isSelected = isInShortlist(title);
+  const displayImage = localCatalogImage(title) || imageUrl;
 
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isSelected) {
       removeFromShortlist(title);
     } else {
-      addToShortlist({ title, imageUrl, price });
+      addToShortlist({ title, imageUrl: displayImage, price });
     }
   };
 
@@ -43,6 +46,10 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
   };
 
   const handleCardClick = () => {
+    if (href) {
+      router.push(href);
+      return;
+    }
     const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
@@ -69,7 +76,7 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
     >
       <div className="relative w-full h-[240px] overflow-hidden bg-gray-50 flex-shrink-0">
         <SafeImage 
-          src={imageUrl} 
+          src={displayImage} 
           alt={title}
           category={category}
           isMotion={true}

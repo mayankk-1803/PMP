@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight, MessageSquare } from "lucide-react";
 import { SafeImage } from "../ui/SafeImage";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 
 interface CategoryRecord {
   id: string;
@@ -60,7 +61,7 @@ export function CorporateSolutions() {
           {/* Card Image Container */}
           <div className="absolute inset-0 z-0">
             <SafeImage
-              src={cat.image || "/images/joiningkit.png"}
+              src={localCatalogImage(cat.name) || cat.image || "/images/joiningkit.png"}
               alt={cat.name}
               category={cat.slug}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"

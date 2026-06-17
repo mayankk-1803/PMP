@@ -25,7 +25,9 @@ const PRODUCT_IMAGE_BY_CATEGORY: Record<string, string[]> = {
   ],
   "t-shirts": [
     "/images/polotshirt.png",
-    "/images/roundnecktshirt.png",
+    "/images/roundnecktshirt/classicroundnecktshirt.png",
+    "/images/roundnecktshirt/premiumroundnecktshirt.png",
+    "/images/roundnecktshirt/executiveroundnecktshirt.png",
     "/images/classictimelesspolotshirt.png",
     "/images/tshirtblue.png",
     "/images/tshirtgreen.png",
@@ -40,22 +42,28 @@ const PRODUCT_IMAGE_BY_CATEGORY: Record<string, string[]> = {
     "/images/ecoacrylickeychain.png",
   ],
   "diaries-notebooks": [
-    "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516542076529-1ea3854896f2?q=80&w=1000&auto=format&fit=crop",
+    "/images/Diaries/1.jpg",
+    "/images/Diaries/2.jpg",
+    "/images/Diaries/3.jpg",
+    "/images/Diaries/4.jpg",
   ],
   caps: [
-    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1521369909029-2afed882baee?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop",
+    "/images/sportscap/classicsportcap.png",
+    "/images/sportscap/premiumsportcap.png",
+    "/images/sportscap/executivesportcap.png",
+    "/images/cottoncaps/classiccottoncap.png",
+    "/images/cottoncaps/premiumcottoncap.png",
+    "/images/cottoncaps/executivecottoncap.png",
+    "/images/cottoncaps/ecocottoncap.png",
   ],
   bags: [
-    "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?q=80&w=1000&auto=format&fit=crop",
+    "/images/Backpacks/1.jpg",
+    "/images/Laptop Bags/1.png",
+    "/images/Duffle Bags/1.webp",
+    "/images/Trolley Bags/2.jpg",
+    "/images/slingbags/classicslingbag.png",
+    "/images/slingbags/premiumslingbag.png",
+    "/images/slingbags/executiveslingbag.png",
   ],
   drinkware: [
     "/images/sportsbottle.png",
@@ -70,16 +78,16 @@ const PRODUCT_IMAGE_BY_CATEGORY: Record<string, string[]> = {
 const CATEGORY_DEFAULT_IMAGES: Record<string, string> = {
   pens: "/images/pen1.png",
   drinkware: "/images/sportsbottle.png",
-  bags: "/images/ecopackback.png",
+  bags: "/images/Backpacks/1.jpg",
   "t-shirts": "/images/polotshirt.png",
-  caps: "/images/keychain.png",
+  caps: "/images/sportscap/classicsportcap.png",
   keychains: "/images/executivemetalkeychain.png",
-  "diaries-notebooks": "/images/leathermat.png",
+  "diaries-notebooks": "/images/Diaries/1.jpg",
   "table-top": "/images/tabletopup.png",
-  "paper-weight": "/images/paperweight.png",
-  "table-mats": "/images/leathermat.png",
-  "mouse-pad": "/images/mousepad.png",
-  "desk-organiser": "/images/tabletopup.png",
+  "paper-weight": "/images/Paper Weight/1.jpg",
+  "table-mats": "/images/Table Mat/1.jpg",
+  "mouse-pad": "/images/Mouse pad/General.jpg",
+  "desk-organiser": "/images/Desk Organsier/1.jpg",
 };
 
 const PRODUCT_VARIANTS = ["Classic", "Premium", "Executive", "Eco"];
@@ -239,7 +247,7 @@ export async function POST(req: Request) {
   // 5. Sync Festive Hampers Subcategories
   const hamperSubcategories = await Promise.all(
     HAMPER_SUBCATEGORIES.map(async ([name, slug, description], index) => {
-      const defaultImg = localCatalogImage(name) || "/images/diwalihampers.png";
+      const defaultImg = localCatalogImage(name) || "/images/Festive Hampers/1.jpg";
       const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug);
 
       return SubcategoryModel.findOneAndUpdate(

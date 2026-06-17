@@ -8,6 +8,7 @@ import { Sparkles, ArrowRight, Bookmark } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { SafeImage } from "../ui/SafeImage";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -106,7 +107,7 @@ export function FeaturedHampers() {
               const hamperPrice = "Custom Quote";
               const hamperBadge = "Festive Hamper";
               const hamperDesc = hamper.description || "Premium custom-branded festive corporate gift hampers.";
-              const hamperImg = hamper.image || "/images/joiningkit.png";
+              const hamperImg = localCatalogImage(hamper.name) || hamper.image || "/images/joiningkit.png";
 
               return (
                 <SwiperSlide key={hamper.slug} className="h-auto">

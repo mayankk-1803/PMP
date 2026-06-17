@@ -1,6 +1,7 @@
 const image = (id: string) => `https://images.unsplash.com/${id}?q=80&w=1000&auto=format&fit=crop`;
 const unsplashPhoto = (id: string) => `https://unsplash.com/photos/${id}/download?force=true&w=1000`;
 const pexelsPhoto = (id: string) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1000`;
+const folderImage = (folder: string, file: string) => `/images/${folder}/${file}`;
 
 const hashText = (value: string) =>
   value.split("").reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) >>> 0, 17);
@@ -35,34 +36,72 @@ const POOLS = {
     "/images/tshirtgreen.png",
     "/images/tshirtyellow.png",
   ],
+  roundNeckTshirt: [
+    folderImage("roundnecktshirt", "classicroundnecktshirt.png"),
+    folderImage("roundnecktshirt", "premiumroundnecktshirt.png"),
+    folderImage("roundnecktshirt", "executiveroundnecktshirt.png"),
+  ],
   caps: [
-    pexelsPhoto("20316377"),
-    image("photo-1588850561407-ed78c282e89b"),
-    image("photo-1521369909029-2afed882baee"),
-    pexelsPhoto("6059961"),
+    folderImage("sportscap", "classicsportcap.png"),
+    folderImage("cottoncaps", "classiccottoncap.png"),
+    folderImage("sportscap", "premiumsportcap.png"),
+    folderImage("cottoncaps", "premiumcottoncap.png"),
+  ],
+  sportsCaps: [
+    folderImage("sportscap", "classicsportcap.png"),
+    folderImage("sportscap", "premiumsportcap.png"),
+    folderImage("sportscap", "executivesportcap.png"),
+  ],
+  cottonCaps: [
+    folderImage("cottoncaps", "classiccottoncap.png"),
+    folderImage("cottoncaps", "premiumcottoncap.png"),
+    folderImage("cottoncaps", "executivecottoncap.png"),
+    folderImage("cottoncaps", "ecocottoncap.png"),
   ],
   backpacks: [
-    pexelsPhoto("16359254"),
-    pexelsPhoto("593157"),
-    image("photo-1553062407-98eeb64c6a62"),
-    image("photo-1622560480605-d83c853bc5c3"),
+    folderImage("Backpacks", "1.jpg"),
+    folderImage("Backpacks", "2.jpg"),
+    folderImage("Backpacks", "3.jpg"),
+    folderImage("Backpacks", "4.jpg"),
+    folderImage("Backpacks", "5.jpg"),
+    folderImage("Backpacks", "6.jpg"),
   ],
   duffel: [
-    pexelsPhoto("13872590"),
-    pexelsPhoto("8412790"),
-    pexelsPhoto("9582664"),
-    pexelsPhoto("14037876"),
+    folderImage("Duffle Bags", "1.webp"),
+    folderImage("Duffle Bags", "2.jpg"),
+    folderImage("Duffle Bags", "3.jpg"),
+    folderImage("Duffle Bags", "4.jpg"),
+    folderImage("Duffle Bags", "5.webp"),
+    folderImage("Duffle Bags", "6.webp"),
   ],
   laptopBags: [
-    image("photo-1553062407-98eeb64c6a62"),
-    image("photo-1622560480605-d83c853bc5c3"),
-    image("photo-1589394815804-964ed0be2eb5"),
+    folderImage("Laptop Bags", "1.png"),
+    folderImage("Laptop Bags", "2.png"),
+    folderImage("Laptop Bags", "3.png"),
+    folderImage("Laptop Bags", "4.png"),
+    folderImage("Laptop Bags", "5.jpg"),
+  ],
+  slingBags: [
+    folderImage("slingbags", "classicslingbag.png"),
+    folderImage("slingbags", "premiumslingbag.png"),
+    folderImage("slingbags", "executiveslingbag.png"),
+  ],
+  trolleyBags: [
+    folderImage("Trolley Bags", "1.jpg"),
+    folderImage("Trolley Bags", "2.jpg"),
+    folderImage("Trolley Bags", "3.jpg"),
+    folderImage("Trolley Bags", "4.jpg"),
+    folderImage("Trolley Bags", "5.jpg"),
   ],
   notebook: [
-    image("photo-1531346878377-a5be20888e57"),
-    image("photo-1517842645767-c639042777db"),
-    image("photo-1457369804613-52c61a468e7d"),
-    image("photo-1517971129774-8a2b38fa128e"),
+    folderImage("Diaries", "1.jpg"),
+    folderImage("Diaries", "2.jpg"),
+    folderImage("Diaries", "3.jpg"),
+    folderImage("Diaries", "4.jpg"),
+    folderImage("Diaries", "5.jpg"),
+    folderImage("Diaries", "6.jpg"),
+    folderImage("Diaries", "7.jpg"),
+    folderImage("Diaries", "8.jpg"),
   ],
   pens: [
     "/images/pen1.png",
@@ -72,10 +111,27 @@ const POOLS = {
     "/images/pen5.png",
   ],
   desk: [
-    image("photo-1542744094-3a31f103e35f"),
-    image("photo-1516321318423-f06f85e504b3"),
-    image("photo-1527443224154-c4a3942d3acf"),
-    image("photo-1501139083538-0139583c060f"),
+    folderImage("Desk Organsier", "1.jpg"),
+    folderImage("Desk Organsier", "2.jpg"),
+    folderImage("Desk Organsier", "3.jpg"),
+    folderImage("Desk Organsier", "4.jpg"),
+  ],
+  mousePad: [
+    folderImage("Mouse pad", "General.jpg"),
+    folderImage("Mouse pad", "1.jpg"),
+    folderImage("Mouse pad", "2.jpg"),
+    folderImage("Mouse pad", "3.jpg"),
+  ],
+  paperWeight: [
+    folderImage("Paper Weight", "1.jpg"),
+    folderImage("Paper Weight", "2.jpg"),
+    folderImage("Paper Weight", "3.jpg"),
+  ],
+  tableMat: [
+    folderImage("Table Mat", "1.jpg"),
+    folderImage("Table Mat", "2.jpg"),
+    folderImage("Table Mat", "3.jpg"),
+    folderImage("Table Mat", "4.jpg"),
   ],
   drinkware: [
     "/images/sportsbottle.png",
@@ -120,12 +176,26 @@ const POOLS = {
     image("photo-1517245386807-bb43f82c33c4"),
   ],
   hampers: [
-    image("photo-1599599810769-bcde5a160d32"),
-    image("photo-1603006905003-be475563bc59"),
-    image("photo-1549465220-1a8b9238cd48"),
-    image("photo-1513885535751-8b9238bd345a"),
-    image("photo-1606220588913-b3aacb4d2f46"),
-    image("photo-1506784983877-45594efa4cbe"),
+    folderImage("Festive Hampers", "1.jpg"),
+    folderImage("Festive Hampers", "2.jpg"),
+    folderImage("Festive Hampers", "3.jpg"),
+  ],
+  diwaliHampers: [
+    folderImage("Diwali Hampers", "1.jpg"),
+    folderImage("Diwali Hampers", "2.jpg"),
+    folderImage("Diwali Hampers", "3.jpg"),
+    folderImage("Diwali Hampers", "4.jpg"),
+    folderImage("Diwali Hampers", "5.jpg"),
+  ],
+  holiHampers: [
+    folderImage("Holi Hampers", "4b4cafcfc2eac114bea36d257d45a580.jpg"),
+  ],
+  eidHampers: [
+    folderImage("EID HAmpers", "1.jpg"),
+    folderImage("EID HAmpers", "2.jpg"),
+    folderImage("EID HAmpers", "3.jpg"),
+    folderImage("EID HAmpers", "4.jpg"),
+    folderImage("EID HAmpers", "5.jpg"),
   ],
   packaging: [
     image("photo-1586528116311-ad8dd3c8310d"),
@@ -146,14 +216,22 @@ export const realCatalogImage = (title: string, category = "", subcategory = "",
   const haystack = `${title} ${category} ${subcategory}`.toLowerCase();
 
   if (haystack.includes("keychain") || haystack.includes("key ring")) return pick(POOLS.keychain, title, seed);
+  if (haystack.includes("round neck") || haystack.includes("crew neck")) return pick(POOLS.roundNeckTshirt, title, seed);
   if (haystack.includes("polo") || haystack.includes("t-shirt") || haystack.includes("tee")) return pick(POOLS.tshirt, title, seed);
+  if (haystack.includes("sports cap") || haystack.includes("sport cap")) return pick(POOLS.sportsCaps, title, seed);
+  if (haystack.includes("cotton cap")) return pick(POOLS.cottonCaps, title, seed);
   if (haystack.includes("cap")) return pick(POOLS.caps, title, seed);
   if (haystack.includes("duffel")) return pick(POOLS.duffel, title, seed);
+  if (haystack.includes("trolley")) return pick(POOLS.trolleyBags, title, seed);
   if (haystack.includes("backpack")) return pick(POOLS.backpacks, title, seed);
+  if (haystack.includes("sling bag")) return pick(POOLS.slingBags, title, seed);
   if (haystack.includes("laptop bag") || haystack.includes("tote") || haystack.includes("bag")) return pick(POOLS.laptopBags, title, seed);
   if (haystack.includes("notebook") || haystack.includes("diary") || haystack.includes("journal") || haystack.includes("planner")) return pick(POOLS.notebook, title, seed);
   if (haystack.includes("pen")) return pick(POOLS.pens, title, seed);
-  if (haystack.includes("desk organizer") || haystack.includes("calendar") || haystack.includes("paper weight")) return pick(POOLS.desk, title, seed);
+  if (haystack.includes("mouse pad") || haystack.includes("mousepad")) return pick(POOLS.mousePad, title, seed);
+  if (haystack.includes("paper weight")) return pick(POOLS.paperWeight, title, seed);
+  if (haystack.includes("table mat") || haystack.includes("desk mat")) return pick(POOLS.tableMat, title, seed);
+  if (haystack.includes("desk organizer") || haystack.includes("desk organiser") || haystack.includes("calendar")) return pick(POOLS.desk, title, seed);
   if (haystack.includes("bottle") || haystack.includes("flask") || haystack.includes("tumbler") || haystack.includes("mug")) return pick(POOLS.drinkware, title, seed);
   if (haystack.includes("speaker") || haystack.includes("earbud") || haystack.includes("charger") || haystack.includes("usb")) return pick(POOLS.tech, title, seed);
 
@@ -164,7 +242,10 @@ export const realCatalogImage = (title: string, category = "", subcategory = "",
     return pick(POOLS.corporateKits, title, seed);
   }
 
-  if (haystack.includes("diwali") || haystack.includes("holi") || haystack.includes("eid") || haystack.includes("christmas") || haystack.includes("new year") || haystack.includes("hamper") || haystack.includes("gift")) {
+  if (haystack.includes("diwali")) return pick(POOLS.diwaliHampers, title, seed);
+  if (haystack.includes("holi")) return pick(POOLS.holiHampers, title, seed);
+  if (haystack.includes("eid")) return pick(POOLS.eidHampers, title, seed);
+  if (haystack.includes("christmas") || haystack.includes("new year") || haystack.includes("women") || haystack.includes("hamper") || haystack.includes("gift")) {
     return pick(POOLS.hampers, title, seed);
   }
 

@@ -1,12 +1,13 @@
 import type { BrandRecord, CategoryRecord, ProductRecord, SubcategoryRecord } from "./types";
 import { realCatalogImage } from "@/lib/catalogImages";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 
 const now = "2026-06-04T00:00:00.000Z";
 
 const imagePools = {
   desk: [
-    "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop",
+    "/images/Desk Organsier/1.jpg",
+    "/images/Desk Organsier/2.jpg",
   ],
   pen: [
     "/images/pen1.png",
@@ -17,19 +18,21 @@ const imagePools = {
   ],
   tshirt: [
     "/images/polotshirt.png",
-    "/images/roundnecktshirt.png",
+    "/images/roundnecktshirt/classicroundnecktshirt.png",
+    "/images/roundnecktshirt/premiumroundnecktshirt.png",
+    "/images/roundnecktshirt/executiveroundnecktshirt.png",
     "/images/classictimelesspolotshirt.png",
     "/images/tshirtblue.png",
     "/images/tshirtgreen.png",
     "/images/tshirtyellow.png",
   ],
   cap: [
-    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1521369909029-2afed882baee?q=80&w=1000&auto=format&fit=crop",
+    "/images/sportscap/classicsportcap.png",
+    "/images/cottoncaps/classiccottoncap.png",
   ],
   diary: [
-    "https://images.unsplash.com/photo-1531346878377-a5be20888e57?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=1000&auto=format&fit=crop",
+    "/images/Diaries/1.jpg",
+    "/images/Diaries/2.jpg",
   ],
   drinkware: [
     "/images/sportsbottle.png",
@@ -40,9 +43,10 @@ const imagePools = {
     "/images/premiumvaccumflask.png",
   ],
   bag: [
-    "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1000&auto=format&fit=crop",
+    "/images/Backpacks/1.jpg",
+    "/images/Laptop Bags/1.png",
+    "/images/Duffle Bags/1.webp",
+    "/images/slingbags/classicslingbag.png",
   ],
   giftbox: [
     "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=1000&auto=format&fit=crop",
@@ -50,9 +54,9 @@ const imagePools = {
     "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1000&auto=format&fit=crop",
   ],
   hamper: [
-    "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1000&auto=format&fit=crop",
+    "/images/Festive Hampers/1.jpg",
+    "/images/Diwali Hampers/1.jpg",
+    "/images/Holi Hampers/4b4cafcfc2eac114bea36d257d45a580.jpg",
   ],
   carton: [
     "https://images.unsplash.com/photo-1586528116311-ad8dd3c8311?q=80&w=1000&auto=format&fit=crop",
@@ -109,7 +113,7 @@ export const PROFESSIONAL_SUBCATEGORIES: SubcategoryRecord[] = Object.entries(su
     slug: slugify(name),
     category: category.slug,
     parentGroup: category.parentGroup || "",
-    image: category.image || imagePools.giftbox[0],
+    image: localCatalogImage(name) || category.image || imagePools.giftbox[0],
     active: true,
     createdAt: now,
   }));

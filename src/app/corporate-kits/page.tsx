@@ -9,6 +9,7 @@ import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 import { Briefcase, HardHat, Gift, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 
 type ActiveTab = "corporate" | "industry" | "festive";
 
@@ -24,6 +25,64 @@ const INDUSTRY_SLUGS = new Set([
   "plumber-kits",
   "real-estate-builder-kit"
 ]);
+
+const FESTIVE_HAMPER_COLLECTIONS = [
+  {
+    name: "Diwali Hampers",
+    slug: "diwali-hampers",
+    description: "Diwali dry fruit, wellness, diya, and festive premium corporate hampers.",
+    images: [
+      "/images/Diwali Hampers/1.jpg",
+      "/images/Diwali Hampers/2.jpg",
+      "/images/Diwali Hampers/3.jpg",
+      "/images/Diwali Hampers/4.jpg",
+      "/images/Diwali Hampers/5.jpg",
+    ],
+  },
+  {
+    name: "Holi Hampers",
+    slug: "holi-hampers",
+    description: "Holi hampers with organic colors, snacks, thandai mixes, and colorful branded boxes.",
+    images: ["/images/Holi Hampers/4b4cafcfc2eac114bea36d257d45a580.jpg"],
+  },
+  {
+    name: "EID Hampers",
+    slug: "eid-kits",
+    description: "EID gourmet hampers with dates, nuts, sweets, and elegant themed presentation.",
+    images: [
+      "/images/EID HAmpers/1.jpg",
+      "/images/EID HAmpers/2.jpg",
+      "/images/EID HAmpers/3.jpg",
+      "/images/EID HAmpers/4.jpg",
+      "/images/EID HAmpers/5.jpg",
+    ],
+  },
+  {
+    name: "Festive Hampers",
+    slug: "festive-hampers",
+    description: "Premium assorted festive hampers for company milestones, holiday gifting, and client appreciation.",
+    images: [
+      "/images/Festive Hampers/1.jpg",
+      "/images/Festive Hampers/2.jpg",
+      "/images/Festive Hampers/3.jpg",
+    ],
+  },
+] as const;
+
+const fallbackFestiveCards = (slug?: string) =>
+  FESTIVE_HAMPER_COLLECTIONS
+    .filter((collection) => !slug || collection.slug === slug)
+    .flatMap((collection) =>
+      collection.images.map((imageUrl, index) => ({
+        title: collection.images.length === 1 ? collection.name : `${collection.name} ${index + 1}`,
+        description: collection.description,
+        imageUrl,
+        price: "Custom Quote",
+        slug: `${collection.slug}-${index + 1}`,
+        category: "festive-hampers",
+        href: `/enquiry?product=${encodeURIComponent(collection.images.length === 1 ? collection.name : `${collection.name} ${index + 1}`)}`,
+      }))
+    );
 
 interface Category {
   id: string;
@@ -91,14 +150,30 @@ function CorporateKitsContent() {
   }, [subcategories]);
 
   const festiveOptions = useMemo(() => {
-    return subcategories.filter(
+    const databaseOptions = subcategories.filter(
       (sub) => sub.category === "festive-hampers" || sub.parentGroup === "Festive Hampers"
     );
+    const existingSlugs = new Set(databaseOptions.map((sub) => sub.slug));
+    const localOptions = FESTIVE_HAMPER_COLLECTIONS
+      .filter((collection) => !existingSlugs.has(collection.slug))
+      .map((collection, index) => ({
+        id: `local_${collection.slug}`,
+        name: collection.name,
+        slug: collection.slug,
+        category: "festive-hampers",
+        parentGroup: "Festive Hampers",
+        description: collection.description,
+        image: collection.images[0],
+        order: 100 + index,
+      }));
+
+    return [...databaseOptions, ...localOptions];
   }, [subcategories]);
 
   const selectedSubcategory = useMemo(() => {
-    return subcategories.find((sub) => sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$/g, "") === selectedKit);
-  }, [subcategories, selectedKit]);
+    return subcategories.find((sub) => sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$/g, "") === selectedKit)
+      || festiveOptions.find((sub) => sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$/g, "") === selectedKit);
+  }, [festiveOptions, subcategories, selectedKit]);
 
   const activeTab: ActiveTab = useMemo(() => {
     if (selectedSubcategory) {
@@ -124,14 +199,20 @@ function CorporateKitsContent() {
       filtered = products.filter((p) => activeSlugs.has(p.subcategory));
     }
 
-    return filtered.map((p) => ({
+    const mapped = filtered.map((p) => ({
       title: p.title,
       description: p.description,
-      imageUrl: p.featuredImage || p.images[0] || "/images/joiningkit.png",
+      imageUrl: localCatalogImage(p.title) || p.featuredImage || p.images[0] || "/images/joiningkit.png",
       price: p.price ? `₹${p.price}` : "Custom Quote",
       slug: p.slug,
-      category: p.category
+      category: p.category,
+      href: undefined,
     }));
+
+    if (mapped.length > 0) return mapped;
+    if (selectedSubcategory?.category === "festive-hampers") return fallbackFestiveCards(selectedSubcategory.slug);
+    if (activeTab === "festive") return fallbackFestiveCards();
+    return mapped;
   }, [activeTab, corporateOptions, festiveOptions, products, selectedSubcategory]);
 
   const selectedLabel = selectedSubcategory?.name || "Corporate Kits";
@@ -255,6 +336,7 @@ function CorporateKitsContent() {
                   price={item.price}
                   index={idx}
                   category={item.category}
+                  href={item.href}
                   className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
                 />
               ))}

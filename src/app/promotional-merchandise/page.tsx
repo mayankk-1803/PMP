@@ -9,6 +9,7 @@ import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 import { ArrowUpRight, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { localCatalogImage } from "@/lib/localCatalogImages";
 
 interface Category {
   id: string;
@@ -68,7 +69,7 @@ export default function PromoMerchPage() {
       .map((p) => ({
         title: p.title,
         description: p.description,
-        imageUrl: p.featuredImage || p.images[0] || "/images/joiningkit.png",
+        imageUrl: localCatalogImage(p.title) || p.featuredImage || p.images[0] || "/images/joiningkit.png",
         cta: "View Product",
         brandingOptions: p.features?.slice(0, 2) || ["Logo Branding", "Custom Finishes"],
         href: `/products/${p.slug}`,
@@ -123,7 +124,7 @@ export default function PromoMerchPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {categories.map((cat, i) => {
                 const href = `/products?category=${cat.slug}`;
-                const matchedImg = cat.image || "/images/joiningkit.png";
+                const matchedImg = localCatalogImage(cat.name) || cat.image || "/images/joiningkit.png";
                 return (
                   <motion.div
                     key={cat.slug}
