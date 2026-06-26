@@ -21,11 +21,11 @@ export default function Home() {
       <section className="py-24 bg-[#fbfaf8] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-16 text-center max-w-2xl mx-auto">
-            <span className="text-red-600 text-xs font-bold tracking-widest uppercase mb-3 block">Branded Corporate Partnerships</span>
+            <span className="text-[#8A6A3B] text-xs font-bold tracking-widest uppercase mb-3 block">Branded Corporate Partnerships</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-              Curated Merchandise & <span className="text-red-600">Giveaways</span>
+              Curated Merchandise & <span className="text-[#6E7757]">Giveaways</span>
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-[#3f4a5f]">
               Explore high-quality merchandise co-branded with laser engraving, screen printing, or embroidery to boost brand value.
             </p>
           </div>

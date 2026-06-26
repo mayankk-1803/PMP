@@ -3,6 +3,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Award, Box, Zap, Truck } from "lucide-react";
+import { staggerContainerSlow, cardReveal, EASE_SMOOTH } from "@/lib/animations";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const USPs = [
   {
@@ -28,34 +30,48 @@ const USPs = [
 ];
 
 export function WhyChooseUs() {
+  const prefersReduced = useReducedMotion();
   return (
-    <section className="py-24 bg-gray-50">
+    <section className="py-24 bg-[#EFE7DB]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold mb-4 text-red-600">Why Partner With Us?</h2>
-          <p className="text-gray-600 text-lg">We handle the complexity of corporate gifting so you can focus on building relationships.</p>
-        </div>
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.65, ease: EASE_SMOOTH }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
+          <h2 className="text-4xl font-bold mb-4 text-[#2B2B2B]">Why Partner With Us?</h2>
+          <p className="text-[#6B6B63] text-lg">We handle the complexity of corporate gifting so you can focus on building relationships.</p>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div
+          variants={prefersReduced ? undefined : staggerContainerSlow}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
           {USPs.map((usp, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all group"
+              variants={prefersReduced ? undefined : cardReveal}
+              whileHover={prefersReduced ? undefined : { y: -8, scale: 1.01 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white p-8 rounded-2xl border border-[#DDD5C8] shadow-sm hover:shadow-xl hover:shadow-[#DDD5C8]/50 hover:border-[#6E7757]/30 transition-all group"
             >
-              <div className="bg-gray-50 w-16 h-16 rounded-xl flex items-center justify-center text-gray-900 mb-6 transition-colors">
+              <motion.div
+                className="bg-[#F8F5EF] w-16 h-16 rounded-xl flex items-center justify-center text-[#6E7757] mb-6 group-hover:bg-[#6E7757] group-hover:text-white transition-colors"
+                whileHover={prefersReduced ? undefined : { rotate: 360 }}
+                transition={{ duration: 0.6, ease: EASE_SMOOTH }}
+              >
                 {usp.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-red-600 transition-colors">{usp.title}</h3>
-              <p className="text-gray-600 leading-relaxed font-medium">
-                {usp.desc}
-              </p>
+              </motion.div>
+              <h3 className="text-xl font-bold mb-3 text-[#6E7757] transition-colors">{usp.title}</h3>
+              <p className="text-[#6B6B63] leading-relaxed font-medium">{usp.desc}</p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

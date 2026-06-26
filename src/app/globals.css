@@ -1,34 +1,39 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-brand-red: #dc2626;
-  --color-brand-red-dark: #b91c1c;
-  --color-brand-red-light: #ef4444;
+  /* ── NEW: Luxury Organic Palette ── */
+  --color-brand-primary: #F8F5EF;
+  --color-brand-secondary: #EFE7DB;
+  --color-brand-olive: #6E7757;
+  --color-brand-olive-dark: #4E583F;
+  --color-brand-gold: #C8A36A;
+  --color-brand-heading: #2B2B2B;
+  --color-brand-body: #6B6B63;
+  --color-brand-border: #DDD5C8;
+  --color-brand-card: #FFFFFF;
+  --color-brand-hover: #7B8563;
+  --color-background: #F8F5EF;
+  --color-foreground: #2B2B2B;
+
+  /* Legacy kept for any residual utility references */
   --color-brand-white: #ffffff;
   --color-brand-gray: #fafafa;
-  --color-background: #ffffff;
-  --color-foreground: #1f2937;
-  --color-luxury-gold: #d4af37;
-  --color-luxury-gold-dark: #aa841c;
-  --color-luxury-gold-light: #f3e5ab;
-  --color-luxury-black: #0a0a0a;
-  --color-luxury-dark: #121212;
-  --color-luxury-navy: #0f172a;
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 
   /* Premium spacing */
-  --spacing-section: 4rem; /* py-16 */
-  --spacing-section-lg: 5rem; /* py-20 */
+  --spacing-section: 4rem;
+  --spacing-section-lg: 5rem;
 }
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #111111;
-    --brand-red: #dc2626;
-    --brand-red-dark: #b91c1c;
-    --luxury-gold: #d4af37;
+    --background: #F8F5EF;
+    --foreground: #2B2B2B;
+    --brand-olive: #6E7757;
+    --brand-olive-dark: #4E583F;
+    --brand-gold: #C8A36A;
+    --brand-border: #DDD5C8;
   }
 
   html, body {
@@ -40,52 +45,68 @@
   }
 
   body {
-    @apply antialiased flex flex-col min-h-screen selection:bg-red-600 selection:text-white;
+    @apply antialiased flex flex-col min-h-screen selection:bg-[#6E7757] selection:text-white;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight text-gray-900;
+    @apply font-bold tracking-tight;
+    color: #2B2B2B;
   }
 
   p {
-    @apply leading-relaxed text-gray-600;
+    @apply leading-relaxed;
+    color: #6B6B63;
   }
 
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
-    background: #0f0f11;
+    background: #EFE7DB;
   }
-  
+
   ::-webkit-scrollbar-thumb {
-    background: #27272a;
+    background: #DDD5C8;
     border-radius: 9999px;
-    border: 2px solid #0f0f11;
+    border: 2px solid #EFE7DB;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #dc2626;
+    background: #6E7757;
   }
 }
 
-/* Custom premium styles */
-.glass-navbar {
-  background: rgba(10, 10, 10, 0.75);
+/* ── Organic Navbar ── */
+.organic-navbar {
+  background: rgba(248, 245, 239, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-b: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(221, 213, 200, 0.8);
 }
 
-.glass-navbar-light {
-  background: rgba(255, 255, 255, 0.75);
+.organic-navbar-scrolled {
+  background: rgba(248, 245, 239, 0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-b: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid #DDD5C8;
+  box-shadow: 0 4px 20px rgba(43, 43, 43, 0.06);
 }
 
+/* ── Organic Cards ── */
+.organic-card {
+  background: #ffffff;
+  border: 1px solid #DDD5C8;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(43, 43, 43, 0.05);
+}
+
+.organic-card:hover {
+  box-shadow: 0 8px 30px rgba(43, 43, 43, 0.08);
+}
+
+/* ── Legacy Glass (kept for admin / any dark sections) ── */
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
@@ -102,45 +123,43 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.glass-card-premium {
-  background: linear-gradient(135deg, rgba(25, 25, 25, 0.8) 0%, rgba(10, 10, 10, 0.9) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35);
-}
-
+/* ── Luxury CTA (dark charcoal block) ── */
 .luxury-gradient {
-  background: linear-gradient(135deg, #09090b 0%, #150808 55%, #050505 100%);
+  background: linear-gradient(135deg, #2B2B2B 0%, #1a1a1a 60%, #2B2B2B 100%);
 }
 
 .luxury-gradient-gold {
-  background: linear-gradient(135deg, #1e1b18 0%, #0d0c0b 60%, #171513 100%);
-  border: 1px solid rgba(214, 175, 55, 0.1);
+  background: linear-gradient(135deg, #EFE7DB 0%, #F8F5EF 60%, #EFE7DB 100%);
+  border: 1px solid #DDD5C8;
 }
 
-.luxury-gradient-red {
-  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-}
-
+/* ── Text Gradients ── */
 .luxury-text-gradient-gold {
-  background: linear-gradient(to right, #f3e5ab, #d4af37, #aa841c);
+  background: linear-gradient(to right, #C8A36A, #b8925a, #C8A36A);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.luxury-text-gradient-olive {
+  background: linear-gradient(to right, #6E7757, #4E583F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Shadows ── */
 .luxury-shadow-sm {
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -2px rgba(43, 43, 43, 0.05);
 }
 
 .luxury-shadow-md {
-  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px -4px rgba(43, 43, 43, 0.08);
 }
 
 .luxury-shadow-lg {
-  box-shadow: 0 20px 50px -8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 20px 50px -8px rgba(43, 43, 43, 0.10);
 }
 
+/* ── No Scrollbar ── */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -150,6 +169,7 @@
   scrollbar-width: none;
 }
 
+/* ── Animations (unchanged) ── */
 @keyframes float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
@@ -195,31 +215,32 @@
   animation: ribbon-rotate 12s linear infinite;
 }
 
-/* Custom transitions */
+/* ── Transitions ── */
 .transition-luxury {
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.luxury-border-glow {
+/* ── Organic Border Glow ── */
+.organic-border-glow {
   position: relative;
 }
 
-.luxury-border-glow::after {
+.organic-border-glow::after {
   content: '';
   position: absolute;
   inset: -1px;
-  background: linear-gradient(to right, rgba(220, 38, 38, 0.2), rgba(212, 175, 55, 0.2));
+  background: linear-gradient(to right, rgba(110, 119, 87, 0.2), rgba(200, 163, 106, 0.2));
   border-radius: inherit;
   z-index: -1;
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-.luxury-border-glow:hover::after {
+.organic-border-glow:hover::after {
   opacity: 1;
 }
 
-/* 3D Box layout mockups */
+/* ── 3D Box (unchanged) ── */
 .box-isometric-container {
   perspective: 1000px;
 }
@@ -233,3 +254,91 @@
 .box-3d:hover {
   transform: rotateX(15deg) rotateY(-10deg) scale(1.02);
 }
+
+/* ── Swiper Overrides (Organic Palette) ── */
+.swiper-pagination-bullet {
+  background-color: #DDD5C8 !important;
+  opacity: 1 !important;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #6E7757 !important;
+  opacity: 1 !important;
+  transform: scale(1.2);
+}
+
+/* ── Shimmer (skeleton loading) ── */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(200%); }
+}
+
+
+@keyframes hero-word-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(-24px, 24px, 0) scale(0.96);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.hero-word-reveal {
+  opacity: 0;
+  animation: hero-word-enter 0.78s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform, filter;
+}
+
+
+@keyframes hero-control-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.94);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.hero-control-reveal {
+  opacity: 0;
+  animation: hero-control-enter 0.64s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform, filter;
+}
+
+/* ── Prefers Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep requested hero word animation visible on page load. */
+  .hero-word-reveal {
+    animation-name: hero-word-enter !important;
+    animation-duration: 0.78s !important;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+    animation-fill-mode: both !important;
+  }
+
+  .hero-control-reveal {
+    animation-name: hero-control-enter !important;
+    animation-duration: 0.64s !important;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+    animation-fill-mode: both !important;
+  }
+}
+

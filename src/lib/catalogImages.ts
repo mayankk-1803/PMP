@@ -1,6 +1,5 @@
+import { corporateKitImageOrFallback } from "@/lib/kitImageMap";
 const image = (id: string) => `https://images.unsplash.com/${id}?q=80&w=1000&auto=format&fit=crop`;
-const unsplashPhoto = (id: string) => `https://unsplash.com/photos/${id}/download?force=true&w=1000`;
-const pexelsPhoto = (id: string) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1000`;
 const folderImage = (folder: string, file: string) => `/images/${folder}/${file}`;
 
 const hashText = (value: string) =>
@@ -235,11 +234,11 @@ export const realCatalogImage = (title: string, category = "", subcategory = "",
   if (haystack.includes("bottle") || haystack.includes("flask") || haystack.includes("tumbler") || haystack.includes("mug")) return pick(POOLS.drinkware, title, seed);
   if (haystack.includes("speaker") || haystack.includes("earbud") || haystack.includes("charger") || haystack.includes("usb")) return pick(POOLS.tech, title, seed);
 
-  if (haystack.includes("architect") || haystack.includes("interior")) return pick(POOLS.architect, title, seed);
-  if (haystack.includes("mason") || haystack.includes("contractor") || haystack.includes("electrician")) return pick(POOLS.fieldTools, title, seed);
-  if (haystack.includes("doctor") || haystack.includes("hospital") || haystack.includes("pharma")) return pick(POOLS.medical, title, seed);
+  if (haystack.includes("architect") || haystack.includes("interior")) return corporateKitImageOrFallback(title || subcategory || category);
+  if (haystack.includes("mason") || haystack.includes("contractor") || haystack.includes("electrician")) return corporateKitImageOrFallback(title || subcategory || category);
+  if (haystack.includes("doctor") || haystack.includes("hospital") || haystack.includes("pharma")) return corporateKitImageOrFallback(title || subcategory || category);
   if (haystack.includes("kit") || haystack.includes("dealer") || haystack.includes("distributor") || haystack.includes("partner") || haystack.includes("sales")) {
-    return pick(POOLS.corporateKits, title, seed);
+    return corporateKitImageOrFallback(title || subcategory || category);
   }
 
   if (haystack.includes("diwali")) return pick(POOLS.diwaliHampers, title, seed);

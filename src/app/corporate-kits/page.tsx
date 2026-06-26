@@ -1,6 +1,7 @@
 "use client";
 
 import React, { Suspense, useEffect, useState, useMemo } from "react";
+import { DEFAULT_KIT_IMAGE } from "@/lib/kitImageMap";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -84,15 +85,16 @@ const fallbackFestiveCards = (slug?: string) =>
       }))
     );
 
-interface Category {
-  id: string;
-  name: string;
-  slug: string;
-  description?: string;
-  parentGroup?: string;
-  order?: number;
-}
-
+const fallbackCorporateCards = (items: Subcategory[]) =>
+  items.map((item) => ({
+    title: item.name,
+    description: item.description || "Curated premium corporate kit with custom branding and bulk fulfillment support.",
+    imageUrl: localCatalogImage(item.name) || item.image || DEFAULT_KIT_IMAGE,
+    price: "Custom Quote",
+    slug: item.slug,
+    category: item.category,
+    href: `/enquiry?product=${encodeURIComponent(item.name)}`,
+  }));
 interface Subcategory {
   id: string;
   name: string;
@@ -121,7 +123,6 @@ function CorporateKitsContent() {
   const router = useRouter();
   const selectedKit = searchParams?.get("kit") || "";
 
-  const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -132,8 +133,7 @@ function CorporateKitsContent() {
       fetch("/api/catalog/subcategories").then((res) => res.json()),
       fetch("/api/catalog/products").then((res) => res.json())
     ])
-      .then(([catRes, subRes, prodRes]) => {
-        if (catRes.success && catRes.data) setCategories(catRes.data);
+      .then(([, subRes, prodRes]) => {
         if (subRes.success && subRes.data) setSubcategories(subRes.data);
         if (prodRes.success && prodRes.data) setProducts(prodRes.data);
         setLoading(false);
@@ -184,6 +184,12 @@ function CorporateKitsContent() {
     return "corporate";
   }, [selectedSubcategory]);
 
+  const currentOptions = activeTab === "festive"
+    ? festiveOptions
+    : activeTab === "industry"
+      ? corporateOptions.filter((s) => INDUSTRY_SLUGS.has(s.slug))
+      : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
+
   const visibleItems = useMemo(() => {
     let filtered = products;
     if (selectedSubcategory) {
@@ -202,7 +208,7 @@ function CorporateKitsContent() {
     const mapped = filtered.map((p) => ({
       title: p.title,
       description: p.description,
-      imageUrl: localCatalogImage(p.title) || p.featuredImage || p.images[0] || "/images/joiningkit.png",
+      imageUrl: localCatalogImage(p.title) || p.featuredImage || p.images[0] || DEFAULT_KIT_IMAGE,
       price: p.price ? `₹${p.price}` : "Custom Quote",
       slug: p.slug,
       category: p.category,
@@ -212,8 +218,9 @@ function CorporateKitsContent() {
     if (mapped.length > 0) return mapped;
     if (selectedSubcategory?.category === "festive-hampers") return fallbackFestiveCards(selectedSubcategory.slug);
     if (activeTab === "festive") return fallbackFestiveCards();
-    return mapped;
-  }, [activeTab, corporateOptions, festiveOptions, products, selectedSubcategory]);
+    if (selectedSubcategory) return fallbackCorporateCards([selectedSubcategory]);
+    return fallbackCorporateCards(currentOptions);
+  }, [activeTab, corporateOptions, currentOptions, festiveOptions, products, selectedSubcategory]);
 
   const selectedLabel = selectedSubcategory?.name || "Corporate Kits";
   const selectedDescription = selectedSubcategory?.description || 
@@ -225,32 +232,26 @@ function CorporateKitsContent() {
     { id: "festive", label: "Festive & Occasion Hampers", icon: <Gift className="w-4 h-4" />, href: "/corporate-kits?kit=diwali-hampers" },
   ] as const;
 
-  const currentOptions = activeTab === "festive"
-    ? festiveOptions
-    : activeTab === "industry"
-      ? corporateOptions.filter((s) => INDUSTRY_SLUGS.has(s.slug))
-      : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#faf9f6]">
-        <Loader2 className="w-8 h-8 text-red-600 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F5EF]">
+        <Loader2 className="w-8 h-8 text-[#6E7757] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-[#faf9f6] overflow-hidden max-w-full">
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#F8F5EF] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[140px]" />
-      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-red-50/40 to-transparent pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-[#EFE7DB]/40 to-transparent pointer-events-none z-0" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-red-100">
+          <span className="px-4 py-1.5 rounded-full bg-[#EFE7DB] text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-[#DDD5C8]">
             Curated Gift Sets
           </span>
           <SectionHeading
-            title={<>{selectedSubcategory ? selectedLabel : "Corporate"} <span className="text-red-600">{selectedSubcategory ? "" : "Kits & Hampers"}</span></>}
+            title={<>{selectedSubcategory ? selectedLabel : "Corporate"} <span className="text-[#6E7757]">{selectedSubcategory ? "" : "Kits & Hampers"}</span></>}
             subtitle={selectedDescription}
             centered
           />
@@ -266,7 +267,7 @@ function CorporateKitsContent() {
                   onClick={() => router.push(tab.href)}
                   className={`flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 w-full md:w-auto ${
                     isActive
-                      ? "bg-gray-900 text-white shadow-md shadow-gray-900/10"
+                      ? "bg-[#6E7757] text-white shadow-md shadow-[#6E7757]/10"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }`}
                 >
@@ -280,7 +281,7 @@ function CorporateKitsContent() {
 
         {/* Dynamic DB-driven Pills Selection */}
         <div className="mb-14 rounded-2xl bg-white border border-gray-200/80 p-5 shadow-sm text-left">
-          <div className="text-[10px] font-extrabold uppercase tracking-widest mb-4 text-red-600">
+          <div className="text-[10px] font-extrabold uppercase tracking-widest mb-4 text-[#C8A36A]">
             {activeTab === "festive" ? "Festive Hamper Collections" : "Corporate Kit Options"}
           </div>
           <div className="flex flex-wrap gap-2">
@@ -292,8 +293,8 @@ function CorporateKitsContent() {
                   href={`/corporate-kits?kit=${item.slug}`}
                   className={`rounded-xl border px-3.5 py-2 text-xs font-bold transition-all ${
                     isSelected
-                      ? "border-red-600 bg-red-50 text-red-600 shadow-sm"
-                      : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300 hover:bg-white hover:text-gray-950"
+                      ? "border-[#6E7757] bg-[#EFE7DB] text-[#6E7757] shadow-sm"
+                      : "border-[#DDD5C8] bg-[#F8F5EF] text-[#6B6B63] hover:border-[#6E7757]/30 hover:bg-white hover:text-[#2B2B2B]"
                   }`}
                 >
                   {item.name}
@@ -305,7 +306,7 @@ function CorporateKitsContent() {
 
         <div className="mb-6 flex items-center justify-between gap-4 text-left">
           <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-600">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#8A6A3B]">
               {selectedSubcategory ? "Selected Collection" : "Featured Collection"}
             </span>
             <h2 className="mt-1 text-2xl md:text-3xl font-black text-gray-950">
@@ -349,27 +350,27 @@ function CorporateKitsContent() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mt-24 p-8 md:p-16 rounded-3xl bg-gradient-to-br from-gray-900 via-gray-900 to-black text-white relative overflow-hidden border border-white/5 shadow-2xl"
+          className="mt-24 p-8 md:p-16 rounded-3xl bg-gradient-to-br from-[#2B2B2B] via-[#303527] to-[#1E2119] text-white relative overflow-hidden border border-[#C8A36A]/20 shadow-2xl shadow-[#4E583F]/15"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-red-600/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#C8A36A]/15 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#6E7757]/20 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 max-w-3xl flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left">
-              <span className="text-[10px] font-bold tracking-widest text-red-500 uppercase block mb-3">
+              <span className="text-[10px] font-bold tracking-widest text-[#C8A36A] uppercase block mb-3">
                 Bespoke Packaging & Gifting
               </span>
               <h3 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-white leading-tight">
-                Want to curate a <span className="text-red-500">completely custom</span> kit?
+                Want to curate a <span className="text-[#C8A36A]">completely custom</span> kit?
               </h3>
-              <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+              <p className="text-[#DDD5C8] text-sm md:text-base leading-relaxed">
                 Tell us your budget, quantity, and product preferences. Our team will draft custom dielines, mockups, and organize pan-India door-to-door delivery.
               </p>
             </div>
             <div className="flex-shrink-0 w-full md:w-auto">
               <Button
                 size="lg"
-                className="w-full md:w-auto font-bold rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-xl shadow-red-900/20 border-0 flex items-center justify-center gap-2 group py-4 px-8"
+                className="w-full md:w-auto font-bold rounded-xl bg-gradient-to-r from-[#6E7757] to-[#4E583F] hover:from-[#7B8563] hover:to-[#4E583F] text-white shadow-xl shadow-[#4E583F]/25 border border-[#C8A36A]/20 flex items-center justify-center gap-2 group py-4 px-8"
                 asChild
               >
                 <Link href="/enquiry?source=custom-kit">

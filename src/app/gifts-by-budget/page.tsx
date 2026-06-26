@@ -59,21 +59,21 @@ function GiftsByBudgetContent() {
   };
 
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-[#fafafa] overflow-hidden max-w-full">
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#F8F5EF] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[140px]" />
       
       {/* Decorative gradient overlay */}
-      <div className="absolute top-0 left-0 right-0 h-[400px] bg-gradient-to-b from-red-50/30 to-transparent pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 right-0 h-[400px] bg-gradient-to-b from-[#EFE7DB]/40 to-transparent pointer-events-none z-0" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Page Title */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-red-100">
+          <span className="px-4 py-1.5 rounded-full bg-[#EFE7DB] text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-[#DDD5C8]">
             Smart Budgets
           </span>
           <SectionHeading 
-            title={<>Corporate Gifts <span className="text-red-600">by Budget</span></>}
+            title={<>Corporate Gifts <span className="text-[#6E7757]">by Budget</span></>}
             subtitle="Explore our curated catalog segments structured dynamically to match your cost constraints without compromising on visual elegance." 
             centered 
           />

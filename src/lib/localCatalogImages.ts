@@ -1,3 +1,4 @@
+import { corporateKitImage } from "@/lib/kitImageMap";
 const normalizeImageTitle = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
 
 const folderImage = (folder: string, file: string) => `/images/${folder}/${file}`;
@@ -282,4 +283,5 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Leadership Retreat Hamper")]: "/images/leadershipretreat.png",
 };
 
-export const localCatalogImage = (title: string) => LOCAL_CATALOG_IMAGES_BY_TITLE[normalizeImageTitle(title)];
+export const localCatalogImage = (title: string) =>
+  corporateKitImage(title) || LOCAL_CATALOG_IMAGES_BY_TITLE[normalizeImageTitle(title)];

@@ -28,18 +28,18 @@ const TESTIMONIALS = [
 
 export function Testimonials() {
   return (
-    <section className="py-24 bg-white border-y border-gray-100">
+    <section className="py-24 bg-[#F8F5EF] border-y border-[#DDD5C8]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl font-bold mb-12 text-red-600"
+          className="text-4xl font-bold mb-12 text-[#2B2B2B]"
         >
           Partner Success Stories
         </motion.h2>
         
-        <div className="bg-gray-50 p-10 md:p-16 rounded-3xl border border-gray-100">
+        <div className="bg-[#EFE7DB] p-10 md:p-16 rounded-3xl border border-[#DDD5C8]">
           <Swiper
             modules={[Autoplay, Pagination]}
             pagination={{ clickable: true }}
@@ -51,13 +51,13 @@ export function Testimonials() {
             {TESTIMONIALS.map((testimonial, idx) => (
               <SwiperSlide key={idx}>
                 <div className="flex flex-col items-center max-w-3xl mx-auto text-center">
-                  <Quote className="w-12 h-12 text-gray-300 mb-8" />
-                  <p className="text-xl md:text-2xl font-medium italic mb-8 text-gray-700 leading-relaxed">
+                  <Quote className="w-12 h-12 text-[#DDD5C8] mb-8" />
+                  <p className="text-xl md:text-2xl font-medium italic mb-8 text-[#2B2B2B] leading-relaxed">
                     "{testimonial.quote}"
                   </p>
                   <div>
-                    <h4 className="font-bold text-red-600 text-lg">{testimonial.author}</h4>
-                    <p className="text-gray-500 font-semibold">{testimonial.company}</p>
+                    <h4 className="font-bold text-[#6E7757] text-lg">{testimonial.author}</h4>
+                    <p className="text-[#6B6B63] font-semibold">{testimonial.company}</p>
                   </div>
                 </div>
               </SwiperSlide>
@@ -68,13 +68,13 @@ export function Testimonials() {
 
       <style jsx global>{`
         .swiper-pagination-bullet {
-          background-color: #e5e7eb !important;
+          background-color: #DDD5C8 !important;
           opacity: 1 !important;
           width: 10px !important;
           height: 10px !important;
         }
         .swiper-pagination-bullet-active {
-          background-color: #111827 !important;
+          background-color: #6E7757 !important;
           opacity: 1 !important;
           transform: scale(1.2);
         }

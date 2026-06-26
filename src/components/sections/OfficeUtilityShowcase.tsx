@@ -56,11 +56,11 @@ export function OfficeUtilityShowcase() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#fafafa] relative overflow-hidden">
+      <section className="py-24 bg-[#F8F5EF] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-[460px] rounded-2xl bg-gray-250 animate-pulse border border-gray-300" />
+              <div key={i} className="h-[460px] rounded-2xl bg-[#EFE7DB] animate-pulse border border-[#DDD5C8]" />
             ))}
           </div>
         </div>
@@ -69,26 +69,26 @@ export function OfficeUtilityShowcase() {
   }
 
   return (
-    <section className="py-24 bg-[#fafafa] relative overflow-hidden">
-      {/* Decorative Blur Backgrounds */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-red-100/10 rounded-full blur-[140px] pointer-events-none" />
+    <section className="py-24 bg-[#F8F5EF] relative overflow-hidden">
+      {/* Decorative warm blur */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#6E7757]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl text-left">
-            <span className="text-red-600 text-xs font-bold tracking-widest uppercase mb-3 block flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 fill-red-600" /> Executive Desk Accessories
+            <span className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 fill-[#C8A36A]" /> Executive Desk Accessories
             </span>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight">
-              Premium <span className="text-red-600">Workspace Essentials</span>
+            <h2 className="text-3xl md:text-5xl font-black text-[#2B2B2B] mb-4 tracking-tight">
+              Premium <span className="text-[#6E7757]">Workspace Essentials</span>
             </h2>
-            <p className="text-gray-500 text-sm sm:text-base leading-relaxed font-semibold">
+            <p className="text-[#6B6B63] text-sm sm:text-base leading-relaxed font-semibold">
               Transform standard office desks into premium branding canvases. Custom logo integration on high-end leather, wood, and aluminum utilities.
             </p>
           </div>
-          <Button variant="outline" className="hidden md:inline-flex rounded-xl font-bold border-gray-300 hover:bg-gray-50 hover:border-gray-400" asChild>
+          <Button variant="outline" className="hidden md:inline-flex rounded-xl font-bold" asChild>
             <Link href="/products?category=workspace-essentials">Explore Workspace Catalog</Link>
           </Button>
         </div>
@@ -106,12 +106,12 @@ export function OfficeUtilityShowcase() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
-                className="group bg-white border border-gray-200/80 rounded-2xl overflow-hidden hover:border-red-500/25 hover:shadow-xl transition-all duration-300 flex flex-col h-[460px] text-left relative cursor-pointer"
+                className="group bg-white border border-[#DDD5C8] rounded-2xl overflow-hidden hover:border-[#6E7757]/25 hover:shadow-xl transition-all duration-300 flex flex-col h-[460px] text-left relative cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 {/* Image Container */}
-                <div className="relative aspect-[4/3] w-full bg-gray-50 overflow-hidden border-b border-gray-150">
+                <div className="relative aspect-[4/3] w-full bg-[#F8F5EF] overflow-hidden border-b border-[#DDD5C8]">
                   <SafeImage
                     src={mainImg}
                     alt={prod.title}
@@ -127,10 +127,10 @@ export function OfficeUtilityShowcase() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col justify-end p-5 text-white z-10"
+                        className="absolute inset-0 bg-[#2B2B2B]/65 backdrop-blur-xs flex flex-col justify-end p-5 text-white z-10"
                       >
                         <div className="space-y-2 mb-2">
-                          <span className="text-[9px] font-extrabold uppercase tracking-widest text-red-400 block border-b border-white/10 pb-1">Tech Specs:</span>
+                          <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#C8A36A] block border-b border-white/10 pb-1">Tech Specs:</span>
                           {prod.specs.slice(0, 3).map((sp: any) => (
                             <div key={sp.label} className="flex justify-between text-[10px] font-semibold text-gray-200">
                               <span className="text-gray-400 font-bold uppercase tracking-wider">{sp.label}:</span>
@@ -145,13 +145,13 @@ export function OfficeUtilityShowcase() {
                   {/* Bookmark Button */}
                   <button
                     onClick={(e) => handleToggleShortlist(prod.title, mainImg, prod.basePrice, e)}
-                    className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-sm text-gray-650 hover:bg-red-600 hover:text-white transition-colors z-20"
+                    className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-[#DDD5C8] shadow-sm text-[#6B6B63] hover:bg-[#6E7757] hover:text-white transition-colors z-20"
                     title="Shortlist Item"
                   >
-                    <Bookmark className={`w-4 h-4 ${isShortlisted ? "fill-red-600 text-white" : ""}`} />
+                    <Bookmark className={`w-4 h-4 ${isShortlisted ? "fill-[#6E7757] text-[#6E7757]" : ""}`} />
                   </button>
 
-                  <span className="absolute bottom-4 left-4 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 bg-gray-900 text-white rounded-md z-20">
+                  <span className="absolute bottom-4 left-4 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 bg-[#2B2B2B] text-white rounded-md z-20">
                     MOQ: {prod.moq} Units
                   </span>
                 </div>
@@ -160,21 +160,21 @@ export function OfficeUtilityShowcase() {
                 <div className="p-6 flex flex-col flex-grow justify-between">
                   <div className="space-y-2">
                     <div className="flex justify-between items-start">
-                      <h3 className="font-extrabold text-gray-900 text-base leading-tight group-hover:text-red-650 transition-colors">
+                      <h3 className="font-extrabold text-[#2B2B2B] text-base leading-tight group-hover:text-[#6E7757] transition-colors">
                         {prod.title}
                       </h3>
                     </div>
-                    <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+                    <p className="text-[#6B6B63] text-xs leading-relaxed line-clamp-2">
                       {prod.description}
                     </p>
                   </div>
 
                   {/* Customization Bullet List */}
-                  <div className="py-3 border-y border-gray-100 flex flex-wrap gap-2">
+                  <div className="py-3 border-y border-[#DDD5C8] flex flex-wrap gap-2">
                     {prod.customizations.slice(0, 2).map((custom: string) => (
                       <span 
                         key={custom} 
-                        className="text-[9px] font-extrabold text-gray-500 uppercase tracking-wider bg-gray-100 px-2 py-0.5 rounded"
+                        className="text-[9px] font-extrabold text-[#6B6B63] uppercase tracking-wider bg-[#F8F5EF] border border-[#DDD5C8] px-2 py-0.5 rounded"
                       >
                         {custom}
                       </span>
@@ -184,14 +184,14 @@ export function OfficeUtilityShowcase() {
                   {/* Bottom pricing & view details link */}
                   <div className="flex items-center justify-between pt-4 mt-auto">
                     <div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 block">Starting At</span>
-                      <span className="text-sm font-black text-gray-900">₹{prod.basePrice}</span>
-                      <span className="text-[10px] text-gray-400 font-bold ml-0.5">/unit</span>
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#6B6B63] block">Starting At</span>
+                      <span className="text-sm font-black text-[#2B2B2B]">₹{prod.basePrice}</span>
+                      <span className="text-[10px] text-[#6B6B63] font-bold ml-0.5">/unit</span>
                     </div>
 
                     <Link
                       href={`/products/${prod.key}`}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-bold text-red-600 hover:text-red-700 transition-colors uppercase tracking-widest"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#6E7757] hover:text-[#4E583F] transition-colors uppercase tracking-widest"
                     >
                       Configure <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </Link>
@@ -204,7 +204,7 @@ export function OfficeUtilityShowcase() {
 
         {/* Mobile View All button */}
         <div className="mt-8 md:hidden text-center">
-          <Button variant="outline" className="w-full rounded-xl border-gray-300 font-bold py-4" asChild>
+          <Button variant="outline" className="w-full rounded-xl font-bold py-4" asChild>
             <Link href="/products?category=workspace-essentials">View Workspace Catalog</Link>
           </Button>
         </div>

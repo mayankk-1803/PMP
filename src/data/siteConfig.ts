@@ -8,7 +8,7 @@ export const COMPANY_INFO = {
   email: "pacmyproduct@gmail.com",
   whatsapp: "https://wa.me/919599139303?text=Hi%2C%20I%20am%20interested%20in%20corporate%20gifting%20and%20packaging%20solutions.",
   gst: "Registered enterprise billing with full GST input tax credits.",
-  mapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3509.302324905183!2d77.07923487629579!3d28.409395275787126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d221800000001%3A0xb3debb96a099a9a3!2sDigital%20Greens!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
+  mapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3510.1065424637073!2d77.02781467629524!3d28.40680057578788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d22d02ce18f6d%3A0xe40da7b66d3e53f2!2sSatya%20The%20Hive%2C%20Sector%20102%2C%20Gurugram%2C%20Haryana%20122006!5e0!3m2!1sen!2sin!4v1750848000000!5m2!1sen!2sin",
   timings: "Monday to Saturday: 10:00 AM — 7:00 PM (IST)"
 };
 
