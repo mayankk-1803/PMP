@@ -8,13 +8,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const isLogin = pathname === "/87564/admin/login";
-  const [authorized, setAuthorized] = useState(isLogin);
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    if (isLogin) {
-      setAuthorized(true);
-      return;
-    }
+    if (isLogin) return;
 
     let active = true;
     fetch("/api/admin/auth/me")
@@ -39,11 +36,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     };
   }, [isLogin, router]);
 
+  if (isLogin) return children;
+
   if (!authorized) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-600">
+      <div className="flex min-h-screen items-center justify-center bg-[#F8F5EF] text-[#5F6752]">
         <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest">
-          <Loader2 className="h-5 w-5 animate-spin text-red-600" />
+          <Loader2 className="h-5 w-5 animate-spin text-[#6E7757]" />
           Checking admin session...
         </div>
       </div>

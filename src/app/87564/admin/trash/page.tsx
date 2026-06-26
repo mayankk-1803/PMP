@@ -137,15 +137,15 @@ export default function TrashPage() {
         )}
 
         {/* Tab Headers */}
-        <div className="border-b border-slate-200 bg-white p-2 rounded-t-xl flex flex-wrap gap-1">
+        <div className="border-b border-[#DDD5C8] bg-[#FFFDF8] p-2 rounded-t-xl flex flex-wrap gap-1">
           {(["products", "categories", "subcategories", "brands", "orders", "quotes"] as TabName[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`rounded-lg px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                 activeTab === tab
-                  ? "bg-slate-900 text-white shadow-md"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  ? "bg-[#4E583F] text-white shadow-md"
+                  : "text-[#5F6752] hover:bg-[#EFE7DB] hover:text-[#2B2B2B]"
               }`}
             >
               {getTabLabel(tab)}
@@ -154,10 +154,10 @@ export default function TrashPage() {
         </div>
 
         {/* Trash Content Table */}
-        <div className="overflow-hidden rounded-b-xl border border-t-0 border-slate-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-b-xl border border-t-0 border-[#DDD5C8] bg-[#FFFDF8] shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px] border-collapse text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+              <thead className="bg-[#F8F5EF] text-xs uppercase tracking-wider text-[#6B6B63]">
                 <tr>
                   {(activeTab === "products" || activeTab === "categories" || activeTab === "subcategories" || activeTab === "brands") && (
                     <th className="px-5 py-3.5 font-bold">Media</th>
@@ -168,19 +168,19 @@ export default function TrashPage() {
                   <th className="px-5 py-3.5 font-bold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-[#E9E1D5]">
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="px-5 py-12 text-center text-slate-400">
+                    <td colSpan={5} className="px-5 py-12 text-center text-[#9A9387]">
                       <div className="flex items-center justify-center gap-2">
-                        <Loader2 className="h-5 w-5 animate-spin text-red-600" />
+                        <Loader2 className="h-5 w-5 animate-spin text-[#6E7757]" />
                         <span>Querying archived collection records...</span>
                       </div>
                     </td>
                   </tr>
                 ) : items.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-5 py-12 text-center text-slate-400">
+                    <td colSpan={5} className="px-5 py-12 text-center text-[#9A9387]">
                       No deleted {activeTab} found in the trash.
                     </td>
                   </tr>
@@ -190,21 +190,21 @@ export default function TrashPage() {
                     const thumb = item.logo || item.image || "";
 
                     return (
-                      <tr key={item.id} className="hover:bg-slate-50/50 transition-colors">
+                      <tr key={item.id} className="hover:bg-[#F8F5EF]/70 transition-colors">
                         {(activeTab === "products" || activeTab === "categories" || activeTab === "subcategories" || activeTab === "brands") && (
                           <td className="px-5 py-3">
                             {thumb ? (
-                              <img src={thumb} alt={title} className="h-10 w-10 rounded-md object-cover border border-slate-150" />
+                              <img src={thumb} alt={title} className="h-10 w-10 rounded-md object-cover border border-[#E5DED2]" />
                             ) : (
-                              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-slate-100 text-slate-400">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#EFE7DB] text-[#9A9387]">
                                 <ImagePlus className="h-4 w-4" />
                               </div>
                             )}
                           </td>
                         )}
-                        <td className="px-5 py-4 font-bold text-slate-900">{title}</td>
-                        <td className="px-5 py-4 text-slate-500">{item.slug || item.email || "-"}</td>
-                        <td className="px-5 py-4 text-xs text-slate-500">
+                        <td className="px-5 py-4 font-bold text-[#2B2B2B]">{title}</td>
+                        <td className="px-5 py-4 text-[#6B6B63]">{item.slug || item.email || "-"}</td>
+                        <td className="px-5 py-4 text-xs text-[#6B6B63]">
                           {item.deletedAt ? new Date(item.deletedAt).toLocaleString() : "-"}
                         </td>
                         <td className="px-5 py-4">
@@ -212,14 +212,14 @@ export default function TrashPage() {
                             <button
                               disabled={processingId !== null}
                               onClick={() => handleRestore(item.id)}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#4E583F] shadow-sm hover:bg-[#F8F5EF] disabled:opacity-50"
                             >
                               <RotateCcw className="h-3.5 w-3.5 text-emerald-600" /> Restore
                             </button>
                             <button
                               disabled={!isSuperAdmin || processingId !== null}
                               onClick={() => handlePermanentDelete(item.id)}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-bold text-red-600 shadow-sm hover:bg-red-50 disabled:opacity-40"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E6C8B4] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#6E7757] shadow-sm hover:bg-[#EFE7DB] disabled:opacity-40"
                               title={isSuperAdmin ? "Purge permanently" : "Super Admin only"}
                             >
                               <Trash2 className="h-3.5 w-3.5" /> Purge
