@@ -74,7 +74,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="pt-28 pb-24 bg-gray-50 overflow-hidden max-w-full relative">
+    <div className="pt-28 pb-24 bg-[#F8F5EF] overflow-hidden max-w-full relative">
       <BackgroundGradient />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -93,8 +93,8 @@ export default function ContactPage() {
           <div className="lg:col-span-2 space-y-6 flex flex-col justify-between text-left">
             <div className="space-y-6">
               <div>
-                <h3 className="text-2xl font-black text-gray-900 mb-2">Corporate Support</h3>
-                <p className="text-sm text-gray-500 leading-relaxed font-medium">
+                <h3 className="text-2xl font-black text-[#2B2B2B] mb-2">Corporate Support</h3>
+                <p className="text-sm text-[#6B6B63] leading-relaxed font-medium">
                   Whether you are launching a bulk employee welcome kit program or ordering bespoke rigid luxury packaging boxes, our team is equipped to support you.
                 </p>
               </div>
@@ -121,70 +121,70 @@ export default function ContactPage() {
 
                 <a 
                   href={`tel:${COMPANY_INFO.phone}`}
-                  className="flex items-center justify-between p-4 bg-red-55/40 hover:bg-red-100/60 border border-red-100 rounded-xl transition-all group"
+                  className="flex items-center justify-between p-4 bg-[#EFE7DB] hover:bg-[#DDD5C8]/60 border border-[#DDD5C8] rounded-xl transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="bg-red-600 p-2.5 rounded-lg text-white">
+                    <div className="bg-[#6E7757] p-2.5 rounded-lg text-white">
                       <Phone className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[9px] text-red-800 font-extrabold uppercase tracking-wider block">Bulk Order Helpline</span>
-                      <span className="text-sm font-bold text-gray-900">{COMPANY_INFO.phone}</span>
+                      <span className="text-[9px] text-[#4E583F] font-extrabold uppercase tracking-wider block">Bulk Order Helpline</span>
+                      <span className="text-sm font-bold text-[#2B2B2B]">{COMPANY_INFO.phone}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-red-600 transition-transform group-hover:translate-x-0.5" />
+                  <ExternalLink className="w-4 h-4 text-[#6E7757] transition-transform group-hover:translate-x-0.5" />
                 </a>
 
                 <a 
                   href={`mailto:${COMPANY_INFO.email}?subject=Corporate%20Gifting%20Inquiry`}
-                  className="flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-250/60 border border-gray-200 rounded-xl transition-all group"
+                  className="flex items-center justify-between p-4 bg-white hover:bg-[#F8F5EF] border border-[#DDD5C8] rounded-xl transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="bg-gray-900 p-2.5 rounded-lg text-white">
+                    <div className="bg-[#2B2B2B] p-2.5 rounded-lg text-white">
                       <Mail className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[9px] text-gray-500 font-extrabold uppercase tracking-wider block">Official Email</span>
-                      <span className="text-sm font-bold text-gray-900 break-all">{COMPANY_INFO.email}</span>
+                      <span className="text-[9px] text-[#6B6B63] font-extrabold uppercase tracking-wider block">Official Email</span>
+                      <span className="text-sm font-bold text-[#2B2B2B] break-all">{COMPANY_INFO.email}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-gray-955 transition-transform group-hover:translate-x-0.5" />
+                  <ExternalLink className="w-4 h-4 text-[#2B2B2B] transition-transform group-hover:translate-x-0.5" />
                 </a>
               </div>
 
               {/* Office Details */}
               <div className="grid gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex items-start gap-4">
-                  <div className="text-red-500 p-2.5 bg-red-50 rounded-lg">
+                <div className="bg-white p-5 rounded-2xl border border-[#DDD5C8] shadow-sm flex items-start gap-4">
+                  <div className="text-[#6E7757] p-2.5 bg-[#EFE7DB] rounded-lg">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-extrabold text-sm text-gray-900 mb-1">Corporate HQ</h4>
-                    <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                    <h4 className="font-extrabold text-sm text-[#2B2B2B] mb-1">Corporate HQ</h4>
+                    <p className="text-[#6B6B63] text-xs leading-relaxed font-semibold">
                       {COMPANY_INFO.address}
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex items-start gap-4">
-                  <div className="text-red-500 p-2.5 bg-red-50 rounded-lg">
+                <div className="bg-white p-5 rounded-2xl border border-[#DDD5C8] shadow-sm flex items-start gap-4">
+                  <div className="text-[#6E7757] p-2.5 bg-[#EFE7DB] rounded-lg">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-extrabold text-sm text-gray-900 mb-1">Operational Hours</h4>
-                    <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                    <h4 className="font-extrabold text-sm text-[#2B2B2B] mb-1">Operational Hours</h4>
+                    <p className="text-[#6B6B63] text-xs leading-relaxed font-semibold">
                       {COMPANY_INFO.timings}
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex items-start gap-4">
-                  <div className="text-red-500 p-2.5 bg-red-50 rounded-lg">
+                <div className="bg-white p-5 rounded-2xl border border-[#DDD5C8] shadow-sm flex items-start gap-4">
+                  <div className="text-[#6E7757] p-2.5 bg-[#EFE7DB] rounded-lg">
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-extrabold text-sm text-gray-900 mb-1">GST & Billing Info</h4>
-                    <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                    <h4 className="font-extrabold text-sm text-[#2B2B2B] mb-1">GST & Billing Info</h4>
+                    <p className="text-[#6B6B63] text-xs leading-relaxed font-semibold">
                       {COMPANY_INFO.gst}
                     </p>
                   </div>
@@ -203,10 +203,10 @@ export default function ContactPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white p-8 md:p-10 rounded-3xl border border-gray-200 shadow-lg relative text-left"
+              className="bg-white p-8 md:p-10 rounded-3xl border border-[#DDD5C8] shadow-lg relative text-left"
             >
-              <h3 className="text-xl font-black text-gray-900 mb-1">Send a Message</h3>
-              <p className="text-xs text-gray-500 mb-6 font-semibold">Complete this quick form to initiate contact. Our account managers will reach out to you.</p>
+              <h3 className="text-xl font-black text-[#2B2B2B] mb-1">Send a Message</h3>
+              <p className="text-xs text-[#6B6B63] mb-6 font-semibold">Complete this quick form to initiate contact. Our account managers will reach out to you.</p>
               
               <AnimatePresence mode="wait">
                 {status === "success" ? (
@@ -236,23 +236,23 @@ export default function ContactPage() {
                   <form className="space-y-5" onSubmit={handleFormSubmit}>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Full Name *</label>
+                        <label className="text-xs font-bold text-[#6B6B63] uppercase tracking-wider block">Full Name *</label>
                         <input 
                           required 
                           name="name"
                           type="text" 
-                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
                           placeholder="Your Name" 
                         />
                       </div>
                       
                       <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Company / Organization *</label>
+                        <label className="text-xs font-bold text-[#6B6B63] uppercase tracking-wider block">Company / Organization *</label>
                         <input 
                           required 
                           name="company"
                           type="text" 
-                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
                           placeholder="Company Name" 
                         />
                       </div>
@@ -260,40 +260,40 @@ export default function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Work Email Address *</label>
+                        <label className="text-xs font-bold text-[#6B6B63] uppercase tracking-wider block">Work Email Address *</label>
                         <input 
                           required 
                           name="email"
                           type="email" 
-                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
                           placeholder="email@company.com" 
                         />
                       </div>
                       
                       <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Phone Number *</label>
+                        <label className="text-xs font-bold text-[#6B6B63] uppercase tracking-wider block">Phone Number *</label>
                         <input 
                           required 
                           name="phone"
                           type="tel" 
-                          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium" 
+                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
                           placeholder="+91 00000 00000" 
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">Inquiry / Project Details</label>
+                      <label className="text-xs font-bold text-[#6B6B63] uppercase tracking-wider block">Inquiry / Project Details</label>
                       <textarea 
                         name="message"
                         rows={4} 
-                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500/10 focus:border-red-500 transition-all resize-none font-medium" 
+                        className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all resize-none font-medium" 
                         placeholder="Please write down your questions or requests..." 
                       />
                     </div>
 
                     {status === "error" && (
-                      <div className="text-red-650 font-bold text-xs bg-red-50 p-3 border border-red-100 rounded-lg">
+                      <div className="text-rose-700 font-bold text-xs bg-rose-50 p-3 border border-rose-200 rounded-lg">
                         {errorMessage}
                       </div>
                     )}
@@ -301,7 +301,7 @@ export default function ContactPage() {
                     <div className="pt-2">
                       <Button 
                         size="lg" 
-                        className="w-full rounded-xl text-sm font-bold bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white py-5 flex items-center justify-center gap-2 shadow-md hover:shadow-red-600/10 border-0" 
+                        className="w-full rounded-xl text-sm font-bold py-5 flex items-center justify-center gap-2" 
                         type="submit"
                         disabled={status === "submitting"}
                       >
@@ -329,30 +329,30 @@ export default function ContactPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-white p-2 relative"
+          className="rounded-3xl overflow-hidden border border-[#DDD5C8] shadow-md bg-white p-2 relative"
         >
           {/* Floating Location Card */}
-          <div className="absolute top-6 left-6 z-20 bg-[#0c0c0e]/95 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.5)] max-w-sm hidden md:block text-left">
-            <span className="text-[9px] font-extrabold uppercase tracking-widest text-red-500 block mb-2">Enterprise Logistics</span>
+          <div className="absolute top-6 left-6 z-20 bg-[#2B2B2B]/95 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-[0_15px_50px_rgba(43,43,43,0.4)] max-w-sm hidden md:block text-left">
+            <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#C8A36A] block mb-2">Enterprise Logistics</span>
             <h4 className="text-sm font-extrabold text-white mb-2">Nationwide B2B Shipments & On-Time Direct Delivery</h4>
             <p className="text-xs text-gray-400 leading-relaxed mb-4 font-medium">
               We manage dedicated fulfillment hubs and shipping networks to guarantee safe transit to corporate offices and residences.
             </p>
-            <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-gray-250">
+            <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-gray-300">
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> North Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> North Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> West Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> West Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> South Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> South Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> East Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> East Hub
               </div>
               <div className="flex items-center gap-1.5 col-span-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" /> Central Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> Central Hub
               </div>
             </div>
           </div>
@@ -367,7 +367,7 @@ export default function ContactPage() {
               allowFullScreen={true} 
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 grayscale invert-[90%] hue-rotate-[180deg] brightness-[95%] contrast-[90%] hover:grayscale-0 hover:invert-0 hover:hue-rotate-0 transition-all duration-750"
+              className="absolute inset-0 rounded-2xl"
             />
           </div>
         </motion.div>

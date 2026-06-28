@@ -3,6 +3,8 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { EASE_SMOOTH } from "@/lib/animations";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface SectionHeadingProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   title: ReactNode;
@@ -17,38 +19,46 @@ export function SectionHeading({
   className,
   ...props
 }: SectionHeadingProps) {
+  const prefersReduced = useReducedMotion();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={prefersReduced ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.65, ease: EASE_SMOOTH }}
       className={cn("mb-16", centered && "text-center", className)}
       {...(props as any)}
     >
-
-      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-red-600">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#2B2B2B]">
         {title}
       </h2>
 
-      <div
+      {/* Gold underline — grows from left on viewport entry */}
+      <motion.div
+        initial={prefersReduced ? false : { scaleX: 0, opacity: 0 }}
+        whileInView={{ scaleX: 1, opacity: 1 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5, delay: 0.3, ease: EASE_SMOOTH }}
+        style={{ originX: centered ? 0.5 : 0 }}
         className={cn(
-          "mt-4 h-1 rounded-full bg-red-600",
-          centered
-            ? "mx-auto w-12"
-            : "w-12"
+          "mt-4 h-1 rounded-full bg-[#C8A36A]",
+          centered ? "mx-auto w-12" : "w-12"
         )}
       />
 
       {subtitle && (
-        <p
+        <motion.p
+          initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.55, delay: 0.2, ease: EASE_SMOOTH }}
           className={cn(
-            "text-gray-500 text-base md:text-lg mt-5 leading-relaxed",
+            "text-[#6B6B63] text-base md:text-lg mt-5 leading-relaxed",
             centered && "mx-auto max-w-2xl"
           )}
         >
           {subtitle}
-        </p>
+        </motion.p>
       )}
     </motion.div>
   );

@@ -6,36 +6,45 @@ import { Button } from "../ui/Button";
 import { MessageCircle, Mail, HelpCircle, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { COMPANY_INFO } from "@/data/siteConfig";
+import { scaleIn, staggerContainerSlow, staggerItem, EASE_SMOOTH } from "@/lib/animations";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export function CtaSection() {
+  const prefersReduced = useReducedMotion();
   return (
-    <section className="py-24 bg-[#faf9f6] relative overflow-hidden">
+    <section className="py-24 bg-[#EFE7DB] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={prefersReduced ? false : { opacity: 0, scale: 0.97, y: 20 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.65, ease: EASE_SMOOTH }}
           className="luxury-gradient rounded-3xl p-10 md:p-20 text-center relative overflow-hidden border border-white/5 shadow-2xl"
         >
           {/* Background glowing spheres */}
-          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-red-950/20 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-amber-950/20 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#6E7757]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-[#C8A36A]/10 rounded-full blur-[80px] pointer-events-none" />
 
-          <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-            <span className="text-amber-400 text-xs font-bold tracking-widest uppercase block">Ready to Partner?</span>
+          <motion.div
+            variants={prefersReduced ? undefined : staggerContainerSlow}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="relative z-10 max-w-3xl mx-auto space-y-6"
+          >
+            <motion.span variants={prefersReduced ? undefined : staggerItem} className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase block">Ready to Partner?</motion.span>
             
-            <h2 className="text-3xl md:text-5xl font-black text-white leading-tight">
+            <motion.h2 variants={prefersReduced ? undefined : staggerItem} className="text-3xl md:text-5xl font-black text-white leading-tight">
               Let&apos;s Design Your Custom <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-300">Gifting Experience</span>
-            </h2>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A36A] via-[#e8c68a] to-[#C8A36A]">Gifting Experience</span>
+            </motion.h2>
             
-            <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-xl mx-auto leading-relaxed font-medium">
+            <motion.p variants={prefersReduced ? undefined : staggerItem} className="text-sm sm:text-base md:text-lg text-gray-300 max-w-xl mx-auto leading-relaxed font-medium">
               Contact our corporate gifting style consultants. Get free catalog samples, structural diework designs, and custom branding proposals.
-            </p>
+            </motion.p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4 pt-6">
-              <Button size="lg" className="rounded-xl text-sm px-10 h-13 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-bold shadow-lg shadow-red-600/25 flex items-center justify-center gap-2 group transition-all border-0" asChild>
+              <Button size="lg" className="rounded-xl text-sm px-10 h-13 flex items-center justify-center gap-2 group" asChild>
                 <Link href="/enquiry">
                   Request Custom Proposal
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -43,19 +52,20 @@ export function CtaSection() {
               </Button>
               <Button variant="outline" size="lg" className="rounded-xl text-sm px-10 h-13 flex items-center justify-center gap-2 border-white/10 text-white bg-white/5 hover:bg-white/10 transition-all font-bold" asChild>
                 <a href={COMPANY_INFO.whatsapp} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4.5 h-4.5 text-emerald-400" />
+                  <MessageCircle className="w-4 h-4 text-emerald-400" />
                   Direct WhatsApp Help
                 </a>
               </Button>
             </div>
 
             <div className="flex justify-center gap-6 pt-10 text-xs text-gray-400 border-t border-white/10 mt-10">
-              <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-red-500" /> {COMPANY_INFO.email}</span>
-              <span className="flex items-center gap-1.5"><HelpCircle className="w-3.5 h-3.5 text-red-500" /> Response: Under 2 Hours</span>
+              <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-[#C8A36A]" /> {COMPANY_INFO.email}</span>
+              <span className="flex items-center gap-1.5"><HelpCircle className="w-3.5 h-3.5 text-[#C8A36A]" /> Response: Under 2 Hours</span>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
   );
 }
+

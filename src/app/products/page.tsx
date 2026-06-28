@@ -137,12 +137,12 @@ function ProductsPageContent() {
   );
 
   return (
-    <div className="pt-28 pb-24 bg-[#faf9f6] min-h-screen">
+    <div className="pt-28 pb-24 bg-[#F8F5EF] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-6">
-          <Link href="/" className="hover:text-red-500 flex items-center gap-1 transition-colors">
+          <Link href="/" className="hover:text-[#6E7757] flex items-center gap-1 transition-colors">
             <Home className="w-3.5 h-3.5" /> Home
           </Link>
           <ChevronRight className="w-3 h-3 text-gray-300" />
@@ -152,15 +152,15 @@ function ProductsPageContent() {
         {/* Page Header */}
         <div className="mb-12 text-left">
           <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
-            Promotional Products <span className="text-red-600">Catalog</span>
+            Promotional Products <span className="text-[#6E7757]">Catalog</span>
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-xl leading-relaxed font-semibold">
+          <p className="text-xs sm:text-sm text-[#6B6B63] mt-2 max-w-xl leading-relaxed font-semibold">
             High-quality corporate giveaways, employee welcome swag, and luxury promotional items customizable with your company logo.
           </p>
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="bg-white border border-gray-200 p-4 rounded-2xl shadow-sm mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="bg-white border border-[#DDD5C8] p-4 rounded-2xl shadow-sm mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="relative w-full md:max-w-md">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
@@ -168,7 +168,7 @@ function ProductsPageContent() {
               placeholder="Search product title or specifications..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-              className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-gray-250 focus:outline-none focus:border-red-650 focus:ring-1 focus:ring-red-500/20 text-sm font-medium"
+              className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-[#DDD5C8] focus:outline-none focus:border-[#6E7757] focus:ring-1 focus:ring-[#6E7757]/20 text-sm font-medium"
             />
             {searchQuery && (
               <button 
@@ -187,9 +187,9 @@ function ProductsPageContent() {
 
             <button
               onClick={() => setShowMobileFilters(true)}
-              className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl border border-gray-250 text-xs font-bold transition-all"
+              className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-[#F8F5EF] hover:bg-[#EFE7DB] text-[#6B6B63] rounded-xl border border-[#DDD5C8] text-xs font-bold transition-all"
             >
-              <Filter className="w-3.5 h-3.5 text-red-500" /> Filters
+              <Filter className="w-3.5 h-3.5 text-[#6E7757]" /> Filters
             </button>
           </div>
         </div>
@@ -203,13 +203,13 @@ function ProductsPageContent() {
             {/* Category Filters */}
             <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm text-left">
               <div className="flex items-center justify-between pb-4 border-b border-gray-100 mb-4">
-                <h3 className="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4 text-red-500" /> Categories
+                <h3 className="text-[11px] font-extrabold text-[#2B2B2B] uppercase tracking-widest flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4 text-[#6E7757]" /> Categories
                 </h3>
                 {(selectedCategory !== "all" || selectedBudget !== "all" || searchQuery !== "") && (
                   <button 
                     onClick={handleResetFilters}
-                    className="text-[9px] font-extrabold text-red-500 hover:underline uppercase tracking-wider flex items-center gap-1"
+                    className="text-[9px] font-extrabold text-[#6E7757] hover:underline uppercase tracking-wider flex items-center gap-1"
                   >
                     <RefreshCw className="w-3 h-3" /> Reset
                   </button>
@@ -222,21 +222,21 @@ function ProductsPageContent() {
                     onClick={() => handleCategoryChange(cat.slug)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
                       selectedCategory === cat.slug
-                        ? "bg-red-50 text-red-600"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-905"
+                        ? "bg-[#EFE7DB] text-[#6E7757]"
+                        : "text-[#6B6B63] hover:bg-[#F8F5EF] hover:text-[#2B2B2B]"
                     }`}
                   >
                     <span>{cat.name}</span>
-                    {selectedCategory === cat.slug && <span className="w-1.5 h-1.5 bg-red-600 rounded-full" />}
+                    {selectedCategory === cat.slug && <span className="w-1.5 h-1.5 bg-[#6E7757] rounded-full" />}
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Budget Filters */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm text-left">
-              <h3 className="text-[11px] font-extrabold text-gray-900 uppercase tracking-widest pb-4 border-b border-gray-100 mb-4 flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4 text-red-500" /> Price Tier
+            <div className="bg-white border border-[#DDD5C8] rounded-2xl p-6 shadow-sm text-left">
+              <h3 className="text-[11px] font-extrabold text-[#2B2B2B] uppercase tracking-widest pb-4 border-b border-[#DDD5C8] mb-4 flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4 text-[#6E7757]" /> Price Tier
               </h3>
               <div className="space-y-1">
                 {BUDGET_TIERS.map((tier) => (
@@ -245,21 +245,21 @@ function ProductsPageContent() {
                     onClick={() => handleBudgetChange(tier.value)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
                       selectedBudget === tier.value
-                        ? "bg-red-50 text-red-600"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-905"
+                        ? "bg-[#EFE7DB] text-[#6E7757]"
+                        : "text-[#6B6B63] hover:bg-[#F8F5EF] hover:text-[#2B2B2B]"
                     }`}
                   >
                     <span>{tier.name}</span>
-                    {selectedBudget === tier.value && <span className="w-1.5 h-1.5 bg-red-600 rounded-full" />}
+                    {selectedBudget === tier.value && <span className="w-1.5 h-1.5 bg-[#6E7757] rounded-full" />}
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Nationwide Logistics Trust Widget */}
-            <div className="bg-gradient-to-br from-slate-900 via-gray-900 to-neutral-900 border border-white/10 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden text-left">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-red-600/10 rounded-full blur-xl pointer-events-none" />
-              <MapPin className="w-6 h-6 text-red-500 mb-3" />
+            <div className="bg-[#2B2B2B] border border-white/10 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden text-left">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[#6E7757]/10 rounded-full blur-xl pointer-events-none" />
+              <MapPin className="w-6 h-6 text-[#C8A36A] mb-3" />
               <h4 className="font-extrabold text-xs uppercase tracking-widest text-gray-400 mb-1">Logistics Trust</h4>
               <h5 className="font-black text-sm mb-1.5 text-white">Insured B2B Shipping & Setup</h5>
               <p className="text-[11px] leading-relaxed text-gray-300 font-semibold mb-4">

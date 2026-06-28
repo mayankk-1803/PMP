@@ -2,12 +2,13 @@ import React from "react";
 
 export default function BrandsPage() {
   return (
-    <main className="pt-28 bg-[#f8f4ef] min-h-screen">
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-950 via-neutral-900 to-red-950 text-white py-24">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:42px_42px]" />
+    <main className="pt-28 bg-[#F8F5EF] min-h-screen">
+      <section className="relative overflow-hidden bg-[#2B2B2B] text-white py-24">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(200,163,106,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(200,163,106,0.03)_1px,transparent_1px)] bg-[size:42px_42px]" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#6E7757]/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl text-left">
-            <span className="inline-flex px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[10px] font-extrabold uppercase tracking-widest text-amber-200 mb-5">
+            <span className="inline-flex px-4 py-1.5 rounded-full bg-white/5 border border-[#C8A36A]/20 text-[10px] font-extrabold uppercase tracking-widest text-[#C8A36A] mb-5">
               Premium Brand Sourcing
             </span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white leading-tight mb-6">

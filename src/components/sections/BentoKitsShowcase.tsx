@@ -6,16 +6,31 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, Shield, Briefcase, Award } from "lucide-react";
 import { Button } from "../ui/Button";
 import { SafeImage } from "../ui/SafeImage";
+import { staggerContainer, cardReveal, EASE_SMOOTH } from "@/lib/animations";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { corporateKitImageOrFallback } from "@/lib/kitImageMap";
 
-// Select specifically relevant kits for the home page Bento Grid
+interface KitSubcategory {
+  name: string;
+  slug: string;
+  description?: string;
+  image?: string;
+}
+
+type BentoKit = (typeof BENTO_MAPPING)[number] & {
+  title: string;
+  desc: string;
+  href: string;
+};
+
 const BENTO_MAPPING = [
   {
     slug: "joining",
     badge: "Most Popular",
     size: "large",
     icon: <Briefcase className="w-5 h-5" />,
-    color: "from-red-600 to-rose-500",
-    image: "/images/joiningkit.png"
+    color: "from-[#6E7757] to-[#4E583F]",
+    image: corporateKitImageOrFallback("Joining Kits")
   },
   {
     slug: "doctor",
@@ -23,7 +38,7 @@ const BENTO_MAPPING = [
     size: "medium",
     icon: <Award className="w-5 h-5" />,
     color: "from-amber-600 to-yellow-500",
-    image: "/images/doctorkit.png"
+    image: corporateKitImageOrFallback("Doctor Kits")
   },
   {
     slug: "dealer",
@@ -31,7 +46,7 @@ const BENTO_MAPPING = [
     size: "medium",
     icon: <Shield className="w-5 h-5" />,
     color: "from-blue-600 to-indigo-500",
-    image: "/images/dealerkit.png"
+    image: corporateKitImageOrFallback("Dealer Kits")
   },
   {
     slug: "sales",
@@ -39,27 +54,28 @@ const BENTO_MAPPING = [
     size: "large",
     icon: <Sparkles className="w-5 h-5" />,
     color: "from-neutral-900 to-neutral-700",
-    image: "/images/salesteamkit.png"
+    image: corporateKitImageOrFallback("Sales Team Kit")
   }
 ];
 
 export function BentoKitsShowcase() {
-  const [bentoKits, setBentoKits] = useState<any[]>([]);
+  const [bentoKits, setBentoKits] = useState<BentoKit[]>([]);
   const [loading, setLoading] = useState(true);
+  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
     fetch("/api/catalog/subcategories")
       .then((res) => res.json())
       .then((res) => {
         if (res.success && res.data) {
-          const subcats = res.data;
+          const subcats = res.data as KitSubcategory[];
           const mapped = BENTO_MAPPING.map(config => {
             const dbSlug = config.slug === "joining" ? "joining-kits"
                          : config.slug === "doctor" ? "doctor-kits"
                          : config.slug === "dealer" ? "dealer-kits"
                          : config.slug === "sales" ? "sales-team-kit"
                          : "";
-            const item = subcats.find((s: any) => s.slug === dbSlug);
+            const item = subcats.find((subcategory) => subcategory.slug === dbSlug);
             return {
               ...config,
               title: item?.name || (config.slug.charAt(0).toUpperCase() + config.slug.slice(1) + " Kit"),
@@ -80,11 +96,13 @@ export function BentoKitsShowcase() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-gray-50 overflow-hidden">
+      <section className="py-24 bg-[#F8F5EF] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-[380px] rounded-2xl bg-gray-200 animate-pulse border border-gray-300" />
+              <div key={i} className="relative h-[380px] rounded-2xl bg-[#EFE7DB] border border-[#DDD5C8] overflow-hidden">
+                <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+              </div>
             ))}
           </div>
         </div>
@@ -93,39 +111,50 @@ export function BentoKitsShowcase() {
   }
 
   return (
-    <section className="py-24 bg-gray-50 overflow-hidden">
+    <section className="py-24 bg-[#F8F5EF] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.65, ease: EASE_SMOOTH }}
+          className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6"
+        >
           <div className="max-w-2xl text-left">
-            <span className="text-red-500 text-xs font-bold tracking-widest uppercase mb-3 block flex items-center gap-1.5">Tailored Merchandise Packages</span>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              Corporate Kits for <span className="text-red-500">Every Field</span>
+            <span className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">Tailored Merchandise Packages</span>
+            <h2 className="text-3xl md:text-4xl font-black text-[#2B2B2B] mb-4">
+              Corporate Kits for <span className="text-[#6E7757]">Every Field</span>
             </h2>
-            <p className="text-base text-gray-500 font-medium">
+            <p className="text-base text-[#6B6B63] font-medium">
               Select from curated, pre-designed kits tailored for internal employee success and external partner networks.
             </p>
           </div>
-          <Button variant="outline" className="hidden md:inline-flex rounded-xl border-gray-250 font-bold" asChild>
+          <Button variant="outline" className="hidden md:inline-flex rounded-xl font-bold" asChild>
             <Link href="/corporate-kits">View All Kits</Link>
           </Button>
-        </div>
+        </motion.div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div
+          variants={prefersReduced ? undefined : staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {bentoKits.map((kit, index) => {
             const isLarge = kit.size === "large";
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                variants={prefersReduced ? undefined : cardReveal}
+                whileHover={prefersReduced ? undefined : { scale: 1.01, y: -4 }}
+                transition={{ duration: 0.3 }}
                 className={`${
                   isLarge ? "md:col-span-2" : "col-span-1"
-                } relative group rounded-2xl overflow-hidden glass-card border-gray-200/60 shadow-lg hover:shadow-xl transition-all duration-500 flex flex-col h-[380px]`}
+                } relative group rounded-2xl overflow-hidden border border-[#DDD5C8]/60 shadow-lg hover:shadow-xl transition-all duration-500 flex flex-col h-[380px]`}
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 z-0">
@@ -140,16 +169,14 @@ export function BentoKitsShowcase() {
                     }}
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  {/* Subtle luxury dark overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/20 transition-opacity duration-300 group-hover:opacity-95" />
-                  <div className="absolute inset-0 bg-black/15" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2B2B2B]/95 via-[#2B2B2B]/60 to-[#2B2B2B]/15 transition-opacity duration-300 group-hover:opacity-95" />
                 </div>
 
                 {/* Content Overlay */}
                 <div className="relative z-10 p-8 flex flex-col justify-between h-full text-white">
                   {/* Badge & Icon Row */}
                   <div className="flex justify-between items-start">
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-1.5 bg-red-600 rounded-lg shadow-md shadow-red-600/35">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-1.5 bg-[#6E7757] rounded-lg shadow-md">
                       {kit.badge}
                     </span>
                     <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
@@ -171,14 +198,14 @@ export function BentoKitsShowcase() {
                       <Button
                         variant="default"
                         size="sm"
-                        className="rounded-xl px-4 py-2.5 text-xs font-bold bg-white text-gray-900 hover:bg-gray-100 shadow-sm border-0"
+                        className="rounded-xl px-4 py-2.5 text-xs font-bold bg-white text-[#2B2B2B] hover:bg-[#F8F5EF] shadow-sm border-0"
                         asChild
                       >
                         <Link href={kit.href}>Get Quote</Link>
                       </Button>
                       <Link
                         href={kit.href}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-red-400 transition-colors uppercase tracking-widest group"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-[#C8A36A] transition-colors uppercase tracking-widest group"
                       >
                         Explore <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </Link>
@@ -188,11 +215,11 @@ export function BentoKitsShowcase() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Mobile View All CTA */}
         <div className="mt-8 md:hidden text-center">
-          <Button variant="outline" className="w-full rounded-xl border-gray-250 font-bold py-4" asChild>
+          <Button variant="outline" className="w-full rounded-xl font-bold py-4" asChild>
             <Link href="/corporate-kits">View All Kits</Link>
           </Button>
         </div>

@@ -1,7 +1,49 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useInView, animate } from "framer-motion";
+import { useEffect, useState } from "react";
+import { staggerContainer, staggerItem, EASE_SMOOTH } from "@/lib/animations";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+
+// ─── Viewport-triggered count-up ─────────────────────────────────────────────
+function AnimatedStat({ value, label }: { value: string; label: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true });
+  const prefersReduced = useReducedMotion();
+
+  // Extract numeric part for counting; keep suffix
+  const numericMatch = value.match(/^[\d,]+/);
+  const suffix = numericMatch ? value.slice(numericMatch[0].length) : "";
+  const end = numericMatch ? parseInt(numericMatch[0].replace(/,/g, ""), 10) : 0;
+  const isNumeric = numericMatch !== null;
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!inView || !isNumeric) return;
+    if (prefersReduced) { setCount(end); return; }
+    const controls = animate(0, end, {
+      duration: 2.2,
+      ease: "easeOut",
+      onUpdate(v) { setCount(Math.floor(v)); },
+    });
+    return controls.stop;
+  }, [inView, end, isNumeric, prefersReduced]);
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={staggerItem}
+      className="flex flex-col items-center justify-center text-center space-y-2"
+    >
+      <h3 className="text-4xl md:text-5xl font-extrabold text-[#6E7757]">
+        {isNumeric ? `${count.toLocaleString()}${suffix}` : value}
+      </h3>
+      <p className="text-sm md:text-base text-[#6B6B63] font-semibold uppercase tracking-wider">{label}</p>
+    </motion.div>
+  );
+}
 
 const METRICS = [
   { value: "500+", label: "Clients Partnered" },
@@ -22,39 +64,47 @@ const LOGOS = [
 ];
 
 export function TrustBar() {
+  const prefersReduced = useReducedMotion();
   return (
-    <section className="bg-white py-16 md:py-20 border-b border-gray-100 overflow-hidden">
+    <section className="bg-white py-16 md:py-20 border-b border-[#DDD5C8] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
+        <motion.div
+          variants={prefersReduced ? undefined : staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20"
+        >
           {METRICS.map((metric, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="flex flex-col items-center justify-center text-center space-y-2"
-            >
-              <h3 className="text-4xl md:text-5xl font-extrabold text-red-600">{metric.value}</h3>
-              <p className="text-sm md:text-base text-gray-600 font-semibold uppercase tracking-wider">{metric.label}</p>
-            </motion.div>
+            <AnimatedStat key={idx} value={metric.value} label={metric.label} />
           ))}
-        </div>
+        </motion.div>
 
-        <div className="text-center w-full relative">
-          <p className="text-sm font-semibold tracking-widest uppercase text-gray-400 mb-8">Trusted by industry leaders</p>
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: EASE_SMOOTH }}
+          className="text-center w-full relative"
+        >
+          <p className="text-sm font-semibold tracking-widest uppercase text-[#6B6B63] mb-8">Trusted by industry leaders</p>
           
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
-              {LOGOS.map((logo, i) => (
-                <img
-                  key={i}
-                  src={logo}
-                  alt="Company Logo"
-                  className="h-6 md:h-8 w-full object-contain opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                />
-              ))}
+            {LOGOS.map((logo, i) => (
+              <motion.img
+                key={i}
+                src={logo}
+                alt="Company Logo"
+                initial={prefersReduced ? false : { opacity: 0 }}
+                whileInView={{ opacity: 0.4 }}
+                whileHover={{ opacity: 1, filter: "grayscale(0%)" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.04 }}
+                className="h-6 md:h-8 w-full object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -141,8 +141,8 @@ export function Navbar() {
         <nav 
           className={`w-full transition-all duration-300 pointer-events-auto ${
             scrolled 
-              ? "bg-[#0c0a09]/95 border-b border-white/10 shadow-xl backdrop-blur-xl" 
-              : "bg-[#0c0a09]/80 border-b border-white/5 backdrop-blur-md shadow-md"
+              ? "organic-navbar-scrolled" 
+              : "organic-navbar"
           }`}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -151,17 +151,23 @@ export function Navbar() {
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center">
                 <Link href="/" className="flex items-center gap-3 group">
-                  <div className="bg-gradient-to-br from-red-600 to-rose-600 p-2.5 rounded-xl transition-all duration-500 group-hover:scale-105 shadow-[0_0_15px_rgba(220,38,38,0.4)]">
+                  <div className="bg-gradient-to-br from-[#6E7757] to-[#4E583F] p-2.5 rounded-xl transition-all duration-500 group-hover:scale-105 shadow-[0_0_15px_rgba(110,119,87,0.3)]">
                     <Gift className="h-5 w-5 text-white" />
                   </div>
-                  <span className="font-black text-xl tracking-wider text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.15)] transition-colors">
-                    PACMY<span className="text-red-600 drop-shadow-[0_0_10px_rgba(220,38,38,0.2)]">PRODUCT</span>
+                  <span className="font-black text-xl tracking-wider text-[#2B2B2B] transition-colors">
+                    PACMY<span className="text-[#6E7757]">PRODUCT</span>
                   </span>
                 </Link>
               </div>
               
               {/* Desktop Mega Menu Navigation */}
-              <div ref={menuRef} className="hidden lg:flex items-center space-x-2">
+              <motion.div
+                ref={menuRef}
+                initial={mounted ? { opacity: 0 } : false}
+                animate={{ opacity: 1 }}
+                transition={{ staggerChildren: 0.06, delayChildren: 0.3 }}
+                className="hidden lg:flex items-center space-x-2"
+              >
                 
                 {/* 1. Promotional Products Dropdown */}
                 <div className="relative group/nav-item">
@@ -170,13 +176,13 @@ export function Navbar() {
                     onClick={() => toggleDropdown("products")}
                     className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
                       activeDropdown === "products" || pathname.startsWith("/products") || pathname.startsWith("/promotional-merchandise")
-                        ? "text-red-500" 
-                        : "text-white/90 hover:text-white"
+                        ? "text-[#6E7757]" 
+                        : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
                     }`}
                   >
                     <span>Promotional Products</span>
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === "products" ? "rotate-180" : ""}`} />
-                    <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                    <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#C8A36A] origin-left transition-transform duration-300 ${
                       activeDropdown === "products" || pathname.startsWith("/products") || pathname.startsWith("/promotional-merchandise") ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                     }`} />
                   </button>
@@ -188,11 +194,11 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute left-0 mt-3 w-[min(980px,calc(100vw-2rem))] max-h-[72vh] overflow-hidden rounded-2xl border border-black/5 bg-white p-5 shadow-2xl z-50 grid grid-cols-12 gap-5 pointer-events-auto"
+                        className="absolute left-0 mt-3 w-[min(980px,calc(100vw-2rem))] max-h-[72vh] overflow-hidden rounded-2xl border border-[#DDD5C8] bg-white p-5 shadow-[0_20px_50px_rgba(43,43,43,0.12)] z-50 grid grid-cols-12 gap-5 pointer-events-auto"
                       >
                         <div className="col-span-8 text-left">
-                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Gift className="w-3.5 h-3.5 text-red-500" /> Promotional Categories
+                          <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Gift className="w-3.5 h-3.5 text-[#6E7757]" /> Promotional Categories
                           </h4>
                           <div className="grid max-h-[52vh] grid-cols-3 gap-x-6 gap-y-5 overflow-y-auto pr-2">
                             {promotionalCats.map((cat) => {
@@ -202,7 +208,7 @@ export function Navbar() {
                                   <Link
                                     href={`/products?category=${cat.slug}`}
                                     onClick={() => setActiveDropdown(null)}
-                                    className="mb-2 block text-[10px] font-extrabold uppercase tracking-widest text-red-600 hover:text-red-750 transition-colors"
+                                    className="mb-2 block text-[10px] font-extrabold uppercase tracking-widest text-[#6E7757] hover:text-[#4E583F] transition-colors"
                                   >
                                     {cat.name}
                                   </Link>
@@ -213,7 +219,7 @@ export function Navbar() {
                                           key={item.name}
                                           href={menuHref(item)}
                                           onClick={() => setActiveDropdown(null)}
-                                          className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-750 transition-colors hover:border-red-500 hover:bg-red-50 hover:text-red-600"
+                                          className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#6E7757] hover:bg-[#F8F5EF] hover:text-[#6E7757]"
                                         >
                                           {item.name}
                                         </Link>
@@ -227,20 +233,20 @@ export function Navbar() {
                         </div>
 
                         {/* Column 3: Featured Panel */}
-                        <div className="col-span-4 flex flex-col justify-between bg-gradient-to-br from-red-50/70 to-amber-50/50 rounded-xl p-4 border border-red-100/30 text-left">
+                        <div className="col-span-4 flex flex-col justify-between bg-gradient-to-br from-[#F8F5EF] to-[#EFE7DB] rounded-xl p-4 border border-[#DDD5C8] text-left">
                           <div>
-                            <span className="text-[9px] font-extrabold text-red-600 uppercase tracking-widest block mb-1">Trending Solution</span>
-                            <h4 className="text-[13px] font-bold text-black mb-1.5">
+                            <span className="text-[9px] font-extrabold text-[#C8A36A] uppercase tracking-widest block mb-1">Trending Solution</span>
+                            <h4 className="text-[13px] font-bold text-[#2B2B2B] mb-1.5">
                               Premium Corporate Gifting
                             </h4>
-                            <p className="text-[11px] text-gray-650 leading-normal mb-3 font-medium">
+                            <p className="text-[11px] text-[#6B6B63] leading-normal mb-3 font-medium">
                               Employee welcome kits, executive gift sets, custom branding, premium giveaways.
                             </p>
                           </div>
                           <Link
                             href="/promotional-merchandise"
                             onClick={() => setActiveDropdown(null)}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors uppercase tracking-wider"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6E7757] hover:text-[#4E583F] transition-colors uppercase tracking-wider"
                           >
                             Explore Collection <ArrowRight className="w-3.5 h-3.5" />
                           </Link>
@@ -257,13 +263,13 @@ export function Navbar() {
                     onClick={() => toggleDropdown("kits")}
                     className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
                       activeDropdown === "kits" || pathname.startsWith("/corporate-kits")
-                        ? "text-red-500" 
-                        : "text-white/90 hover:text-white"
+                        ? "text-[#6E7757]" 
+                        : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
                     }`}
                   >
-                    <span>Kits & Hampers</span>
+                    <span>Kits &amp; Hampers</span>
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === "kits" ? "rotate-180" : ""}`} />
-                    <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                    <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#C8A36A] origin-left transition-transform duration-300 ${
                       activeDropdown === "kits" || pathname.startsWith("/corporate-kits") ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                     }`} />
                   </button>
@@ -275,12 +281,12 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[min(980px,calc(100vw-2rem))] max-h-[72vh] overflow-hidden rounded-2xl border border-black/5 bg-white p-5 shadow-2xl z-50 grid grid-cols-12 gap-5 pointer-events-auto"
+                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[min(980px,calc(100vw-2rem))] max-h-[72vh] overflow-hidden rounded-2xl border border-[#DDD5C8] bg-white p-5 shadow-[0_20px_50px_rgba(43,43,43,0.12)] z-50 grid grid-cols-12 gap-5 pointer-events-auto"
                       >
                         {/* Column 1: Corporate Kits */}
                         <div className="col-span-5 text-left">
-                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Briefcase className="w-3.5 h-3.5 text-red-500" /> Corporate Kits
+                          <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Briefcase className="w-3.5 h-3.5 text-[#6E7757]" /> Corporate Kits
                           </h4>
                           <div className="grid max-h-[52vh] grid-cols-2 gap-x-4 gap-y-1 overflow-y-auto pr-2">
                             {corporateKits.map((item) => (
@@ -288,7 +294,7 @@ export function Navbar() {
                                 key={item.name}
                                 href={kitHref(item)}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-750 transition-colors hover:border-red-500 hover:bg-red-50 hover:text-red-600"
+                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#6E7757] hover:bg-[#F8F5EF] hover:text-[#6E7757]"
                               >
                                 {item.name}
                               </Link>
@@ -298,8 +304,8 @@ export function Navbar() {
 
                         {/* Column 2: Festive Hampers */}
                         <div className="col-span-4 text-left">
-                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Festive Hampers
+                          <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Sparkles className="w-3.5 h-3.5 text-[#C8A36A]" /> Festive Hampers
                           </h4>
                           <div className="max-h-[52vh] space-y-1 overflow-y-auto pr-2">
                             {festiveHampers.map((item) => (
@@ -307,7 +313,7 @@ export function Navbar() {
                                 key={item.name}
                                 href={kitHref(item)}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-gray-755 transition-colors hover:border-red-500 hover:bg-amber-50 hover:text-red-655"
+                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#C8A36A] hover:bg-[#F8F5EF] hover:text-[#6E7757]"
                               >
                                 {item.name}
                               </Link>
@@ -316,20 +322,20 @@ export function Navbar() {
                         </div>
 
                         {/* Column 3: Featured Panel */}
-                        <div className="col-span-3 flex flex-col justify-between rounded-xl border border-amber-100/30 bg-gradient-to-br from-amber-50/70 to-red-50/50 p-4 text-left">
+                        <div className="col-span-3 flex flex-col justify-between rounded-xl border border-[#DDD5C8] bg-gradient-to-br from-[#EFE7DB] to-[#F8F5EF] p-4 text-left">
                           <div>
-                            <span className="text-[9px] font-extrabold text-amber-600 uppercase tracking-widest block mb-1">Kit Onboarding</span>
-                            <h4 className="text-[13px] font-bold text-black mb-1.5">
+                            <span className="text-[9px] font-extrabold text-[#C8A36A] uppercase tracking-widest block mb-1">Kit Onboarding</span>
+                            <h4 className="text-[13px] font-bold text-[#2B2B2B] mb-1.5">
                               Curated Corporate Kits
                             </h4>
-                            <p className="text-[11px] text-gray-650 leading-normal mb-3 font-medium">
+                            <p className="text-[11px] text-[#6B6B63] leading-normal mb-3 font-medium">
                               Onboarding kits, dealer welcome packs, startup collections, custom branded hampers.
                             </p>
                           </div>
                           <Link
                             href="/corporate-kits"
                             onClick={() => setActiveDropdown(null)}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 hover:text-red-700 transition-colors uppercase tracking-wider"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6E7757] hover:text-[#4E583F] transition-colors uppercase tracking-wider"
                           >
                             Explore Collection <ArrowRight className="w-3.5 h-3.5" />
                           </Link>
@@ -347,13 +353,13 @@ export function Navbar() {
                     onClick={() => toggleDropdown("budget")}
                     className={`relative flex items-center gap-1.5 text-[13px] font-semibold tracking-wide px-3 py-2 rounded-xl transition-all duration-300 ${
                       activeDropdown === "budget" || pathname.startsWith("/gifts-by-budget")
-                        ? "text-red-500" 
-                        : "text-white/90 hover:text-white"
+                        ? "text-[#6E7757]" 
+                        : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
                     }`}
                   >
                     <span>Budget</span>
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === "budget" ? "rotate-180" : ""}`} />
-                    <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                    <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#C8A36A] origin-left transition-transform duration-300 ${
                       activeDropdown === "budget" || pathname.startsWith("/gifts-by-budget") ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                     }`} />
                   </button>
@@ -365,17 +371,17 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute right-0 mt-3 w-[240px] bg-white rounded-2xl shadow-2xl border border-black/5 p-4 z-50 space-y-1 pointer-events-auto"
+                        className="absolute right-0 mt-3 w-[240px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(43,43,43,0.12)] border border-[#DDD5C8] p-4 z-50 space-y-1 pointer-events-auto"
                       >
-                        <h4 className="text-[11px] font-bold text-black uppercase tracking-wide px-3 py-1 mb-2 flex items-center gap-2">
-                          <Coins className="w-3.5 h-3.5 text-amber-500" /> Shop by Budget
+                        <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide px-3 py-1 mb-2 flex items-center gap-2">
+                          <Coins className="w-3.5 h-3.5 text-[#C8A36A]" /> Shop by Budget
                         </h4>
                         {BUDGETS.map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
                             onClick={() => setActiveDropdown(null)}
-                            className="block text-[13px] text-gray-750 hover:text-red-650 hover:bg-black/5 font-medium px-3 py-2 rounded-lg transition-all"
+                            className="block text-[13px] text-[#6B6B63] hover:text-[#6E7757] hover:bg-[#F8F5EF] font-medium px-3 py-2 rounded-lg transition-all"
                           >
                             {item.name}
                           </Link>
@@ -389,11 +395,11 @@ export function Navbar() {
                 <Link
                   href="/packaging-solutions"
                   className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
-                    pathname === "/packaging-solutions" ? "text-red-500" : "text-white/90 hover:text-white"
+                    pathname === "/packaging-solutions" ? "text-[#6E7757]" : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
                   }`}
                 >
                   <span>Packaging</span>
-                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#C8A36A] origin-left transition-transform duration-300 ${
                     pathname === "/packaging-solutions" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                   }`} />
                 </Link>
@@ -402,11 +408,11 @@ export function Navbar() {
                 <Link
                   href="/brands"
                   className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
-                    pathname === "/brands" ? "text-red-500" : "text-white/90 hover:text-white"
+                    pathname === "/brands" ? "text-[#6E7757]" : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
                   }`}
                 >
                   <span>Brands</span>
-                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#C8A36A] origin-left transition-transform duration-300 ${
                     pathname === "/brands" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                   }`} />
                 </Link>
@@ -415,11 +421,11 @@ export function Navbar() {
                 <Link
                   href="/about"
                   className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
-                    pathname === "/about" ? "text-red-500" : "text-white/90 hover:text-white"
+                    pathname === "/about" ? "text-[#6E7757]" : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
                   }`}
                 >
                   <span>Company</span>
-                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#C8A36A] origin-left transition-transform duration-300 ${
                     pathname === "/about" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                   }`} />
                 </Link>
@@ -428,33 +434,33 @@ export function Navbar() {
                 <Link
                   href="/contact"
                   className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
-                    pathname === "/contact" ? "text-red-500" : "text-white/90 hover:text-white"
+                    pathname === "/contact" ? "text-[#6E7757]" : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
                   }`}
                 >
                   <span>Contact</span>
-                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-gradient-to-r from-red-600 to-amber-500 origin-left transition-transform duration-300 ${
+                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#C8A36A] origin-left transition-transform duration-300 ${
                     pathname === "/contact" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                   }`} />
                 </Link>
-              </div>
+              </motion.div>
 
               {/* Desktop Action Buttons */}
               <div className="hidden lg:flex items-center gap-4">
                 <button 
                   suppressHydrationWarning
                   onClick={() => setIsDrawerOpen(true)}
-                  className="relative p-2.5 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all focus:outline-none flex items-center justify-center group pointer-events-auto"
+                  className="relative p-2.5 text-[#6B6B63] hover:text-[#2B2B2B] hover:bg-[#EFE7DB] rounded-xl transition-all focus:outline-none flex items-center justify-center group pointer-events-auto"
                   aria-label="View Shortlist"
                 >
                   <Bookmark className="w-5 h-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
                   {mounted && items.length > 0 && (
-                    <span className="absolute top-1 right-1 bg-red-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-black">
+                    <span className="absolute top-1 right-1 bg-[#6E7757] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-white">
                       {items.length}
                     </span>
                   )}
                 </button>
                 
-                <Button variant="default" className="rounded-xl px-6 py-2.5 h-11 text-[13px] font-bold bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-lg shadow-red-600/25 hover:shadow-red-600/35 hover:scale-[1.02] transition-all duration-300 border-0 pointer-events-auto" asChild>
+                <Button variant="default" className="rounded-2xl px-6 py-2.5 h-11 text-[13px] font-bold pointer-events-auto" asChild>
                   <Link href="/enquiry">Get Custom Quote</Link>
                 </Button>
               </div>
@@ -464,22 +470,24 @@ export function Navbar() {
                 <button 
                   suppressHydrationWarning
                   onClick={() => setIsDrawerOpen(true)}
-                  className="relative p-2.5 text-gray-300 hover:bg-white/5 rounded-xl transition-all"
+                  className="relative p-2.5 text-[#6B6B63] hover:bg-[#EFE7DB] rounded-xl transition-all"
                 >
                   <Bookmark className="w-5.5 h-5.5" />
                   {mounted && items.length > 0 && (
-                    <span className="absolute top-1.5 right-1.5 bg-red-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-black">
+                    <span className="absolute top-1.5 right-1.5 bg-[#6E7757] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-white">
                       {items.length}
                     </span>
                   )}
                 </button>
-                <button
+                <motion.button
                   suppressHydrationWarning
                   onClick={() => setIsOpen(!isOpen)}
-                  className="p-2.5 rounded-xl text-gray-300 hover:bg-white/5 focus:outline-none transition-colors"
+                  animate={{ rotate: isOpen ? 90 : 0 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  className="p-2.5 rounded-xl text-[#6B6B63] hover:bg-[#EFE7DB] focus:outline-none transition-colors"
                 >
                   {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                </button>
+                </motion.button>
               </div>
 
             </div>
@@ -494,39 +502,44 @@ export function Navbar() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "100%", opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:hidden fixed inset-0 z-[999] bg-[#050505]/96 backdrop-blur-3xl overflow-y-auto flex flex-col pointer-events-auto"
+              className="lg:hidden fixed inset-0 z-[999] bg-[#F8F5EF] overflow-y-auto flex flex-col pointer-events-auto"
             >
               {/* Header inside drawer */}
-              <div className="flex justify-between items-center h-[72px] px-5 border-b border-white/10 flex-shrink-0">
+              <div className="flex justify-between items-center h-[72px] px-5 border-b border-[#DDD5C8] flex-shrink-0">
                 <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                  <div className="bg-gradient-to-br from-red-600 to-rose-600 p-2.5 rounded-xl">
+                  <div className="bg-gradient-to-br from-[#6E7757] to-[#4E583F] p-2.5 rounded-xl">
                     <Gift className="h-5 w-5 text-white" />
                   </div>
-                  <span className="font-black text-xl tracking-wider text-white">
-                    PACMY<span className="text-red-600">PRODUCT</span>
+                  <span className="font-black text-xl tracking-wider text-[#2B2B2B]">
+                    PACMY<span className="text-[#6E7757]">PRODUCT</span>
                   </span>
                 </Link>
                 <button
                   suppressHydrationWarning
                   onClick={() => setIsOpen(false)}
-                  className="p-2.5 rounded-xl text-gray-300 hover:bg-white/5 focus:outline-none transition-colors"
+                  className="p-2.5 rounded-xl text-[#6B6B63] hover:bg-[#EFE7DB] focus:outline-none transition-colors"
                 >
                   <X className="h-6 w-6" />
                 </button>
               </div>
 
               {/* Collapsible Accordion Navigation Items */}
-              <div className="flex-1 px-6 py-6 space-y-2">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } } }}
+                className="flex-1 px-6 py-6 space-y-2"
+              >
                 
                 {/* 1. Promotional Products Accordion */}
-                <div className="border-b border-white/10">
+                <div className="border-b border-[#DDD5C8]">
                   <button 
                     suppressHydrationWarning
                     onClick={() => toggleSection("products")}
-                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left focus:outline-none group"
+                    className="flex justify-between items-center w-full py-4 text-[#2B2B2B] text-base font-bold text-left focus:outline-none group"
                   >
                     <span>Promotional Products</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${expandedSection === "products" ? "rotate-180 text-red-500" : "group-hover:text-white"}`} />
+                    <ChevronDown className={`w-4 h-4 text-[#6B6B63] transition-transform duration-300 ${expandedSection === "products" ? "rotate-180 text-[#6E7757]" : "group-hover:text-[#2B2B2B]"}`} />
                   </button>
                   <AnimatePresence initial={false}>
                     {expandedSection === "products" && (
@@ -542,20 +555,20 @@ export function Navbar() {
                             key="explore-all-products"
                             href="/products"
                             onClick={() => setIsOpen(false)}
-                            className="col-span-2 text-xs font-extrabold text-red-500 hover:text-red-400 uppercase tracking-widest py-1 flex items-center gap-1"
+                            className="col-span-2 text-xs font-extrabold text-[#6E7757] hover:text-[#4E583F] uppercase tracking-widest py-1 flex items-center gap-1"
                           >
                             Explore All Products <ArrowRight className="w-3 h-3" />
                           </Link>
                             {promotionalCats.map((cat) => (
                               <div key={cat.slug} className="col-span-2 mt-2 first:mt-0">
-                                <h5 className="text-[10px] font-extrabold text-red-500 uppercase tracking-wider mb-1">{cat.name}</h5>
+                                <h5 className="text-[10px] font-extrabold text-[#6E7757] uppercase tracking-wider mb-1">{cat.name}</h5>
                                 <div className="grid grid-cols-2 gap-2">
                                   {getSubcategories(cat.slug).map((item) => (
                                     <Link
                                       key={item.name}
                                       href={menuHref(item)}
                                       onClick={() => setIsOpen(false)}
-                                      className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
+                                      className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
                                     >
                                       {item.name}
                                     </Link>
@@ -570,14 +583,14 @@ export function Navbar() {
                 </div>
 
                 {/* 2. Kits & Hampers Accordion */}
-                <div className="border-b border-white/10">
+                <div className="border-b border-[#DDD5C8]">
                   <button 
                     suppressHydrationWarning
                     onClick={() => toggleSection("kits")}
-                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left focus:outline-none group"
+                    className="flex justify-between items-center w-full py-4 text-[#2B2B2B] text-base font-bold text-left focus:outline-none group"
                   >
-                    <span>Kits & Hampers</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${expandedSection === "kits" ? "rotate-180 text-red-500" : "group-hover:text-white"}`} />
+                    <span>Kits &amp; Hampers</span>
+                    <ChevronDown className={`w-4 h-4 text-[#6B6B63] transition-transform duration-300 ${expandedSection === "kits" ? "rotate-180 text-[#6E7757]" : "group-hover:text-[#2B2B2B]"}`} />
                   </button>
                   <AnimatePresence initial={false}>
                     {expandedSection === "kits" && (
@@ -590,29 +603,29 @@ export function Navbar() {
                       >
                         <div className="pl-2 space-y-4 pt-1">
                           <div>
-                            <h4 className="text-[10px] font-extrabold text-red-500 uppercase tracking-widest mb-2">Corporate Kits</h4>
+                            <h4 className="text-[10px] font-extrabold text-[#6E7757] uppercase tracking-widest mb-2">Corporate Kits</h4>
                             <div className="grid grid-cols-2 gap-2">
                               {corporateKits.map((item) => (
                                 <Link
                                   key={item.name}
                                   href={kitHref(item)}
                                   onClick={() => setIsOpen(false)}
-                                  className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
+                                  className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
                                 >
                                   {item.name}
                                 </Link>
                               ))}
                             </div>
                           </div>
-                          <div className="pt-2 border-t border-white/5">
-                            <h4 className="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest mb-2">Festive Hampers</h4>
+                          <div className="pt-2 border-t border-[#DDD5C8]">
+                            <h4 className="text-[10px] font-extrabold text-[#C8A36A] uppercase tracking-widest mb-2">Festive Hampers</h4>
                             <div className="grid grid-cols-2 gap-2">
                               {festiveHampers.map((item) => (
                                 <Link
                                   key={item.name}
                                   href={kitHref(item)}
                                   onClick={() => setIsOpen(false)}
-                                  className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
+                                  className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
                                 >
                                   {item.name}
                                 </Link>
@@ -623,7 +636,7 @@ export function Navbar() {
                             key="explore-all-kits"
                             href="/corporate-kits"
                             onClick={() => setIsOpen(false)}
-                            className="block text-xs font-extrabold text-red-500 hover:text-red-400 uppercase tracking-widest pt-1 flex items-center gap-1"
+                            className="block text-xs font-extrabold text-[#6E7757] hover:text-[#4E583F] uppercase tracking-widest pt-1 flex items-center gap-1"
                           >
                             Explore All Kits <ArrowRight className="w-3 h-3" />
                           </Link>
@@ -634,14 +647,14 @@ export function Navbar() {
                 </div>
 
                 {/* 3. Budget Accordion */}
-                <div className="border-b border-white/10">
+                <div className="border-b border-[#DDD5C8]">
                   <button 
                     suppressHydrationWarning
                     onClick={() => toggleSection("budget")}
-                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left focus:outline-none group"
+                    className="flex justify-between items-center w-full py-4 text-[#2B2B2B] text-base font-bold text-left focus:outline-none group"
                   >
                     <span>Budget</span>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${expandedSection === "budget" ? "rotate-180 text-red-500" : "group-hover:text-white"}`} />
+                    <ChevronDown className={`w-4 h-4 text-[#6B6B63] transition-transform duration-300 ${expandedSection === "budget" ? "rotate-180 text-[#6E7757]" : "group-hover:text-[#2B2B2B]"}`} />
                   </button>
                   <AnimatePresence initial={false}>
                     {expandedSection === "budget" && (
@@ -658,7 +671,7 @@ export function Navbar() {
                               key={item.name}
                               href={item.href}
                               onClick={() => setIsOpen(false)}
-                              className="text-sm font-semibold text-gray-400 hover:text-white py-1 block truncate transition-colors"
+                              className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
                             >
                               {item.name}
                             </Link>
@@ -670,58 +683,58 @@ export function Navbar() {
                 </div>
 
                 {/* 3. Direct Link: Packaging */}
-                <div className="border-b border-white/10">
+                <div className="border-b border-[#DDD5C8]">
                   <Link
                     key="packaging-solutions"
                     href="/packaging-solutions"
                     onClick={() => setIsOpen(false)}
-                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left hover:text-red-500 transition-colors"
+                    className="flex justify-between items-center w-full py-4 text-[#2B2B2B] text-base font-bold text-left hover:text-[#6E7757] transition-colors"
                   >
                     Packaging
                   </Link>
                 </div>
 
                 {/* 5. Direct Link: Company */}
-                <div className="border-b border-white/10">
+                <div className="border-b border-[#DDD5C8]">
                   <Link
                     key="about-company"
                     href="/about"
                     onClick={() => setIsOpen(false)}
-                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left hover:text-red-500 transition-colors"
+                    className="flex justify-between items-center w-full py-4 text-[#2B2B2B] text-base font-bold text-left hover:text-[#6E7757] transition-colors"
                   >
                     Company
                   </Link>
                 </div>
 
                 {/* 6. Direct Link: Contact */}
-                <div className="border-b border-white/10">
+                <div className="border-b border-[#DDD5C8]">
                   <Link
                     key="contact-us"
                     href="/contact"
                     onClick={() => setIsOpen(false)}
-                    className="flex justify-between items-center w-full py-4 text-white/90 text-base font-bold text-left hover:text-red-500 transition-colors"
+                    className="flex justify-between items-center w-full py-4 text-[#2B2B2B] text-base font-bold text-left hover:text-[#6E7757] transition-colors"
                   >
                     Contact
                   </Link>
                 </div>
 
-              </div>
+              </motion.div>
 
               {/* Footer inside drawer */}
-              <div className="px-6 py-8 border-t border-white/10 bg-[#050505]/40 backdrop-blur-xl space-y-4 flex-shrink-0">
+              <div className="px-6 py-8 border-t border-[#DDD5C8] bg-[#EFE7DB] space-y-4 flex-shrink-0">
                 <Button 
-                  className="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white py-6 rounded-xl text-base shadow-lg shadow-red-600/20 flex items-center justify-center gap-2 font-bold border-0"
+                  className="w-full py-6 rounded-2xl text-base font-bold flex items-center justify-center gap-2"
                   asChild
                 >
                   <Link href="/enquiry" onClick={() => setIsOpen(false)}>
                     Get Custom Quote <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
-                <div className="flex justify-center gap-8 text-xs text-gray-500 font-bold">
-                  <a href={`tel:${COMPANY_INFO.phone}`} className="flex items-center gap-1.5 hover:text-white transition-colors">
+                <div className="flex justify-center gap-8 text-xs text-[#6B6B63] font-bold">
+                  <a href={`tel:${COMPANY_INFO.phone}`} className="flex items-center gap-1.5 hover:text-[#2B2B2B] transition-colors">
                     <Phone className="w-3.5 h-3.5" /> Call Us
                   </a>
-                  <a href={`mailto:${COMPANY_INFO.email}`} className="flex items-center gap-1.5 hover:text-white transition-colors">
+                  <a href={`mailto:${COMPANY_INFO.email}`} className="flex items-center gap-1.5 hover:text-[#2B2B2B] transition-colors">
                     <Mail className="w-3.5 h-3.5" /> Email
                   </a>
                 </div>
@@ -731,7 +744,7 @@ export function Navbar() {
         </AnimatePresence>
       </motion.header>
 
-    {/* Shortlist Drawer (Persisted data-flow) */}
+    {/* Shortlist Drawer */}
     <AnimatePresence>
       {isDrawerOpen && (
         <>
@@ -740,47 +753,47 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsDrawerOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-[#2B2B2B]/40 backdrop-blur-sm z-50"
           />
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 26, stiffness: 220 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0a0a0c] border-l border-white/10 shadow-2xl z-50 flex flex-col"
+            className="fixed right-0 top-0 h-full w-full max-w-md bg-white border-l border-[#DDD5C8] shadow-[0_0_60px_rgba(43,43,43,0.15)] z-50 flex flex-col"
           >
-            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-[#0a0a0c]">
+            <div className="p-6 border-b border-[#DDD5C8] flex items-center justify-between bg-white">
               <div className="flex items-center gap-3">
-                <div className="bg-gradient-to-br from-red-600 to-rose-600 p-2.5 rounded-xl shadow-lg shadow-red-600/15">
+                <div className="bg-gradient-to-br from-[#6E7757] to-[#4E583F] p-2.5 rounded-xl shadow-lg shadow-[#6E7757]/15">
                   <Bookmark className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-base font-extrabold text-white">Your Custom Selection</h2>
-                  <p className="text-xs text-gray-500 font-bold">{items.length} items saved</p>
+                  <h2 className="text-base font-extrabold text-[#2B2B2B]">Your Custom Selection</h2>
+                  <p className="text-xs text-[#6B6B63] font-bold">{items.length} items saved</p>
                 </div>
               </div>
               <button 
                 suppressHydrationWarning
                 onClick={() => setIsDrawerOpen(false)}
-                className="p-2 hover:bg-white/5 rounded-full transition-colors text-gray-400 hover:text-white"
+                className="p-2 hover:bg-[#EFE7DB] rounded-full transition-colors text-[#6B6B63] hover:text-[#2B2B2B]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[#070708]">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[#F8F5EF]">
               {items.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-8">
-                  <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mb-6">
-                    <Bookmark className="w-8 h-8 text-gray-600" />
+                  <div className="w-20 h-20 bg-[#EFE7DB] border border-[#DDD5C8] rounded-full flex items-center justify-center mb-6">
+                    <Bookmark className="w-8 h-8 text-[#6B6B63]" />
                   </div>
-                  <h3 className="text-sm font-bold text-gray-300 mb-2">Shortlist is empty</h3>
-                  <p className="text-gray-500 text-xs max-w-[240px] mx-auto leading-relaxed">
+                  <h3 className="text-sm font-bold text-[#2B2B2B] mb-2">Shortlist is empty</h3>
+                  <p className="text-[#6B6B63] text-xs max-w-[240px] mx-auto leading-relaxed">
                     Add premium products and kits while browsing to request a compiled bulk quote.
                   </p>
                   <Button 
                     variant="outline" 
-                    className="mt-6 border-white/10 hover:border-white text-gray-300 hover:bg-white/5 transition-colors" 
+                    className="mt-6" 
                     onClick={() => setIsDrawerOpen(false)}
                   >
                     Browse Products
@@ -788,8 +801,8 @@ export function Navbar() {
                 </div>
               ) : (
                 items.map((item) => (
-                  <div key={item.title} className="flex gap-4 p-4 bg-white/5 border border-white/10 rounded-xl shadow-sm group hover:border-red-500/30 transition-all">
-                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-white/5 border border-white/10 flex-shrink-0 relative">
+                  <div key={item.title} className="flex gap-4 p-4 bg-white border border-[#DDD5C8] rounded-xl shadow-sm group hover:border-[#6E7757]/30 transition-all">
+                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-[#F8F5EF] border border-[#DDD5C8] flex-shrink-0 relative">
                       <SafeImage 
                         src={item.imageUrl} 
                         alt={item.title} 
@@ -799,13 +812,13 @@ export function Navbar() {
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-between">
                       <div>
-                        <h4 className="font-bold text-white text-sm mb-0.5 truncate">{item.title}</h4>
-                        <p className="text-xs font-semibold text-red-500">{item.price || "Contact for price"}</p>
+                        <h4 className="font-bold text-[#2B2B2B] text-sm mb-0.5 truncate">{item.title}</h4>
+                        <p className="text-xs font-semibold text-[#6E7757]">{item.price || "Contact for price"}</p>
                       </div>
                       <button 
                         suppressHydrationWarning
                         onClick={() => removeFromShortlist(item.title)}
-                        className="text-xs font-bold text-gray-500 hover:text-red-500 flex items-center gap-1.5 transition-colors mt-2"
+                        className="text-xs font-bold text-[#6B6B63] hover:text-[#6E7757] flex items-center gap-1.5 transition-colors mt-2"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                         Remove
@@ -817,15 +830,15 @@ export function Navbar() {
             </div>
 
             {items.length > 0 && (
-              <div className="p-6 bg-[#0a0a0c] border-t border-white/10 space-y-4">
+              <div className="p-6 bg-white border-t border-[#DDD5C8] space-y-4">
                 <Button 
-                  className="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white py-6 rounded-xl text-base shadow-lg shadow-red-600/25 flex items-center justify-center gap-2 group font-bold transition-all border-0"
+                  className="w-full py-6 rounded-2xl text-base font-bold flex items-center justify-center gap-2 group"
                   onClick={handleBulkQuote}
                 >
                   Request Bulk Quote
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <p className="text-center text-[10px] text-gray-500 font-bold">
+                <p className="text-center text-[10px] text-[#6B6B63] font-bold">
                   🛡️ Enterprise SLA: Quote compiled within 2 hours
                 </p>
               </div>

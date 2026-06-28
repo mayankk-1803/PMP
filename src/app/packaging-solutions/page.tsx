@@ -13,18 +13,18 @@ import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function PackagingSolutionsPage() {
   return (
-    <div className="pt-32 pb-0 bg-[#fafafa] overflow-hidden max-w-full">
+    <div className="pt-32 pb-0 bg-[#F8F5EF] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[130px]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <span className="px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-red-100">
+          <span className="px-4 py-1.5 rounded-full bg-[#EFE7DB] text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-[#DDD5C8]">
             In-House Manufacturing
           </span>
           <SectionHeading 
-            title={<>Custom <span className="text-red-600">Packaging Solutions</span></>}
+            title={<>Custom <span className="text-[#6E7757]">Packaging Solutions</span></>}
             subtitle="Elevate your product presentation and corporate gifting unboxing experience with our state-of-the-art custom manufacturing process." 
             centered 
           />
@@ -47,7 +47,7 @@ export default function PackagingSolutionsPage() {
               >
                 {/* Image Section */}
                 <div className="w-full lg:w-1/2 relative group">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#6E7757]/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-gray-200/60 bg-white">
                     <SafeImage 
                       src={pkg.img} 
@@ -60,7 +60,7 @@ export default function PackagingSolutionsPage() {
 
                 {/* Content Section */}
                 <div className="w-full lg:w-1/2 flex flex-col justify-center text-left">
-                  <span className="text-xs font-bold tracking-widest text-red-600 uppercase mb-3 block">
+                  <span className="text-xs font-bold tracking-widest text-[#C8A36A] uppercase mb-3 block">
                     {pkg.tagline}
                   </span>
                   <h3 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-6 tracking-tight">
@@ -79,7 +79,7 @@ export default function PackagingSolutionsPage() {
                       <ul className="space-y-2">
                         {pkg.materials.map((mat, i) => (
                           <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-gray-700 font-medium">
-                            <CheckCircle2 className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#6E7757] mt-0.5 flex-shrink-0" />
                             <span>{mat}</span>
                           </li>
                         ))}
@@ -93,7 +93,7 @@ export default function PackagingSolutionsPage() {
                       <ul className="space-y-2">
                         {pkg.finishes.map((fin, i) => (
                           <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-gray-700 font-medium">
-                            <CheckCircle2 className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="w-4 h-4 text-[#6E7757] mt-0.5 flex-shrink-0" />
                             <span>{fin}</span>
                           </li>
                         ))}
@@ -101,15 +101,15 @@ export default function PackagingSolutionsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 mb-8 text-xs font-bold text-gray-500 bg-gray-100/70 border border-gray-200/50 py-2 px-4 rounded-xl w-fit">
-                    <Clock className="w-4 h-4 text-red-500" />
+                  <div className="flex items-center gap-2.5 mb-8 text-xs font-bold text-[#6B6B63] bg-[#EFE7DB] border border-[#DDD5C8] py-2 px-4 rounded-xl w-fit">
+                    <Clock className="w-4 h-4 text-[#6E7757]" />
                     <span>Average Lead Time: {pkg.leadTime}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-4">
                     <Button
                       size="lg"
-                      className="rounded-xl font-bold bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white py-3.5 px-6 shadow-md shadow-red-600/10 border-0"
+                      className="rounded-xl font-bold py-3.5 px-6"
                       asChild
                     >
                       <Link href={`/enquiry?product=${encodeURIComponent(pkg.title)}`}>
@@ -136,7 +136,7 @@ export default function PackagingSolutionsPage() {
         {/* Process Timeline Section */}
         <div className="py-20 border-t border-gray-200/70 relative">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-red-600 text-xs font-bold tracking-widest uppercase mb-3 block">
+            <span className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-3 block">
               Step-By-Step
             </span>
             <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4">
@@ -155,12 +155,12 @@ export default function PackagingSolutionsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-white p-8 rounded-2xl border border-gray-200/80 shadow-sm relative group hover:border-red-500/20 hover:shadow-md transition-all text-left"
+                className="bg-white p-8 rounded-2xl border border-[#DDD5C8] shadow-sm relative group hover:border-[#6E7757]/20 hover:shadow-md transition-all text-left"
               >
-                <div className="absolute -top-5 right-6 text-5xl font-black text-gray-100 group-hover:text-red-500/10 transition-colors select-none">
+                <div className="absolute -top-5 right-6 text-5xl font-black text-[#EFE7DB] group-hover:text-[#6E7757]/10 transition-colors select-none">
                   {step.step}
                 </div>
-                <h4 className="text-base font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
+                <h4 className="text-base font-bold text-[#2B2B2B] mb-3 group-hover:text-[#6E7757] transition-colors">
                   {step.name}
                 </h4>
                 <p className="text-gray-500 text-xs leading-relaxed">
@@ -177,18 +177,18 @@ export default function PackagingSolutionsPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="my-24 p-8 md:p-16 rounded-3xl bg-gradient-to-br from-gray-900 via-gray-900 to-black text-white relative overflow-hidden border border-white/5 shadow-2xl"
+          className="my-24 p-8 md:p-16 rounded-3xl bg-[#2B2B2B] text-white relative overflow-hidden border border-white/5 shadow-2xl"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-red-600/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#6E7757]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C8A36A]/5 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 max-w-4xl flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left">
-              <span className="text-[10px] font-bold tracking-widest text-red-500 uppercase block mb-3">
+              <span className="text-[10px] font-bold tracking-widest text-[#C8A36A] uppercase block mb-3">
                 Bulk Branding and Fulfillment
               </span>
               <h3 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-white leading-tight">
-                Need premium boxes with <span className="text-red-500">custom structural inserts</span>?
+                Need premium boxes with <span className="text-[#C8A36A]">custom structural inserts</span>?
               </h3>
               <p className="text-gray-400 text-sm md:text-base leading-relaxed">
                 Send us your product dimensions. We'll produce custom EVA foam, paperboard dividers, or vacuum plastic trays, and drop-ship directly to your warehouse.
@@ -197,7 +197,7 @@ export default function PackagingSolutionsPage() {
             <div className="flex-shrink-0 w-full md:w-auto">
               <Button
                 size="lg"
-                className="w-full md:w-auto font-bold rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-xl shadow-red-900/20 border-0 flex items-center justify-center gap-2 group py-4 px-8"
+                className="w-full md:w-auto font-bold rounded-xl flex items-center justify-center gap-2 group py-4 px-8"
                 asChild
               >
                 <Link href="/enquiry?source=packaging-structural">
