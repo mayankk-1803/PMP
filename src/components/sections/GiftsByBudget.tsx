@@ -21,13 +21,13 @@ export function GiftsByBudget() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <div className="w-full max-w-full overflow-hidden py-6 bg-[#EFE7DB] border-b border-[#DDD5C8]">
+    <div className="w-full max-w-full overflow-hidden py-6 bg-[#F8F7F3] border-b border-[#F5C2C2]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 min-w-0">
           
           {/* Label */}
           <div className="flex-shrink-0 text-center md:text-left">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#C8A36A]">Quick Filters</span>
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#EF5350]">Quick Filters</span>
             <h3 className="text-sm font-bold text-[#2B2B2B] leading-none mt-1.5">Shop by Budget Range</h3>
           </div>
 
@@ -51,26 +51,26 @@ export function GiftsByBudget() {
                     href={item.href}
                     onMouseEnter={() => setActiveIdx(idx)}
                     onMouseLeave={() => setActiveIdx(null)}
-                    className="relative p-3 rounded-xl border border-[#DDD5C8] hover:border-[#6E7757]/30 bg-white transition-all text-left md:flex-shrink-0 flex items-center gap-3 shadow-sm hover:shadow-md hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer group min-w-0 md:min-w-[160px]"
+                    className="relative p-3 rounded-xl border border-[#F5C2C2] hover:border-[#D32F2F]/30 bg-white transition-all text-left md:flex-shrink-0 flex items-center gap-3 shadow-sm hover:shadow-md hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.97] cursor-pointer group min-w-0 md:min-w-[160px]"
                   >
 
                   {/* Sliding background tab glow */}
                   {activeIdx === idx && (
                     <motion.div
                       layoutId="budgetTabGlow"
-                      className="absolute inset-0 bg-[#F8F5EF] border border-[#6E7757]/20 rounded-xl -z-10"
+                      className="absolute inset-0 bg-[#FAF9F6] border border-[#D32F2F]/20 rounded-xl -z-10"
                       initial={false}
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
 
                   {/* Icon Box */}
-                  <div className="bg-[#F8F5EF] group-hover:bg-[#6E7757] group-hover:text-white p-2.5 rounded-lg text-[#6B6B63] transition-colors">
+                  <div className="bg-[#FAF9F6] group-hover:bg-[#D32F2F] group-hover:text-white p-2.5 rounded-lg text-[#6B6B63] transition-colors">
                     {asset.icon}
                   </div>
 
                   <div>
-                    <div className="text-xs sm:text-sm font-extrabold text-[#2B2B2B] group-hover:text-[#6E7757] transition-colors leading-tight">
+                    <div className="text-xs sm:text-sm font-extrabold text-[#2B2B2B] group-hover:text-[#D32F2F] transition-colors leading-tight">
                       {item.name}
                     </div>
                     <div className="text-[9px] text-[#6B6B63] font-bold mt-0.5 leading-tight">

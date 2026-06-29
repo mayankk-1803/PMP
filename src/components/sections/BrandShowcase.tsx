@@ -36,7 +36,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
   }, []);
 
   return (
-    <section className={compact ? "bg-[#F8F5EF] py-16 overflow-hidden" : "bg-[#EFE7DB] py-16 md:py-20 overflow-hidden"}>
+    <section className={compact ? "bg-[#FAF9F6] py-16 overflow-hidden" : "bg-[#F8F7F3] py-16 md:py-20 overflow-hidden"}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={prefersReduced ? false : { opacity: 0, x: -40 }}
@@ -46,11 +46,11 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
           className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14"
         >
           <div className="max-w-3xl text-left">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F8F5EF] border border-[#DDD5C8] text-[10px] font-extrabold uppercase tracking-widest text-[#6E7757] mb-4">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF9F6] border border-[#F5C2C2] text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] mb-4">
               <BadgeCheck className="w-3.5 h-3.5" /> Brand Partner Network
             </span>
             <h2 className="text-3xl md:text-5xl font-black tracking-tight text-[#2B2B2B] mb-4">
-              Premium brand partners, organized for <span className="text-[#6E7757]">corporate gifting</span>
+              Premium brand partners, organized for <span className="text-[#D32F2F]">corporate gifting</span>
             </h2>
             <p className="text-sm sm:text-base text-[#6B6B63] max-w-2xl font-medium">
               Source curated brand-led kits across audio, travel, drinkware, apparel, utility, and executive gifting with tasteful logo placement and corporate-ready packaging.
@@ -78,14 +78,14 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
               variants={prefersReduced ? undefined : cardReveal}
               whileHover={prefersReduced ? undefined : { y: -6, scale: 1.01 }}
               transition={{ duration: 0.3 }}
-              className="h-full min-h-[220px] rounded-xl bg-white border border-[#DDD5C8] shadow-sm p-5 hover:-translate-y-1 hover:shadow-lg transition-all text-left flex flex-col justify-between"
+              className="h-full min-h-[220px] rounded-xl bg-white border border-[#F5C2C2] shadow-sm p-5 hover:-translate-y-1 hover:shadow-lg transition-all text-left flex flex-col justify-between"
             >
               <BrandLogo brand={brand} className="mb-4 h-16 md:h-20" />
               <div>
                 <h3 className="text-sm md:text-base font-black text-[#2B2B2B]">{brand.name}</h3>
                 <div className="flex flex-wrap items-center gap-1.5 mt-1">
-                  <span className="text-[9px] font-extrabold uppercase tracking-wider text-[#6E7757]">{brand.industry || brand.slug}</span>
-                  <span className="text-[9px] text-[#DDD5C8]">&bull;</span>
+                  <span className="text-[9px] font-extrabold uppercase tracking-wider text-[#D32F2F]">{brand.industry || brand.slug}</span>
+                  <span className="text-[9px] text-[#F5C2C2]">&bull;</span>
                   <span className="text-[9px] font-bold uppercase tracking-wider text-[#6B6B63]">{brand.category}</span>
                 </div>
                 {brand.description && (
@@ -99,7 +99,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
         {!compact && (
           <div className="mt-8 rounded-2xl bg-[#2B2B2B] p-8 md:p-10 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <div className="flex items-center gap-2 text-[#C8A36A] text-[10px] font-extrabold uppercase tracking-widest mb-3">
+              <div className="flex items-center gap-2 text-[#EF5350] text-[10px] font-extrabold uppercase tracking-widest mb-3">
                 <Headphones className="w-4 h-4" /> Partner Showcase
               </div>
               <h3 className="text-2xl md:text-3xl font-black text-white mb-2">Build a co-branded kit around your audience.</h3>
@@ -107,7 +107,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
                 Mix apparel, drinkware, audio, travelware, stationery, and useful desk tech into one premium gifting experience.
               </p>
             </div>
-            <Link href="/enquiry?source=partner-showcase" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-[#2B2B2B] px-6 py-3 text-sm font-bold hover:bg-[#F8F5EF] transition-colors">
+            <Link href="/enquiry?source=partner-showcase" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-[#2B2B2B] px-6 py-3 text-sm font-bold hover:bg-[#FAF9F6] transition-colors">
               Start Curating <Sparkles className="w-4 h-4" />
             </Link>
           </div>
@@ -130,7 +130,7 @@ function BrandLogo({ brand, className }: { brand: BrandRecord; className?: strin
 
   return (
     <div className={`flex w-full items-center ${className || ""}`}>
-      <span className="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-[#DDD5C8] bg-[#EFE7DB] px-3 text-sm font-black tracking-widest text-[#6E7757]">
+      <span className="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-[#F5C2C2] bg-[#F8F7F3] px-3 text-sm font-black tracking-widest text-[#D32F2F]">
         {brand.name.slice(0, 2).toUpperCase()}
       </span>
     </div>

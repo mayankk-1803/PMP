@@ -9,8 +9,8 @@ export function BackgroundGradient({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#6E7757] rounded-full mix-blend-multiply opacity-20" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#C8A36A] rounded-full mix-blend-multiply opacity-15" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D32F2F] rounded-full mix-blend-multiply opacity-20" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#EF5350] rounded-full mix-blend-multiply opacity-15" />
     </div>
   );
 }

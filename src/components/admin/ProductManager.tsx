@@ -508,19 +508,19 @@ export function ProductManager() {
     <div className="space-y-5">
       
       {/* Action Header Button Controls */}
-      <div className="flex flex-wrap justify-between items-center gap-3 bg-[#FFFDF8] p-4 rounded-xl border border-[#DDD5C8] shadow-sm">
+      <div className="flex flex-wrap justify-between items-center gap-3 bg-[#FFFDF8] p-4 rounded-xl border border-[#F5C2C2] shadow-sm">
         <div className="flex gap-2">
-          <button onClick={() => setImportExportModalOpen(true)} className="inline-flex items-center gap-2 rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-4 py-2.5 text-xs font-black uppercase text-[#4E583F] hover:bg-[#F8F5EF] shadow-sm">
+          <button onClick={() => setImportExportModalOpen(true)} className="inline-flex items-center gap-2 rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-4 py-2.5 text-xs font-black uppercase text-[#C62828] hover:bg-[#FAF9F6] shadow-sm">
             <Upload className="h-4 w-4" /> Import / Export Tools
           </button>
         </div>
-        <button onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-[#6E7757] px-4 py-2.5 text-xs font-black uppercase text-white hover:bg-[#4E583F] shadow-md">
+        <button onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-[#D32F2F] px-4 py-2.5 text-xs font-black uppercase text-white hover:bg-[#C62828] shadow-md">
           <Plus className="h-4 w-4" /> Add Product
         </button>
       </div>
 
       {/* Filters & Search Panel */}
-      <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-5 shadow-sm space-y-4">
+      <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-5 shadow-sm space-y-4">
         <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6 text-left">
           
           {/* Search Box */}
@@ -533,7 +533,7 @@ export function ProductManager() {
                 placeholder="Search by Title, Slug, SKU, Brand..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] pl-9 pr-3 py-2.5 text-sm outline-none focus:border-[#6E7757]"
+                className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] pl-9 pr-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]"
               />
             </div>
           </div>
@@ -544,7 +544,7 @@ export function ProductManager() {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]"
+              className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]"
             >
               <option value="">All Categories</option>
               {categories.map((c) => (
@@ -559,7 +559,7 @@ export function ProductManager() {
             <select
               value={filterSubcategory}
               onChange={(e) => setFilterSubcategory(e.target.value)}
-              className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]"
+              className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]"
             >
               <option value="">All Subcategories</option>
               {subcategories
@@ -576,7 +576,7 @@ export function ProductManager() {
             <select
               value={filterBrand}
               onChange={(e) => setFilterBrand(e.target.value)}
-              className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]"
+              className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]"
             >
               <option value="">All Brands</option>
               {brands.map((b) => (
@@ -591,7 +591,7 @@ export function ProductManager() {
             <select
               value={filterActive}
               onChange={(e) => setFilterActive(e.target.value)}
-              className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]"
+              className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]"
             >
               <option value="">All Statuses</option>
               <option value="true">Active Only</option>
@@ -611,7 +611,7 @@ export function ProductManager() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#4E583F] outline-none"
+                className="rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#C62828] outline-none"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -627,7 +627,7 @@ export function ProductManager() {
               <select
                 value={limit}
                 onChange={(e) => setLimit(Number(e.target.value))}
-                className="rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#4E583F] outline-none"
+                className="rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#C62828] outline-none"
               >
                 <option value={10}>10 rows</option>
                 <option value={25}>25 rows</option>
@@ -637,7 +637,7 @@ export function ProductManager() {
 
             {/* Featured filter */}
             <div>
-              <label className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-bold text-[#4E583F] pt-1">
+              <label className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-bold text-[#C62828] pt-1">
                 <input
                   type="checkbox"
                   checked={filterFeatured === "true"}
@@ -655,13 +655,13 @@ export function ProductManager() {
       </div>
 
       {/* Drag and Drop sorting context layout */}
-      <div className="overflow-hidden rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] shadow-sm">
         <div className="overflow-x-auto">
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="products-list">
               {(provided) => (
                 <table className="w-full min-w-[1040px] border-collapse text-left text-sm" ref={provided.innerRef} {...provided.droppableProps}>
-                  <thead className="bg-[#F8F5EF] text-xs uppercase tracking-wider text-[#6B6B63] border-b border-[#DDD5C8]">
+                  <thead className="bg-[#FAF9F6] text-xs uppercase tracking-wider text-[#6B6B63] border-b border-[#F5C2C2]">
                     <tr>
                       <th className="px-4 py-3 font-bold w-12 text-center">Move</th>
                       <th className="px-4 py-3 font-bold">Thumbnail</th>
@@ -676,41 +676,41 @@ export function ProductManager() {
                       <th className="px-4 py-3 font-bold">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#DDD5C8]">
+                  <tbody className="divide-y divide-[#F5C2C2]">
                     {loading ? (
-                      <tr><td className="px-4 py-8 text-center text-[#6B6B63]" colSpan={11}><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#6E7757] mb-2" />Loading product catalog database...</td></tr>
+                      <tr><td className="px-4 py-8 text-center text-[#6B6B63]" colSpan={11}><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#D32F2F] mb-2" />Loading product catalog database...</td></tr>
                     ) : paginatedProducts.length === 0 ? (
                       <tr><td className="px-4 py-8 text-center text-[#9A9387] font-bold" colSpan={11}>No matching products yet. Create or import spreadsheet rows above.</td></tr>
                     ) : (
                       paginatedProducts.map((product, idx) => (
                         <Draggable key={product.id} draggableId={product.id} index={idx}>
                           {(dragProvided) => (
-                            <tr ref={dragProvided.innerRef} {...dragProvided.draggableProps} className="text-[#4E583F] hover:bg-[#F8F5EF]/70 transition">
+                            <tr ref={dragProvided.innerRef} {...dragProvided.draggableProps} className="text-[#C62828] hover:bg-[#FAF9F6]/70 transition">
                               <td className="px-4 py-3 text-center" {...dragProvided.dragHandleProps}>
-                                <GripVertical className="h-4 w-4 text-[#9A9387] hover:text-[#4E583F] mx-auto cursor-grab" />
+                                <GripVertical className="h-4 w-4 text-[#9A9387] hover:text-[#C62828] mx-auto cursor-grab" />
                               </td>
                               <td className="px-4 py-3">
                                 {product.featuredImage ? (
                                   <img src={product.featuredImage} alt={product.title} className="h-11 w-11 rounded-lg object-cover border border-[#E5DED2]" />
                                 ) : (
-                                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EFE7DB] text-[#9A9387]"><ImagePlus className="h-4 w-4" /></div>
+                                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#F8F7F3] text-[#9A9387]"><ImagePlus className="h-4 w-4" /></div>
                                 )}
                               </td>
                               <td className="px-4 py-3 font-bold text-[#2B2B2B]">{product.title}</td>
                               <td className="px-4 py-3 text-xs font-mono">{product.slug}</td>
-                              <td className="px-4 py-3"><span className="rounded bg-[#EFE7DB] px-2 py-0.5 text-xs text-[#5F6752] font-semibold">{product.category}</span></td>
+                              <td className="px-4 py-3"><span className="rounded bg-[#F8F7F3] px-2 py-0.5 text-xs text-[#5F6752] font-semibold">{product.category}</span></td>
                               <td className="px-4 py-3 text-[#6B6B63] font-medium">{product.subcategory}</td>
                               <td className="px-4 py-3 font-semibold text-[#3F4734]">{product.brand || "PacMyProduct"}</td>
                               <td className="px-4 py-3 font-bold">{product.moq} Units</td>
                               <td className="px-4 py-3 font-black text-[#2B2B2B]">₹{product.price || 0}</td>
                               <td className="px-4 py-3">
-                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${product.active ? "bg-emerald-50 text-emerald-700" : "bg-[#EFE7DB] text-[#6B6B63]"}`}>
+                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${product.active ? "bg-[#FDECEC] text-[#D32F2F]" : "bg-[#F8F7F3] text-[#6B6B63]"}`}>
                                   {product.active ? "Active" : "Hidden"}
                                 </span>
                               </td>
                               <td className="px-4 py-3">
                                 <div className="flex gap-2">
-                                  <button onClick={() => openEdit(product)} className="inline-flex items-center gap-1 rounded-md border border-[#DDD5C8] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#4E583F] hover:bg-[#F8F5EF] shadow-sm">
+                                  <button onClick={() => openEdit(product)} className="inline-flex items-center gap-1 rounded-md border border-[#F5C2C2] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#C62828] hover:bg-[#FAF9F6] shadow-sm">
                                     <Pencil className="h-3 w-3" /> Edit
                                   </button>
                                   <button onClick={() => setDeleteTarget(product)} className="inline-flex items-center gap-1 rounded-md border border-[#EAD7C8] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#8A4B22] hover:bg-[#F3E7D7] shadow-sm">
@@ -733,7 +733,7 @@ export function ProductManager() {
 
         {/* Pagination navigation controls */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t border-[#DDD5C8] bg-[#F8F5EF] px-5 py-4">
+          <div className="flex items-center justify-between border-t border-[#F5C2C2] bg-[#FAF9F6] px-5 py-4">
             <span className="text-xs font-bold text-[#6B6B63] uppercase tracking-wider">
               Showing {(page - 1) * limit + 1} to {Math.min(page * limit, totalItems)} of {totalItems} items
             </span>
@@ -741,14 +741,14 @@ export function ProductManager() {
               <button
                 disabled={page === 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="inline-flex items-center gap-1 rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#4E583F] shadow-sm hover:bg-[#F8F5EF] disabled:opacity-50"
+                className="inline-flex items-center gap-1 rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#C62828] shadow-sm hover:bg-[#FAF9F6] disabled:opacity-50"
               >
                 <ArrowLeft className="h-3.5 w-3.5" /> Previous
               </button>
               <button
                 disabled={page === totalPages}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                className="inline-flex items-center gap-1 rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#4E583F] shadow-sm hover:bg-[#F8F5EF] disabled:opacity-50"
+                className="inline-flex items-center gap-1 rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#C62828] shadow-sm hover:bg-[#FAF9F6] disabled:opacity-50"
               >
                 Next <ArrowRight className="h-3.5 w-3.5" />
               </button>
@@ -760,33 +760,33 @@ export function ProductManager() {
       {/* Import / Export Spreadsheet Modal */}
       {importExportModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/45 p-4">
-          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl space-y-6">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl space-y-6">
             <div className="flex justify-between items-center border-b border-[#E9E1D5] pb-3">
               <h2 className="text-lg font-black uppercase tracking-wider text-[#2B2B2B]">Spreadsheet Catalog Manager</h2>
-              <button onClick={() => { setImportExportModalOpen(false); setImportFile(null); setImportPreview([]); setImportSummary(null); }} className="rounded-lg p-1.5 border border-[#DDD5C8] hover:bg-[#EFE7DB]"><X className="h-5 w-5" /></button>
+              <button onClick={() => { setImportExportModalOpen(false); setImportFile(null); setImportPreview([]); setImportSummary(null); }} className="rounded-lg p-1.5 border border-[#F5C2C2] hover:bg-[#F8F7F3]"><X className="h-5 w-5" /></button>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 text-left">
               
               {/* Export Panel */}
-              <div className="space-y-4 rounded-xl border border-[#DDD5C8] p-5 bg-[#F8F5EF]/70">
+              <div className="space-y-4 rounded-xl border border-[#F5C2C2] p-5 bg-[#FAF9F6]/70">
                 <h3 className="text-sm font-black uppercase tracking-widest text-[#3F4734] flex items-center gap-2">
-                  <Download className="h-4.5 w-4.5 text-[#6E7757]" /> Export Catalog Data
+                  <Download className="h-4.5 w-4.5 text-[#D32F2F]" /> Export Catalog Data
                 </h3>
                 <p className="text-xs text-[#6B6B63]">Download active products in CSV or Excel file spreadsheet format.</p>
 
                 <div className="space-y-3">
-                  <label className="block text-xs font-bold text-[#4E583F]">
+                  <label className="block text-xs font-bold text-[#C62828]">
                     File Format:
-                    <select value={exportFormat} onChange={(e) => setExportFormat(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm">
+                    <select value={exportFormat} onChange={(e) => setExportFormat(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm">
                       <option value="csv">CSV (Comma Separated Values)</option>
                       <option value="xlsx">Excel File (.xlsx)</option>
                     </select>
                   </label>
 
-                  <label className="block text-xs font-bold text-[#4E583F]">
+                  <label className="block text-xs font-bold text-[#C62828]">
                     Category Filter:
-                    <select value={exportCategory} onChange={(e) => setExportCategory(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm">
+                    <select value={exportCategory} onChange={(e) => setExportCategory(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm">
                       <option value="">All Categories</option>
                       {categories.map((c) => (
                         <option key={c.slug} value={c.slug}>{c.name}</option>
@@ -795,38 +795,38 @@ export function ProductManager() {
                   </label>
 
                   <div className="grid grid-cols-2 gap-2">
-                    <label className="block text-xs font-bold text-[#4E583F]">
+                    <label className="block text-xs font-bold text-[#C62828]">
                       From Date:
-                      <input type="date" value={exportStartDate} onChange={(e) => setExportStartDate(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-xs" />
+                      <input type="date" value={exportStartDate} onChange={(e) => setExportStartDate(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-xs" />
                     </label>
-                    <label className="block text-xs font-bold text-[#4E583F]">
+                    <label className="block text-xs font-bold text-[#C62828]">
                       To Date:
-                      <input type="date" value={exportEndDate} onChange={(e) => setExportEndDate(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-xs" />
+                      <input type="date" value={exportEndDate} onChange={(e) => setExportEndDate(e.target.value)} className="mt-1.5 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-xs" />
                     </label>
                   </div>
 
-                  <label className="inline-flex items-center gap-2 text-xs font-bold text-[#4E583F] cursor-pointer pt-2">
+                  <label className="inline-flex items-center gap-2 text-xs font-bold text-[#C62828] cursor-pointer pt-2">
                     <input type="checkbox" checked={exportActiveOnly} onChange={(e) => setExportActiveOnly(e.target.checked)} className="rounded" />
                     Active/Published items only
                   </label>
                 </div>
 
-                <button onClick={submitExport} className="w-full mt-4 bg-[#4E583F] text-white rounded-lg px-4 py-2.5 text-xs font-black uppercase hover:bg-[#3F4734] transition">
+                <button onClick={submitExport} className="w-full mt-4 bg-[#C62828] text-white rounded-lg px-4 py-2.5 text-xs font-black uppercase hover:bg-[#C62828]/85 transition">
                   Export Catalog
                 </button>
               </div>
 
               {/* Import Panel */}
-              <div className="space-y-4 rounded-xl border border-[#DDD5C8] p-5 bg-[#F8F5EF]/70">
-                <h3 className="text-sm font-black uppercase tracking-widest text-[#3F4734] flex items-center gap-2">
-                  <Upload className="h-4.5 w-4.5 text-emerald-600" /> Bulk Import Spreadsheet
+              <div className="space-y-4 rounded-xl border border-[#F5C2C2] p-5 bg-[#FAF9F6]/70">
+                <h3 className="text-sm font-black uppercase tracking-widest text-[#D32F2F] flex items-center gap-2">
+                  <Upload className="h-4.5 w-4.5 text-[#D32F2F]" /> Bulk Import Spreadsheet
                 </h3>
                 <p className="text-xs text-[#6B6B63]">Upload CSV or XLSX templates to create or update catalog records in bulk.</p>
 
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-[#4E583F]">1. Download Blank Templates:</span>
-                    <select onChange={(e) => { if (e.target.value) window.open(`/api/admin/catalog/import?template=${e.target.value}`); }} className="rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#4E583F]">
+                    <span className="text-xs font-bold text-[#C62828]">1. Download Blank Templates:</span>
+                    <select onChange={(e) => { if (e.target.value) window.open(`/api/admin/catalog/import?template=${e.target.value}`); }} className="rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#C62828]">
                       <option value="">Download Template...</option>
                       <option value="products">Products Template</option>
                       <option value="brands">Brands Template</option>
@@ -835,9 +835,9 @@ export function ProductManager() {
                     </select>
                   </div>
 
-                  <label className="block text-xs font-bold text-[#4E583F]">
+                  <label className="block text-xs font-bold text-[#C62828]">
                     2. Import Target Entity:
-                    <select value={importingType} onChange={(e) => { setImportingType(e.target.value); setImportPreview([]); setImportFile(null); }} className="mt-1.5 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm">
+                    <select value={importingType} onChange={(e) => { setImportingType(e.target.value); setImportPreview([]); setImportFile(null); }} className="mt-1.5 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm">
                       <option value="products">Products</option>
                       <option value="brands">Brands</option>
                       <option value="categories">Categories</option>
@@ -845,7 +845,7 @@ export function ProductManager() {
                     </select>
                   </label>
 
-                  <div className="border border-dashed border-[#CFC5B7] rounded-lg p-4 bg-[#FFFDF8] flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#F8F5EF] transition relative">
+                  <div className="border border-dashed border-[#CFC5B7] rounded-lg p-4 bg-[#FFFDF8] flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#FAF9F6] transition relative">
                     <UploadCloud className="h-6 w-6 text-[#9A9387] mb-2" />
                     <span className="text-xs font-bold text-[#2B2B2B]">{importFile ? importFile.name : "Select Spreadsheet File"}</span>
                     <span className="text-[10px] text-[#9A9387] mt-1">Supports CSV, XLSX. Max 5MB.</span>
@@ -854,7 +854,7 @@ export function ProductManager() {
                 </div>
 
                 {importFile && (
-                  <button onClick={submitImport} disabled={importLoading} className="w-full mt-4 bg-emerald-600 text-white rounded-lg px-4 py-2.5 text-xs font-black uppercase hover:bg-emerald-500 transition disabled:opacity-50">
+                  <button onClick={submitImport} disabled={importLoading} className="w-full mt-4 bg-[#D32F2F] text-white rounded-lg px-4 py-2.5 text-xs font-black uppercase hover:bg-[#C62828] transition disabled:opacity-50">
                     {importLoading ? "Uploading & Importing..." : "Confirm & Import into MongoDB"}
                   </button>
                 )}
@@ -864,12 +864,12 @@ export function ProductManager() {
 
             {/* Import results summary */}
             {importSummary && (
-              <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-5 text-left space-y-3 shadow-sm">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#2B2B2B] flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Import Summary</h4>
+              <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-5 text-left space-y-3 shadow-sm">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#2B2B2B] flex items-center gap-1.5"><Check className="h-4 w-4 text-[#D32F2F]" /> Import Summary</h4>
                 <div className="grid grid-cols-4 gap-4 text-center">
-                  <div className="rounded-lg bg-emerald-50 p-3"><span className="block text-lg font-black text-emerald-700">{importSummary.created}</span><span className="text-[10px] uppercase font-bold text-[#6B6B63]">Created</span></div>
-                  <div className="rounded-lg bg-[#E7ECE1] p-3"><span className="block text-lg font-black text-[#4E583F]">{importSummary.updated}</span><span className="text-[10px] uppercase font-bold text-[#6B6B63]">Updated</span></div>
-                  <div className="rounded-lg bg-[#EFE7DB] p-3"><span className="block text-lg font-black text-[#5F6752]">{importSummary.skipped}</span><span className="text-[10px] uppercase font-bold text-[#6B6B63]">Skipped</span></div>
+                  <div className="rounded-lg bg-[#FDECEC] p-3"><span className="block text-lg font-black text-[#D32F2F]">{importSummary.created}</span><span className="text-[10px] uppercase font-bold text-[#6B6B63]">Created</span></div>
+                  <div className="rounded-lg bg-[#FDECEC]/80 p-3"><span className="block text-lg font-black text-[#C62828]">{importSummary.updated}</span><span className="text-[10px] uppercase font-bold text-[#6B6B63]">Updated</span></div>
+                  <div className="rounded-lg bg-[#F8F7F3] p-3"><span className="block text-lg font-black text-[#5F6752]">{importSummary.skipped}</span><span className="text-[10px] uppercase font-bold text-[#6B6B63]">Skipped</span></div>
                   <div className="rounded-lg bg-[#F3E7D7] p-3"><span className="block text-lg font-black text-[#8A4B22]">{importSummary.failed}</span><span className="text-[10px] uppercase font-bold text-[#6B6B63]">Failed</span></div>
                 </div>
 
@@ -884,13 +884,13 @@ export function ProductManager() {
 
             {/* Spreadsheet row preview */}
             {importPreview.length > 0 && !importSummary && (
-              <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-4 text-left shadow-sm space-y-3">
+              <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-4 text-left shadow-sm space-y-3">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#6B6B63]">Previewing Spreadsheet Rows ({importPreview.length}):</span>
                 <div className="max-h-56 overflow-auto border border-[#E5DED2] rounded-lg">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#F8F5EF] font-bold border-b border-[#DDD5C8]">
+                    <thead className="bg-[#FAF9F6] font-bold border-b border-[#F5C2C2]">
                       <tr>
-                        {Object.keys(importPreview[0] || {}).slice(0, 6).map((k) => <th key={k} className="px-3 py-2 border-r border-[#DDD5C8]">{k}</th>)}
+                        {Object.keys(importPreview[0] || {}).slice(0, 6).map((k) => <th key={k} className="px-3 py-2 border-r border-[#F5C2C2]">{k}</th>)}
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#E9E1D5] text-[#5F6752] font-mono">
@@ -901,7 +901,7 @@ export function ProductManager() {
                       ))}
                     </tbody>
                   </table>
-                  {importPreview.length > 10 && <div className="text-center text-[10px] text-[#9A9387] font-bold p-2 bg-[#F8F5EF] border-t border-[#E5DED2]">And {importPreview.length - 10} more rows...</div>}
+                  {importPreview.length > 10 && <div className="text-center text-[10px] text-[#9A9387] font-bold p-2 bg-[#FAF9F6] border-t border-[#E5DED2]">And {importPreview.length - 10} more rows...</div>}
                 </div>
               </div>
             )}
@@ -912,27 +912,27 @@ export function ProductManager() {
       {/* Product Creation / Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/45 p-4">
-          <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
+          <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
             <div className="mb-4 flex items-center justify-between border-b border-[#E9E1D5] pb-3">
               <h2 className="text-xl font-black">{editingId ? "Edit Product Record" : "Add Product to Catalog"}</h2>
-              <button onClick={() => setModalOpen(false)} className="rounded-md p-1.5 hover:bg-[#EFE7DB]"><X className="h-5 w-5" /></button>
+              <button onClick={() => setModalOpen(false)} className="rounded-md p-1.5 hover:bg-[#F8F7F3]"><X className="h-5 w-5" /></button>
             </div>
             
             <form onSubmit={saveProduct} className="grid gap-4 md:grid-cols-2 text-left">
               
-              <label className="block text-sm font-bold text-[#4E583F]">
+              <label className="block text-sm font-bold text-[#C62828]">
                 Product Title
-                <input required type="text" value={form.title} onChange={(e) => updateForm("title", e.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]" />
+                <input required type="text" value={form.title} onChange={(e) => updateForm("title", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]" />
               </label>
 
-              <label className="block text-sm font-bold text-[#4E583F]">
+              <label className="block text-sm font-bold text-[#C62828]">
                 Slug
-                <input required type="text" value={form.slug} onChange={(e) => updateForm("slug", e.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]" />
+                <input required type="text" value={form.slug} onChange={(e) => updateForm("slug", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]" />
               </label>
 
-              <label className="block text-sm font-bold text-[#4E583F]">
+              <label className="block text-sm font-bold text-[#C62828]">
                 Category
-                <select required value={form.category} onChange={(e) => updateForm("category", e.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]">
+                <select required value={form.category} onChange={(e) => updateForm("category", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]">
                   <option value="">Select Category</option>
                   {categories.map((c) => (
                     <option key={c.slug} value={c.slug}>{c.name}</option>
@@ -940,9 +940,9 @@ export function ProductManager() {
                 </select>
               </label>
 
-              <label className="block text-sm font-bold text-[#4E583F]">
+              <label className="block text-sm font-bold text-[#C62828]">
                 Subcategory
-                <select required value={form.subcategory} onChange={(e) => updateForm("subcategory", e.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]">
+                <select required value={form.subcategory} onChange={(e) => updateForm("subcategory", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]">
                   <option value="">Select Subcategory</option>
                   {subcategories
                     .filter((sub: any) => !form.category || sub.category === form.category)
@@ -952,9 +952,9 @@ export function ProductManager() {
                 </select>
               </label>
 
-              <label className="block text-sm font-bold text-[#4E583F]">
+              <label className="block text-sm font-bold text-[#C62828]">
                 Brand Partner
-                <select value={form.brand} onChange={(e) => updateForm("brand", e.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]">
+                <select value={form.brand} onChange={(e) => updateForm("brand", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]">
                   <option value="">Select Brand (Optional)</option>
                   <option value="PacMyProduct">PacMyProduct (Own)</option>
                   {brands.map((b) => (
@@ -964,31 +964,31 @@ export function ProductManager() {
               </label>
 
               <div className="grid grid-cols-2 gap-2">
-                <label className="block text-sm font-bold text-[#4E583F]">
+                <label className="block text-sm font-bold text-[#C62828]">
                   MOQ (Units)
-                  <input required type="number" value={form.moq} onChange={(e) => updateForm("moq", Number(e.target.value) || 0)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]" />
+                  <input required type="number" value={form.moq} onChange={(e) => updateForm("moq", Number(e.target.value) || 0)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]" />
                 </label>
-                <label className="block text-sm font-bold text-[#4E583F]">
+                <label className="block text-sm font-bold text-[#C62828]">
                   Base Price (₹)
-                  <input required type="number" value={form.price} onChange={(e) => updateForm("price", Number(e.target.value) || 0)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]" />
+                  <input required type="number" value={form.price} onChange={(e) => updateForm("price", Number(e.target.value) || 0)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]" />
                 </label>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-bold text-[#4E583F]">
+                <label className="block text-sm font-bold text-[#C62828]">
                   Description
-                  <textarea value={form.description} onChange={(e) => updateForm("description", e.target.value)} rows={3} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]" />
+                  <textarea value={form.description} onChange={(e) => updateForm("description", e.target.value)} rows={3} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]" />
                 </label>
               </div>
 
-              <label className="flex items-center gap-2 pt-6 text-sm font-bold text-[#4E583F] cursor-pointer">
+              <label className="flex items-center gap-2 pt-6 text-sm font-bold text-[#C62828] cursor-pointer">
                 <input type="checkbox" checked={form.featured} onChange={(e) => updateForm("featured", e.target.checked)} />
                 Featured Item (Homepage Showcase)
               </label>
 
-              <label className="block text-sm font-bold text-[#4E583F]">
+              <label className="block text-sm font-bold text-[#C62828]">
                 Publish Status
-                <select value={form.status} onChange={(e) => updateForm("status", e.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#6E7757]">
+                <select value={form.status} onChange={(e) => updateForm("status", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]">
                   <option value="PUBLISHED">Published</option>
                   <option value="HIDDEN">Hidden/Draft</option>
                 </select>
@@ -999,19 +999,19 @@ export function ProductManager() {
                 
                 {/* Featured Image Upload */}
                 <div>
-                  <span className="block text-sm font-bold text-[#4E583F] mb-2">Featured Image</span>
+                  <span className="block text-sm font-bold text-[#C62828] mb-2">Featured Image</span>
                   <div className="flex flex-wrap items-center gap-4">
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#F8F5EF] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
-                      <ImagePlus className="h-5 w-5 text-[#6E7757]" />
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#FAF9F6] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
+                      <ImagePlus className="h-5 w-5 text-[#D32F2F]" />
                       <span className="text-xs font-black uppercase text-[#3F4734]">Select Image</span>
                       <input ref={featuredFileInputRef} type="file" accept="image/*" onChange={handleFeaturedImageChange} className="hidden" />
                     </label>
 
                     {/* Pre-existing URL preview if available */}
                     {form.featuredImage && !featuredPreviewUrl && (
-                      <div className="relative h-20 w-20 rounded-lg overflow-hidden border border-[#DDD5C8]">
+                      <div className="relative h-20 w-20 rounded-lg overflow-hidden border border-[#F5C2C2]">
                         <img src={form.featuredImage} alt="Featured preview" className="h-full w-full object-cover" />
-                        <button type="button" onClick={() => updateForm("featuredImage", "")} className="absolute right-1 top-1 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#6E7757]"><X className="h-3 w-3" /></button>
+                        <button type="button" onClick={() => updateForm("featuredImage", "")} className="absolute right-1 top-1 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
                       </div>
                     )}
 
@@ -1022,7 +1022,7 @@ export function ProductManager() {
                         <div className="min-w-0 text-left">
                           <div className="text-xs font-bold text-[#2B2B2B] truncate">{featuredFile?.name}</div>
                           <div className="text-[10px] text-[#6B6B63] font-semibold">{featuredFile ? (featuredFile.size / 1024).toFixed(1) : 0} KB</div>
-                          <button type="button" onClick={removePendingFeatured} className="text-[10px] text-[#6E7757] hover:text-[#2B2B2B] font-black uppercase tracking-wider mt-1.5 block">Remove File</button>
+                          <button type="button" onClick={removePendingFeatured} className="text-[10px] text-[#D32F2F] hover:text-[#2B2B2B] font-black uppercase tracking-wider mt-1.5 block">Remove File</button>
                         </div>
                       </div>
                     )}
@@ -1031,10 +1031,10 @@ export function ProductManager() {
 
                 {/* Gallery Images Upload */}
                 <div>
-                  <span className="block text-sm font-bold text-[#4E583F] mb-2">Gallery Images</span>
+                  <span className="block text-sm font-bold text-[#C62828] mb-2">Gallery Images</span>
                   <div className="flex flex-wrap items-center gap-4">
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#F8F5EF] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
-                      <ImagePlus className="h-5 w-5 text-[#6E7757]" />
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#FAF9F6] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
+                      <ImagePlus className="h-5 w-5 text-[#D32F2F]" />
                       <span className="text-xs font-black uppercase text-[#3F4734]">Add Gallery Files</span>
                       <input ref={galleryFileInputRef} type="file" multiple accept="image/*" onChange={handleGalleryImagesChange} className="hidden" />
                     </label>
@@ -1046,9 +1046,9 @@ export function ProductManager() {
                       <div className="text-[10px] font-bold text-[#9A9387] uppercase tracking-widest mb-1.5">Saved Gallery:</div>
                       <div className="flex flex-wrap gap-2">
                         {form.galleryImages.map((img, i) => (
-                          <div key={img} className="relative h-14 w-14 rounded-lg overflow-hidden border border-[#DDD5C8]">
+                          <div key={img} className="relative h-14 w-14 rounded-lg overflow-hidden border border-[#F5C2C2]">
                             <img src={img} alt="gallery" className="h-full w-full object-cover" />
-                            <button type="button" onClick={() => updateForm("galleryImages", form.galleryImages.filter((_, idx) => idx !== i))} className="absolute right-0.5 top-0.5 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#6E7757]"><X className="h-3 w-3" /></button>
+                            <button type="button" onClick={() => updateForm("galleryImages", form.galleryImages.filter((_, idx) => idx !== i))} className="absolute right-0.5 top-0.5 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
                           </div>
                         ))}
                       </div>
@@ -1058,15 +1058,15 @@ export function ProductManager() {
                   {/* Pending gallery previews */}
                   {galleryPreviewUrls.length > 0 && (
                     <div className="mt-3">
-                      <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1.5">Pending upload ({galleryFiles.length} files):</div>
+                      <div className="text-[10px] font-bold text-[#D32F2F] uppercase tracking-widest mb-1.5">Pending upload ({galleryFiles.length} files):</div>
                       <div className="flex flex-wrap gap-2">
                         {galleryPreviewUrls.map((url, i) => (
-                          <div key={url} className="relative h-14 w-14 rounded-lg overflow-hidden border border-emerald-200 bg-emerald-50">
+                          <div key={url} className="relative h-14 w-14 rounded-lg overflow-hidden border border-[#F5C2C2] bg-[#FDECEC]">
                             <img src={url} alt="pending gallery" className="h-full w-full object-cover" />
                             <div className="absolute inset-x-0 bottom-0 bg-black/60 text-white text-[8px] text-center truncate px-0.5 font-mono">
                               {(galleryFiles[i]?.size / 1024).toFixed(0)}K
                             </div>
-                            <button type="button" onClick={() => removePendingGallery(i)} className="absolute right-0.5 top-0.5 bg-[#FFFDF8]/95 p-0.5 rounded shadow text-[#5F6752] hover:text-[#6E7757]"><X className="h-3 w-3" /></button>
+                            <button type="button" onClick={() => removePendingGallery(i)} className="absolute right-0.5 top-0.5 bg-[#FFFDF8]/95 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
                           </div>
                         ))}
                       </div>
@@ -1079,15 +1079,15 @@ export function ProductManager() {
 
               {/* Status errors & success displays */}
               {(uploadError || uploadSuccess) && (
-                <div className={`md:col-span-2 rounded-lg px-3 py-2 text-xs font-bold ${uploadError ? "bg-[#F3E7D7] text-[#8A4B22]" : "bg-emerald-50 text-emerald-700"}`}>
+                <div className={`md:col-span-2 rounded-lg px-3 py-2 text-xs font-bold ${uploadError ? "bg-[#F3E7D7] text-[#8A4B22]" : "bg-[#FDECEC] text-[#D32F2F]"}`}>
                   {uploadError || uploadSuccess}
                 </div>
               )}
 
               {/* Footer action buttons */}
               <div className="md:col-span-2 flex justify-end gap-3 border-t border-[#E9E1D5] pt-4">
-                <button type="button" onClick={() => setModalOpen(false)} className="rounded-lg border border-[#DDD5C8] px-4 py-2 text-sm font-bold text-[#4E583F] hover:bg-[#F8F5EF]">Cancel</button>
-                <button disabled={saving} type="submit" className="rounded-lg bg-[#6E7757] px-5 py-2 text-sm font-black text-white hover:bg-[#4E583F] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
+                <button type="button" onClick={() => setModalOpen(false)} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
+                <button disabled={saving} type="submit" className="rounded-lg bg-[#D32F2F] px-5 py-2 text-sm font-black text-white hover:bg-[#C62828] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
                   {saving ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" /> Saving...
@@ -1106,13 +1106,13 @@ export function ProductManager() {
       {/* Delete Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/45 p-4">
-          <div className="w-full max-w-md rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl text-left">
+          <div className="w-full max-w-md rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl text-left">
             <h2 className="text-lg font-black text-[#2B2B2B]">Archive catalog item?</h2>
             <p className="mt-2 text-sm text-[#6B6B63]">
               Are you sure you want to delete <strong>{deleteTarget.title}</strong>? It will be moved to the Trash Bin and hidden from the store.
             </p>
             <div className="mt-6 flex justify-end gap-3">
-              <button onClick={() => setDeleteTarget(null)} className="rounded-lg border border-[#DDD5C8] px-4 py-2 text-sm font-bold text-[#4E583F] hover:bg-[#F8F5EF]">Cancel</button>
+              <button onClick={() => setDeleteTarget(null)} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
               <button onClick={deleteProduct} className="rounded-lg bg-[#8A6A3B] px-4 py-2 text-sm font-black text-white hover:bg-[#6E5330]">Confirm Archive</button>
             </div>
           </div>

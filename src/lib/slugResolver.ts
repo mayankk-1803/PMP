@@ -36,7 +36,28 @@ export const getCanonicalKitSlug = (slug: string | null | undefined): string | u
   if (clean === "diwali" || clean === "diwalihampers") return "diwali-hampers";
   if (clean === "holi" || clean === "holihampers") return "holi-hampers";
   if (clean === "eid" || clean === "eidkits" || clean === "eidhampers") return "eid-kits";
-  if (clean === "womens" || clean === "womensday" || clean === "womensdaygifts" || clean === "womensdayhampers") return "womens-day-gifts";
+  if (
+    clean === "womens" ||
+    clean === "womensday" ||
+    clean === "womensdaygifts" ||
+    clean === "womensdaygift" ||
+    clean === "womensdayhampers" ||
+    clean === "womensdayhamper" ||
+    clean === "womenday" ||
+    clean === "womendaygifts" ||
+    clean === "womendaygift" ||
+    clean === "womendayhampers" ||
+    clean === "womendayhamper" ||
+    clean === "woman" ||
+    clean === "womansdaygifts" ||
+    clean === "womansdaygift" ||
+    clean === "womandaygifts" ||
+    clean === "womandaygift" ||
+    clean === "womensgifts" ||
+    clean === "womensgift" ||
+    clean === "internationalwomensday" ||
+    clean === "iwd"
+  ) return "womens-day-gifts";
   if (clean === "christmas" || clean === "christmaskits" || clean === "christmashampers") return "christmas-kits";
   if (clean === "newyear" || clean === "newyearhampers" || clean === "newyeargifts") return "new-year-hampers";
   if (clean === "celebration" || clean === "corporatecelebration" || clean === "corporatecelebrationhampers") return "corporate-celebration-hampers";

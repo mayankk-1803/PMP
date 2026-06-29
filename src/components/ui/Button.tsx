@@ -4,17 +4,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-2xl text-[15px] font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6E7757] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-all duration-200 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.97] will-change-transform",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-2xl text-[15px] font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D32F2F] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-all duration-200 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.97] will-change-transform",
   {
     variants: {
       variant: {
         default:
-          "bg-[#6E7757] text-white hover:bg-[#4E583F] shadow-[0_4px_14px_rgba(110,119,87,0.25)] hover:shadow-[0_8px_24px_rgba(110,119,87,0.35)]",
+          "bg-[#D32F2F] text-white hover:bg-[#C62828] shadow-[0_4px_14px_rgba(211,47,47,0.15)] hover:shadow-[0_8px_24px_rgba(211,47,47,0.25)]",
         outline:
-          "border border-[#6E7757] bg-white text-[#6E7757] hover:bg-[#F8F5EF] hover:border-[#4E583F]",
-        ghost: "hover:bg-[#EFE7DB] text-[#6B6B63] hover:text-[#2B2B2B]",
-        gold: "bg-[#C8A36A] text-white hover:bg-[#b8925a] shadow-[0_4px_14px_rgba(200,163,106,0.25)] hover:shadow-[0_8px_24px_rgba(200,163,106,0.35)]",
-        link: "text-[#6E7757] underline-offset-4 hover:underline hover:scale-100 hover:translate-y-0",
+          "border border-[#D32F2F] bg-white text-[#D32F2F] hover:bg-[#FDECEC] hover:border-[#C62828]",
+        ghost: "hover:bg-[#FDECEC] text-[#555555] hover:text-[#D32F2F]",
+        gold: "bg-[#EF5350] text-white hover:bg-[#C62828] shadow-[0_4px_14px_rgba(239,83,80,0.15)] hover:shadow-[0_8px_24px_rgba(239,83,80,0.25)]",
+        link: "text-[#D32F2F] underline-offset-4 hover:underline hover:scale-100 hover:translate-y-0",
       },
       size: {
         default: "h-11 px-6 py-2",

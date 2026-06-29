@@ -58,16 +58,16 @@ export function HowItWorks() {
               variants={prefersReduced ? undefined : cardReveal}
               whileHover={prefersReduced ? undefined : { y: -6 }}
               transition={{ duration: 0.3, ease: EASE_SMOOTH }}
-              className="relative text-center flex flex-col items-center bg-[#F8F5EF] p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-[#DDD5C8] h-full group/card hover:border-[#6E7757]/30"
+              className="relative text-center flex flex-col items-center bg-[#FAF9F6] p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-[#F5C2C2] h-full group/card hover:border-[#D32F2F]/30"
             >
               <motion.div
-                className="w-16 h-16 bg-white shadow-sm rounded-xl flex items-center justify-center text-[#6E7757] mb-6 transition-transform border border-[#DDD5C8]"
+                className="w-16 h-16 bg-white shadow-sm rounded-xl flex items-center justify-center text-[#D32F2F] mb-6 transition-transform border border-[#F5C2C2]"
                 whileHover={prefersReduced ? undefined : { y: -4, scale: 1.08 }}
                 transition={{ duration: 0.3, ease: EASE_SMOOTH }}
               >
                 {step.icon}
               </motion.div>
-              <h3 className="text-lg font-bold text-[#6E7757] mb-3">{step.title}</h3>
+              <h3 className="text-lg font-bold text-[#D32F2F] mb-3">{step.title}</h3>
               <p className="text-[#6B6B63] leading-relaxed text-sm flex-grow">{step.desc}</p>
             </motion.div>
           ))}

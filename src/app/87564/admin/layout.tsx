@@ -40,9 +40,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!authorized) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F8F5EF] text-[#5F6752]">
+      <div className="flex min-h-screen items-center justify-center bg-[#FAF9F6] text-[#5F6752]">
         <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest">
-          <Loader2 className="h-5 w-5 animate-spin text-[#6E7757]" />
+          <Loader2 className="h-5 w-5 animate-spin text-[#D32F2F]" />
           Checking admin session...
         </div>
       </div>

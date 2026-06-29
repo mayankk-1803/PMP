@@ -132,13 +132,35 @@ const POOLS = {
     folderImage("Table Mat", "3.jpg"),
     folderImage("Table Mat", "4.jpg"),
   ],
-  drinkware: [
+  // Drinkware — split by type for strict matching
+  flasks: [
+    "/images/flaskbottle.png",
+    "/images/premiumvaccumflask.png",
+  ],
+  bottles: [
     "/images/sportsbottle.png",
     "/images/sportsbottle1.png",
     "/images/steelbottle.png",
-    "/images/flaskbottle.png",
     "/images/copperbottleset.png",
+  ],
+  // Coffee mugs — only add images here if dedicated mug images exist in public/images
+  // Currently empty; returns "" which renders the neutral placeholder
+  coffeeMugs: [] as string[],
+  travelMugs: [
+    "/images/flaskbottle.png",
     "/images/premiumvaccumflask.png",
+  ],
+  // Travel bags use Trolley Bags folder (not laptop bags)
+  travelBags: [
+    folderImage("Trolley Bags", "1.jpg"),
+    folderImage("Trolley Bags", "2.jpg"),
+    folderImage("Trolley Bags", "3.jpg"),
+    folderImage("Trolley Bags", "4.jpg"),
+    folderImage("Trolley Bags", "5.jpg"),
+  ],
+  // Women's Day — dedicated images
+  womensDay: [
+    "/kitsimages/womendayhamper.png",
   ],
   tech: [
     image("photo-1608043152269-423dbba4e7e1"),
@@ -213,27 +235,59 @@ const POOLS = {
 
 export const realCatalogImage = (title: string, category = "", subcategory = "", seed = title) => {
   const haystack = `${title} ${category} ${subcategory}`.toLowerCase();
+  const sub = subcategory.toLowerCase();
+  const ttl = title.toLowerCase();
 
+  // ── Keychains ──────────────────────────────────────────────────────
   if (haystack.includes("keychain") || haystack.includes("key ring")) return pick(POOLS.keychain, title, seed);
+
+  // ── T-Shirts ───────────────────────────────────────────────────────
   if (haystack.includes("round neck") || haystack.includes("crew neck")) return pick(POOLS.roundNeckTshirt, title, seed);
   if (haystack.includes("polo") || haystack.includes("t-shirt") || haystack.includes("tee")) return pick(POOLS.tshirt, title, seed);
+
+  // ── Caps ───────────────────────────────────────────────────────────
   if (haystack.includes("sports cap") || haystack.includes("sport cap")) return pick(POOLS.sportsCaps, title, seed);
   if (haystack.includes("cotton cap")) return pick(POOLS.cottonCaps, title, seed);
   if (haystack.includes("cap")) return pick(POOLS.caps, title, seed);
-  if (haystack.includes("duffel")) return pick(POOLS.duffel, title, seed);
-  if (haystack.includes("trolley")) return pick(POOLS.trolleyBags, title, seed);
-  if (haystack.includes("backpack")) return pick(POOLS.backpacks, title, seed);
-  if (haystack.includes("sling bag")) return pick(POOLS.slingBags, title, seed);
-  if (haystack.includes("laptop bag") || haystack.includes("tote") || haystack.includes("bag")) return pick(POOLS.laptopBags, title, seed);
+
+  // ── Bags — strict per subcategory ─────────────────────────────────
+  if (sub === "duffle-bags" || ttl.includes("duffle")) return pick(POOLS.duffel, title, seed);
+  if (sub === "trolley-bags" || ttl.includes("trolley")) return pick(POOLS.trolleyBags, title, seed);
+  if (sub === "sling-bags" || ttl.includes("sling bag")) return pick(POOLS.slingBags, title, seed);
+  if (sub === "laptop-bags" || ttl.includes("laptop bag")) return pick(POOLS.laptopBags, title, seed);
+  if (sub === "travel-bags" || ttl.includes("travel bag")) return pick(POOLS.travelBags, title, seed);
+  if (sub === "backpacks" || ttl.includes("backpack")) return pick(POOLS.backpacks, title, seed);
+  // Generic bag fallback (only if slug is under bags)
+  if ((sub.includes("bag") || ttl.includes("bag")) && !haystack.includes("kit")) return pick(POOLS.laptopBags, title, seed);
+
+  // ── Diaries / Notebooks ────────────────────────────────────────────
   if (haystack.includes("notebook") || haystack.includes("diary") || haystack.includes("journal") || haystack.includes("planner")) return pick(POOLS.notebook, title, seed);
+
+  // ── Pens ───────────────────────────────────────────────────────────
   if (haystack.includes("pen")) return pick(POOLS.pens, title, seed);
+
+  // ── Table Top ──────────────────────────────────────────────────────
   if (haystack.includes("mouse pad") || haystack.includes("mousepad")) return pick(POOLS.mousePad, title, seed);
-  if (haystack.includes("paper weight")) return pick(POOLS.paperWeight, title, seed);
+  if (haystack.includes("paper weight") || haystack.includes("paperweight")) return pick(POOLS.paperWeight, title, seed);
   if (haystack.includes("table mat") || haystack.includes("desk mat")) return pick(POOLS.tableMat, title, seed);
   if (haystack.includes("desk organizer") || haystack.includes("desk organiser") || haystack.includes("calendar")) return pick(POOLS.desk, title, seed);
-  if (haystack.includes("bottle") || haystack.includes("flask") || haystack.includes("tumbler") || haystack.includes("mug")) return pick(POOLS.drinkware, title, seed);
-  if (haystack.includes("speaker") || haystack.includes("earbud") || haystack.includes("charger") || haystack.includes("usb")) return pick(POOLS.tech, title, seed);
 
+  // ── Drinkware — strict per subcategory, NO cross-category mixing ───
+  if (sub === "flasks" || ttl.includes("flask") || ttl.includes("vacuum flask") || ttl.includes("vaccum flask")) {
+    return pick(POOLS.flasks, title, seed);
+  }
+  if (sub === "coffee-mugs" || ttl.includes("coffee mug") || ttl.includes("ceramic mug") || ttl.includes("tea mug")) {
+    // No dedicated mug images yet — return empty string to render neutral placeholder
+    return POOLS.coffeeMugs.length > 0 ? pick(POOLS.coffeeMugs, title, seed) : "";
+  }
+  if (sub === "travel-mugs" || ttl.includes("travel mug") || ttl.includes("tumbler")) {
+    return pick(POOLS.travelMugs, title, seed);
+  }
+  if (sub === "bottles" || ttl.includes("bottle") || ttl.includes("sipper")) {
+    return pick(POOLS.bottles, title, seed);
+  }
+
+  // ── Kits & Hampers (kept for corporate-kits page) ─────────────────
   if (haystack.includes("architect") || haystack.includes("interior")) return corporateKitImageOrFallback(title || subcategory || category);
   if (haystack.includes("mason") || haystack.includes("contractor") || haystack.includes("electrician")) return corporateKitImageOrFallback(title || subcategory || category);
   if (haystack.includes("doctor") || haystack.includes("hospital") || haystack.includes("pharma")) return corporateKitImageOrFallback(title || subcategory || category);
@@ -241,17 +295,21 @@ export const realCatalogImage = (title: string, category = "", subcategory = "",
     return corporateKitImageOrFallback(title || subcategory || category);
   }
 
+  // ── Specific hampers ───────────────────────────────────────────────
   if (haystack.includes("diwali")) return pick(POOLS.diwaliHampers, title, seed);
   if (haystack.includes("holi")) return pick(POOLS.holiHampers, title, seed);
   if (haystack.includes("eid")) return pick(POOLS.eidHampers, title, seed);
-  if (haystack.includes("christmas") || haystack.includes("new year") || haystack.includes("women") || haystack.includes("hamper") || haystack.includes("gift")) {
+  if (haystack.includes("women") || haystack.includes("woman")) return POOLS.womensDay[0];
+  if (haystack.includes("christmas") || haystack.includes("new year") || haystack.includes("hamper")) {
     return pick(POOLS.hampers, title, seed);
   }
 
+  // ── Packaging ──────────────────────────────────────────────────────
   if (haystack.includes("rigid") || haystack.includes("magnetic") || haystack.includes("luxury box")) return pick(POOLS.rigidBoxes, title, seed);
   if (haystack.includes("corrugated") || haystack.includes("shipping") || haystack.includes("carton") || haystack.includes("mono") || haystack.includes("packaging") || haystack.includes("box")) {
     return pick(POOLS.packaging, title, seed);
   }
 
-  return pick(POOLS.corporateKits, title, seed);
+  // ── Unknown — return empty string, never substitute another category's image ──
+  return "";
 };

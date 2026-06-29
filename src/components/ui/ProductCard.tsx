@@ -72,11 +72,11 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
       whileTap={prefersReduced ? undefined : { scale: 0.97 }}
       onClick={handleCardClick}
       className={cn(
-        "group flex flex-col h-full relative overflow-hidden rounded-[20px] bg-white shadow-[0_4px_20px_rgba(43,43,43,0.06)] border border-[#DDD5C8] transition-all hover:shadow-[0_16px_40px_rgba(43,43,43,0.12)] hover:border-[#C8A36A]/40 cursor-pointer", 
+        "group flex flex-col h-full relative overflow-hidden rounded-[20px] bg-white shadow-[0_4px_20px_rgba(43,43,43,0.06)] border border-[#F5C2C2] transition-all hover:shadow-[0_16px_40px_rgba(43,43,43,0.12)] hover:border-[#EF5350]/40 cursor-pointer", 
         className
       )}
     >
-      <div className="relative w-full h-[240px] overflow-hidden bg-[#F8F5EF] flex-shrink-0">
+      <div className="relative w-full h-[240px] overflow-hidden bg-[#FAF9F6] flex-shrink-0">
         <SafeImage 
           src={displayImage} 
           alt={title}
@@ -100,14 +100,14 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
             className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-all focus:outline-none"
             aria-label="Save for quote"
           >
-            <Bookmark className={cn("w-4 h-4 transition-colors", isSelected ? "fill-[#6E7757] text-[#6E7757]" : "text-[#6B6B63] hover:text-[#2B2B2B]")} />
+            <Bookmark className={cn("w-4 h-4 transition-colors", isSelected ? "fill-[#D32F2F] text-[#D32F2F]" : "text-[#6B6B63] hover:text-[#2B2B2B]")} />
           </motion.button>
         </div>
       </div>
       
       <div className="p-5 flex flex-col flex-grow">
         <div className="mb-3">
-          <h3 className="text-[17px] font-bold text-[#6E7757] leading-tight line-clamp-2 transition-colors group-hover:text-[#4E583F]">{title}</h3>
+          <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{title}</h3>
         </div>
         
         {description && <p className="text-[#6B6B63] text-[13px] mb-4 line-clamp-2 leading-relaxed">{description}</p>}
@@ -119,7 +119,7 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
                 {brandingOptions.slice(0, 2).map((option) => (
                   <span
                     key={option}
-                    className="rounded-md border border-[#DDD5C8] bg-[#F8F5EF] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#6B6B63]"
+                    className="rounded-md border border-[#F5C2C2] bg-[#FAF9F6] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#6B6B63]"
                   >
                     {option}
                   </span>
@@ -134,7 +134,7 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
           </div>
         )}
         
-        <div className="mt-auto pt-4 border-t border-[#DDD5C8] flex items-center justify-between">
+        <div className="mt-auto pt-4 border-t border-[#F5C2C2] flex items-center justify-between">
           {price ? (
             <span className="font-bold text-[#2B2B2B] text-sm">{price}</span>
           ) : (

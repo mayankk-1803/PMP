@@ -142,16 +142,16 @@ export default function AdminDashboard() {
 
   if (loading || !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F8F5EF]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6]">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-[#6E7757]" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#D32F2F]" />
           <span className="text-sm font-black text-[#5F6752] uppercase tracking-widest animate-pulse">Assembling Enterprise Dashboard...</span>
         </div>
       </div>
     );
   }
 
-  const COLORS = ["#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#6366f1"];
+  const COLORS = ["#ef4444", "#f59e0b", "#EF5350", "#3b82f6", "#6366f1"];
 
   return (
     <AdminShell title="Dashboard Overview" subtitle="Real-time business performance summaries, client quotation pipelines, catalog weights, and system logs.">
@@ -159,10 +159,10 @@ export default function AdminDashboard() {
         
         {/* Metric Widgets */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          <MetricCard icon={<Boxes className="h-5 w-5 text-[#6E7757]" />} label="Products" value={data.totalProducts} note="Catalog items available" />
+          <MetricCard icon={<Boxes className="h-5 w-5 text-[#D32F2F]" />} label="Products" value={data.totalProducts} note="Catalog items available" />
           <MetricCard icon={<Layers className="h-5 w-5 text-amber-500" />} label="Categories" value={data.totalCategories} note="Parent classifications" />
-          <MetricCard icon={<Building2 className="h-5 w-5 text-emerald-500" />} label="Brands" value={data.totalBrands} note="Partner brands" />
-          <MetricCard icon={<ShoppingBag className="h-5 w-5 text-[#6E7757]" />} label="Orders" value={data.totalOrders} note="Total transactions" />
+          <MetricCard icon={<Building2 className="h-5 w-5 text-[#EF5350]" />} label="Brands" value={data.totalBrands} note="Partner brands" />
+          <MetricCard icon={<ShoppingBag className="h-5 w-5 text-[#D32F2F]" />} label="Orders" value={data.totalOrders} note="Total transactions" />
           <MetricCard icon={<PackageCheck className="h-5 w-5 text-indigo-500" />} label="Quotes" value={data.totalQuotes} note="Bulk gifting requests" />
           <MetricCard icon={<Trash className="h-5 w-5 text-[#6B6B63]" />} label="Archived (Trash)" value={data.totalDeleted} note="Soft deleted items" />
         </div>
@@ -171,29 +171,29 @@ export default function AdminDashboard() {
         <div className="grid gap-6 lg:grid-cols-2">
           
           {/* Order/Quote Activity */}
-          <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-5 shadow-sm">
+          <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-5 shadow-sm">
             <h3 className="text-sm font-black uppercase tracking-wider text-[#6B6B63] mb-6 flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-[#6E7757]" /> Orders & Quotes Trend (6 Months)
+              <TrendingUp className="h-4 w-4 text-[#D32F2F]" /> Orders & Quotes Trend (6 Months)
             </h3>
             <div className="h-80 w-full overflow-x-auto">
               <AreaChart width={760} height={320} data={data.monthlyOrders.map((o, idx) => ({ month: o.month, orders: o.orders, quotes: data.monthlyQuotes[idx]?.quotes || 0 }))}>
                   <defs>
                     <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6E7757" stopOpacity={0.22}/>
-                      <stop offset="95%" stopColor="#6E7757" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#D32F2F" stopOpacity={0.22}/>
+                      <stop offset="95%" stopColor="#D32F2F" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorQuotes" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#C8A36A" stopOpacity={0.24}/>
-                      <stop offset="95%" stopColor="#C8A36A" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#EF5350" stopOpacity={0.24}/>
+                      <stop offset="95%" stopColor="#EF5350" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E9E1D5" />
                   <XAxis dataKey="month" stroke="#8A8378" fontSize={11} tickLine={false} />
                   <YAxis stroke="#8A8378" fontSize={11} tickLine={false} />
-                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, borderColor: "#DDD5C8" }} />
+                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, borderColor: "#F5C2C2" }} />
                   <Legend wrapperStyle={{ fontSize: 11, fontWeight: "bold" }} />
-                  <Area type="monotone" dataKey="orders" name="Orders" stroke="#6E7757" strokeWidth={2.5} fillOpacity={1} fill="url(#colorOrders)" />
-                  <Area type="monotone" dataKey="quotes" name="Quotes" stroke="#C8A36A" strokeWidth={2.5} fillOpacity={1} fill="url(#colorQuotes)" />
+                  <Area type="monotone" dataKey="orders" name="Orders" stroke="#D32F2F" strokeWidth={2.5} fillOpacity={1} fill="url(#colorOrders)" />
+                  <Area type="monotone" dataKey="quotes" name="Quotes" stroke="#EF5350" strokeWidth={2.5} fillOpacity={1} fill="url(#colorQuotes)" />
               </AreaChart>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default function AdminDashboard() {
           <div className="grid gap-6 md:grid-cols-2">
             
             {/* Top Categories allocation */}
-            <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-5 shadow-sm flex flex-col justify-between">
+            <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-5 shadow-sm flex flex-col justify-between">
               <h3 className="text-sm font-black uppercase tracking-wider text-[#6B6B63] mb-4">Top Categories Distribution</h3>
               <div className="h-56 w-full overflow-x-auto flex items-center justify-center">
                 <PieChart width={220} height={220}>
@@ -217,7 +217,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Top Brands allocation */}
-            <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-5 shadow-sm flex flex-col justify-between">
+            <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-5 shadow-sm flex flex-col justify-between">
               <h3 className="text-sm font-black uppercase tracking-wider text-[#6B6B63] mb-4">Top Brands Allocation</h3>
               <div className="h-56 w-full overflow-x-auto flex items-center justify-center">
                 <BarChart width={260} height={220} data={data.topBrands}>
@@ -238,23 +238,23 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent Activity lists */}
-        <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] shadow-sm overflow-hidden">
+        <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] shadow-sm overflow-hidden">
           
           {/* List header tabs */}
-          <div className="border-b border-[#DDD5C8] bg-[#F8F5EF] p-2.5 flex flex-wrap gap-1">
-            <button onClick={() => setActiveListTab("orders")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "orders" ? "bg-[#4E583F] text-white shadow-md" : "text-[#5F6752] hover:bg-[#EFE7DB]"}`}>
+          <div className="border-b border-[#F5C2C2] bg-[#FAF9F6] p-2.5 flex flex-wrap gap-1">
+            <button onClick={() => setActiveListTab("orders")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "orders" ? "bg-[#C62828] text-white shadow-md" : "text-[#5F6752] hover:bg-[#F8F7F3]"}`}>
               Recent Orders ({recentOrders.length})
             </button>
-            <button onClick={() => setActiveListTab("quotes")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "quotes" ? "bg-[#4E583F] text-white shadow-md" : "text-[#5F6752] hover:bg-[#EFE7DB]"}`}>
+            <button onClick={() => setActiveListTab("quotes")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "quotes" ? "bg-[#C62828] text-white shadow-md" : "text-[#5F6752] hover:bg-[#F8F7F3]"}`}>
               Recent Quotes ({recentQuotes.length})
             </button>
-            <button onClick={() => setActiveListTab("products")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "products" ? "bg-[#4E583F] text-white shadow-md" : "text-[#5F6752] hover:bg-[#EFE7DB]"}`}>
+            <button onClick={() => setActiveListTab("products")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "products" ? "bg-[#C62828] text-white shadow-md" : "text-[#5F6752] hover:bg-[#F8F7F3]"}`}>
               Recent Products ({recentProducts.length})
             </button>
-            <button onClick={() => setActiveListTab("brands")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "brands" ? "bg-[#4E583F] text-white shadow-md" : "text-[#5F6752] hover:bg-[#EFE7DB]"}`}>
+            <button onClick={() => setActiveListTab("brands")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "brands" ? "bg-[#C62828] text-white shadow-md" : "text-[#5F6752] hover:bg-[#F8F7F3]"}`}>
               Recent Brands ({recentBrands.length})
             </button>
-            <button onClick={() => setActiveListTab("logs")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "logs" ? "bg-[#4E583F] text-white shadow-md" : "text-[#5F6752] hover:bg-[#EFE7DB]"}`}>
+            <button onClick={() => setActiveListTab("logs")} className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeListTab === "logs" ? "bg-[#C62828] text-white shadow-md" : "text-[#5F6752] hover:bg-[#F8F7F3]"}`}>
               System Logs ({recentLogs.length})
             </button>
           </div>
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
             {activeListTab === "orders" && (
               <table className="w-full min-w-[700px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#DDD5C8] text-[#6B6B63] font-bold">
+                  <tr className="border-b border-[#F5C2C2] text-[#6B6B63] font-bold">
                     <th className="pb-3">Customer</th>
                     <th className="pb-3">Email</th>
                     <th className="pb-3">Total Amount</th>
@@ -272,13 +272,13 @@ export default function AdminDashboard() {
                     <th className="pb-3">Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E9E1D5] text-[#4E583F]">
+                <tbody className="divide-y divide-[#E9E1D5] text-[#C62828]">
                   {recentOrders.map((o) => (
-                    <tr key={o.id} className="hover:bg-[#F8F5EF]/70">
+                    <tr key={o.id} className="hover:bg-[#FAF9F6]/70">
                       <td className="py-3 font-semibold text-[#2B2B2B]">{o.customerName}</td>
                       <td className="py-3">{o.email}</td>
                       <td className="py-3 font-black">₹{o.total}</td>
-                      <td className="py-3"><span className="rounded-full bg-[#EFE7DB] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide">{o.status}</span></td>
+                      <td className="py-3"><span className="rounded-full bg-[#F8F7F3] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide">{o.status}</span></td>
                       <td className="py-3 text-xs text-[#6B6B63]">{new Date(o.createdAt).toLocaleDateString()}</td>
                     </tr>
                   ))}
@@ -289,7 +289,7 @@ export default function AdminDashboard() {
             {activeListTab === "quotes" && (
               <table className="w-full min-w-[700px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#DDD5C8] text-[#6B6B63] font-bold">
+                  <tr className="border-b border-[#F5C2C2] text-[#6B6B63] font-bold">
                     <th className="pb-3">Customer</th>
                     <th className="pb-3">Company</th>
                     <th className="pb-3">Product(s)</th>
@@ -297,14 +297,14 @@ export default function AdminDashboard() {
                     <th className="pb-3">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E9E1D5] text-[#4E583F]">
+                <tbody className="divide-y divide-[#E9E1D5] text-[#C62828]">
                   {recentQuotes.map((q) => (
-                    <tr key={q.id} className="hover:bg-[#F8F5EF]/70">
+                    <tr key={q.id} className="hover:bg-[#FAF9F6]/70">
                       <td className="py-3 font-semibold text-[#2B2B2B]">{q.customerName}</td>
                       <td className="py-3">{q.company || "-"}</td>
                       <td className="py-3 truncate max-w-[240px]">{q.products.join(", ")}</td>
                       <td className="py-3 font-bold">{q.quantity}</td>
-                      <td className="py-3"><span className="rounded-full bg-[#EFE7DB] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide">{q.status}</span></td>
+                      <td className="py-3"><span className="rounded-full bg-[#F8F7F3] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide">{q.status}</span></td>
                     </tr>
                   ))}
                 </tbody>
@@ -314,7 +314,7 @@ export default function AdminDashboard() {
             {activeListTab === "products" && (
               <table className="w-full min-w-[700px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#DDD5C8] text-[#6B6B63] font-bold">
+                  <tr className="border-b border-[#F5C2C2] text-[#6B6B63] font-bold">
                     <th className="pb-3">Product Name</th>
                     <th className="pb-3">Slug</th>
                     <th className="pb-3">Category</th>
@@ -322,9 +322,9 @@ export default function AdminDashboard() {
                     <th className="pb-3">Date Added</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E9E1D5] text-[#4E583F]">
+                <tbody className="divide-y divide-[#E9E1D5] text-[#C62828]">
                   {recentProducts.map((p) => (
-                    <tr key={p.id} className="hover:bg-[#F8F5EF]/70">
+                    <tr key={p.id} className="hover:bg-[#FAF9F6]/70">
                       <td className="py-3 font-semibold text-[#2B2B2B]">{p.title}</td>
                       <td className="py-3 text-xs font-mono">{p.slug}</td>
                       <td className="py-3">{p.category}</td>
@@ -339,16 +339,16 @@ export default function AdminDashboard() {
             {activeListTab === "brands" && (
               <table className="w-full min-w-[700px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#DDD5C8] text-[#6B6B63] font-bold">
+                  <tr className="border-b border-[#F5C2C2] text-[#6B6B63] font-bold">
                     <th className="pb-3">Brand Name</th>
                     <th className="pb-3">Industry</th>
                     <th className="pb-3">Category</th>
                     <th className="pb-3">Date Added</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E9E1D5] text-[#4E583F]">
+                <tbody className="divide-y divide-[#E9E1D5] text-[#C62828]">
                   {recentBrands.map((b) => (
-                    <tr key={b.id} className="hover:bg-[#F8F5EF]/70">
+                    <tr key={b.id} className="hover:bg-[#FAF9F6]/70">
                       <td className="py-3 font-semibold text-[#2B2B2B]">{b.name}</td>
                       <td className="py-3">{b.industry || "-"}</td>
                       <td className="py-3">{b.category || "-"}</td>
@@ -362,19 +362,19 @@ export default function AdminDashboard() {
             {activeListTab === "logs" && (
               <table className="w-full min-w-[700px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#DDD5C8] text-[#6B6B63] font-bold">
+                  <tr className="border-b border-[#F5C2C2] text-[#6B6B63] font-bold">
                     <th className="pb-3">Time</th>
                     <th className="pb-3">User</th>
                     <th className="pb-3">Action</th>
                     <th className="pb-3">Entity Name</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E9E1D5] text-[#4E583F]">
+                <tbody className="divide-y divide-[#E9E1D5] text-[#C62828]">
                   {recentLogs.map((l) => (
-                    <tr key={l.id} className="hover:bg-[#F8F5EF]/70">
+                    <tr key={l.id} className="hover:bg-[#FAF9F6]/70">
                       <td className="py-3 text-xs text-[#6B6B63]">{new Date(l.createdAt).toLocaleTimeString()}</td>
                       <td className="py-3 font-semibold text-[#2B2B2B]">{l.userName}</td>
-                      <td className="py-3"><span className="rounded bg-[#EFE7DB] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider">{l.action}</span></td>
+                      <td className="py-3"><span className="rounded bg-[#F8F7F3] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider">{l.action}</span></td>
                       <td className="py-3 text-xs truncate max-w-[280px]">{l.entityName || "-"}</td>
                     </tr>
                   ))}

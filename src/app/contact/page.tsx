@@ -74,7 +74,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="pt-28 pb-24 bg-[#F8F5EF] overflow-hidden max-w-full relative">
+    <div className="pt-28 pb-24 bg-[#FAF9F6] overflow-hidden max-w-full relative">
       <BackgroundGradient />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -105,39 +105,39 @@ export default function ContactPage() {
                   href={COMPANY_INFO.whatsapp} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-100 rounded-xl transition-all group"
+                  className="flex items-center justify-between p-4 bg-[#FDECEC] hover:bg-[#FDECEC]/80 border border-[#F5C2C2] rounded-xl transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="bg-emerald-600 p-2.5 rounded-lg text-white">
+                    <div className="bg-[#D32F2F] p-2.5 rounded-lg text-white">
                       <MessageSquare className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[9px] text-emerald-800 font-extrabold uppercase tracking-wider block">Chat on WhatsApp</span>
+                      <span className="text-[9px] text-[#C62828] font-extrabold uppercase tracking-wider block">Chat on WhatsApp</span>
                       <span className="text-sm font-bold text-gray-900">{COMPANY_INFO.phone}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-emerald-600 transition-transform group-hover:translate-x-0.5" />
+                  <ExternalLink className="w-4 h-4 text-[#D32F2F] transition-transform group-hover:translate-x-0.5" />
                 </a>
 
                 <a 
                   href={`tel:${COMPANY_INFO.phone}`}
-                  className="flex items-center justify-between p-4 bg-[#EFE7DB] hover:bg-[#DDD5C8]/60 border border-[#DDD5C8] rounded-xl transition-all group"
+                  className="flex items-center justify-between p-4 bg-[#F8F7F3] hover:bg-[#F5C2C2]/60 border border-[#F5C2C2] rounded-xl transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="bg-[#6E7757] p-2.5 rounded-lg text-white">
+                    <div className="bg-[#D32F2F] p-2.5 rounded-lg text-white">
                       <Phone className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[9px] text-[#4E583F] font-extrabold uppercase tracking-wider block">Bulk Order Helpline</span>
+                      <span className="text-[9px] text-[#C62828] font-extrabold uppercase tracking-wider block">Bulk Order Helpline</span>
                       <span className="text-sm font-bold text-[#2B2B2B]">{COMPANY_INFO.phone}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-[#6E7757] transition-transform group-hover:translate-x-0.5" />
+                  <ExternalLink className="w-4 h-4 text-[#D32F2F] transition-transform group-hover:translate-x-0.5" />
                 </a>
 
                 <a 
                   href={`mailto:${COMPANY_INFO.email}?subject=Corporate%20Gifting%20Inquiry`}
-                  className="flex items-center justify-between p-4 bg-white hover:bg-[#F8F5EF] border border-[#DDD5C8] rounded-xl transition-all group"
+                  className="flex items-center justify-between p-4 bg-white hover:bg-[#FAF9F6] border border-[#F5C2C2] rounded-xl transition-all group"
                 >
                   <div className="flex items-center gap-3">
                     <div className="bg-[#2B2B2B] p-2.5 rounded-lg text-white">
@@ -154,8 +154,8 @@ export default function ContactPage() {
 
               {/* Office Details */}
               <div className="grid gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-[#DDD5C8] shadow-sm flex items-start gap-4">
-                  <div className="text-[#6E7757] p-2.5 bg-[#EFE7DB] rounded-lg">
+                <div className="bg-white p-5 rounded-2xl border border-[#F5C2C2] shadow-sm flex items-start gap-4">
+                  <div className="text-[#D32F2F] p-2.5 bg-[#F8F7F3] rounded-lg">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
@@ -166,8 +166,8 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-[#DDD5C8] shadow-sm flex items-start gap-4">
-                  <div className="text-[#6E7757] p-2.5 bg-[#EFE7DB] rounded-lg">
+                <div className="bg-white p-5 rounded-2xl border border-[#F5C2C2] shadow-sm flex items-start gap-4">
+                  <div className="text-[#D32F2F] p-2.5 bg-[#F8F7F3] rounded-lg">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
@@ -178,8 +178,8 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-[#DDD5C8] shadow-sm flex items-start gap-4">
-                  <div className="text-[#6E7757] p-2.5 bg-[#EFE7DB] rounded-lg">
+                <div className="bg-white p-5 rounded-2xl border border-[#F5C2C2] shadow-sm flex items-start gap-4">
+                  <div className="text-[#D32F2F] p-2.5 bg-[#F8F7F3] rounded-lg">
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <div>
@@ -203,7 +203,7 @@ export default function ContactPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white p-8 md:p-10 rounded-3xl border border-[#DDD5C8] shadow-lg relative text-left"
+              className="bg-white p-8 md:p-10 rounded-3xl border border-[#F5C2C2] shadow-lg relative text-left"
             >
               <h3 className="text-xl font-black text-[#2B2B2B] mb-1">Send a Message</h3>
               <p className="text-xs text-[#6B6B63] mb-6 font-semibold">Complete this quick form to initiate contact. Our account managers will reach out to you.</p>
@@ -217,7 +217,7 @@ export default function ContactPage() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="flex flex-col items-center justify-center text-center py-10"
                   >
-                    <div className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-6 shadow-inner animate-bounce">
+                    <div className="w-20 h-20 bg-[#FDECEC] text-[#D32F2F] rounded-full flex items-center justify-center mb-6 shadow-inner animate-bounce">
                       <CheckCircle2 className="w-10 h-10" />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Message Sent Successfully!</h3>
@@ -241,7 +241,7 @@ export default function ContactPage() {
                           required 
                           name="name"
                           type="text" 
-                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
+                          className="w-full bg-white border border-[#F5C2C2] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#D32F2F]/15 focus:border-[#D32F2F] transition-all font-medium" 
                           placeholder="Your Name" 
                         />
                       </div>
@@ -252,7 +252,7 @@ export default function ContactPage() {
                           required 
                           name="company"
                           type="text" 
-                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
+                          className="w-full bg-white border border-[#F5C2C2] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#D32F2F]/15 focus:border-[#D32F2F] transition-all font-medium" 
                           placeholder="Company Name" 
                         />
                       </div>
@@ -265,7 +265,7 @@ export default function ContactPage() {
                           required 
                           name="email"
                           type="email" 
-                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
+                          className="w-full bg-white border border-[#F5C2C2] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#D32F2F]/15 focus:border-[#D32F2F] transition-all font-medium" 
                           placeholder="email@company.com" 
                         />
                       </div>
@@ -276,7 +276,7 @@ export default function ContactPage() {
                           required 
                           name="phone"
                           type="tel" 
-                          className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all font-medium" 
+                          className="w-full bg-white border border-[#F5C2C2] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#D32F2F]/15 focus:border-[#D32F2F] transition-all font-medium" 
                           placeholder="+91 00000 00000" 
                         />
                       </div>
@@ -287,7 +287,7 @@ export default function ContactPage() {
                       <textarea 
                         name="message"
                         rows={4} 
-                        className="w-full bg-white border border-[#DDD5C8] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#6E7757]/15 focus:border-[#6E7757] transition-all resize-none font-medium" 
+                        className="w-full bg-white border border-[#F5C2C2] rounded-xl px-4 py-3 text-sm text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#D32F2F]/15 focus:border-[#D32F2F] transition-all resize-none font-medium" 
                         placeholder="Please write down your questions or requests..." 
                       />
                     </div>
@@ -329,30 +329,30 @@ export default function ContactPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="rounded-3xl overflow-hidden border border-[#DDD5C8] shadow-md bg-white p-2 relative"
+          className="rounded-3xl overflow-hidden border border-[#F5C2C2] shadow-md bg-white p-2 relative"
         >
           {/* Floating Location Card */}
           <div className="absolute top-6 left-6 z-20 bg-[#2B2B2B]/95 backdrop-blur-md border border-white/10 p-6 rounded-2xl shadow-[0_15px_50px_rgba(43,43,43,0.4)] max-w-sm hidden md:block text-left">
-            <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#C8A36A] block mb-2">Enterprise Logistics</span>
+            <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#EF5350] block mb-2">Enterprise Logistics</span>
             <h4 className="text-sm font-extrabold text-white mb-2">Nationwide B2B Shipments & On-Time Direct Delivery</h4>
             <p className="text-xs text-gray-400 leading-relaxed mb-4 font-medium">
               We manage dedicated fulfillment hubs and shipping networks to guarantee safe transit to corporate offices and residences.
             </p>
             <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-gray-300">
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> North Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D32F2F] animate-pulse" /> North Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> West Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D32F2F] animate-pulse" /> West Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> South Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D32F2F] animate-pulse" /> South Hub
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> East Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D32F2F] animate-pulse" /> East Hub
               </div>
               <div className="flex items-center gap-1.5 col-span-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#6E7757] animate-pulse" /> Central Hub
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D32F2F] animate-pulse" /> Central Hub
               </div>
             </div>
           </div>

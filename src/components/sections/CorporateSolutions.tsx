@@ -42,7 +42,7 @@ export function CorporateSolutions() {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
-          <div key={i} className="h-[320px] rounded-2xl bg-[#EFE7DB] animate-pulse border border-[#DDD5C8]" />
+          <div key={i} className="h-[320px] rounded-2xl bg-[#F8F7F3] animate-pulse border border-[#F5C2C2]" />
         ))}
       </div>
     );
@@ -57,7 +57,7 @@ export function CorporateSolutions() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-20px" }}
           transition={{ duration: 0.5, delay: (idx % 4) * 0.05 }}
-          className="group relative flex flex-col justify-between h-[320px] rounded-2xl overflow-hidden border border-[#DDD5C8]/60 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
+          className="group relative flex flex-col justify-between h-[320px] rounded-2xl overflow-hidden border border-[#F5C2C2]/60 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
         >
           {/* Card Image Container */}
           <div className="absolute inset-0 z-0">
@@ -75,7 +75,7 @@ export function CorporateSolutions() {
           <div className="absolute top-4 right-4 z-25 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <Link
               href={`/enquiry?product=${encodeURIComponent(cat.name)}`}
-              className="flex items-center justify-center p-2.5 bg-[#6E7757] text-white rounded-xl shadow-md hover:bg-[#4E583F] transition-colors"
+              className="flex items-center justify-center p-2.5 bg-[#D32F2F] text-white rounded-xl shadow-md hover:bg-[#C62828] transition-colors"
               title="Quick Quote Request"
             >
               <MessageSquare className="w-4 h-4" />
@@ -85,7 +85,7 @@ export function CorporateSolutions() {
           {/* Text Content */}
           <div className="relative z-10 p-6 flex flex-col justify-end h-full text-white">
             <div className="space-y-1.5 transform group-hover:-translate-y-1 transition-transform duration-300">
-              <h3 className="text-lg font-bold tracking-tight text-white flex items-center gap-1 group-hover:text-[#C8A36A] transition-colors">
+              <h3 className="text-lg font-bold tracking-tight text-white flex items-center gap-1 group-hover:text-[#EF5350] transition-colors">
                 {cat.name}
               </h3>
               <p className="text-gray-300 text-xs leading-relaxed max-w-[200px] sm:max-w-none">
@@ -97,7 +97,7 @@ export function CorporateSolutions() {
             <div className="pt-4 border-t border-white/10 mt-4 flex items-center justify-between">
               <Link 
                 href={`/products?category=${cat.slug}`}
-                className="text-[11px] font-extrabold uppercase tracking-widest text-[#C8A36A] hover:text-white transition-colors inline-flex items-center gap-1"
+                className="text-[11px] font-extrabold uppercase tracking-widest text-[#EF5350] hover:text-white transition-colors inline-flex items-center gap-1"
               >
                 View Catalog <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>

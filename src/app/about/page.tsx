@@ -19,23 +19,23 @@ const EXPERTISE = [
   {
     title: "Corporate Gifting Curation",
     desc: "Strategic selection of premium gifts that align with your brand values and resonate with your audience.",
-    icon: <Gift className="w-8 h-8 text-[#6E7757]" />
+    icon: <Gift className="w-8 h-8 text-[#D32F2F]" />
   },
   {
     title: "In-House Packaging Design",
     desc: "In-house design and manufacturing of custom boxes, from rigid premium presentation box cases to heavy-duty shipping cartons.",
-    icon: <Box className="w-8 h-8 text-[#6E7757]" />
+    icon: <Box className="w-8 h-8 text-[#D32F2F]" />
   },
   {
     title: "Quality-Controlled Execution",
     desc: "Structured sampling, artwork checks, vendor coordination, and production tracking keep every gifting program consistent.",
-    icon: <ClipboardCheck className="w-8 h-8 text-[#6E7757]" />
+    icon: <ClipboardCheck className="w-8 h-8 text-[#D32F2F]" />
   }
 ];
 
 export default function AboutPage() {
   return (
-    <div className="pt-24 pb-20 bg-[#F8F5EF] overflow-hidden max-w-full">
+    <div className="pt-24 pb-20 bg-[#FAF9F6] overflow-hidden max-w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         <div className="mb-16">
@@ -53,7 +53,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-left"
           >
-            <h3 className="text-2xl md:text-3xl font-black text-[#6E7757] leading-tight mb-6">
+            <h3 className="text-2xl md:text-3xl font-black text-[#D32F2F] leading-tight mb-6">
               Strategic B2B Partner for Corporate Gifting & Packaging
             </h3>
             <p className="text-[#6B6B63] text-sm sm:text-base leading-relaxed mb-6 font-medium">
@@ -71,7 +71,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="relative h-[360px] md:h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-[#DDD5C8]"
+            className="relative h-[360px] md:h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-[#F5C2C2]"
           >
             <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1000&auto=format&fit=crop" alt="Team Packing Gifts" className="w-full h-full object-cover" />
           </motion.div>
@@ -82,13 +82,13 @@ export default function AboutPage() {
           <section>
             <div className="text-center mb-12">
               <h3 className="text-xl sm:text-2xl font-black text-[#2B2B2B]">Our Services & Expertise</h3>
-              <div className="mt-4 h-1.5 w-12 bg-[#6E7757] mx-auto rounded-full" />
+              <div className="mt-4 h-1.5 w-12 bg-[#D32F2F] mx-auto rounded-full" />
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
               {EXPERTISE.map((service, i) => (
-                <div key={i} className="bg-white p-8 rounded-2xl border border-[#DDD5C8] hover:border-[#6E7757]/30 hover:shadow-xl transition-all duration-300 text-left">
-                  <div className="mb-6 bg-[#EFE7DB] w-14 h-14 rounded-xl flex items-center justify-center">{service.icon}</div>
+                <div key={i} className="bg-white p-8 rounded-2xl border border-[#F5C2C2] hover:border-[#D32F2F]/30 hover:shadow-xl transition-all duration-300 text-left">
+                  <div className="mb-6 bg-[#F8F7F3] w-14 h-14 rounded-xl flex items-center justify-center">{service.icon}</div>
                   <h4 className="text-base sm:text-lg font-black text-[#2B2B2B] mb-3">{service.title}</h4>
                   <p className="text-[#6B6B63] text-xs sm:text-sm leading-relaxed">{service.desc}</p>
                 </div>
@@ -97,7 +97,7 @@ export default function AboutPage() {
           </section>
 
           {/* Industries Served */}
-          <section className="bg-[#EFE7DB] rounded-3xl p-10 md:p-16 border border-[#DDD5C8] text-center">
+          <section className="bg-[#F8F7F3] rounded-3xl p-10 md:p-16 border border-[#F5C2C2] text-center">
             <div className="max-w-3xl mx-auto">
               <h3 className="text-xl sm:text-2xl font-black text-[#2B2B2B] mb-6">Industries We Serve</h3>
               <p className="text-[#6B6B63] text-sm sm:text-base mb-10 leading-relaxed font-medium">
@@ -105,7 +105,7 @@ export default function AboutPage() {
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 {["IT & Tech Hubs", "Banking & Finance", "Healthcare & Pharma", "E-commerce & Logistics", "Education Councils", "Manufacturing", "Automobile Brands"].map((industry) => (
-                  <span key={industry} className="px-5 py-2.5 bg-white text-[#6B6B63] rounded-xl font-bold text-xs border border-[#DDD5C8] shadow-sm hover:border-[#6E7757]/25 transition-all">
+                  <span key={industry} className="px-5 py-2.5 bg-white text-[#6B6B63] rounded-xl font-bold text-xs border border-[#F5C2C2] shadow-sm hover:border-[#D32F2F]/25 transition-all">
                     {industry}
                   </span>
                 ))}
@@ -123,10 +123,10 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="bg-white border border-[#DDD5C8] rounded-2xl p-8 text-center shadow-sm hover:shadow-lg transition-all"
+              className="bg-white border border-[#F5C2C2] rounded-2xl p-8 text-center shadow-sm hover:shadow-lg transition-all"
             >
-              <div className="text-[#6E7757] mb-4 flex justify-center">{stat.icon}</div>
-              <div className="text-2xl sm:text-3xl font-black text-[#6E7757] mb-1">{stat.metric}</div>
+              <div className="text-[#D32F2F] mb-4 flex justify-center">{stat.icon}</div>
+              <div className="text-2xl sm:text-3xl font-black text-[#D32F2F] mb-1">{stat.metric}</div>
               <div className="text-[#6B6B63] text-[9px] font-extrabold uppercase tracking-widest">{stat.label}</div>
             </motion.div>
           ))}

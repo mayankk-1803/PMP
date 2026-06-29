@@ -249,24 +249,24 @@ function CorporateKitsContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F8F5EF]">
-        <Loader2 className="w-8 h-8 text-[#6E7757] animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6]">
+        <Loader2 className="w-8 h-8 text-[#D32F2F] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="pt-32 pb-24 relative min-h-screen bg-[#F8F5EF] overflow-hidden max-w-full">
+    <div className="pt-32 pb-24 relative min-h-screen bg-[#FAF9F6] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[140px]" />
-      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-[#EFE7DB]/40 to-transparent pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-[#F8F7F3]/40 to-transparent pointer-events-none z-0" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="px-4 py-1.5 rounded-full bg-[#EFE7DB] text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-[#DDD5C8]">
+          <span className="px-4 py-1.5 rounded-full bg-[#F8F7F3] text-[#EF5350] text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-[#F5C2C2]">
             Curated Gift Sets
           </span>
           <SectionHeading
-            title={<>{selectedSubcategory ? selectedLabel : "Corporate"} <span className="text-[#6E7757]">{selectedSubcategory ? "" : "Kits & Hampers"}</span></>}
+            title={<>{selectedSubcategory ? selectedLabel : "Corporate"} <span className="text-[#D32F2F]">{selectedSubcategory ? "" : "Kits & Hampers"}</span></>}
             subtitle={selectedDescription}
             centered
           />
@@ -282,7 +282,7 @@ function CorporateKitsContent() {
                   onClick={() => router.push(tab.href)}
                   className={`flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 w-full md:w-auto ${
                     isActive
-                      ? "bg-[#6E7757] text-white shadow-md shadow-[#6E7757]/10"
+                      ? "bg-[#D32F2F] text-white shadow-md shadow-[#D32F2F]/10"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }`}
                 >
@@ -296,7 +296,7 @@ function CorporateKitsContent() {
 
         {/* Dynamic DB-driven Pills Selection */}
         <div className="mb-14 rounded-2xl bg-white border border-gray-200/80 p-5 shadow-sm text-left">
-          <div className="text-[10px] font-extrabold uppercase tracking-widest mb-4 text-[#C8A36A]">
+          <div className="text-[10px] font-extrabold uppercase tracking-widest mb-4 text-[#EF5350]">
             {activeTab === "festive" ? "Festive Hamper Collections" : "Corporate Kit Options"}
           </div>
           <div className="flex flex-wrap gap-2">
@@ -308,8 +308,8 @@ function CorporateKitsContent() {
                   href={`/corporate-kits?kit=${item.slug}`}
                   className={`rounded-xl border px-3.5 py-2 text-xs font-bold transition-all ${
                     isSelected
-                      ? "border-[#6E7757] bg-[#EFE7DB] text-[#6E7757] shadow-sm"
-                      : "border-[#DDD5C8] bg-[#F8F5EF] text-[#6B6B63] hover:border-[#6E7757]/30 hover:bg-white hover:text-[#2B2B2B]"
+                      ? "border-[#D32F2F] bg-[#F8F7F3] text-[#D32F2F] shadow-sm"
+                      : "border-[#F5C2C2] bg-[#FAF9F6] text-[#6B6B63] hover:border-[#D32F2F]/30 hover:bg-white hover:text-[#2B2B2B]"
                   }`}
                 >
                   {item.name}
@@ -372,27 +372,27 @@ function CorporateKitsContent() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mt-24 p-8 md:p-16 rounded-3xl bg-gradient-to-br from-[#2B2B2B] via-[#303527] to-[#1E2119] text-white relative overflow-hidden border border-[#C8A36A]/20 shadow-2xl shadow-[#4E583F]/15"
+          className="mt-24 p-8 md:p-16 rounded-3xl bg-gradient-to-br from-[#2B2B2B] via-[#303527] to-[#1E2119] text-white relative overflow-hidden border border-[#EF5350]/20 shadow-2xl shadow-[#C62828]/15"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#C8A36A]/15 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#6E7757]/20 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#EF5350]/15 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#D32F2F]/20 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 max-w-3xl flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left">
-              <span className="text-[10px] font-bold tracking-widest text-[#C8A36A] uppercase block mb-3">
+              <span className="text-[10px] font-bold tracking-widest text-[#EF5350] uppercase block mb-3">
                 Bespoke Packaging & Gifting
               </span>
               <h3 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-white leading-tight">
-                Want to curate a <span className="text-[#C8A36A]">completely custom</span> kit?
+                Want to curate a <span className="text-[#EF5350]">completely custom</span> kit?
               </h3>
-              <p className="text-[#DDD5C8] text-sm md:text-base leading-relaxed">
+              <p className="text-[#F5C2C2] text-sm md:text-base leading-relaxed">
                 Tell us your budget, quantity, and product preferences. Our team will draft custom dielines, mockups, and organize pan-India door-to-door delivery.
               </p>
             </div>
             <div className="flex-shrink-0 w-full md:w-auto">
               <Button
                 size="lg"
-                className="w-full md:w-auto font-bold rounded-xl bg-gradient-to-r from-[#6E7757] to-[#4E583F] hover:from-[#7B8563] hover:to-[#4E583F] text-white shadow-xl shadow-[#4E583F]/25 border border-[#C8A36A]/20 flex items-center justify-center gap-2 group py-4 px-8"
+                className="w-full md:w-auto font-bold rounded-xl bg-gradient-to-r from-[#D32F2F] to-[#C62828] hover:from-[#C62828] hover:to-[#C62828] text-white shadow-xl shadow-[#C62828]/25 border border-[#EF5350]/20 flex items-center justify-center gap-2 group py-4 px-8"
                 asChild
               >
                 <Link href="/enquiry?source=custom-kit">
