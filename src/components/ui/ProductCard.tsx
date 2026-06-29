@@ -22,9 +22,10 @@ interface ProductCardProps {
   index?: number;
   category?: string;
   href?: string;
+  slug?: string;
 }
 
-export function ProductCard({ title, description, imageUrl, price, moq, brandingOptions = [], className, index = 0, category, href }: ProductCardProps) {
+export function ProductCard({ title, description, imageUrl, price, moq, brandingOptions = [], className, index = 0, category, href, slug }: ProductCardProps) {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const router = useRouter();
   const prefersReduced = useReducedMotion();
@@ -51,11 +52,15 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
       router.push(href);
       return;
     }
-    const slug = title
+    if (slug) {
+      router.push(`/products/${slug}`);
+      return;
+    }
+    const generatedSlug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
-    router.push(`/products/${slug}`);
+    router.push(`/products/${generatedSlug}`);
   };
 
   return (

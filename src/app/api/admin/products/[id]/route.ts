@@ -19,14 +19,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ success: false, message: "Product not found" }, { status: 404 });
     }
 
-    const images = data.galleryImages ?? data.images ?? (data.featuredImage ? [data.featuredImage] : undefined);
     const nextPublicIds = uniquePublicIds([
-      data.cloudinaryPublicId,
-      ...(data.galleryPublicIds || []),
+      data.cloudinaryPublicId ?? oldProduct.cloudinaryPublicId,
+      ...(data.galleryPublicIds || oldProduct.galleryPublicIds || []),
     ]);
     const removedPublicIds = publicIdsRemoved(
       [oldProduct.cloudinaryPublicId, ...(oldProduct.galleryPublicIds || [])],
-      nextPublicIds.length ? nextPublicIds : [oldProduct.cloudinaryPublicId, ...(oldProduct.galleryPublicIds || [])]
+      nextPublicIds
     );
     if (removedPublicIds.length) {
       await destroyCloudinaryAssets(removedPublicIds);
@@ -35,11 +34,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const updated = await updateProduct(id, {
       ...data,
       title: data.title ?? data.name,
-      featuredImage: data.featuredImage || images?.[0],
-      galleryImages: images,
+      featuredImage: data.featuredImage,
+      galleryImages: data.galleryImages,
       cloudinaryPublicId: data.cloudinaryPublicId,
       galleryPublicIds: data.galleryPublicIds,
-      images,
+      images: data.galleryImages,
       active: data.status ? data.status !== "HIDDEN" : data.active,
     });
 

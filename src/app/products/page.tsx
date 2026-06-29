@@ -354,6 +354,7 @@ function ProductsPageContent() {
                       >
                         <ProductCard
                           title={product.title}
+                          slug={product.slug}
                           price="Custom Quote"
                           imageUrl={product.images[0]}
                           description={product.shortDescription || product.description}

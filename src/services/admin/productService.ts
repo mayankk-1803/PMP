@@ -144,11 +144,21 @@ const normalizeSpecifications = (specifications: any) => {
   return specifications;
 };
 
+const normalizeForLookup = (str: string) => {
+  if (!str) return "";
+  const words = str.toLowerCase().split(/[^a-z0-9]+/);
+  const filtered = words.filter((w) => w && w !== "pmp");
+  const unique = Array.from(new Set(filtered));
+  unique.sort();
+  return unique.join("");
+};
+
 const mapMongoProduct = (product: any): ProductRecord => {
   const title = product.name || product.title || "";
   const category = product.category || "";
   const subcategory = product.subcategory || "";
-  const matchedImage = localCatalogImage(title) || realCatalogImage(title, category, subcategory, product.slug || title);
+  const dbFeatured = product.featuredImage || product.image || "";
+  const matchedImage = dbFeatured || localCatalogImage(title) || realCatalogImage(title, category, subcategory, product.slug || title);
   const sourceImages = product.galleryImages?.length
     ? product.galleryImages
     : product.images?.length
@@ -196,8 +206,24 @@ export async function getCatalogProducts(): Promise<ProductRecord[]> {
 export async function getCatalogProductBySlug(slug: string): Promise<ProductRecord | null> {
   if (!process.env.MONGODB_URI) return getProductBySlug(slug);
   await connectMongoDB();
-  const product = await ProductModel.findOne({ slug, status: "PUBLISHED", isDeleted: { $ne: true } }).lean<any>();
-  return product ? mapMongoProduct(product) : null;
+  
+  // 1. Try exact match
+  let product = await ProductModel.findOne({ slug, status: "PUBLISHED", isDeleted: { $ne: true } }).lean<any>();
+  if (product) return mapMongoProduct(product);
+
+  // 2. Try match with "pmp-" prefix adjustment if missing or added
+  const normalizedSlug = slug.startsWith("pmp-") ? slug : `pmp-${slug}`;
+  product = await ProductModel.findOne({ slug: normalizedSlug, status: "PUBLISHED", isDeleted: { $ne: true } }).lean<any>();
+  if (product) return mapMongoProduct(product);
+
+  // 3. Try fallback match by normalized word composition (handles duplicate slug words, etc.)
+  const reqNorm = normalizeForLookup(slug);
+  const allProducts = await ProductModel.find({ status: "PUBLISHED", isDeleted: { $ne: true } }).lean<any[]>();
+  const match = allProducts.find((p) => normalizeForLookup(p.slug) === reqNorm);
+  if (match) return mapMongoProduct(match);
+
+  // 4. Try legacy JSON list lookup fallback
+  return getProductBySlug(slug);
 }
 
 export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt" | "updatedAt">) {

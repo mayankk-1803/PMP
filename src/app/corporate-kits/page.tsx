@@ -353,6 +353,7 @@ function CorporateKitsContent() {
                   <ProductCard
                     key={`${item.slug}-${item.title}`}
                     title={item.title}
+                    slug={item.slug}
                     description={item.description}
                     imageUrl={item.imageUrl}
                     price={item.price}

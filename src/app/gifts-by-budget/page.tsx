@@ -28,7 +28,8 @@ function GiftsByBudgetContent() {
   const selectedRange = searchParams?.get("range") || "";
 
   // Convert products object to array and transform images/price fields
-  const allProducts = Object.values(PRODUCTS).map((p) => ({
+  const allProducts = Object.entries(PRODUCTS).map(([slug, p]) => ({
+    slug,
     title: p.title,
     description: p.description,
     imageUrl: p.images[0] || "",
@@ -130,6 +131,7 @@ function GiftsByBudgetContent() {
                 {filteredProducts.map((product, idx) => (
                   <ProductCard
                     key={product.title}
+                    slug={product.slug}
                     title={product.title}
                     description={product.description}
                     imageUrl={product.imageUrl}
