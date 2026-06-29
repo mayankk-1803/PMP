@@ -61,7 +61,50 @@ export function SafeImage({
   alt = "image",
   ...props
 }: SafeImageProps) {
+  const isKitOrHamper = (cat?: string, altText?: string) => {
+    const clean = (cat || altText || "").toLowerCase();
+    return (
+      clean.includes("kit") ||
+      clean.includes("hamper") ||
+      clean.includes("gift") ||
+      clean.includes("joining") ||
+      clean.includes("onboarding") ||
+      clean.includes("dealer") ||
+      clean.includes("distributor") ||
+      clean.includes("doctor") ||
+      clean.includes("architect") ||
+      clean.includes("contractor") ||
+      clean.includes("mason") ||
+      clean.includes("electrician") ||
+      clean.includes("plumber") ||
+      clean.includes("sales") ||
+      clean.includes("partner") ||
+      clean.includes("executive") ||
+      clean.includes("seminar") ||
+      clean.includes("pharma") ||
+      clean.includes("hospital") ||
+      clean.includes("diwali") ||
+      clean.includes("holi") ||
+      clean.includes("eid") ||
+      clean.includes("christmas") ||
+      clean.includes("newyear") ||
+      clean.includes("celebration") ||
+      clean.includes("welcome") ||
+      clean.includes("luxury") ||
+      clean.includes("gourmet") ||
+      clean.includes("dryfruit") ||
+      clean.includes("tea") ||
+      clean.includes("coffee")
+    );
+  };
+
   const getFallback = () => {
+    if (isKitOrHamper(category, alt)) {
+      const kitFallback = corporateKitImage(category || alt);
+      if (kitFallback) return kitFallback;
+      return "";
+    }
+
     if (fallbackSrc) return fallbackSrc;
     const cat = category?.toLowerCase() || "default";
     const kitFallback = corporateKitImage(category || alt);
@@ -87,7 +130,13 @@ export function SafeImage({
 
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const fallback = getFallback();
-  const imgSrc = failedSrc === src ? fallback : src || fallback;
+  const imgSrc = failedSrc === src ? (isKitOrHamper(category, alt) ? "" : fallback) : (src || fallback);
+
+  if (!imgSrc) {
+    return (
+      <div className="absolute inset-0 w-full h-full bg-[#FAF9F6] border border-neutral-100 flex items-center justify-center" aria-label="No image available" />
+    );
+  }
 
   const handleError = () => {
     setFailedSrc(src);

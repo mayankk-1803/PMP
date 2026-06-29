@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   const featured = url.searchParams.get("featured");
   const sortBy = url.searchParams.get("sortBy") || "order";
   const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
-  const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit")) || 100));
+  const limit = Math.min(1000, Math.max(1, Number(url.searchParams.get("limit")) || 1000));
 
   if (process.env.MONGODB_URI) {
     const result = await searchCatalogProducts({

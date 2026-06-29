@@ -67,9 +67,9 @@ export const PROMOTIONAL_SUBCATEGORIES = [
 ] as const;
 
 export const CORPORATE_KIT_SUBCATEGORIES = [
+  ["Joining Kits", "joining-kits", "Employee onboarding kits with diary, pen, sipper, welcome card, and branded box."],
   ["Dealer Kits", "dealer-kits", "Dealer launch kits with sales collateral, partner folders, and channel welcome packs."],
   ["Distributor Kits", "distributor-kits", "Distributor growth kits with travel utilities, trophies, and campaign literature."],
-  ["Employee Welcome Kit", "employee-welcome-kit", "Employee welcome kits containing premium utilities, apparel, and onboarding stationery."],
   ["Doctor Kits", "doctor-kits", "Medical-themed stationery, desk utilities, planners, and clinic-ready branded packs."],
   ["Architect Kits", "architect-kits", "Sketchbooks, design tools, swatches, rulers, and premium studio presentation kits."],
   ["Contractor Kits", "contractor-kits", "Field-ready branded bags, caps, notebooks, tools, and durable site essentials."],
@@ -78,13 +78,18 @@ export const CORPORATE_KIT_SUBCATEGORIES = [
   ["Interior Designer Kits", "interior-designer-kits", "Designer sample kits with swatches, notebooks, rulers, pens, and presentation boxes."],
   ["Pharma Representative Kits", "pharma-representative-kits", "Representative kits with folders, sample inserts, planners, and branded cartons."],
   ["Hospital Staff Kits", "hospital-staff-kits", "Hospital staff appreciation kits with bottles, badge reels, notebooks, and care cards."],
+  ["Channel Partner Kits", "channel-partner-kits", "Channel partner welcome kits with branded merchandise, folders, and welcome packs."],
+  ["Training Kits", "training-kits", "Delegate and training kits with notebooks, pens, agendas, and certificates."],
+  ["Seminar Kits", "seminar-kits", "Seminar delegate packages with notebook, pen, custom folder, and welcome treats."],
   ["Startup Employee Onboarding Kits", "startup-employee-onboarding-kits", "Startup culture kits with tees, stickers, tumblers, notebooks, and tech organizers."],
-  ["Training & Seminar Kits", "training-seminar-kits", "Delegate kits with notebooks, pens, agendas, badges, bottles, and certificates."],
-  ["Joining Kits", "joining-kits", "Employee onboarding kits with diary, pen, sipper, welcome card, and branded box."],
-  ["Plumber Kits", "plumber-kits", "Functional kits with branded toolbags, notebooks, drinkware, and trade accessories."],
-  ["Real Estate / Builder Kit", "real-estate-builder-kit", "Builder and handover kits with folders, keys, desk gifts, and luxury packaging."],
-  ["Partner Kit", "partner-kit", "Partner appreciation kits with premium treats, awards, desk gifts, and thank-you cards."],
-  ["Sales Team Kit", "sales-team-kit", "Sales starter kits with polos, backpacks, bottles, planners, and pitch material."]
+  ["Employee Welcome Kits", "employee-welcome-kits", "Employee welcome kits containing premium utilities, apparel, and onboarding stationery."],
+  ["Leadership Kits", "leadership-kits", "Executive leadership retreat kits with premium stationery, bags, and high-end treats."],
+  ["Executive Kits", "executive-kits", "Premium executive kits with customized folders, keychains, and presentation packaging."],
+  ["Remote Onboarding Kits", "remote-onboarding-kits", "Remote team onboarding packages with technical utilities, drinkware, and custom welcome cards."],
+  ["Partner Kits", "partner-kits", "Partner appreciation kits with premium treats, awards, desk gifts, and thank-you cards."],
+  ["Sales Team Kits", "sales-team-kits", "Sales starter kits with polos, backpacks, bottles, planners, and pitch material."],
+  ["Real Estate Kits", "real-estate-kits", "Builder and handover kits with folders, keys, desk gifts, and luxury packaging."],
+  ["Plumber Kits", "plumber-kits", "Functional kits with branded toolbags, notebooks, drinkware, and trade accessories."]
 ] as const;
 
 export const HAMPER_SUBCATEGORIES = [
@@ -93,7 +98,13 @@ export const HAMPER_SUBCATEGORIES = [
   ["Eid Kits", "eid-kits", "Eid gourmet hampers with dates, nuts, sweets, and elegant themed presentation."],
   ["Women's Day Gifts", "womens-day-gifts", "Women's Day appreciation hampers with self-care, candles, chocolates, and cards."],
   ["Christmas Kits", "christmas-kits", "Christmas gourmet hampers with cookies, cocoa, candles, ornaments, and winter sleeves."],
-  ["New Year Hampers", "new-year-hampers", "New Year desk hampers with planners, calendars, tumblers, and premium treats."]
+  ["New Year Hampers", "new-year-hampers", "New Year desk hampers with planners, calendars, tumblers, and premium treats."],
+  ["Corporate Celebration Hampers", "corporate-celebration-hampers", "Milestone and celebration hampers with premium treats, custom champagne glasses, and branded packaging."],
+  ["Welcome Hampers", "welcome-hampers", "Warm welcome gift hampers with mugs, cookies, notebooks, and greetings."],
+  ["Luxury Hampers", "luxury-hampers", "Super-premium corporate gifting hampers featuring elite accessories and imported gourmet treats."],
+  ["Premium Gourmet Hampers", "premium-gourmet-hampers", "Refined corporate hampers packed with handpicked dry fruits, gourmet cookies, and tea selections."],
+  ["Dry Fruit Hampers", "dry-fruit-hampers", "Healthy luxury dry fruit combinations in beautifully crafted presentation boxes."],
+  ["Tea & Coffee Hampers", "tea-coffee-hampers", "Premium beverage hampers with custom mugs, organic tea leaves, and craft coffee blends."]
 ] as const;
 
 export const BRAND_PARTNERS = [

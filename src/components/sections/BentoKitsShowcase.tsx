@@ -9,6 +9,7 @@ import { SafeImage } from "../ui/SafeImage";
 import { staggerContainer, cardReveal, EASE_SMOOTH } from "@/lib/animations";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { corporateKitImageOrFallback } from "@/lib/kitImageMap";
+import { getCanonicalKitSlug } from "@/lib/slugResolver";
 
 interface KitSubcategory {
   name: string;
@@ -70,11 +71,7 @@ export function BentoKitsShowcase() {
         if (res.success && res.data) {
           const subcats = res.data as KitSubcategory[];
           const mapped = BENTO_MAPPING.map(config => {
-            const dbSlug = config.slug === "joining" ? "joining-kits"
-                         : config.slug === "doctor" ? "doctor-kits"
-                         : config.slug === "dealer" ? "dealer-kits"
-                         : config.slug === "sales" ? "sales-team-kit"
-                         : "";
+            const dbSlug = getCanonicalKitSlug(config.slug) || "";
             const item = subcats.find((subcategory) => subcategory.slug === dbSlug);
             return {
               ...config,

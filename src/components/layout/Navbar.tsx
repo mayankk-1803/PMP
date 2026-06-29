@@ -13,7 +13,10 @@ import { useShortlist } from "@/context/ShortlistContext";
 import { 
   COMPANY_INFO, 
   BUDGETS,
-  PRODUCTS
+  PRODUCTS,
+  PRODUCT_HIERARCHY,
+  CORPORATE_KITS,
+  OCCASION_HAMPERS
 } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
 
@@ -29,8 +32,6 @@ export function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [subcategories, setSubcategories] = useState<any[]>([]);
   
   const [mounted, setMounted] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -47,21 +48,6 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/catalog/categories").then((res) => res.json()),
-      fetch("/api/catalog/subcategories").then((res) => res.json())
-    ])
-      .then(([catRes, subRes]) => {
-        setCategories(catRes.success && catRes.data ? catRes.data : []);
-        setSubcategories(subRes.success && subRes.data ? subRes.data : []);
-      })
-      .catch(() => {
-        setCategories([]);
-        setSubcategories([]);
-      });
   }, []);
 
   // Prevent background scrolling when mobile menu or shortlist drawer is open
@@ -109,25 +95,18 @@ export function Navbar() {
   };
 
   const menuHref = (item: any) => `/products?subcategory=${encodeURIComponent(item.slug)}`;
-  const kitHref = (item: any) => `/corporate-kits?kit=${item.slug.replace(/-kits$|-hampers$|-gifts$/g, "")}`;
+  const kitHref = (item: any) => `/corporate-kits?kit=${item.slug}`;
 
-  const promotionalCats = categories
-    .filter((cat) => cat.parentGroup === "Promotional Products")
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  const promotionalCats = PRODUCT_HIERARCHY[0]?.categories || [];
 
   const getSubcategories = (catSlug: string) => {
-    return subcategories
-      .filter((sub) => sub.category === catSlug)
-      .sort((a, b) => (a.order || 0) - (b.order || 0));
+    const cat = promotionalCats.find((c) => c.slug === catSlug);
+    return cat ? cat.subcategories : [];
   };
 
-  const corporateKits = subcategories
-    .filter((sub) => sub.category === "corporate-kits" || sub.parentGroup === "Corporate Kits")
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  const corporateKits = CORPORATE_KITS;
 
-  const festiveHampers = subcategories
-    .filter((sub) => sub.category === "festive-hampers" || sub.parentGroup === "Festive Hampers")
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  const festiveHampers = OCCASION_HAMPERS;
 
   return (
     <>
