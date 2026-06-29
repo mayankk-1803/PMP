@@ -54,10 +54,10 @@ export const PROMOTIONAL_SUBCATEGORIES = [
   ["Acrylic Keychain", "acrylic-keychain", "keychains", "Acrylic keychains for promotional campaigns."],
 
   // Table Top
-  ["Paper Weight", "paper-weight-sub", "table-top", "Custom tabletop paper weights."],
-  ["Table Mats", "table-mats-sub", "table-top", "Premium leatherette table mats."],
-  ["Mouse Pad", "mouse-pad-sub", "table-top", "Precision tracking mouse pads."],
-  ["Desk Organiser", "desk-organiser-sub", "table-top", "Wooden and metal desk organizers."],
+  ["Paper Weight", "paper-weight-sub", "paper-weight", "Custom tabletop paper weights."],
+  ["Table Mats", "table-mats-sub", "table-mats", "Premium leatherette table mats."],
+  ["Mouse Pad", "mouse-pad-sub", "mouse-pad", "Precision tracking mouse pads."],
+  ["Desk Organiser", "desk-organiser-sub", "desk-organiser", "Wooden and metal desk organizers."],
 
   // Flat Table Top items
   ["Paper Weight", "paper-weight", "paper-weight", "Corporate paper weights and desk utilities."],

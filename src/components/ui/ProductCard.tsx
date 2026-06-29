@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { localCatalogImage } from "@/lib/localCatalogImages";
 import { SafeImage } from "./SafeImage";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { resolveProductImage } from "@/lib/imageResolver";
 
 interface ProductCardProps {
   title: string;
@@ -31,7 +32,7 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
   const prefersReduced = useReducedMotion();
   
   const isSelected = isInShortlist(title);
-  const displayImage = imageUrl || localCatalogImage(title) || "";
+  const displayImage = resolveProductImage({ title, imageUrl, category, slug }) || "";
 
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();

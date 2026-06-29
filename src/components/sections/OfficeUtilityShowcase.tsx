@@ -7,6 +7,7 @@ import { Sparkles, ArrowRight, Bookmark, ShieldCheck, ShoppingBag, Eye } from "l
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { SafeImage } from "../ui/SafeImage";
+import { resolveProductImage } from "@/lib/imageResolver";
 
 export function OfficeUtilityShowcase() {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
@@ -93,7 +94,7 @@ export function OfficeUtilityShowcase() {
               key: p.slug,
               title: p.title,
               category: p.category,
-              images: p.galleryImages?.length ? p.galleryImages : p.images?.length ? p.images : [p.featuredImage || "/images/joiningkit.png"],
+              imageUrl: resolveProductImage(p) || "/images/joiningkit.png",
               moq: p.moq || 50,
               description: p.description || p.shortDescription || "",
               basePrice: p.price || 450,
@@ -162,7 +163,7 @@ export function OfficeUtilityShowcase() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((prod, idx) => {
             const isShortlisted = mounted && isInShortlist(prod.title);
-            const mainImg = prod.images[0];
+            const mainImg = prod.imageUrl;
 
             return (
               <motion.div

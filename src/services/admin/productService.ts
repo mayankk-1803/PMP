@@ -5,6 +5,7 @@ import { localCatalogImage } from "@/lib/localCatalogImages";
 import { connectMongoDB } from "@/lib/mongodb";
 import { destroyCloudinaryAssets, uniquePublicIds } from "@/lib/admin/cloudinaryLifecycle";
 import { ProductModel } from "@/models/cmsModels";
+import { resolveProductImage } from "@/lib/imageResolver";
 
 export function listProducts(): ProductRecord[] {
   return listRecords("products").filter((product) => product.active);
@@ -157,8 +158,21 @@ const mapMongoProduct = (product: any): ProductRecord => {
   const title = product.name || product.title || "";
   const category = product.category || "";
   const subcategory = product.subcategory || "";
-  const dbFeatured = product.featuredImage || product.image || "";
-  const matchedImage = dbFeatured || localCatalogImage(title) || realCatalogImage(title, category, subcategory, product.slug || title);
+  
+  // Resolve primary image via database-first centralized resolver
+  const matchedImage = resolveProductImage({
+    title,
+    name: product.name,
+    featuredImage: product.featuredImage,
+    featuredImageUrl: product.featuredImageUrl,
+    image: product.image,
+    images: product.images,
+    galleryImages: product.galleryImages,
+    category,
+    subcategory,
+    slug: product.slug
+  });
+
   const sourceImages = product.galleryImages?.length
     ? product.galleryImages
     : product.images?.length

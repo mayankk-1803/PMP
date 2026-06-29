@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/Button";
+import { resolveProductImage } from "@/lib/imageResolver";
 
 interface ShowcaseProduct {
   id: string;
@@ -31,7 +32,7 @@ export function ProductShowcase() {
               id: product.id,
               category: product.category,
               title: product.title,
-              image: product.images[0],
+              image: resolveProductImage(product),
             });
           }
         });
