@@ -47,7 +47,6 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
     const status = data.status ?? (data.active === false ? "HIDDEN" : "PUBLISHED");
-    const galleryImages = data.galleryImages ?? data.images ?? (data.featuredImage ? [data.featuredImage] : []);
     const product = await createProduct({
       title: data.title ?? data.name,
       slug: data.slug,
@@ -56,11 +55,11 @@ export async function POST(req: Request) {
       category: data.category,
       subcategory: data.subcategory ?? data.category,
       brand: data.brand,
-      featuredImage: data.featuredImage || galleryImages[0],
-      galleryImages,
+      featuredImage: data.featuredImage || "",
+      galleryImages: data.galleryImages || [],
       cloudinaryPublicId: data.cloudinaryPublicId,
-      galleryPublicIds: data.galleryPublicIds ?? (data.cloudinaryPublicId ? [data.cloudinaryPublicId] : []),
-      images: galleryImages,
+      galleryPublicIds: data.galleryPublicIds || [],
+      images: data.galleryImages || [],
       features: data.features ?? [],
       specifications: data.specifications ?? {},
       tags: data.tags ?? [],

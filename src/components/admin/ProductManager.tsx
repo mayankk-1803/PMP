@@ -180,7 +180,7 @@ export function ProductManager() {
       featuredImage,
       galleryImages: images.filter((image) => image !== featuredImage),
       cloudinaryPublicId: product.cloudinaryPublicId || "",
-      galleryPublicIds: product.galleryPublicIds || [],
+      galleryPublicIds: (product.galleryPublicIds || []).filter((pid: string) => pid && pid !== product.cloudinaryPublicId),
     });
 
     setFeaturedFile(null);
@@ -297,16 +297,11 @@ export function ProductManager() {
       }
 
       const finalGalleryImages = [
-        finalFeaturedImage,
         ...form.galleryImages,
         ...uploadedGallery.map((item) => item.url)
       ].filter(Boolean);
-      const existingGalleryPublicIds = featuredFile
-        ? form.galleryPublicIds.filter((publicId) => publicId !== form.cloudinaryPublicId)
-        : form.galleryPublicIds;
       const finalGalleryPublicIds = [
-        finalCloudinaryPublicId,
-        ...existingGalleryPublicIds,
+        ...form.galleryPublicIds,
         ...uploadedGallery.map((item) => item.publicId),
       ].filter(Boolean);
 
