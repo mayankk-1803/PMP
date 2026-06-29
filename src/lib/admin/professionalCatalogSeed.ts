@@ -100,23 +100,41 @@ const subcategoryNames: Record<string, string[]> = {
   drinkware: ["Flasks", "Bottles", "Coffee Mugs", "Travel Mugs"],
   "backpacks-bags": ["Laptop Backpacks", "Travel Backpacks", "Conference Bags", "Tote Bags"],
   "executive-gifts": ["Luxury Gift Boxes", "Desk Kits", "Office Kits", "VIP Welcome Boxes"],
-  "corporate-kits": ["Joining Kits", "Dealer Kits", "Distributor Kits", "Doctor Kits", "Architect Kits", "Contractor Kits", "Mason Kits"],
-  "festive-hampers": ["Diwali Hampers", "Holi Hampers", "Eid Hampers", "Christmas Hampers", "New Year Hampers", "Women's Day Hampers"],
+  "corporate-kits": [
+    "Joining Kits", "Dealer Kits", "Distributor Kits", "Doctor Kits", "Architect Kits", "Contractor Kits", "Mason Kits",
+    "Electrician Kits", "Interior Designer Kits", "Pharma Representative Kits", "Hospital Staff Kits", "Channel Partner Kits",
+    "Training Kits", "Seminar Kits", "Startup Employee Onboarding Kits", "Employee Welcome Kits", "Leadership Kits",
+    "Executive Kits", "Remote Onboarding Kits", "Partner Kits", "Sales Team Kits", "Real Estate Kits", "Plumber Kits"
+  ],
+  "festive-hampers": [
+    "Diwali Hampers", "Holi Hampers", "Eid Kits", "Women's Day Gifts", "Christmas Kits", "New Year Hampers",
+    "Corporate Celebration Hampers", "Welcome Hampers", "Luxury Hampers", "Premium Gourmet Hampers", "Dry Fruit Hampers",
+    "Tea & Coffee Hampers"
+  ],
   packaging: ["Mono Cartons", "Rigid Boxes", "Corrugated Cartons"],
 };
 
 export const PROFESSIONAL_SUBCATEGORIES: SubcategoryRecord[] = Object.entries(subcategoryNames).flatMap(([categorySlug, names]) => {
   const category = PROFESSIONAL_CATEGORIES.find((item) => item.slug === categorySlug)!;
-  return names.map((name, index) => ({
-    id: `sub_${categorySlug}_${index + 1}`,
-    name,
-    slug: slugify(name),
-    category: category.slug,
-    parentGroup: category.parentGroup || "",
-    image: localCatalogImage(name) || category.image || imagePools.giftbox[0],
-    active: true,
-    createdAt: now,
-  }));
+  return names.map((name, index) => {
+    let slug = slugify(name);
+    if (name === "Women's Day Gifts") slug = "womens-day-gifts";
+    if (name === "Eid Kits") slug = "eid-kits";
+    if (name === "Real Estate Kits") slug = "real-estate-kits";
+    if (name === "Partner Kits") slug = "partner-kits";
+    if (name === "Sales Team Kits") slug = "sales-team-kits";
+
+    return {
+      id: `sub_${categorySlug}_${index + 1}`,
+      name,
+      slug,
+      category: category.slug,
+      parentGroup: category.parentGroup || "",
+      image: localCatalogImage(name) || category.image || imagePools.giftbox[0],
+      active: true,
+      createdAt: now,
+    };
+  });
 });
 
 export const PROFESSIONAL_BRANDS: BrandRecord[] = [
@@ -181,8 +199,17 @@ const explicitProducts = [
   ["VIP Welcome Box", "executive-gifts", "vip-welcome-boxes", "giftbox"],
 ] as const;
 
-const kitSubcategories = ["joining-kits", "dealer-kits", "distributor-kits", "doctor-kits", "architect-kits", "contractor-kits", "mason-kits"];
-const hamperSubcategories = ["diwali-hampers", "holi-hampers", "eid-hampers", "christmas-hampers", "new-year-hampers", "women-s-day-hampers"];
+const kitSubcategories = [
+  "joining-kits", "dealer-kits", "distributor-kits", "doctor-kits", "architect-kits", "contractor-kits", "mason-kits",
+  "electrician-kits", "interior-designer-kits", "pharma-representative-kits", "hospital-staff-kits", "channel-partner-kits",
+  "training-kits", "seminar-kits", "startup-employee-onboarding-kits", "employee-welcome-kits", "leadership-kits",
+  "executive-kits", "remote-onboarding-kits", "partner-kits", "sales-team-kits", "real-estate-kits", "plumber-kits"
+];
+const hamperSubcategories = [
+  "diwali-hampers", "holi-hampers", "eid-kits", "womens-day-gifts", "christmas-kits", "new-year-hampers",
+  "corporate-celebration-hampers", "welcome-hampers", "luxury-hampers", "premium-gourmet-hampers", "dry-fruit-hampers",
+  "tea-coffee-hampers"
+];
 const packagingProducts = [
   ["Cosmetic Cartons", "mono-cartons"],
   ["Pharma Cartons", "mono-cartons"],

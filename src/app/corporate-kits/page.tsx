@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense, useEffect, useState, useMemo } from "react";
-import { DEFAULT_KIT_IMAGE } from "@/lib/kitImageMap";
+import { DEFAULT_KIT_IMAGE, corporateKitImageOrFallback, corporateKitImage } from "@/lib/kitImageMap";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -11,6 +11,7 @@ import { Briefcase, HardHat, Gift, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { localCatalogImage } from "@/lib/localCatalogImages";
+import { getCanonicalKitSlug } from "@/lib/slugResolver";
 
 type ActiveTab = "corporate" | "industry" | "festive";
 
@@ -24,7 +25,7 @@ const INDUSTRY_SLUGS = new Set([
   "pharma-representative-kits",
   "hospital-staff-kits",
   "plumber-kits",
-  "real-estate-builder-kit"
+  "real-estate-kits"
 ]);
 
 const FESTIVE_HAMPER_COLLECTIONS = [
@@ -89,7 +90,7 @@ const fallbackCorporateCards = (items: Subcategory[]) =>
   items.map((item) => ({
     title: item.name,
     description: item.description || "Curated premium corporate kit with custom branding and bulk fulfillment support.",
-    imageUrl: localCatalogImage(item.name) || item.image || DEFAULT_KIT_IMAGE,
+    imageUrl: corporateKitImage(item.name) || corporateKitImage(item.slug) || "",
     price: "Custom Quote",
     slug: item.slug,
     category: item.category,
@@ -171,8 +172,10 @@ function CorporateKitsContent() {
   }, [subcategories]);
 
   const selectedSubcategory = useMemo(() => {
-    return subcategories.find((sub) => sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$/g, "") === selectedKit)
-      || festiveOptions.find((sub) => sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$/g, "") === selectedKit);
+    if (!selectedKit) return undefined;
+    const canonical = getCanonicalKitSlug(selectedKit);
+    return subcategories.find((sub) => sub.slug === canonical || sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$|-kit$/g, "") === selectedKit)
+      || festiveOptions.find((sub) => sub.slug === canonical || sub.slug === selectedKit || sub.slug.replace(/-kits$|-hampers$|-gifts$|-kit$/g, "") === selectedKit);
   }, [festiveOptions, subcategories, selectedKit]);
 
   const activeTab: ActiveTab = useMemo(() => {
@@ -191,24 +194,38 @@ function CorporateKitsContent() {
       : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
 
   const visibleItems = useMemo(() => {
-    let filtered = products;
-    if (selectedSubcategory) {
-      filtered = products.filter((p) => p.subcategory === selectedSubcategory.slug);
-    } else {
-      const activeOptions = 
-        activeTab === "festive"
-          ? festiveOptions
-          : activeTab === "industry"
-            ? corporateOptions.filter((s) => INDUSTRY_SLUGS.has(s.slug))
-            : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
-      const activeSlugs = new Set(activeOptions.map((s) => s.slug));
-      filtered = products.filter((p) => activeSlugs.has(p.subcategory));
+    if (selectedKit) {
+      if (!selectedSubcategory) {
+        console.warn(`[Catalog] Missing subcategory for kit slug: ${selectedKit}`);
+        return [];
+      }
+      
+      const filtered = products.filter((p) => p.subcategory === selectedSubcategory.slug);
+      return filtered.map((p) => ({
+        title: p.title,
+        description: p.description,
+        imageUrl: corporateKitImage(p.title) || corporateKitImage(p.subcategory) || "",
+        price: p.price ? `₹${p.price}` : "Custom Quote",
+        slug: p.slug,
+        category: p.category,
+        href: undefined,
+      }));
     }
+
+    // Landing page (no kit specified)
+    const activeOptions = 
+      activeTab === "festive"
+        ? festiveOptions
+        : activeTab === "industry"
+          ? corporateOptions.filter((s) => INDUSTRY_SLUGS.has(s.slug))
+          : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
+    const activeSlugs = new Set(activeOptions.map((s) => s.slug));
+    const filtered = products.filter((p) => activeSlugs.has(p.subcategory));
 
     const mapped = filtered.map((p) => ({
       title: p.title,
       description: p.description,
-      imageUrl: localCatalogImage(p.title) || p.featuredImage || p.images[0] || DEFAULT_KIT_IMAGE,
+      imageUrl: corporateKitImage(p.title) || corporateKitImage(p.subcategory) || "",
       price: p.price ? `₹${p.price}` : "Custom Quote",
       slug: p.slug,
       category: p.category,
@@ -216,11 +233,9 @@ function CorporateKitsContent() {
     }));
 
     if (mapped.length > 0) return mapped;
-    if (selectedSubcategory?.category === "festive-hampers") return fallbackFestiveCards(selectedSubcategory.slug);
     if (activeTab === "festive") return fallbackFestiveCards();
-    if (selectedSubcategory) return fallbackCorporateCards([selectedSubcategory]);
     return fallbackCorporateCards(currentOptions);
-  }, [activeTab, corporateOptions, currentOptions, festiveOptions, products, selectedSubcategory]);
+  }, [activeTab, corporateOptions, currentOptions, festiveOptions, products, selectedSubcategory, selectedKit]);
 
   const selectedLabel = selectedSubcategory?.name || "Corporate Kits";
   const selectedDescription = selectedSubcategory?.description || 
@@ -328,19 +343,26 @@ function CorporateKitsContent() {
               transition={{ duration: 0.4, ease: "easeInOut" }}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
             >
-              {visibleItems.map((item, idx) => (
-                <ProductCard
-                  key={`${item.slug}-${item.title}`}
-                  title={item.title}
-                  description={item.description}
-                  imageUrl={item.imageUrl}
-                  price={item.price}
-                  index={idx}
-                  category={item.category}
-                  href={item.href}
-                  className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
-                />
-              ))}
+              {visibleItems.length === 0 ? (
+                <div className="col-span-full py-20 text-center rounded-2xl bg-white border border-gray-200/50 p-8 shadow-sm">
+                  <p className="text-lg font-bold text-gray-800">No products available</p>
+                  <p className="text-sm text-gray-500 mt-1">We couldn't find any products in this collection. Please select another collection or contact us for a custom proposal.</p>
+                </div>
+              ) : (
+                visibleItems.map((item, idx) => (
+                  <ProductCard
+                    key={`${item.slug}-${item.title}`}
+                    title={item.title}
+                    description={item.description}
+                    imageUrl={item.imageUrl}
+                    price={item.price}
+                    index={idx}
+                    category={item.category}
+                    href={item.href}
+                    className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
+                  />
+                ))
+              )}
             </motion.div>
           </AnimatePresence>
         </div>

@@ -90,7 +90,7 @@ export async function searchCatalogProducts(options: {
   await connectMongoDB();
 
   const page = Math.max(1, Number(options.page) || 1);
-  const limit = Math.min(100, Math.max(1, Number(options.limit) || 100));
+  const limit = Math.min(1000, Math.max(1, Number(options.limit) || 1000));
   const query: Record<string, any> = { status: "PUBLISHED", isDeleted: { $ne: true } };
 
   if (options.search) query.$text = { $search: options.search };

@@ -41,43 +41,43 @@ export const PROMOTIONAL_PRODUCT_GROUPS = [
 ];
 
 export const CORPORATE_KITS = [
-  { name: "Joining Kits", slug: "joining", href: "/corporate-kits?kit=joining" },
-  { name: "Dealer Kits", slug: "dealer", href: "/corporate-kits?kit=dealer" },
-  { name: "Distributor Kits", slug: "distributor", href: "/corporate-kits?kit=distributor" },
-  { name: "Doctor Kits", slug: "doctor", href: "/corporate-kits?kit=doctor" },
-  { name: "Architect Kits", slug: "architect", href: "/corporate-kits?kit=architect" },
-  { name: "Contractor Kits", slug: "contractor", href: "/corporate-kits?kit=contractor" },
-  { name: "Mason Kits", slug: "mason", href: "/corporate-kits?kit=mason" },
-  { name: "Electrician Kits", slug: "electrician", href: "/corporate-kits?kit=electrician" },
-  { name: "Interior Designer Kits", slug: "interior-designer", href: "/corporate-kits?kit=interior-designer" },
-  { name: "Pharma Representative Kits", slug: "pharma", href: "/corporate-kits?kit=pharma" },
-  { name: "Hospital Staff Kits", slug: "hospital-staff", href: "/corporate-kits?kit=hospital-staff" },
-  { name: "Channel Partner Kits", slug: "channel-partner", href: "/corporate-kits?kit=channel-partner" },
-  { name: "Training Kits", slug: "training", href: "/corporate-kits?kit=training" },
-  { name: "Seminar Kits", slug: "seminar", href: "/corporate-kits?kit=seminar" },
-  { name: "Startup Employee Onboarding Kits", slug: "startup-onboarding", href: "/corporate-kits?kit=startup-onboarding" },
-  { name: "Employee Welcome Kits", slug: "employee-welcome", href: "/corporate-kits?kit=employee-welcome" },
-  { name: "Leadership Kits", slug: "leadership", href: "/corporate-kits?kit=leadership" },
-  { name: "Executive Kits", slug: "executive", href: "/corporate-kits?kit=executive" },
-  { name: "Remote Onboarding Kits", slug: "remote-onboarding", href: "/corporate-kits?kit=remote-onboarding" },
-  { name: "Partner Kits", slug: "partner", href: "/corporate-kits?kit=partner" },
-  { name: "Sales Team Kits", slug: "sales", href: "/corporate-kits?kit=sales" },
-  { name: "Real Estate Kits", slug: "real-estate", href: "/corporate-kits?kit=real-estate" }
+  { name: "Joining Kits", slug: "joining-kits", href: "/corporate-kits?kit=joining-kits" },
+  { name: "Dealer Kits", slug: "dealer-kits", href: "/corporate-kits?kit=dealer-kits" },
+  { name: "Distributor Kits", slug: "distributor-kits", href: "/corporate-kits?kit=distributor-kits" },
+  { name: "Doctor Kits", slug: "doctor-kits", href: "/corporate-kits?kit=doctor-kits" },
+  { name: "Architect Kits", slug: "architect-kits", href: "/corporate-kits?kit=architect-kits" },
+  { name: "Contractor Kits", slug: "contractor-kits", href: "/corporate-kits?kit=contractor-kits" },
+  { name: "Mason Kits", slug: "mason-kits", href: "/corporate-kits?kit=mason-kits" },
+  { name: "Electrician Kits", slug: "electrician-kits", href: "/corporate-kits?kit=electrician-kits" },
+  { name: "Interior Designer Kits", slug: "interior-designer-kits", href: "/corporate-kits?kit=interior-designer-kits" },
+  { name: "Pharma Representative Kits", slug: "pharma-representative-kits", href: "/corporate-kits?kit=pharma-representative-kits" },
+  { name: "Hospital Staff Kits", slug: "hospital-staff-kits", href: "/corporate-kits?kit=hospital-staff-kits" },
+  { name: "Channel Partner Kits", slug: "channel-partner-kits", href: "/corporate-kits?kit=channel-partner-kits" },
+  { name: "Training Kits", slug: "training-kits", href: "/corporate-kits?kit=training-kits" },
+  { name: "Seminar Kits", slug: "seminar-kits", href: "/corporate-kits?kit=seminar-kits" },
+  { name: "Startup Employee Onboarding Kits", slug: "startup-employee-onboarding-kits", href: "/corporate-kits?kit=startup-employee-onboarding-kits" },
+  { name: "Employee Welcome Kits", slug: "employee-welcome-kits", href: "/corporate-kits?kit=employee-welcome-kits" },
+  { name: "Leadership Kits", slug: "leadership-kits", href: "/corporate-kits?kit=leadership-kits" },
+  { name: "Executive Kits", slug: "executive-kits", href: "/corporate-kits?kit=executive-kits" },
+  { name: "Remote Onboarding Kits", slug: "remote-onboarding-kits", href: "/corporate-kits?kit=remote-onboarding-kits" },
+  { name: "Partner Kits", slug: "partner-kits", href: "/corporate-kits?kit=partner-kits" },
+  { name: "Sales Team Kits", slug: "sales-team-kits", href: "/corporate-kits?kit=sales-team-kits" },
+  { name: "Real Estate Kits", slug: "real-estate-kits", href: "/corporate-kits?kit=real-estate-kits" }
 ];
 
 export const OCCASION_HAMPERS = [
-  { name: "Diwali Hampers", slug: "diwali", href: "/corporate-kits?kit=diwali" },
-  { name: "Holi Hampers", slug: "holi", href: "/corporate-kits?kit=holi" },
-  { name: "Eid Kits", slug: "eid", href: "/corporate-kits?kit=eid" },
-  { name: "Women's Day Gifts", slug: "womens", href: "/corporate-kits?kit=womens" },
-  { name: "Christmas Kits", slug: "christmas", href: "/corporate-kits?kit=christmas" },
-  { name: "New Year Hampers", slug: "newyear", href: "/corporate-kits?kit=newyear" },
-  { name: "Corporate Celebration Hampers", slug: "celebration", href: "/corporate-kits?kit=celebration" },
-  { name: "Welcome Hampers", slug: "welcome", href: "/corporate-kits?kit=welcome" },
-  { name: "Luxury Hampers", slug: "luxury", href: "/corporate-kits?kit=luxury" },
-  { name: "Premium Gourmet Hampers", slug: "premium-gourmet", href: "/corporate-kits?kit=premium-gourmet" },
-  { name: "Dry Fruit Hampers", slug: "dry-fruit", href: "/corporate-kits?kit=dry-fruit" },
-  { name: "Tea & Coffee Hampers", slug: "tea-coffee", href: "/corporate-kits?kit=tea-coffee" }
+  { name: "Diwali Hampers", slug: "diwali-hampers", href: "/corporate-kits?kit=diwali-hampers" },
+  { name: "Holi Hampers", slug: "holi-hampers", href: "/corporate-kits?kit=holi-hampers" },
+  { name: "Eid Kits", slug: "eid-kits", href: "/corporate-kits?kit=eid-kits" },
+  { name: "Women's Day Gifts", slug: "womens-day-gifts", href: "/corporate-kits?kit=womens-day-gifts" },
+  { name: "Christmas Kits", slug: "christmas-kits", href: "/corporate-kits?kit=christmas-kits" },
+  { name: "New Year Hampers", slug: "new-year-hampers", href: "/corporate-kits?kit=new-year-hampers" },
+  { name: "Corporate Celebration Hampers", slug: "corporate-celebration-hampers", href: "/corporate-kits?kit=corporate-celebration-hampers" },
+  { name: "Welcome Hampers", slug: "welcome-hampers", href: "/corporate-kits?kit=welcome-hampers" },
+  { name: "Luxury Hampers", slug: "luxury-hampers", href: "/corporate-kits?kit=luxury-hampers" },
+  { name: "Premium Gourmet Hampers", slug: "premium-gourmet-hampers", href: "/corporate-kits?kit=premium-gourmet-hampers" },
+  { name: "Dry Fruit Hampers", slug: "dry-fruit-hampers", href: "/corporate-kits?kit=dry-fruit-hampers" },
+  { name: "Tea & Coffee Hampers", slug: "tea-coffee-hampers", href: "/corporate-kits?kit=tea-coffee-hampers" }
 ];
 
 export const PACKAGING_SOLUTIONS = [
@@ -92,8 +92,63 @@ export const PRODUCT_HIERARCHY = [
     name: "Promotional Products",
     slug: "promotional-products",
     categories: [
-      { name: "Corporate Gifts", slug: "corporate-gifts", subcategories: CORPORATE_GIFTS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) },
-      { name: "Premium Giveaways", slug: "premium-giveaways", subcategories: PREMIUM_GIVEAWAYS.map((item) => ({ ...item, image: `/category-images/${item.slug}.jpg` })) }
+      {
+        name: "Bags",
+        slug: "bags",
+        subcategories: [
+          { name: "Laptop Bags", slug: "laptop-bags", href: "/products?subcategory=laptop-bags" },
+          { name: "Travel Bags", slug: "travel-bags", href: "/products?subcategory=travel-bags" },
+          { name: "Duffle Bags", slug: "duffle-bags", href: "/products?subcategory=duffle-bags" },
+          { name: "Trolley Bags", slug: "trolley-bags", href: "/products?subcategory=trolley-bags" },
+          { name: "Sling Bags", slug: "sling-bags", href: "/products?subcategory=sling-bags" }
+        ]
+      },
+      {
+        name: "T-Shirts",
+        slug: "t-shirts",
+        subcategories: [
+          { name: "Polo T-Shirts", slug: "polo-t-shirts", href: "/products?subcategory=polo-t-shirts" },
+          { name: "Round Neck T-Shirts", slug: "round-neck-t-shirts", href: "/products?subcategory=round-neck-t-shirts" }
+        ]
+      },
+      {
+        name: "Caps",
+        slug: "caps",
+        subcategories: [
+          { name: "Promotional Caps", slug: "promotional-caps", href: "/products?subcategory=promotional-caps" },
+          { name: "Sports Caps", slug: "sports-caps", href: "/products?subcategory=sports-caps" },
+          { name: "Cotton Caps", slug: "cotton-caps", href: "/products?subcategory=cotton-caps" }
+        ]
+      },
+      {
+        name: "Keychains",
+        slug: "keychains",
+        subcategories: [
+          { name: "Metal Keychain", slug: "metal-keychain", href: "/products?subcategory=metal-keychain" },
+          { name: "Leather Keychain", slug: "leather-keychain", href: "/products?subcategory=leather-keychain" },
+          { name: "Acrylic Keychain", slug: "acrylic-keychain", href: "/products?subcategory=acrylic-keychain" }
+        ]
+      },
+      {
+        name: "Diaries / Notebooks",
+        slug: "diaries-notebooks",
+        subcategories: [
+          { name: "Executive Diaries", slug: "executive-diaries", href: "/products?subcategory=executive-diaries" },
+          { name: "Premium Diaries", slug: "premium-diaries", href: "/products?subcategory=premium-diaries" },
+          { name: "Eco Notebooks", slug: "eco-notebooks", href: "/products?subcategory=eco-notebooks" },
+          { name: "Standard Notebooks", slug: "standard-notebooks", href: "/products?subcategory=standard-notebooks" }
+        ]
+      },
+      {
+        name: "Table Top",
+        slug: "table-top",
+        subcategories: [
+          { name: "Paper Weight", slug: "paper-weight", href: "/products?subcategory=paper-weight" },
+          { name: "Table Mats", slug: "table-mats", href: "/products?subcategory=table-mats" },
+          { name: "Mouse Pad", slug: "mouse-pad", href: "/products?subcategory=mouse-pad" },
+          { name: "Desk Organiser", slug: "desk-organiser", href: "/products?subcategory=desk-organiser" }
+        ]
+      }
     ]
   },
   {

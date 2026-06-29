@@ -283,5 +283,30 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Leadership Retreat Hamper")]: "/images/leadershipretreat.png",
 };
 
-export const localCatalogImage = (title: string) =>
-  corporateKitImage(title) || LOCAL_CATALOG_IMAGES_BY_TITLE[normalizeImageTitle(title)];
+export const localCatalogImage = (title: string) => {
+  const matched = corporateKitImage(title);
+  if (matched) return matched;
+
+  const normalized = normalizeImageTitle(title);
+  const staticImage = LOCAL_CATALOG_IMAGES_BY_TITLE[normalized];
+  if (staticImage) {
+    const isGenericKitsFallback = 
+      staticImage.includes("/images/dealerkit.png") || 
+      staticImage.includes("/images/employeewelcome.png") ||
+      staticImage.includes("/images/joiningkit.png") ||
+      staticImage.includes("/images/doctorkit.png") ||
+      staticImage.includes("/images/contractorkits1.png") ||
+      staticImage.includes("/images/architectkit1.png") ||
+      staticImage.includes("/images/Festive Hampers/") ||
+      staticImage.includes("/images/clientthankyouhamper.png") ||
+      staticImage.includes("/images/employeemilestonehamper.png") ||
+      staticImage.includes("/images/salesteamkit.png") ||
+      staticImage.includes("/images/leadershipretreat.png");
+
+    if (isGenericKitsFallback) {
+      return undefined;
+    }
+    return staticImage;
+  }
+  return undefined;
+};
