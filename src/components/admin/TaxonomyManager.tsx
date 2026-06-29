@@ -320,20 +320,20 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
   return (
     <div className="space-y-5">
       <div className="flex justify-end">
-        <button onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-[#6E7757] px-4 py-2 text-xs font-black uppercase tracking-wider text-white hover:bg-[#4E583F] shadow-md">
+        <button onClick={openCreate} className="inline-flex items-center gap-2 rounded-lg bg-[#D32F2F] px-4 py-2 text-xs font-black uppercase tracking-wider text-white hover:bg-[#C62828] shadow-md">
           <Plus className="h-4 w-4" />
           {addLabel}
         </button>
       </div>
 
       {/* Drag & Drop Reordering Table */}
-      <div className="overflow-hidden rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] shadow-sm">
         <div className="overflow-x-auto">
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="taxonomy-list">
               {(provided) => (
                 <table className="w-full min-w-[860px] border-collapse text-left text-sm" ref={provided.innerRef} {...provided.droppableProps}>
-                  <thead className="bg-[#F8F5EF] text-xs uppercase tracking-wider text-[#6B6B63] border-b border-[#DDD5C8]">
+                  <thead className="bg-[#FAF9F6] text-xs uppercase tracking-wider text-[#6B6B63] border-b border-[#F5C2C2]">
                     <tr>
                       <th className="px-4 py-3 font-bold w-12 text-center">Move</th>
                       {(isBrand 
@@ -346,9 +346,9 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#DDD5C8]">
+                  <tbody className="divide-y divide-[#F5C2C2]">
                     {loading ? (
-                      <tr><td className="px-4 py-8 text-center text-[#6B6B63]" colSpan={isSubcategory ? 9 : isBrand ? 8 : 8}><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#6E7757] mb-2" />Loading records from MongoDB...</td></tr>
+                      <tr><td className="px-4 py-8 text-center text-[#6B6B63]" colSpan={isSubcategory ? 9 : isBrand ? 8 : 8}><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#D32F2F] mb-2" />Loading records from MongoDB...</td></tr>
                     ) : records.length === 0 ? (
                       <tr><td className="px-4 py-8 text-center text-[#9A9387] font-bold" colSpan={isSubcategory ? 9 : isBrand ? 8 : 8}>No records found. Click add above.</td></tr>
                     ) : (
@@ -357,15 +357,15 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                         return (
                           <Draggable key={record.id} draggableId={record.id} index={idx}>
                             {(dragProvided) => (
-                              <tr ref={dragProvided.innerRef} {...dragProvided.draggableProps} className="text-[#4E583F] hover:bg-[#F8F5EF]/70 transition">
+                              <tr ref={dragProvided.innerRef} {...dragProvided.draggableProps} className="text-[#C62828] hover:bg-[#FAF9F6]/70 transition">
                                 <td className="px-4 py-3 text-center" {...dragProvided.dragHandleProps}>
-                                  <GripVertical className="h-4 w-4 text-[#9A9387] hover:text-[#4E583F] mx-auto cursor-grab" />
+                                  <GripVertical className="h-4 w-4 text-[#9A9387] hover:text-[#C62828] mx-auto cursor-grab" />
                                 </td>
                                 <td className="px-4 py-3">
                                   {thumb ? (
                                     <img src={thumb} alt={record.name} className="h-10 w-10 rounded-lg object-cover border border-[#E5DED2]" />
                                   ) : (
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFE7DB] text-[#9A9387]"><ImagePlus className="h-4 w-4" /></div>
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F8F7F3] text-[#9A9387]"><ImagePlus className="h-4 w-4" /></div>
                                   )}
                                 </td>
                                 <td className="px-4 py-3 font-bold text-[#2B2B2B]">{record.name}</td>
@@ -377,16 +377,16 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                                 ) : (
                                   <td className="px-4 py-3 text-xs font-mono">{record.slug}</td>
                                 )}
-                                {isSubcategory && <td className="px-4 py-3"><span className="rounded bg-[#EFE7DB] px-2 py-0.5 text-xs text-[#5F6752] font-semibold">{"category" in record ? record.category : ""}</span></td>}
+                                {isSubcategory && <td className="px-4 py-3"><span className="rounded bg-[#F8F7F3] px-2 py-0.5 text-xs text-[#5F6752] font-semibold">{"category" in record ? record.category : ""}</span></td>}
                                 {!isBrand && <td className="px-4 py-3 text-[#6B6B63] font-medium">{"parentGroup" in record ? record.parentGroup : ""}</td>}
                                 <td className="px-4 py-3">
-                                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${record.active ? "bg-emerald-50 text-emerald-700" : "bg-[#EFE7DB] text-[#6B6B63]"}`}>
+                                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${record.active ? "bg-[#FDECEC] text-[#D32F2F]" : "bg-[#F8F7F3] text-[#6B6B63]"}`}>
                                     {record.active ? "Active" : "Hidden"}
                                   </span>
                                 </td>
                                 <td className="px-4 py-3">
                                   <div className="flex gap-2">
-                                    <button onClick={() => openEdit(record)} className="inline-flex items-center gap-1 rounded-md border border-[#DDD5C8] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#4E583F] hover:bg-[#F8F5EF] shadow-sm">
+                                    <button onClick={() => openEdit(record)} className="inline-flex items-center gap-1 rounded-md border border-[#F5C2C2] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#C62828] hover:bg-[#FAF9F6] shadow-sm">
                                       <Pencil className="h-3 w-3" /> Edit
                                     </button>
                                     <button onClick={() => setDeleteTarget(record)} className="inline-flex items-center gap-1 rounded-md border border-[#EAD7C8] bg-[#FFFDF8] px-2 py-1 text-xs font-bold text-[#8A4B22] hover:bg-[#F3E7D7] shadow-sm">
@@ -412,10 +412,10 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
       {/* CRUD Creation/Edit Form Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/45 p-4">
-          <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
+          <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
             <div className="mb-4 flex items-center justify-between border-b border-[#E9E1D5] pb-3">
               <h2 className="text-xl font-black">{editingId ? `Edit ${entityLabel}` : addLabel}</h2>
-              <button onClick={() => setModalOpen(false)} className="rounded-md p-1.5 hover:bg-[#EFE7DB]"><X className="h-5 w-5" /></button>
+              <button onClick={() => setModalOpen(false)} className="rounded-md p-1.5 hover:bg-[#F8F7F3]"><X className="h-5 w-5" /></button>
             </div>
             
             <form onSubmit={saveRecord} className="grid gap-4 md:grid-cols-2 text-left">
@@ -441,26 +441,26 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                 <TextArea label="Description" value={form.description} onChange={(value) => updateForm("description", value)} />
               </div>
 
-              <label className="flex items-center gap-2 pt-6 text-sm font-bold text-[#4E583F] cursor-pointer">
+              <label className="flex items-center gap-2 pt-6 text-sm font-bold text-[#C62828] cursor-pointer">
                 <input type="checkbox" checked={form.active} onChange={(event) => updateForm("active", event.target.checked)} />
                 Publish Status (Active)
               </label>
 
               {/* 3. IMAGE PREVIEW BEFORE UPLOAD FILE DROPAREA */}
               <div className="md:col-span-2 border-t border-[#E9E1D5] pt-4">
-                <span className="block text-sm font-bold text-[#4E583F] mb-2">Image Upload</span>
+                <span className="block text-sm font-bold text-[#C62828] mb-2">Image Upload</span>
                 <div className="flex flex-wrap items-center gap-4">
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#F8F5EF] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
-                    <UploadCloud className="h-5 w-5 text-[#6E7757]" />
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#FAF9F6] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
+                    <UploadCloud className="h-5 w-5 text-[#D32F2F]" />
                     <span className="text-xs font-black uppercase text-[#3F4734]">Select Image</span>
                     <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                   </label>
 
                   {/* Pre-existing preview */}
                   {(isBrand ? form.logo : form.image) && !previewUrl && (
-                    <div className="relative h-20 w-20 rounded-lg overflow-hidden border border-[#DDD5C8]">
+                    <div className="relative h-20 w-20 rounded-lg overflow-hidden border border-[#F5C2C2]">
                       <img src={isBrand ? form.logo : form.image} alt="Pre-existing" className="h-full w-full object-cover" />
-                      <button type="button" onClick={() => updateForm(isBrand ? "logo" : "image", "")} className="absolute right-1 top-1 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#6E7757]"><X className="h-3 w-3" /></button>
+                      <button type="button" onClick={() => updateForm(isBrand ? "logo" : "image", "")} className="absolute right-1 top-1 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
                     </div>
                   )}
 
@@ -471,7 +471,7 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                       <div className="min-w-0 text-left">
                         <div className="text-xs font-bold text-[#2B2B2B] truncate">{pendingFile?.name}</div>
                         <div className="text-[10px] text-[#6B6B63] font-semibold">{pendingFile ? (pendingFile.size / 1024).toFixed(1) : 0} KB</div>
-                        <button type="button" onClick={removePendingFile} className="text-[10px] text-[#6E7757] hover:text-[#2B2B2B] font-black uppercase mt-1.5 block">Remove File</button>
+                        <button type="button" onClick={removePendingFile} className="text-[10px] text-[#D32F2F] hover:text-[#2B2B2B] font-black uppercase mt-1.5 block">Remove File</button>
                       </div>
                     </div>
                   )}
@@ -479,14 +479,14 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
               </div>
 
               {(uploadError || uploadSuccess) && (
-                <div className={`md:col-span-2 rounded-lg px-3 py-2 text-xs font-bold ${uploadError ? "bg-[#F3E7D7] text-[#8A4B22]" : "bg-emerald-50 text-emerald-700"}`}>
+                <div className={`md:col-span-2 rounded-lg px-3 py-2 text-xs font-bold ${uploadError ? "bg-[#F3E7D7] text-[#8A4B22]" : "bg-[#FDECEC] text-[#D32F2F]"}`}>
                   {uploadError || uploadSuccess}
                 </div>
               )}
 
               <div className="md:col-span-2 flex justify-end gap-3 border-t border-[#E9E1D5] pt-4">
-                <button type="button" onClick={() => setModalOpen(false)} className="rounded-lg border border-[#DDD5C8] px-4 py-2 text-sm font-bold text-[#4E583F] hover:bg-[#F8F5EF]">Cancel</button>
-                <button disabled={saving} type="submit" className="rounded-lg bg-[#6E7757] px-5 py-2 text-sm font-black text-white hover:bg-[#4E583F] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
+                <button type="button" onClick={() => setModalOpen(false)} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
+                <button disabled={saving} type="submit" className="rounded-lg bg-[#D32F2F] px-5 py-2 text-sm font-black text-white hover:bg-[#C62828] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
                   {saving ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" /> Saving...
@@ -505,13 +505,13 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
       {/* Delete soft confirmation modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/45 p-4">
-          <div className="w-full max-w-md rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl text-left">
+          <div className="w-full max-w-md rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl text-left">
             <h2 className="text-lg font-black text-[#2B2B2B]">Archive {entityLabel}?</h2>
             <p className="mt-2 text-sm text-[#6B6B63]">
               Are you sure you want to delete <strong>{deleteTarget.name}</strong>? It will be moved to the Trash Bin and hidden from the store.
             </p>
             <div className="mt-6 flex justify-end gap-3">
-              <button onClick={() => setDeleteTarget(null)} className="rounded-lg border border-[#DDD5C8] px-4 py-2 text-sm font-bold text-[#4E583F] hover:bg-[#F8F5EF]">Cancel</button>
+              <button onClick={() => setDeleteTarget(null)} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
               <button onClick={deleteRecord} className="rounded-lg bg-[#8A6A3B] px-4 py-2 text-sm font-black text-white hover:bg-[#6E5330]">Confirm Archive</button>
             </div>
           </div>
@@ -523,27 +523,27 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
 
 function Input({ label, value, onChange, type = "text", required = false }: { label: string; value: string; onChange: (value: string) => void; type?: string; required?: boolean }) {
   return (
-    <label className="block text-sm font-bold text-[#4E583F]">
+    <label className="block text-sm font-bold text-[#C62828]">
       {label}
-      <input required={required} type={type} value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#6E7757]" />
+      <input required={required} type={type} value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#D32F2F]" />
     </label>
   );
 }
 
 function TextArea({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return (
-    <label className="block text-sm font-bold text-[#4E583F]">
+    <label className="block text-sm font-bold text-[#C62828]">
       {label}
-      <textarea value={value} onChange={(event) => onChange(event.target.value)} rows={3} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#6E7757]" />
+      <textarea value={value} onChange={(event) => onChange(event.target.value)} rows={3} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#D32F2F]" />
     </label>
   );
 }
 
 function Select({ label, value, options, onChange, required = false }: { label: string; value: string; options: OptionRecord[]; onChange: (value: string) => void; required?: boolean }) {
   return (
-    <label className="block text-sm font-bold text-[#4E583F]">
+    <label className="block text-sm font-bold text-[#C62828]">
       {label}
-      <select required={required} value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#6E7757]">
+      <select required={required} value={value} onChange={(event) => onChange(event.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#D32F2F]">
         <option value="">Select {label}</option>
         {options.map((option) => (
           <option key={option.slug} value={option.slug}>{option.name}</option>

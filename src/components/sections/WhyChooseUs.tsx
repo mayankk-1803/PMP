@@ -32,7 +32,7 @@ const USPs = [
 export function WhyChooseUs() {
   const prefersReduced = useReducedMotion();
   return (
-    <section className="py-24 bg-[#EFE7DB]">
+    <section className="py-24 bg-[#F8F7F3]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={prefersReduced ? false : { opacity: 0, y: 24 }}
@@ -58,16 +58,16 @@ export function WhyChooseUs() {
               variants={prefersReduced ? undefined : cardReveal}
               whileHover={prefersReduced ? undefined : { y: -8, scale: 1.01 }}
               transition={{ duration: 0.3 }}
-              className="bg-white p-8 rounded-2xl border border-[#DDD5C8] shadow-sm hover:shadow-xl hover:shadow-[#DDD5C8]/50 hover:border-[#6E7757]/30 transition-all group"
+              className="bg-white p-8 rounded-2xl border border-[#F5C2C2] shadow-sm hover:shadow-xl hover:shadow-[#F5C2C2]/50 hover:border-[#D32F2F]/30 transition-all group"
             >
               <motion.div
-                className="bg-[#F8F5EF] w-16 h-16 rounded-xl flex items-center justify-center text-[#6E7757] mb-6 group-hover:bg-[#6E7757] group-hover:text-white transition-colors"
+                className="bg-[#FAF9F6] w-16 h-16 rounded-xl flex items-center justify-center text-[#D32F2F] mb-6 group-hover:bg-[#D32F2F] group-hover:text-white transition-colors"
                 whileHover={prefersReduced ? undefined : { rotate: 360 }}
                 transition={{ duration: 0.6, ease: EASE_SMOOTH }}
               >
                 {usp.icon}
               </motion.div>
-              <h3 className="text-xl font-bold mb-3 text-[#6E7757] transition-colors">{usp.title}</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#D32F2F] transition-colors">{usp.title}</h3>
               <p className="text-[#6B6B63] leading-relaxed font-medium">{usp.desc}</p>
             </motion.div>
           ))}

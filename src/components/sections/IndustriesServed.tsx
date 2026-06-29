@@ -33,7 +33,7 @@ const INDUSTRIES = [
 export function IndustriesServed() {
   const prefersReduced = useReducedMotion();
   return (
-    <section className="py-24 bg-[#F8F5EF] border-y border-[#DDD5C8]">
+    <section className="py-24 bg-[#FAF9F6] border-y border-[#F5C2C2]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={prefersReduced ? false : { opacity: 0, y: 24 }}
@@ -59,16 +59,16 @@ export function IndustriesServed() {
               variants={prefersReduced ? undefined : cardReveal}
               whileHover={prefersReduced ? undefined : { y: -8, scale: 1.02 }}
               transition={{ duration: 0.3, ease: EASE_SMOOTH }}
-              className="bg-white p-8 rounded-2xl border border-[#DDD5C8] shadow-sm flex flex-col items-center text-center cursor-pointer group hover:border-[#6E7757]/30 hover:shadow-lg transition-all"
+              className="bg-white p-8 rounded-2xl border border-[#F5C2C2] shadow-sm flex flex-col items-center text-center cursor-pointer group hover:border-[#D32F2F]/30 hover:shadow-lg transition-all"
             >
               <motion.div
-                className="bg-[#EFE7DB] w-20 h-20 rounded-full flex items-center justify-center text-[#6E7757] mb-6 group-hover:bg-[#6E7757] group-hover:text-white transition-colors"
+                className="bg-[#F8F7F3] w-20 h-20 rounded-full flex items-center justify-center text-[#D32F2F] mb-6 group-hover:bg-[#D32F2F] group-hover:text-white transition-colors"
                 whileHover={prefersReduced ? undefined : { y: -6 }}
                 transition={{ duration: 0.35, ease: EASE_SMOOTH }}
               >
                 {industry.icon}
               </motion.div>
-              <h3 className="text-xl font-bold text-[#6E7757] mb-2">{industry.name}</h3>
+              <h3 className="text-xl font-bold text-[#D32F2F] mb-2">{industry.name}</h3>
               <p className="text-[#6B6B63] font-medium mb-6">{industry.desc}</p>
               
               <Link href="/industry-solutions" className="mt-auto text-[#2B2B2B] font-semibold text-sm flex items-center opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">

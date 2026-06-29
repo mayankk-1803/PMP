@@ -37,7 +37,7 @@ function AnimatedStat({ value, label }: { value: string; label: string }) {
       variants={staggerItem}
       className="flex flex-col items-center justify-center text-center space-y-2"
     >
-      <h3 className="text-4xl md:text-5xl font-extrabold text-[#6E7757]">
+      <h3 className="text-4xl md:text-5xl font-extrabold text-[#D32F2F]">
         {isNumeric ? `${count.toLocaleString()}${suffix}` : value}
       </h3>
       <p className="text-sm md:text-base text-[#6B6B63] font-semibold uppercase tracking-wider">{label}</p>
@@ -66,7 +66,7 @@ const LOGOS = [
 export function TrustBar() {
   const prefersReduced = useReducedMotion();
   return (
-    <section className="bg-white py-16 md:py-20 border-b border-[#DDD5C8] overflow-hidden">
+    <section className="bg-white py-16 md:py-20 border-b border-[#F5C2C2] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={prefersReduced ? undefined : staggerContainer}

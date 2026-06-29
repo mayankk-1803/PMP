@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* ── NEW: Luxury Organic Palette ── */
-  --color-brand-primary: #F8F5EF;
-  --color-brand-secondary: #EFE7DB;
-  --color-brand-olive: #6E7757;
-  --color-brand-olive-dark: #4E583F;
-  --color-brand-gold: #C8A36A;
-  --color-brand-heading: #2B2B2B;
-  --color-brand-body: #6B6B63;
-  --color-brand-border: #DDD5C8;
+  /* ── Premium True Red & Warm Off-White Palette ── */
+  --color-brand-primary: #FAF9F6;
+  --color-brand-secondary: #F8F7F3;
+  --color-brand-olive: #D32F2F;
+  --color-brand-olive-dark: #C62828;
+  --color-brand-gold: #EF5350;
+  --color-brand-heading: #1F1F1F;
+  --color-brand-body: #555555;
+  --color-brand-border: #F5C2C2;
   --color-brand-card: #FFFFFF;
-  --color-brand-hover: #7B8563;
-  --color-background: #F8F5EF;
-  --color-foreground: #2B2B2B;
+  --color-brand-hover: #C62828;
+  --color-background: #FAF9F6;
+  --color-foreground: #1F1F1F;
 
   /* Legacy kept for any residual utility references */
   --color-brand-white: #ffffff;
@@ -28,12 +28,18 @@
 
 @layer base {
   :root {
-    --background: #F8F5EF;
-    --foreground: #2B2B2B;
-    --brand-olive: #6E7757;
-    --brand-olive-dark: #4E583F;
-    --brand-gold: #C8A36A;
-    --brand-border: #DDD5C8;
+    --background: #FAF9F6;
+    --foreground: #1F1F1F;
+    --brand-primary: #D32F2F;
+    --brand-primary-hover: #C62828;
+    --brand-primary-light: #FAF9F6;
+    --brand-light-red: #FDECEC;
+    --brand-accent: #EF5350;
+    --brand-border: #F5C2C2;
+    /* Legacy aliases for backward compatibility */
+    --brand-olive: #D32F2F;
+    --brand-olive-dark: #C62828;
+    --brand-gold: #EF5350;
   }
 
   html, body {
@@ -45,7 +51,7 @@
   }
 
   body {
-    @apply antialiased flex flex-col min-h-screen selection:bg-[#6E7757] selection:text-white;
+    @apply antialiased flex flex-col min-h-screen selection:bg-[#D32F2F] selection:text-white;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -55,7 +61,7 @@
 
   p {
     @apply leading-relaxed;
-    color: #6B6B63;
+    color: #555555;
   }
 
   ::-webkit-scrollbar {
@@ -64,46 +70,46 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #EFE7DB;
+    background: #F8F7F3;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #DDD5C8;
+    background: #F5C2C2;
     border-radius: 9999px;
-    border: 2px solid #EFE7DB;
+    border: 2px solid #F8F7F3;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #6E7757;
+    background: #D32F2F;
   }
 }
 
 /* ── Organic Navbar ── */
 .organic-navbar {
-  background: rgba(248, 245, 239, 0.92);
+  background: rgba(250, 249, 246, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(221, 213, 200, 0.8);
+  border-bottom: 1px solid rgba(245, 194, 194, 0.8);
 }
 
 .organic-navbar-scrolled {
-  background: rgba(248, 245, 239, 0.97);
+  background: rgba(250, 249, 246, 0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid #DDD5C8;
+  border-bottom: 1px solid #F5C2C2;
   box-shadow: 0 4px 20px rgba(43, 43, 43, 0.06);
 }
 
 /* ── Organic Cards ── */
 .organic-card {
   background: #ffffff;
-  border: 1px solid #DDD5C8;
+  border: 1px solid #F5C2C2;
   border-radius: 20px;
   box-shadow: 0 4px 20px rgba(43, 43, 43, 0.05);
 }
 
 .organic-card:hover {
-  box-shadow: 0 8px 30px rgba(43, 43, 43, 0.08);
+  box-shadow: 0 8px 30px rgba(211, 47, 47, 0.10);
 }
 
 /* ── Legacy Glass (kept for admin / any dark sections) ── */
@@ -129,8 +135,8 @@
 }
 
 .luxury-gradient-gold {
-  background: linear-gradient(135deg, #EFE7DB 0%, #F8F5EF 60%, #EFE7DB 100%);
-  border: 1px solid #DDD5C8;
+  background: linear-gradient(135deg, #F8F7F3 0%, #FAF9F6 60%, #F8F7F3 100%);
+  border: 1px solid #F5C2C2;
 }
 
 /* ── Text Gradients ── */
@@ -141,7 +147,7 @@
 }
 
 .luxury-text-gradient-olive {
-  background: linear-gradient(to right, #6E7757, #4E583F);
+  background: linear-gradient(to right, #D32F2F, #C62828);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -229,7 +235,7 @@
   content: '';
   position: absolute;
   inset: -1px;
-  background: linear-gradient(to right, rgba(110, 119, 87, 0.2), rgba(200, 163, 106, 0.2));
+  background: linear-gradient(to right, rgba(211, 47, 47, 0.2), rgba(239, 83, 80, 0.2));
   border-radius: inherit;
   z-index: -1;
   opacity: 0;
@@ -257,14 +263,14 @@
 
 /* ── Swiper Overrides (Organic Palette) ── */
 .swiper-pagination-bullet {
-  background-color: #DDD5C8 !important;
+  background-color: #F5C2C2 !important;
   opacity: 1 !important;
   width: 10px !important;
   height: 10px !important;
 }
 
 .swiper-pagination-bullet-active {
-  background-color: #6E7757 !important;
+  background-color: #D32F2F !important;
   opacity: 1 !important;
   transform: scale(1.2);
 }

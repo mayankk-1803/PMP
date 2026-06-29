@@ -57,11 +57,11 @@ export function FeaturedHampers() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#EFE7DB] border-y border-[#DDD5C8] relative overflow-hidden">
+      <section className="py-24 bg-[#F8F7F3] border-y border-[#F5C2C2] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-[380px] rounded-2xl bg-[#DDD5C8]/40 animate-pulse border border-[#DDD5C8]" />
+              <div key={i} className="h-[380px] rounded-2xl bg-[#F5C2C2]/40 animate-pulse border border-[#F5C2C2]" />
             ))}
           </div>
         </div>
@@ -70,21 +70,21 @@ export function FeaturedHampers() {
   }
 
   return (
-    <section className="py-24 bg-[#EFE7DB] border-y border-[#DDD5C8] relative overflow-hidden">
+    <section className="py-24 bg-[#F8F7F3] border-y border-[#F5C2C2] relative overflow-hidden">
       {/* Ambient warm backgrounds */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#6E7757]/5 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute top-12 right-12 w-[200px] h-[200px] bg-[#C8A36A]/5 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D32F2F]/5 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-12 right-12 w-[200px] h-[200px] bg-[#EF5350]/5 rounded-full blur-[80px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl text-left">
-            <span className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 fill-[#C8A36A]" /> Festive &amp; Occasion Gifting
+            <span className="text-[#EF5350] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 fill-[#EF5350]" /> Festive &amp; Occasion Gifting
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#2B2B2B] mb-4">
-              Premium Hampers &amp; <span className="text-[#6E7757]">Corporate Kits</span>
+              Premium Hampers &amp; <span className="text-[#D32F2F]">Corporate Kits</span>
             </h2>
             <p className="text-base text-[#6B6B63] leading-relaxed font-medium">
               Celebrate company milestones, holidays, and onboarding with our luxury curations. Custom-branded and bulk-packed.
@@ -119,10 +119,10 @@ export function FeaturedHampers() {
 
               return (
                 <SwiperSlide key={hamper.slug} className="h-auto">
-                  <div className="group flex flex-col h-full bg-white border border-[#DDD5C8] rounded-2xl overflow-hidden hover:border-[#6E7757]/30 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(43,43,43,0.08)] relative">
+                  <div className="group flex flex-col h-full bg-white border border-[#F5C2C2] rounded-2xl overflow-hidden hover:border-[#D32F2F]/30 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(43,43,43,0.08)] relative">
                     
                     {/* Image Box */}
-                    <div className="relative aspect-[4/3] w-full bg-[#F8F5EF] overflow-hidden flex-shrink-0 border-b border-[#DDD5C8]">
+                    <div className="relative aspect-[4/3] w-full bg-[#FAF9F6] overflow-hidden flex-shrink-0 border-b border-[#F5C2C2]">
                       <SafeImage
                         src={hamperImg}
                         alt={hamper.name}
@@ -136,36 +136,36 @@ export function FeaturedHampers() {
                       />
                       
                       {/* Festive Badge */}
-                      <span className="absolute top-4 left-4 text-[9px] font-extrabold uppercase tracking-widest px-3 py-1.5 bg-[#6E7757] text-white rounded-lg shadow-lg">
+                      <span className="absolute top-4 left-4 text-[9px] font-extrabold uppercase tracking-widest px-3 py-1.5 bg-[#D32F2F] text-white rounded-lg shadow-lg">
                         {hamperBadge}
                       </span>
 
                       {/* Bookmark Icon */}
                       <button
                         onClick={(e) => handleToggleShortlist(hamper.name, hamperImg, hamperPrice, e)}
-                        className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-[#DDD5C8] text-[#6B6B63] hover:bg-[#6E7757] hover:text-white transition-colors z-20"
+                        className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-[#F5C2C2] text-[#6B6B63] hover:bg-[#D32F2F] hover:text-white transition-colors z-20"
                         title="Shortlist Hamper"
                       >
-                        <Bookmark className={`w-4 h-4 ${isSelected ? "fill-[#6E7757] text-white" : "text-[#6B6B63]"}`} />
+                        <Bookmark className={`w-4 h-4 ${isSelected ? "fill-[#D32F2F] text-white" : "text-[#6B6B63]"}`} />
                       </button>
                     </div>
 
                     {/* Content Box */}
                     <div className="p-6 flex flex-col flex-grow text-left">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-bold text-[#2B2B2B] text-base leading-tight group-hover:text-[#6E7757] transition-colors">
+                        <h3 className="font-bold text-[#2B2B2B] text-base leading-tight group-hover:text-[#D32F2F] transition-colors">
                           {hamper.name}
                         </h3>
-                        <span className="font-extrabold text-[#C8A36A] text-xs tracking-wider uppercase bg-[#C8A36A]/10 px-2.5 py-1 rounded-md">{hamperPrice}</span>
+                        <span className="font-extrabold text-[#EF5350] text-xs tracking-wider uppercase bg-[#EF5350]/10 px-2.5 py-1 rounded-md">{hamperPrice}</span>
                       </div>
                       <p className="text-[#6B6B63] text-xs leading-relaxed mb-6 flex-grow">
                         {hamperDesc}
                       </p>
 
-                      <div className="pt-4 border-t border-[#DDD5C8] flex items-center justify-between mt-auto">
+                      <div className="pt-4 border-t border-[#F5C2C2] flex items-center justify-between mt-auto">
                         <Link
                           href={`/enquiry?product=${encodeURIComponent(hamper.name)}`}
-                          className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63] hover:text-[#6E7757] transition-all flex items-center gap-1 group/link"
+                          className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63] hover:text-[#D32F2F] transition-all flex items-center gap-1 group/link"
                         >
                           Request Customization <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
                         </Link>
@@ -193,20 +193,20 @@ export function FeaturedHampers() {
       <style jsx global>{`
         .swiper-button-prev,
         .swiper-button-next {
-          color: #6E7757 !important;
+          color: #D32F2F !important;
           width: 44px !important;
           height: 44px !important;
-          background: rgba(248, 245, 239, 0.9) !important;
+          background: rgba(247, 231, 234, 0.9) !important;
           backdrop-filter: blur(8px) !important;
-          border: 1px solid #DDD5C8 !important;
+          border: 1px solid #F5C2C2 !important;
           border-radius: 9999px !important;
           transition: all 0.3s !important;
         }
         .swiper-button-prev:hover,
         .swiper-button-next:hover {
-          background: #6E7757 !important;
+          background: #D32F2F !important;
           color: white !important;
-          border-color: #6E7757 !important;
+          border-color: #D32F2F !important;
         }
         .swiper-button-prev::after,
         .swiper-button-next::after {
@@ -214,7 +214,7 @@ export function FeaturedHampers() {
           font-weight: bold !important;
         }
         .hampers-pagination .swiper-pagination-bullet {
-          background-color: #DDD5C8 !important;
+          background-color: #F5C2C2 !important;
           opacity: 1 !important;
           width: 8px !important;
           height: 8px !important;
@@ -222,7 +222,7 @@ export function FeaturedHampers() {
           transition: all 0.3s !important;
         }
         .hampers-pagination .swiper-pagination-bullet-active {
-          background-color: #6E7757 !important;
+          background-color: #D32F2F !important;
           width: 24px !important;
           border-radius: 9999px !important;
         }

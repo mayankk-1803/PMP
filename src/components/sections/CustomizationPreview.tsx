@@ -28,11 +28,11 @@ export function CustomizationPreview() {
                 { icon: <CheckCircle2 />, title: "Production", desc: "Once approved, bulk branding commences immediately." },
               ].map((step, idx) => (
                 <div key={idx} className="flex gap-4 items-start">
-                  <div className="bg-[#EFE7DB] p-3 rounded-lg text-[#6E7757] border border-[#DDD5C8] shadow-sm">
+                  <div className="bg-[#F8F7F3] p-3 rounded-lg text-[#D32F2F] border border-[#F5C2C2] shadow-sm">
                     {step.icon}
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#6E7757]">{step.title}</h4>
+                    <h4 className="font-bold text-[#D32F2F]">{step.title}</h4>
                     <p className="text-[#6B6B63] font-medium">{step.desc}</p>
                   </div>
                 </div>
@@ -48,34 +48,34 @@ export function CustomizationPreview() {
             className="flex justify-center"
           >
             {/* Abstract UI Mockup */}
-            <div className="relative w-full max-w-md bg-[#F8F5EF] rounded-3xl p-6 border border-[#DDD5C8] shadow-2xl flex flex-col items-center">
+            <div className="relative w-full max-w-md bg-[#FAF9F6] rounded-3xl p-6 border border-[#F5C2C2] shadow-2xl flex flex-col items-center">
               {/* Fake Browser/App Header */}
-              <div className="w-full flex justify-between items-center mb-8 border-b border-[#DDD5C8] pb-4">
+              <div className="w-full flex justify-between items-center mb-8 border-b border-[#F5C2C2] pb-4">
                 <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-[#DDD5C8]"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#EFE7DB]"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#F8F5EF]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#F5C2C2]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#F8F7F3]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#FAF9F6]"></div>
                 </div>
                 <div className="text-xs font-semibold text-[#6B6B63]">Branding Preview</div>
               </div>
 
               {/* Upload Dropzone UI */}
-              <div className="w-full border-2 border-dashed border-[#DDD5C8] bg-white rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#F8F5EF] transition-colors mb-6">
+              <div className="w-full border-2 border-dashed border-[#F5C2C2] bg-white rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#FAF9F6] transition-colors mb-6">
                 <Upload className="w-10 h-10 text-[#6B6B63] mb-4" />
                 <p className="font-semibold text-[#2B2B2B]">Drop Your Logo Here</p>
                 <p className="text-xs text-[#6B6B63] mt-1">PNG, SVG or AI up to 10MB</p>
               </div>
 
               {/* Fake Product Preview */}
-              <div className="w-full bg-white rounded-xl shadow-sm p-4 border border-[#DDD5C8] flex items-center gap-4">
-                <div className="w-16 h-16 bg-[#EFE7DB] rounded-lg flex items-center justify-center">
-                  <Package className="w-8 h-8 text-[#DDD5C8]" />
+              <div className="w-full bg-white rounded-xl shadow-sm p-4 border border-[#F5C2C2] flex items-center gap-4">
+                <div className="w-16 h-16 bg-[#F8F7F3] rounded-lg flex items-center justify-center">
+                  <Package className="w-8 h-8 text-[#F5C2C2]" />
                 </div>
                 <div className="flex-1">
-                  <div className="h-4 bg-[#EFE7DB] rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-[#F8F5EF] rounded w-1/2"></div>
+                  <div className="h-4 bg-[#F8F7F3] rounded w-3/4 mb-2"></div>
+                  <div className="h-3 bg-[#FAF9F6] rounded w-1/2"></div>
                 </div>
-                <div className="bg-[#6E7757] text-white text-xs px-2 py-1 rounded font-bold">READY</div>
+                <div className="bg-[#D32F2F] text-white text-xs px-2 py-1 rounded font-bold">READY</div>
               </div>
 
             </div>

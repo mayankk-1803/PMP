@@ -3,6 +3,8 @@ import { listRecords } from "@/repositories/adminRepository";
 import { connectMongoDB } from "@/lib/mongodb";
 import { CategoryModel } from "@/models/cmsModels";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   if (process.env.MONGODB_URI) {
     await connectMongoDB();

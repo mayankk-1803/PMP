@@ -107,7 +107,7 @@ function FeatureChip({ tag, delay, small = false }: { tag: string; delay: number
       }
       style={controlRevealStyle(delay)}
     >
-      <CheckCircle2 className="w-2.5 h-2.5 text-[#C8A36A]" />
+      <CheckCircle2 className="w-2.5 h-2.5 text-[#EF5350]" />
       {tag}
     </span>
   );
@@ -224,7 +224,7 @@ export function HeroSection() {
               text="& Branded Merchandise"
               delay={t(1.0)}
               className="block"
-              wordClassName="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A36A] via-[#e8c68a] to-[#C8A36A]"
+              wordClassName="text-[#D32F2F]"
              
             />
           </motion.h1>
@@ -249,7 +249,7 @@ export function HeroSection() {
           >
             <Button
               variant="default"
-              className="h-12 flex-1 rounded-2xl font-bold bg-[#6E7757] hover:bg-[#4E583F] text-white flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(110,119,87,0.35)] border-0 cursor-pointer text-sm group active:scale-[0.97] transition-all duration-200"
+              className="h-12 flex-1 rounded-2xl font-bold bg-[#D32F2F] hover:bg-[#C62828] text-white flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(211,47,47,0.25)] border-0 cursor-pointer text-sm group active:scale-[0.97] transition-all duration-200"
               asChild
             >
               <Link href="/promotional-merchandise">
@@ -280,31 +280,22 @@ export function HeroSection() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 hidden lg:block">
         <div className="max-w-xl space-y-4 sm:space-y-5 text-left">
 
-          {/* Badge */}
-          <div
-            className="hero-control-reveal inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-md max-w-full overflow-hidden"
-            style={controlRevealStyle(t(0.4))}
-          >
-            <Star className="w-3.5 h-3.5 text-[#C8A36A] fill-[#C8A36A] shrink-0" />
-            <span className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider sm:tracking-widest text-[#C8A36A] flex items-center gap-1 sm:gap-1.5">
-              <span className="sm:inline hidden">Curated Corporate Gifting &amp; Experiences</span>
-              <span className="sm:hidden inline">Corporate Gifting &amp; Experiences</span>
-            </span>
-          </div>
+          {/* Heading container to prevent overlap with background graphics */}
+          <div className="max-w-[480px] space-y-1">
+            {/* Heading line 1 */}
+            <div className="text-2xl sm:text-4xl lg:text-[44px] xl:text-[50px] font-black tracking-tight text-white leading-[1.1] sm:leading-[1.05]">
+              <AnimatedWords text="Premium Corporate Gifts" delay={t(0.6)} />
+            </div>
 
-          {/* Heading line 1 */}
-          <div className="text-2xl sm:text-4xl lg:text-[44px] xl:text-[50px] font-black tracking-tight text-white leading-[1.1] sm:leading-[1.05]">
-            <AnimatedWords text="Premium Corporate Gifts" delay={t(0.6)} />
-          </div>
-
-          {/* Heading line 2 — gold gradient */}
-          <div className="-mt-3 text-2xl sm:text-4xl lg:text-[44px] xl:text-[50px] font-black tracking-tight leading-[1.1] sm:leading-[1.05]">
-            <AnimatedWords
-              text="& Branded Merchandise"
-              delay={t(0.83)}
-              wordClassName="text-transparent bg-clip-text bg-gradient-to-r from-[#C8A36A] via-[#e8c68a] to-[#C8A36A]"
-             
-            />
+            {/* Heading line 2 */}
+            <div className="-mt-1 text-2xl sm:text-4xl lg:text-[44px] xl:text-[50px] font-black tracking-tight leading-[1.1] sm:leading-[1.05]">
+              <AnimatedWords
+                text="& Branded Merchandise"
+                delay={t(0.83)}
+                wordClassName="text-[#D32F2F]"
+               
+              />
+            </div>
           </div>
 
           {/* Subtitle */}
@@ -325,7 +316,7 @@ export function HeroSection() {
             <div className="hero-control-reveal" style={controlRevealStyle(t(1.75))}>
               <Button
                 variant="default"
-                className="h-10 sm:h-11 w-full sm:w-auto px-4 sm:px-6 rounded-2xl font-bold bg-[#6E7757] hover:bg-[#4E583F] text-white flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(110,119,87,0.35)] hover:shadow-[0_0_30px_rgba(110,119,87,0.5)] hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-200 border-0 cursor-pointer text-xs sm:text-sm"
+                className="h-10 sm:h-11 w-full sm:w-auto px-4 sm:px-6 rounded-2xl font-bold bg-[#D32F2F] hover:bg-[#C62828] text-white flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(211,47,47,0.25)] hover:shadow-[0_0_30px_rgba(211,47,47,0.35)] hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-200 border-0 cursor-pointer text-xs sm:text-sm"
                 asChild
               >
                 <Link href="/promotional-merchandise">

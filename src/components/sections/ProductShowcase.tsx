@@ -43,7 +43,7 @@ export function ProductShowcase() {
   const filteredProducts = products.filter((product) => activeFilter === "All" || product.category === activeFilter).slice(0, 4);
 
   return (
-    <section className="py-24 bg-[#EFE7DB]">
+    <section className="py-24 bg-[#F8F7F3]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
           <div>
@@ -58,8 +58,8 @@ export function ProductShowcase() {
                 onClick={() => setActiveFilter(cat)}
                 className={`px-6 py-2 rounded-full text-sm font-semibold transition-colors ${
                   activeFilter === cat
-                    ? "bg-[#6E7757] text-white"
-                    : "bg-white text-[#6B6B63] hover:bg-[#F8F5EF] border border-[#DDD5C8]"
+                    ? "bg-[#D32F2F] text-white"
+                    : "bg-white text-[#6B6B63] hover:bg-[#FAF9F6] border border-[#F5C2C2]"
                 }`}
               >
                 {cat}
@@ -78,7 +78,7 @@ export function ProductShowcase() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 key={product.id}
-                className="group bg-white rounded-2xl overflow-hidden border border-[#DDD5C8] shadow-sm hover:shadow-xl hover:shadow-[#DDD5C8]/50 transition-all"
+                className="group bg-white rounded-2xl overflow-hidden border border-[#F5C2C2] shadow-sm hover:shadow-xl hover:shadow-[#F5C2C2]/50 transition-all"
               >
                 <div className="relative h-64 overflow-hidden">
                   <div
@@ -86,14 +86,14 @@ export function ProductShowcase() {
                     style={{ backgroundImage: `url(${product.image})` }}
                   />
                   <div className="absolute inset-0 bg-[#2B2B2B]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <Button variant="default" className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 bg-white text-[#2B2B2B] hover:bg-[#F8F5EF] border-none shadow-xl">
+                    <Button variant="default" className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 bg-white text-[#2B2B2B] hover:bg-[#FAF9F6] border-none shadow-xl">
                       Request Quote
                     </Button>
                   </div>
                 </div>
                 <div className="p-6">
                   <p className="text-xs text-[#6B6B63] font-medium uppercase tracking-wider mb-2">{product.category}</p>
-                  <h3 className="text-lg font-bold text-[#6E7757] mb-1">{product.title}</h3>
+                  <h3 className="text-lg font-bold text-[#D32F2F] mb-1">{product.title}</h3>
                   <p className="text-[#2B2B2B] font-semibold">Custom Quote</p>
                 </div>
               </motion.div>

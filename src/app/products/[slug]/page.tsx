@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { ProductCard } from "@/components/ui/ProductCard";
 
 interface CatalogProduct {
   title: string;
@@ -24,6 +25,7 @@ interface CatalogProduct {
   features: string[];
   specifications: Record<string, string>;
   moq: number;
+  price?: number;
 }
 
 const toSpecs = (product: CatalogProduct) =>
@@ -67,7 +69,36 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
       setQuantity(nextProduct.moq);
       setSelectedBranding(nextProduct.customizations[0]);
       setSelectedPackaging(nextProduct.packagings[0]);
-      setRelatedProducts((productsResult.data ?? []).filter((item: CatalogProduct) => item.slug !== slug && item.category === nextProduct.category).slice(0, 3));
+      const allItems = productsResult.data ?? [];
+      // 1. Same subcategory (e.g. Table Mats)
+      let related = allItems.filter(
+        (item: CatalogProduct) => item.slug !== slug && item.subcategory === nextProduct.subcategory
+      );
+      
+      // 2. Same parent category (e.g. Table Top)
+      if (related.length < 4) {
+        const sameCat = allItems.filter(
+          (item: CatalogProduct) => 
+            item.slug !== slug && 
+            item.category === nextProduct.category && 
+            item.subcategory !== nextProduct.subcategory &&
+            !related.some((r: CatalogProduct) => r.slug === item.slug)
+        );
+        related = [...related, ...sameCat];
+      }
+
+      // 3. Other promotional products
+      if (related.length < 4) {
+        const otherPromo = allItems.filter(
+          (item: CatalogProduct) => 
+            item.slug !== slug && 
+            !["corporate-kits", "festive-hampers", "packaging"].includes(item.category) &&
+            !related.some((r: CatalogProduct) => r.slug === item.slug)
+        );
+        related = [...related, ...otherPromo];
+      }
+
+      setRelatedProducts(related.slice(0, 4));
     }
 
     loadProduct();
@@ -270,7 +301,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-extrabold text-red-600 uppercase tracking-widest">Pan-India Cargo Dispatch</span>
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#EF5350] animate-pulse" />
                 </div>
                 <h4 className="text-xs font-black text-gray-900">Enterprise Logistics: 5 - 7 Days SLA</h4>
                 <p className="text-[10px] font-semibold text-gray-500 leading-relaxed">
@@ -352,7 +383,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div className="text-right">
                   <div className="text-xl font-black text-gray-900">₹{totalPrice.toLocaleString("en-IN")}</div>
-                  <span className="text-[8px] font-extrabold text-green-600 uppercase bg-green-50 px-2 py-0.5 rounded-md">
+                  <span className="text-[8px] font-extrabold text-[#D32F2F] uppercase bg-[#FDECEC] px-2 py-0.5 rounded-md">
                     Saved ₹{(product.basePrice * quantity - totalPrice).toLocaleString("en-IN")}
                   </span>
                 </div>
@@ -416,29 +447,20 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {relatedProducts.map((relatedItem) => (
-                <div 
-                  key={relatedItem.title}
-                  onClick={() => router.push(`/products/${relatedItem.slug}`)}
-                  className="group cursor-pointer bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all text-left"
-                >
-                  <div className="relative aspect-[16/10] w-full bg-gray-50">
-                    <SafeImage src={relatedItem.images[0]} alt={relatedItem.title} category={relatedItem.category} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  </div>
-                  <div className="p-5 flex flex-col justify-between">
-                    <div>
-                      <h4 className="font-bold text-gray-900 text-sm mb-1 truncate group-hover:text-red-500 transition-colors">
-                        {relatedItem.title}
-                      </h4>
-                      <p className="text-gray-400 text-[10px] font-extrabold uppercase tracking-wider">{relatedItem.subcategory}</p>
-                    </div>
-                    <div className="pt-4 border-t border-gray-100 mt-4 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-gray-400">MOQ: {relatedItem.moq} units</span>
-                      <span className="text-[10px] font-extrabold text-red-500 group-hover:underline uppercase tracking-wider">Configure →</span>
-                    </div>
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {relatedProducts.map((relatedItem, idx) => (
+              <ProductCard
+                key={relatedItem.slug}
+                title={relatedItem.title}
+                description={relatedItem.description}
+                imageUrl={relatedItem.images[0]}
+                price={relatedItem.price ? `₹${relatedItem.price}` : "Custom Quote"}
+                moq={relatedItem.moq}
+                index={idx}
+                category={relatedItem.category}
+                href={`/products/${relatedItem.slug}`}
+                className="hover:shadow-xl hover:shadow-gray-200/40"
+              />
             ))}
           </div>
         </div>

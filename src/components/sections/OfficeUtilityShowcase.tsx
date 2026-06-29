@@ -21,8 +21,73 @@ export function OfficeUtilityShowcase() {
       .then((res) => res.json())
       .then((res) => {
         if (res.success && res.data) {
-          const mapped = res.data
-            .filter((p: any) => p.category === "workspace-essentials" || ["executive-leather-desk-mat", "wireless-charging-wood-organizer", "smart-temperature-sipper", "aluminum-laptop-stand"].includes(p.slug))
+          const allProducts = res.data || [];
+
+          // 1. Deduplicate products by ID, slug, and title
+          const seen = new Set<string>();
+          const uniqueProducts: any[] = [];
+          for (const p of allProducts) {
+            const idKey = p.id || p._id || "";
+            const slugKey = p.slug || "";
+            const titleKey = p.title?.toLowerCase() || "";
+            if (seen.has(idKey) || seen.has(slugKey) || seen.has(titleKey)) {
+              continue;
+            }
+            seen.add(idKey);
+            seen.add(slugKey);
+            seen.add(titleKey);
+            uniqueProducts.push(p);
+          }
+          
+          // 2. Group unique products by subcategory (or category if subcategory is empty)
+          // focus on workspace-essentials & table-top sibling subcategories
+          const subcatGroups: Record<string, any[]> = {};
+          for (const p of uniqueProducts) {
+            const isWorkspaceOrTableTop = 
+              p.category === "workspace-essentials" || 
+              p.subcategory === "workspace-essentials" ||
+              p.category === "table-top" || 
+              ["desk-organiser", "mouse-pad", "table-mats", "paper-weight"].includes(p.category) ||
+              ["desk-organiser", "mouse-pad", "table-mats", "paper-weight"].includes(p.subcategory);
+              
+            if (isWorkspaceOrTableTop) {
+              const subKey = p.subcategory || p.category || "workspace-essentials";
+              if (!subcatGroups[subKey]) {
+                subcatGroups[subKey] = [];
+              }
+              subcatGroups[subKey].push(p);
+            }
+          }
+
+          // 3. Take one from each subcategory group in a loop (round-robin) to maximize variety
+          const selected: any[] = [];
+          const keys = Object.keys(subcatGroups);
+          let index = 0;
+          while (selected.length < 4 && keys.length > 0) {
+            const key = keys[index % keys.length];
+            const group = subcatGroups[key];
+            if (group && group.length > 0) {
+              selected.push(group.shift());
+            } else {
+              // Remove empty group
+              keys.splice(index % keys.length, 1);
+              continue;
+            }
+            index++;
+          }
+          
+          // 4. Pad remaining slots with other general promotional products if we still have less than 4
+          if (selected.length < 4) {
+            for (const p of uniqueProducts) {
+              if (selected.length >= 4) break;
+              const isPromo = !["corporate-kits", "festive-hampers", "packaging"].includes(p.category);
+              if (isPromo && !selected.some((item: any) => item.slug === p.slug)) {
+                selected.push(p);
+              }
+            }
+          }
+
+          const mapped = selected
             .slice(0, 4)
             .map((p: any) => ({
               key: p.slug,
@@ -56,11 +121,11 @@ export function OfficeUtilityShowcase() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#F8F5EF] relative overflow-hidden">
+      <section className="py-24 bg-[#FAF9F6] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-[460px] rounded-2xl bg-[#EFE7DB] animate-pulse border border-[#DDD5C8]" />
+              <div key={i} className="h-[460px] rounded-2xl bg-[#F8F7F3] animate-pulse border border-[#F5C2C2]" />
             ))}
           </div>
         </div>
@@ -69,22 +134,22 @@ export function OfficeUtilityShowcase() {
   }
 
   return (
-    <section className="py-24 bg-[#F8F5EF] relative overflow-hidden">
+    <section className="py-24 bg-[#FAF9F6] relative overflow-hidden">
       {/* Decorative warm blur */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#6E7757]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#D32F2F]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl text-left">
-            <span className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 fill-[#C8A36A]" /> Executive Desk Accessories
+            <span className="text-[#EF5350] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 fill-[#EF5350]" /> Executive Desk Accessories
             </span>
-            <h2 className="text-3xl md:text-5xl font-black text-[#2B2B2B] mb-4 tracking-tight">
-              Premium <span className="text-[#6E7757]">Workspace Essentials</span>
+            <h2 className="text-3xl md:text-5xl font-black text-[#1F1F1F] mb-4 tracking-tight">
+              Premium <span className="text-[#D32F2F]">Workspace Essentials</span>
             </h2>
-            <p className="text-[#6B6B63] text-sm sm:text-base leading-relaxed font-semibold">
+            <p className="text-[#555555] text-sm sm:text-base leading-relaxed font-semibold">
               Transform standard office desks into premium branding canvases. Custom logo integration on high-end leather, wood, and aluminum utilities.
             </p>
           </div>
@@ -94,7 +159,7 @@ export function OfficeUtilityShowcase() {
         </div>
 
         {/* Editorial Product Cards Layout */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((prod, idx) => {
             const isShortlisted = mounted && isInShortlist(prod.title);
             const mainImg = prod.images[0];
@@ -106,12 +171,12 @@ export function OfficeUtilityShowcase() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
-                className="group bg-white border border-[#DDD5C8] rounded-2xl overflow-hidden hover:border-[#6E7757]/25 hover:shadow-xl transition-all duration-300 flex flex-col h-[460px] text-left relative cursor-pointer"
+                className="group bg-white border border-[#F5C2C2] rounded-2xl overflow-hidden hover:border-[#D32F2F]/25 hover:shadow-xl transition-all duration-300 flex flex-col h-[460px] text-left relative cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 {/* Image Container */}
-                <div className="relative aspect-[4/3] w-full bg-[#F8F5EF] overflow-hidden border-b border-[#DDD5C8]">
+                <div className="relative aspect-[4/3] w-full bg-[#FAF9F6] overflow-hidden border-b border-[#F5C2C2]">
                   <SafeImage
                     src={mainImg}
                     alt={prod.title}
@@ -127,10 +192,10 @@ export function OfficeUtilityShowcase() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute inset-0 bg-[#2B2B2B]/65 backdrop-blur-xs flex flex-col justify-end p-5 text-white z-10"
+                        className="absolute inset-0 bg-[#1F1F1F]/65 backdrop-blur-xs flex flex-col justify-end p-5 text-white z-10"
                       >
                         <div className="space-y-2 mb-2">
-                          <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#C8A36A] block border-b border-white/10 pb-1">Tech Specs:</span>
+                          <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#EF5350] block border-b border-white/10 pb-1">Tech Specs:</span>
                           {prod.specs.slice(0, 3).map((sp: any) => (
                             <div key={sp.label} className="flex justify-between text-[10px] font-semibold text-gray-200">
                               <span className="text-gray-400 font-bold uppercase tracking-wider">{sp.label}:</span>
@@ -145,13 +210,13 @@ export function OfficeUtilityShowcase() {
                   {/* Bookmark Button */}
                   <button
                     onClick={(e) => handleToggleShortlist(prod.title, mainImg, prod.basePrice, e)}
-                    className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-[#DDD5C8] shadow-sm text-[#6B6B63] hover:bg-[#6E7757] hover:text-white transition-colors z-20"
+                    className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-[#F5C2C2] shadow-sm text-[#555555] hover:bg-[#D32F2F] hover:text-white transition-colors z-20"
                     title="Shortlist Item"
                   >
-                    <Bookmark className={`w-4 h-4 ${isShortlisted ? "fill-[#6E7757] text-[#6E7757]" : ""}`} />
+                    <Bookmark className={`w-4 h-4 ${isShortlisted ? "fill-[#D32F2F] text-[#D32F2F]" : ""}`} />
                   </button>
 
-                  <span className="absolute bottom-4 left-4 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 bg-[#2B2B2B] text-white rounded-md z-20">
+                  <span className="absolute bottom-4 left-4 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 bg-[#1F1F1F] text-white rounded-md z-20">
                     MOQ: {prod.moq} Units
                   </span>
                 </div>
@@ -160,21 +225,21 @@ export function OfficeUtilityShowcase() {
                 <div className="p-6 flex flex-col flex-grow justify-between">
                   <div className="space-y-2">
                     <div className="flex justify-between items-start">
-                      <h3 className="font-extrabold text-[#2B2B2B] text-base leading-tight group-hover:text-[#6E7757] transition-colors">
+                      <h3 className="font-extrabold text-[#1F1F1F] text-base leading-tight group-hover:text-[#D32F2F] transition-colors">
                         {prod.title}
                       </h3>
                     </div>
-                    <p className="text-[#6B6B63] text-xs leading-relaxed line-clamp-2">
+                    <p className="text-[#555555] text-xs leading-relaxed line-clamp-2">
                       {prod.description}
                     </p>
                   </div>
 
                   {/* Customization Bullet List */}
-                  <div className="py-3 border-y border-[#DDD5C8] flex flex-wrap gap-2">
+                  <div className="py-3 border-y border-[#F5C2C2] flex flex-wrap gap-2">
                     {prod.customizations.slice(0, 2).map((custom: string) => (
                       <span 
                         key={custom} 
-                        className="text-[9px] font-extrabold text-[#6B6B63] uppercase tracking-wider bg-[#F8F5EF] border border-[#DDD5C8] px-2 py-0.5 rounded"
+                        className="text-[9px] font-extrabold text-[#555555] uppercase tracking-wider bg-[#FAF9F6] border border-[#F5C2C2] px-2 py-0.5 rounded"
                       >
                         {custom}
                       </span>
@@ -184,14 +249,14 @@ export function OfficeUtilityShowcase() {
                   {/* Bottom pricing & view details link */}
                   <div className="flex items-center justify-between pt-4 mt-auto">
                     <div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#6B6B63] block">Starting At</span>
-                      <span className="text-sm font-black text-[#2B2B2B]">₹{prod.basePrice}</span>
-                      <span className="text-[10px] text-[#6B6B63] font-bold ml-0.5">/unit</span>
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#555555] block">Starting At</span>
+                      <span className="text-sm font-black text-[#1F1F1F]">₹{prod.basePrice}</span>
+                      <span className="text-[10px] text-[#555555] font-bold ml-0.5">/unit</span>
                     </div>
 
                     <Link
                       href={`/products/${prod.key}`}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#6E7757] hover:text-[#4E583F] transition-colors uppercase tracking-widest"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#D32F2F] hover:text-[#C62828] transition-colors uppercase tracking-widest"
                     >
                       Configure <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </Link>

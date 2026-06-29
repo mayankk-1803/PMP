@@ -16,8 +16,8 @@ if (fs.existsSync(kitsImagesDir)) {
 }
 
 const content = `// This file is auto-generated at build time. Do not edit manually.
-export const KIT_IMAGES_FILES = ${JSON.stringify(kitImagesFiles, null, 2)};
-export const KITSIMAGES_FILES = ${JSON.stringify(kitsImagesFiles, null, 2)};
+export const KIT_IMAGES_FILES: string[] = ${JSON.stringify(kitImagesFiles, null, 2)};
+export const KITSIMAGES_FILES: string[] = ${JSON.stringify(kitsImagesFiles, null, 2)};
 `;
 
 const outputPath = path.join(__dirname, '../src/lib/generatedImageMap.ts');

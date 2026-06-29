@@ -92,6 +92,7 @@ export const PRODUCT_HIERARCHY = [
     name: "Promotional Products",
     slug: "promotional-products",
     categories: [
+      // Column 1: Bags
       {
         name: "Bags",
         slug: "bags",
@@ -103,23 +104,29 @@ export const PRODUCT_HIERARCHY = [
           { name: "Sling Bags", slug: "sling-bags", href: "/products?subcategory=sling-bags" }
         ]
       },
+      // Column 2: Drinkware
       {
-        name: "T-Shirts",
-        slug: "t-shirts",
+        name: "Drinkware",
+        slug: "drinkware",
         subcategories: [
-          { name: "Polo T-Shirts", slug: "polo-t-shirts", href: "/products?subcategory=polo-t-shirts" },
-          { name: "Round Neck T-Shirts", slug: "round-neck-t-shirts", href: "/products?subcategory=round-neck-t-shirts" }
+          { name: "Flasks", slug: "flasks", href: "/products?subcategory=flasks" },
+          { name: "Bottles", slug: "bottles", href: "/products?subcategory=bottles" },
+          { name: "Coffee Mugs", slug: "coffee-mugs", href: "/products?subcategory=coffee-mugs" },
+          { name: "Travel Mugs", slug: "travel-mugs", href: "/products?subcategory=travel-mugs" }
         ]
       },
+      // Column 3: Pens
       {
-        name: "Caps",
-        slug: "caps",
+        name: "Pens",
+        slug: "pens",
         subcategories: [
-          { name: "Promotional Caps", slug: "promotional-caps", href: "/products?subcategory=promotional-caps" },
-          { name: "Sports Caps", slug: "sports-caps", href: "/products?subcategory=sports-caps" },
-          { name: "Cotton Caps", slug: "cotton-caps", href: "/products?subcategory=cotton-caps" }
+          { name: "Premium Pens", slug: "premium-pens", href: "/products?subcategory=premium-pens" },
+          { name: "Eco Pens", slug: "eco-pens", href: "/products?subcategory=eco-pens" },
+          { name: "Gift Box Pens", slug: "gift-box-pens", href: "/products?subcategory=gift-box-pens" },
+          { name: "Engraved Pens", slug: "engraved-pens", href: "/products?subcategory=engraved-pens" }
         ]
       },
+      // Column 4: Keychains
       {
         name: "Keychains",
         slug: "keychains",
@@ -129,6 +136,46 @@ export const PRODUCT_HIERARCHY = [
           { name: "Acrylic Keychain", slug: "acrylic-keychain", href: "/products?subcategory=acrylic-keychain" }
         ]
       },
+      // Column 5: Caps
+      {
+        name: "Caps",
+        slug: "caps",
+        subcategories: [
+          { name: "Promotional Caps", slug: "promotional-caps", href: "/products?subcategory=promotional-caps" },
+          { name: "Sports Caps", slug: "sports-caps", href: "/products?subcategory=sports-caps" },
+          { name: "Cotton Caps", slug: "cotton-caps", href: "/products?subcategory=cotton-caps" }
+        ]
+      },
+      // Column 6: T-Shirts
+      {
+        name: "T-Shirts",
+        slug: "t-shirts",
+        subcategories: [
+          { name: "Polo T-Shirts", slug: "polo-t-shirts", href: "/products?subcategory=polo-t-shirts" },
+          { name: "Round Neck T-Shirts", slug: "round-neck-t-shirts", href: "/products?subcategory=round-neck-t-shirts" }
+        ]
+      },
+      // Column 7: Paper Weight
+      {
+        name: "Paper Weight",
+        slug: "paper-weight",
+        subcategories: [
+          { name: "Paper Weight", slug: "paper-weight-sub", href: "/products?subcategory=paper-weight-sub" },
+          { name: "Table Mats", slug: "table-mats-sub", href: "/products?subcategory=table-mats-sub" }
+        ]
+      },
+      // Column 8: Table Top
+      {
+        name: "Table Top",
+        slug: "table-top",
+        subcategories: [
+          { name: "Mouse Pad", slug: "mouse-pad", href: "/products?subcategory=mouse-pad" },
+          { name: "Desk Organiser", slug: "desk-organiser", href: "/products?subcategory=desk-organiser" },
+          { name: "Table Mats", slug: "table-mats", href: "/products?subcategory=table-mats" },
+          { name: "Paper Weight", slug: "paper-weight", href: "/products?subcategory=paper-weight" }
+        ]
+      },
+      // Column 9: Diaries / Notebooks
       {
         name: "Diaries / Notebooks",
         slug: "diaries-notebooks",
@@ -137,16 +184,6 @@ export const PRODUCT_HIERARCHY = [
           { name: "Premium Diaries", slug: "premium-diaries", href: "/products?subcategory=premium-diaries" },
           { name: "Eco Notebooks", slug: "eco-notebooks", href: "/products?subcategory=eco-notebooks" },
           { name: "Standard Notebooks", slug: "standard-notebooks", href: "/products?subcategory=standard-notebooks" }
-        ]
-      },
-      {
-        name: "Table Top",
-        slug: "table-top",
-        subcategories: [
-          { name: "Paper Weight", slug: "paper-weight", href: "/products?subcategory=paper-weight" },
-          { name: "Table Mats", slug: "table-mats", href: "/products?subcategory=table-mats" },
-          { name: "Mouse Pad", slug: "mouse-pad", href: "/products?subcategory=mouse-pad" },
-          { name: "Desk Organiser", slug: "desk-organiser", href: "/products?subcategory=desk-organiser" }
         ]
       }
     ]
@@ -168,7 +205,24 @@ export const PRODUCT_HIERARCHY = [
   }
 ];
 
+/**
+ * Single source of truth: the exact category slugs that belong to Promotional Products.
+ * Used to filter the sidebar in /products so Kits & Hampers categories never appear.
+ */
+export const PROMO_CATEGORY_SLUGS = new Set(
+  PRODUCT_HIERARCHY[0].categories.map((c) => c.slug)
+);
+
+/**
+ * Single source of truth: the exact subcategory slugs that belong to Promotional Products.
+ * Used to filter the API subcategories list in /products sidebar.
+ */
+export const PROMO_SUBCATEGORY_SLUGS = new Set(
+  PRODUCT_HIERARCHY[0].categories.flatMap((c) => c.subcategories.map((s) => s.slug))
+);
+
 export const BUDGETS = [
+
   { name: "₹0–₹250", value: "Under ₹250", href: "/gifts-by-budget?range=Under%20%E2%82%B9250" },
   { name: "₹250–₹500", value: "₹250 - ₹500", href: "/gifts-by-budget?range=%E2%82%B9250%20-%20%E2%82%B9500" },
   { name: "₹500–₹1000", value: "₹500 - ₹1000", href: "/gifts-by-budget?range=%E2%82%B9500%20-%20%E2%82%B91000" },
@@ -1545,7 +1599,7 @@ const BASE_SITE_PACKAGING = [
     id: "mono",
     title: "Mono Cartons",
     tagline: "Retail & Product Packaging",
-    desc: "Precision-engineered single-layer boxes designed for maximum shelf impact, vibrant color retention, and product security. Perfect for cosmetics, pharmaceuticals, and FMCG retail items.",
+    desc: "Precision-engineered single-layer boxes for retail shelf impact and product security.",
     img: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=800&q=80",
     materials: ["SBS Board (250-400 GSM)", "Duplex Board (Grey/White Back)", "FBB Kraft Board (Eco-conscious)"],
     finishes: ["Matte/Gloss Lamination", "Spot UV Coating", "Gold/Silver Hot Foil Stamping", "Aqueous Coating"],
@@ -1555,7 +1609,7 @@ const BASE_SITE_PACKAGING = [
     id: "rigid",
     title: "Rigid Luxury Boxes",
     tagline: "Premium & Festive Gifting Cases",
-    desc: "Luxury heavy-duty cases handmade using high-grade cardboard greyboards wrapped with premium textured paper. Built for top-tier electronics, gourmet sweets, luxury gifts, and product presentation.",
+    desc: "Premium rigid gift boxes with luxury finishes for corporate branding.",
     img: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=800&q=80",
     materials: ["Thick Greyboard (1.2mm - 3mm)", "Textured Imported Art Paper", "Eco-Friendly Recycled Kraft wrapper"],
     finishes: ["Blind Embossing & Debossing", "Metallic Foil Stamping", "Custom Foam/EVA Die-cut Inserts", "Magnetic Snap Closures"],
@@ -1565,7 +1619,7 @@ const BASE_SITE_PACKAGING = [
     id: "corrugated",
     title: "Corrugated Cartons",
     tagline: "Heavy-Duty E-commerce Shipping",
-    desc: "Fluted protective cartons built to withstand rough shipping conditions while carrying your custom branding. Ideal for e-commerce deliveries, industrial shipping, bulk cargo, and subscription box shipments.",
+    desc: "Durable fluted shipping cartons built for secure transit and e-commerce deliveries.",
     img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
     materials: ["3-Ply Fluted Board (E/B flute)", "5-Ply Heavy-Duty Kraft Board", "White liner testboard outer"],
     finishes: ["Flexographic Ink Branding", "Screen Printing", "Water-resistant outer coat", "Custom corrugated dividers"],
@@ -1574,27 +1628,27 @@ const BASE_SITE_PACKAGING = [
 ];
 
 const PACKAGING_EXPANSIONS = [
-  { id: "mono-window-cartons", title: "Window Mono Cartons", tagline: "Retail Visibility Boxes", desc: "Die-cut mono cartons with acetate windows for food, cosmetics, accessories, and launch samples that need visible product display.", img: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?q=80&w=900&auto=format&fit=crop", materials: ["SBS 300-400 GSM", "Clear PET window", "Food-safe inner coating"], finishes: ["Matte lamination", "Spot UV", "Foil logo", "Window patching"], leadTime: "8-11 Working Days" },
-  { id: "mono-sleeve-cartons", title: "Printed Sleeve Cartons", tagline: "Fast Brand Wraps", desc: "Custom printed sleeves for product boxes, hampers, books, apparel, and quick-turn campaign packaging.", img: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=900&auto=format&fit=crop", materials: ["Art card", "Kraft card", "Duplex board"], finishes: ["Foil stamping", "Soft-touch lamination", "Embossed logo"], leadTime: "5-7 Working Days" },
-  { id: "mono-pharma-cartons", title: "Pharma Mono Cartons", tagline: "Regulated Product Cartons", desc: "Clean, precise cartons for pharma, wellness, and healthcare products with sharp print registration and batch-ready dielines.", img: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=900&auto=format&fit=crop", materials: ["FBB board", "Duplex board", "White back board"], finishes: ["Aqueous coating", "Tamper seals", "Batch coding space"], leadTime: "7-10 Working Days" },
-  { id: "mono-cosmetic-cartons", title: "Cosmetic Mono Cartons", tagline: "Beauty Product Packaging", desc: "Premium cosmetic cartons for skincare, fragrance, and grooming products with tactile finishes and crisp retail shelf appeal.", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=900&auto=format&fit=crop", materials: ["SBS board", "Metallic paper", "Textured art card"], finishes: ["Spot UV", "Foil stamping", "Embossing", "Soft-touch coat"], leadTime: "8-12 Working Days" },
-  { id: "rigid-magnetic-boxes", title: "Magnetic Rigid Boxes", tagline: "Luxury Closure Gift Boxes", desc: "Premium rigid boxes with magnetic flap closure for executive kits, electronics, leadership gifts, and festive hampers.", img: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=900&auto=format&fit=crop", materials: ["2mm greyboard", "Textured wrap paper", "Magnet closure"], finishes: ["Foil logo", "Embossed lid", "EVA insert", "Ribbon pull"], leadTime: "12-16 Working Days" },
-  { id: "rigid-drawer-boxes", title: "Drawer Rigid Boxes", tagline: "Slide-Out Presentation", desc: "Slide-out drawer boxes for pens, gourmet sets, onboarding kits, watches, tech accessories, and luxury samples.", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=900&auto=format&fit=crop", materials: ["Greyboard shell", "Art paper wrap", "Ribbon puller"], finishes: ["Gold foil", "Custom tray", "Debossed logo"], leadTime: "12-15 Working Days" },
-  { id: "rigid-book-style-boxes", title: "Book-Style Rigid Boxes", tagline: "Premium Opening Experience", desc: "Book-style gift boxes with hinge opening, custom inner tray, and presentation-ready finish for high-value gift sets.", img: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=900&auto=format&fit=crop", materials: ["2.5mm greyboard", "Imported wrap paper", "Foam or paperboard tray"], finishes: ["Foil spine", "Magnetic flap", "Custom insert"], leadTime: "13-17 Working Days" },
-  { id: "rigid-hamper-trays", title: "Rigid Hamper Trays", tagline: "Festive Display Trays", desc: "Open or lidded hamper trays for dry fruits, sweets, candles, wellness kits, and festive corporate gifting.", img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=900&auto=format&fit=crop", materials: ["Greyboard tray", "Art paper wrap", "Paperboard dividers"], finishes: ["Foil sleeve", "Ribbon closure", "Custom cavity tray"], leadTime: "10-14 Working Days" },
-  { id: "corrugated-mailer-boxes", title: "Corrugated Mailer Boxes", tagline: "E-Commerce Mailers", desc: "Self-locking corrugated mailers for doorstep employee kits, subscription drops, and campaign fulfillment.", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=900&auto=format&fit=crop", materials: ["E flute board", "Kraft liner", "White liner"], finishes: ["Single-color print", "Full-color outer print", "Inside print"], leadTime: "5-8 Working Days" },
-  { id: "corrugated-shipping-cartons", title: "Shipping Master Cartons", tagline: "Bulk Dispatch Protection", desc: "Heavy-duty master cartons for B2B dispatch, warehouse consolidation, and pan-India employee door delivery.", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=900&auto=format&fit=crop", materials: ["5-ply kraft", "7-ply kraft", "Burst-resistant liners"], finishes: ["Flexo print", "Handling icons", "Water-resistant coat"], leadTime: "5-7 Working Days" },
-  { id: "corrugated-partition-boxes", title: "Partition Corrugated Boxes", tagline: "Bottle & Jar Protection", desc: "Corrugated boxes with custom partitions for bottles, jars, mugs, candles, and fragile hamper components.", img: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?q=80&w=900&auto=format&fit=crop", materials: ["3-ply outer", "Die-cut partitions", "Kraft dividers"], finishes: ["Flexo branding", "Fragile icons", "Divider print"], leadTime: "6-9 Working Days" },
-  { id: "corrugated-display-dumpbin", title: "Corrugated Display Bins", tagline: "Retail Promotional Units", desc: "Temporary retail display bins and countertop units for brand launches, samples, and channel promotions.", img: "https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=900&auto=format&fit=crop", materials: ["High BF corrugated board", "Printed liner", "Support struts"], finishes: ["Full-color print", "Gloss coat", "Assembly tabs"], leadTime: "8-12 Working Days" },
-  { id: "custom-eva-inserts", title: "Custom EVA Inserts", tagline: "Precision Product Holding", desc: "CNC-cut EVA foam inserts for tech kits, bottles, awards, premium pens, and fragile product presentation.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=900&auto=format&fit=crop", materials: ["Black EVA foam", "White EVA foam", "Velvet laminated foam"], finishes: ["Finger slots", "Multi-level cavities", "Velvet lamination"], leadTime: "7-10 Working Days" },
-  { id: "paperboard-inserts", title: "Paperboard Inserts", tagline: "Eco Inner Structures", desc: "Sustainable paperboard dividers and trays for hampers, stationery kits, drinkware, and onboarding boxes.", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=900&auto=format&fit=crop", materials: ["Kraft paperboard", "Duplex board", "Recycled card"], finishes: ["Die-cut cavities", "Printed tray", "Fold-lock design"], leadTime: "6-9 Working Days" },
-  { id: "kraft-gift-boxes", title: "Kraft Gift Boxes", tagline: "Eco Corporate Packaging", desc: "Natural kraft boxes and sleeves for sustainable corporate gifts, welcome kits, event packs, and sample drops.", img: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=900&auto=format&fit=crop", materials: ["Recycled kraft board", "Kraft corrugated", "Paperboard tray"], finishes: ["Single-color print", "Paper sticker seal", "Jute ribbon"], leadTime: "5-8 Working Days" },
-  { id: "apparel-sleeve-packaging", title: "Apparel Sleeve Packaging", tagline: "T-Shirt & Uniform Packs", desc: "Custom apparel sleeves, belly bands, and shirt boxes for event tees, uniforms, polos, and brand drops.", img: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=900&auto=format&fit=crop", materials: ["Art card sleeve", "Kraft belly band", "Garment board box"], finishes: ["Foil logo", "Size sticker", "Hang tag"], leadTime: "5-7 Working Days" },
-  { id: "bottle-tube-packaging", title: "Bottle Tube Packaging", tagline: "Premium Drinkware Tubes", desc: "Cylindrical tube packaging for bottles, tumblers, drinkware gift sets, and executive wellness kits.", img: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=900&auto=format&fit=crop", materials: ["Paper tube", "Rigid board tube", "Metal cap option"], finishes: ["Full-wrap print", "Foil seal", "Embossed cap"], leadTime: "10-14 Working Days" },
-  { id: "sample-kit-boxes", title: "Sample Kit Boxes", tagline: "Dealer & Sales Samples", desc: "Structured sample kit boxes with compartments for tiles, swatches, product minis, pharma samples, and sales collateral.", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=900&auto=format&fit=crop", materials: ["Rigid board", "EVA or paper tray", "Printed swatch cards"], finishes: ["Magnetic closure", "Printed tray", "Carry handle"], leadTime: "12-18 Working Days" },
-  { id: "premium-paper-bags", title: "Premium Paper Bags", tagline: "Retail & Event Carry Bags", desc: "Luxury paper bags with rope handles for events, retail gifting, product launches, and premium hamper handovers.", img: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=900&auto=format&fit=crop", materials: ["Art paper", "Kraft paper", "Textured board"], finishes: ["Foil print", "Embossed logo", "Cotton rope handle"], leadTime: "7-10 Working Days" },
-  { id: "welcome-kit-mailers", title: "Welcome Kit Mailers", tagline: "Doorstep Onboarding Boxes", desc: "Employee welcome mailers designed for branded unboxing, protected transit, and efficient pan-India dispatch.", img: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=900&auto=format&fit=crop", materials: ["Corrugated mailer", "Printed inner liner", "Paperboard insert"], finishes: ["Inside print", "QR card", "Tamper sticker"], leadTime: "6-9 Working Days" },
-  { id: "event-delegate-boxes", title: "Event Delegate Boxes", tagline: "Conference Kit Packaging", desc: "Delegate kit boxes for notebooks, badges, lanyards, bottles, agendas, and sponsor inserts.", img: "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=900&auto=format&fit=crop", materials: ["Kraft mailer", "Rigid board option", "Paper insert"], finishes: ["Sponsor print", "Name label", "Agenda pocket"], leadTime: "6-10 Working Days" }
+  { id: "mono-window-cartons", title: "Window Mono Cartons", tagline: "Retail Visibility Boxes", desc: "Die-cut cartons with clear windows for retail visibility and product display.", img: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?q=80&w=900&auto=format&fit=crop", materials: ["SBS 300-400 GSM", "Clear PET window", "Food-safe inner coating"], finishes: ["Matte lamination", "Spot UV", "Foil logo", "Window patching"], leadTime: "8-11 Working Days" },
+  { id: "mono-sleeve-cartons", title: "Printed Sleeve Cartons", tagline: "Fast Brand Wraps", desc: "Custom printed brand sleeves for boxes, hampers, and apparel packaging.", img: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=900&auto=format&fit=crop", materials: ["Art card", "Kraft card", "Duplex board"], finishes: ["Foil stamping", "Soft-touch lamination", "Embossed logo"], leadTime: "5-7 Working Days" },
+  { id: "mono-pharma-cartons", title: "Pharma Mono Cartons", tagline: "Regulated Product Cartons", desc: "Regulated pharma and wellness cartons with precise print registration.", img: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=900&auto=format&fit=crop", materials: ["FBB board", "Duplex board", "White back board"], finishes: ["Aqueous coating", "Tamper seals", "Batch coding space"], leadTime: "7-10 Working Days" },
+  { id: "mono-cosmetic-cartons", title: "Cosmetic Mono Cartons", tagline: "Beauty Product Packaging", desc: "Elegant beauty and cosmetic packaging with tactile premium finishes.", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=900&auto=format&fit=crop", materials: ["SBS board", "Metallic paper", "Textured art card"], finishes: ["Spot UV", "Foil stamping", "Embossing", "Soft-touch coat"], leadTime: "8-12 Working Days" },
+  { id: "rigid-magnetic-boxes", title: "Magnetic Rigid Boxes", tagline: "Luxury Closure Gift Boxes", desc: "Premium rigid boxes with secure magnetic snap closures for luxury gifts.", img: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=900&auto=format&fit=crop", materials: ["2mm greyboard", "Textured wrap paper", "Magnet closure"], finishes: ["Foil logo", "Embossed lid", "EVA insert", "Ribbon pull"], leadTime: "12-16 Working Days" },
+  { id: "rigid-drawer-boxes", title: "Drawer Rigid Boxes", tagline: "Slide-Out Presentation", desc: "Slide-out rigid drawer boxes for tech accessories and onboarding kits.", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=900&auto=format&fit=crop", materials: ["Greyboard shell", "Art paper wrap", "Ribbon puller"], finishes: ["Gold foil", "Custom tray", "Debossed logo"], leadTime: "12-15 Working Days" },
+  { id: "rigid-book-style-boxes", title: "Book-Style Rigid Boxes", tagline: "Premium Opening Experience", desc: "Book-style hinge opening rigid boxes for high-value gift sets.", img: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=900&auto=format&fit=crop", materials: ["2.5mm greyboard", "Imported wrap paper", "Foam or paperboard tray"], finishes: ["Foil spine", "Magnetic flap", "Custom insert"], leadTime: "13-17 Working Days" },
+  { id: "rigid-hamper-trays", title: "Rigid Hamper Trays", tagline: "Festive Display Trays", desc: "Textured rigid display trays for premium dry fruits and festive gifts.", img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=900&auto=format&fit=crop", materials: ["Greyboard tray", "Art paper wrap", "Paperboard dividers"], finishes: ["Foil sleeve", "Ribbon closure", "Custom cavity tray"], leadTime: "10-14 Working Days" },
+  { id: "corrugated-mailer-boxes", title: "Corrugated Mailer Boxes", tagline: "E-Commerce Mailers", desc: "Self-locking corrugated mailers for employee onboarding and campaign drops.", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=900&auto=format&fit=crop", materials: ["E flute board", "Kraft liner", "White liner"], finishes: ["Single-color print", "Full-color outer print", "Inside print"], leadTime: "5-8 Working Days" },
+  { id: "corrugated-shipping-cartons", title: "Shipping Master Cartons", tagline: "Bulk Dispatch Protection", desc: "Heavy-duty master shipping cartons for bulk dispatch and cargo protection.", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=900&auto=format&fit=crop", materials: ["5-ply kraft", "7-ply kraft", "Burst-resistant liners"], finishes: ["Flexo print", "Handling icons", "Water-resistant coat"], leadTime: "5-7 Working Days" },
+  { id: "corrugated-partition-boxes", title: "Partition Corrugated Boxes", tagline: "Bottle & Jar Protection", desc: "Corrugated partition boxes designed to protect fragile mugs, jars, and bottles.", img: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?q=80&w=900&auto=format&fit=crop", materials: ["3-ply outer", "Die-cut partitions", "Kraft dividers"], finishes: ["Flexo branding", "Fragile icons", "Divider print"], leadTime: "6-9 Working Days" },
+  { id: "corrugated-display-dumpbin", title: "Corrugated Display Bins", tagline: "Retail Promotional Units", desc: "Corrugated display bins and units for retail launches and promotions.", img: "https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=900&auto=format&fit=crop", materials: ["High BF corrugated board", "Printed liner", "Support struts"], finishes: ["Full-color print", "Gloss coat", "Assembly tabs"], leadTime: "8-12 Working Days" },
+  { id: "custom-eva-inserts", title: "Custom EVA Inserts", tagline: "Precision Product Holding", desc: "Precision CNC-cut EVA foam inserts to secure high-end electronics and awards.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=900&auto=format&fit=crop", materials: ["Black EVA foam", "White EVA foam", "Velvet laminated foam"], finishes: ["Finger slots", "Multi-level cavities", "Velvet lamination"], leadTime: "7-10 Working Days" },
+  { id: "paperboard-inserts", title: "Paperboard Inserts", tagline: "Eco Inner Structures", desc: "Eco-friendly paperboard trays and dividers for welcome kits and hampers.", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=900&auto=format&fit=crop", materials: ["Kraft paperboard", "Duplex board", "Recycled card"], finishes: ["Die-cut cavities", "Printed tray", "Fold-lock design"], leadTime: "6-9 Working Days" },
+  { id: "kraft-gift-boxes", title: "Kraft Gift Boxes", tagline: "Eco Corporate Packaging", desc: "Sustainable natural kraft gift boxes for eco-conscious campaigns.", img: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=900&auto=format&fit=crop", materials: ["Recycled kraft board", "Kraft corrugated", "Paperboard tray"], finishes: ["Single-color print", "Paper sticker seal", "Jute ribbon"], leadTime: "5-8 Working Days" },
+  { id: "apparel-sleeve-packaging", title: "Apparel Sleeve Packaging", tagline: "T-Shirt & Uniform Packs", desc: "Custom printed apparel sleeves and bands for uniforms and tees.", img: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=900&auto=format&fit=crop", materials: ["Art card sleeve", "Kraft belly band", "Garment board box"], finishes: ["Foil logo", "Size sticker", "Hang tag"], leadTime: "5-7 Working Days" },
+  { id: "bottle-tube-packaging", title: "Bottle Tube Packaging", tagline: "Premium Drinkware Tubes", desc: "Cylindrical rigid tube packaging for bottles and premium drinkware.", img: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=900&auto=format&fit=crop", materials: ["Paper tube", "Rigid board tube", "Metal cap option"], finishes: ["Full-wrap print", "Foil seal", "Embossed cap"], leadTime: "10-14 Working Days" },
+  { id: "sample-kit-boxes", title: "Sample Kit Boxes", tagline: "Dealer & Sales Samples", desc: "Compartmentalized sample boxes for tiles, swatches, and product minis.", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=900&auto=format&fit=crop", materials: ["Rigid board", "EVA or paper tray", "Printed swatch cards"], finishes: ["Magnetic closure", "Printed tray", "Carry handle"], leadTime: "12-18 Working Days" },
+  { id: "premium-paper-bags", title: "Premium Paper Bags", tagline: "Retail & Event Carry Bags", desc: "Luxury paper bags with handles for retail events and product launches.", img: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=900&auto=format&fit=crop", materials: ["Art paper", "Kraft paper", "Textured board"], finishes: ["Foil print", "Embossed logo", "Cotton rope handle"], leadTime: "7-10 Working Days" },
+  { id: "welcome-kit-mailers", title: "Welcome Kit Mailers", tagline: "Doorstep Onboarding Boxes", desc: "Branded employee onboarding mailers for secure nationwide transit.", img: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=900&auto=format&fit=crop", materials: ["Corrugated mailer", "Printed inner liner", "Paperboard insert"], finishes: ["Inside print", "QR card", "Tamper sticker"], leadTime: "6-9 Working Days" },
+  { id: "event-delegate-boxes", title: "Event Delegate Boxes", tagline: "Conference Kit Packaging", desc: "Structured delegate kit boxes for conference handouts and notebooks.", img: "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=900&auto=format&fit=crop", materials: ["Kraft mailer", "Rigid board option", "Paper insert"], finishes: ["Sponsor print", "Name label", "Agenda pocket"], leadTime: "6-10 Working Days" }
 ];
 
 const RAW_SITE_PACKAGING = [
@@ -1631,10 +1685,33 @@ const packagingImageGroup = (pkg: { id: string; title: string }) => {
   return PACKAGING_IMAGE_LIBRARY.mono;
 };
 
-export const SITE_PACKAGING = RAW_SITE_PACKAGING.map((pkg) => {
-  const images = packagingImageGroup(pkg);
-  return { ...pkg, img: images[0] };
-});
+export const SITE_PACKAGING = (() => {
+  const seen = new Set<string>();
+  return RAW_SITE_PACKAGING.map((pkg) => {
+    let img = "";
+    
+    // We prioritize unique image paths to never repeat inside the packaging section
+    // 1. Original package image if it hasn't been used yet
+    if (pkg.img && !seen.has(pkg.img)) {
+      img = pkg.img;
+    } else {
+      // 2. Try to match with localCatalogImage or realCatalogImage, filtering out duplicates
+      const resolved = localCatalogImage(pkg.title) || realCatalogImage(pkg.title, "packaging", pkg.id);
+      if (resolved && !seen.has(resolved)) {
+        img = resolved;
+      }
+    }
+    
+    // Mark as seen, or if not unique, set to empty string to show neutral placeholder
+    if (img) {
+      seen.add(img);
+    } else {
+      img = "";
+    }
+    
+    return { ...pkg, img };
+  });
+})();
 
 const totalProducts = Object.keys(PRODUCTS).length;
 const productMismatchCount = Object.entries(RAW_PRODUCTS).filter(([key, product]) => product.images[0] !== PRODUCTS[key].images[0]).length;

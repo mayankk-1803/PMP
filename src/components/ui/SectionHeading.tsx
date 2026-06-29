@@ -41,7 +41,7 @@ export function SectionHeading({
         transition={{ duration: 0.5, delay: 0.3, ease: EASE_SMOOTH }}
         style={{ originX: centered ? 0.5 : 0 }}
         className={cn(
-          "mt-4 h-1 rounded-full bg-[#C8A36A]",
+          "mt-4 h-1 rounded-full bg-[#EF5350]",
           centered ? "mx-auto w-12" : "w-12"
         )}
       />

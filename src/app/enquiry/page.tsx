@@ -790,14 +790,14 @@ function EnquiryFormContainer() {
           {/* Quick FAQ / trust notes */}
           <div className="space-y-4 pt-2 text-left">
             <div className="flex gap-3">
-              <div className="text-green-500 mt-1"><CheckCircle2 className="w-4 h-4"/></div>
+              <div className="text-[#EF5350] mt-1"><CheckCircle2 className="w-4 h-4"/></div>
               <div>
                 <h4 className="font-bold text-white text-xs tracking-wider uppercase">Free Sample Dispatches</h4>
                 <p className="text-gray-400 text-[10px] leading-relaxed">Corporate accounts qualify for physical proofing sample approvals before batch production.</p>
               </div>
             </div>
             <div className="flex gap-3">
-              <div className="text-green-500 mt-1"><CheckCircle2 className="w-4 h-4"/></div>
+              <div className="text-[#EF5350] mt-1"><CheckCircle2 className="w-4 h-4"/></div>
               <div>
                 <h4 className="font-bold text-white text-xs tracking-wider uppercase">Enterprise Tax Invoicing</h4>
                 <p className="text-gray-400 text-[10px] leading-relaxed">All bulk invoices are provided with active GST input credit processing details.</p>

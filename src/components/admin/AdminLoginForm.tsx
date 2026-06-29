@@ -37,7 +37,7 @@ export function AdminLoginForm() {
       <label className="block text-sm font-semibold">
         Email
         <input
-          className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#6E7757]"
+          className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#D32F2F]"
           placeholder="Admin email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -47,14 +47,14 @@ export function AdminLoginForm() {
         Password
         <input
           type="password"
-          className="mt-2 w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#6E7757]"
+          className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] outline-none focus:border-[#D32F2F]"
           placeholder="Password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
       </label>
       {message && <p className="rounded-lg bg-[#F3E7D7] px-3 py-2 text-sm text-[#8A4B22]">{message}</p>}
-      <button disabled={status === "submitting"} className="w-full rounded-lg bg-[#6E7757] px-4 py-3 text-sm font-black text-white disabled:opacity-60" type="submit">
+      <button disabled={status === "submitting"} className="w-full rounded-lg bg-[#D32F2F] px-4 py-3 text-sm font-black text-white disabled:opacity-60" type="submit">
         {status === "submitting" ? "Signing In..." : "Sign In"}
       </button>
     </form>

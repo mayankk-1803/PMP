@@ -23,7 +23,7 @@ export default function Home() {
           <div className="mb-16 text-center max-w-2xl mx-auto">
             <span className="text-[#8A6A3B] text-xs font-bold tracking-widest uppercase mb-3 block">Branded Corporate Partnerships</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-              Curated Merchandise & <span className="text-[#6E7757]">Giveaways</span>
+              Curated Merchandise & <span className="text-[#D32F2F]">Giveaways</span>
             </h2>
             <p className="text-lg text-[#3f4a5f]">
               Explore high-quality merchandise co-branded with laser engraving, screen printing, or embroidery to boost brand value.

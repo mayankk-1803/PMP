@@ -78,28 +78,28 @@ export default function PromoMerchPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F8F5EF]">
-        <Loader2 className="w-8 h-8 text-[#6E7757] animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6]">
+        <Loader2 className="w-8 h-8 text-[#D32F2F] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="relative isolate pt-32 pb-0 bg-[#F8F5EF] overflow-hidden max-w-full">
+    <div className="relative isolate pt-32 pb-0 bg-[#FAF9F6] overflow-hidden max-w-full">
       <BackgroundGradient className="opacity-15 blur-[140px]" />
       
       {/* Soft overlay */}
-      <div className="absolute top-0 left-0 right-0 h-[450px] bg-gradient-to-b from-[#EFE7DB]/40 to-transparent pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 right-0 h-[450px] bg-gradient-to-b from-[#F8F7F3]/40 to-transparent pointer-events-none z-0" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Page Title */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="px-4 py-1.5 rounded-full bg-[#EFE7DB] text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-[#DDD5C8]">
+          <span className="px-4 py-1.5 rounded-full bg-[#F8F7F3] text-[#EF5350] text-xs font-bold tracking-widest uppercase mb-4 inline-block border border-[#F5C2C2]">
             Promotional Giveaways
           </span>
           <SectionHeading 
-            title={<>Promotional <span className="text-[#6E7757]">Products</span></>}
+            title={<>Promotional <span className="text-[#D32F2F]">Products</span></>}
             subtitle="Explore corporate gifts and premium giveaways curated for brand launches, employee welcome kits, channel partners, and high-impact event merchandise."
             centered 
           />
@@ -110,13 +110,13 @@ export default function PromoMerchPage() {
           <section className="text-left">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
               <div>
-                <span className="text-[10px] font-extrabold text-[#C8A36A] uppercase tracking-widest">Promotional Products</span>
+                <span className="text-[10px] font-extrabold text-[#EF5350] uppercase tracking-widest">Promotional Products</span>
                 <h2 className="text-2xl md:text-3xl font-black text-[#2B2B2B] mt-2">All Promotional Categories</h2>
                 <p className="text-sm text-[#6B6B63] font-medium max-w-2xl mt-2">
                   Select a category to browse customized merchandise options for your teams and marketing campaigns.
                 </p>
               </div>
-              <Link href="/products" className="text-xs font-extrabold text-[#6E7757] uppercase tracking-widest inline-flex items-center gap-1.5 hover:text-[#4E583F]">
+              <Link href="/products" className="text-xs font-extrabold text-[#D32F2F] uppercase tracking-widest inline-flex items-center gap-1.5 hover:text-[#C62828]">
                 View Product Catalog <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -133,10 +133,10 @@ export default function PromoMerchPage() {
                     viewport={{ once: true, margin: "-20px" }}
                     transition={{ delay: (i % 4) * 0.05, duration: 0.5 }}
                     whileHover={{ y: -6 }}
-                    className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-[#DDD5C8] shadow-sm hover:shadow-xl hover:border-[#6E7757]/30 transition-all cursor-pointer relative"
+                    className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-[#F5C2C2] shadow-sm hover:shadow-xl hover:border-[#D32F2F]/30 transition-all cursor-pointer relative"
                   >
                     <Link href={href} className="flex flex-col h-full">
-                      <div className="relative w-full h-[180px] overflow-hidden bg-[#EFE7DB] flex-shrink-0">
+                      <div className="relative w-full h-[180px] overflow-hidden bg-[#F8F7F3] flex-shrink-0">
                         <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-black/0 transition-colors duration-500" />
                         <SafeImage
                           src={matchedImg}
@@ -145,20 +145,20 @@ export default function PromoMerchPage() {
                           className="w-full h-full object-cover transition-transform duration-700 ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
                         />
                         <div className="absolute bottom-3 right-3 z-20">
-                          <span className="p-2 rounded-xl bg-white/90 backdrop-blur-sm text-[#2B2B2B] shadow-sm border border-[#DDD5C8] inline-block transition-transform duration-300 group-hover:rotate-45 group-hover:bg-[#6E7757] group-hover:text-white">
+                          <span className="p-2 rounded-xl bg-white/90 backdrop-blur-sm text-[#2B2B2B] shadow-sm border border-[#F5C2C2] inline-block transition-transform duration-300 group-hover:rotate-45 group-hover:bg-[#D32F2F] group-hover:text-white">
                             <ArrowUpRight className="w-4 h-4" />
                           </span>
                         </div>
                       </div>
 
                       <div className="p-6 flex flex-col flex-grow text-left">
-                        <h3 className="text-lg font-bold text-[#2B2B2B] group-hover:text-[#6E7757] transition-colors mb-2 leading-tight">
+                        <h3 className="text-lg font-bold text-[#2B2B2B] group-hover:text-[#D32F2F] transition-colors mb-2 leading-tight">
                           {cat.name}
                         </h3>
                         <p className="text-[#6B6B63] text-xs leading-relaxed line-clamp-3 mb-6 flex-grow font-medium">
                           {cat.description || `Custom corporate branding and bespoke finishes on premium ${cat.name.toLowerCase()} options.`}
                         </p>
-                        <div className="pt-4 border-t border-[#DDD5C8] flex items-center justify-between text-xs font-bold text-[#6E7757]">
+                        <div className="pt-4 border-t border-[#F5C2C2] flex items-center justify-between text-xs font-bold text-[#D32F2F]">
                           <span>Explore Products</span>
                           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                         </div>
@@ -175,17 +175,17 @@ export default function PromoMerchPage() {
                 .map((cat) => ({ cat, spotlights: getSpotlights(cat.slug) }))
                 .filter(({ spotlights }) => spotlights.length > 0)
                 .map(({ cat, spotlights }) => (
-                  <div key={cat.slug} className="rounded-2xl bg-white border border-[#DDD5C8] p-5 sm:p-6 shadow-sm">
+                  <div key={cat.slug} className="rounded-2xl bg-white border border-[#F5C2C2] p-5 sm:p-6 shadow-sm">
                     <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6 text-left">
                       <div>
-                        <span className="text-[10px] font-extrabold text-[#C8A36A] uppercase tracking-widest">
+                        <span className="text-[10px] font-extrabold text-[#EF5350] uppercase tracking-widest">
                           {cat.name} Spotlight
                         </span>
                         <h3 className="text-xl md:text-2xl font-black text-[#2B2B2B] mt-1">
                           Featured {cat.name}
                         </h3>
                       </div>
-                      <Link href={`/products?category=${cat.slug}`} className="text-xs font-extrabold text-[#6E7757] uppercase tracking-widest inline-flex items-center gap-1.5 hover:text-[#4E583F]">
+                      <Link href={`/products?category=${cat.slug}`} className="text-xs font-extrabold text-[#D32F2F] uppercase tracking-widest inline-flex items-center gap-1.5 hover:text-[#C62828]">
                         View All <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
@@ -197,10 +197,10 @@ export default function PromoMerchPage() {
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true, margin: "-20px" }}
                           transition={{ delay: (index % 3) * 0.04, duration: 0.45 }}
-                          className="group bg-white rounded-xl overflow-hidden border border-[#DDD5C8] shadow-sm hover:shadow-lg transition-all"
+                          className="group bg-white rounded-xl overflow-hidden border border-[#F5C2C2] shadow-sm hover:shadow-lg transition-all"
                         >
                           <Link href={spotlight.href} className="block h-full text-left">
-                            <div className="relative h-40 bg-[#EFE7DB] overflow-hidden">
+                            <div className="relative h-40 bg-[#F8F7F3] overflow-hidden">
                               <SafeImage
                                 src={spotlight.imageUrl}
                                 alt={spotlight.title}
@@ -209,18 +209,18 @@ export default function PromoMerchPage() {
                               />
                             </div>
                             <div className="p-5">
-                              <h4 className="text-base font-black text-[#2B2B2B] group-hover:text-[#6E7757] transition-colors">{spotlight.title}</h4>
+                              <h4 className="text-base font-black text-[#2B2B2B] group-hover:text-[#D32F2F] transition-colors">{spotlight.title}</h4>
                               <p className="text-xs text-[#6B6B63] leading-relaxed font-medium mt-2 line-clamp-2">{spotlight.description}</p>
                               {spotlight.brandingOptions && (
                                 <div className="flex flex-wrap gap-1.5 mt-4">
                                   {spotlight.brandingOptions.map((option) => (
-                                    <span key={option} className="text-[9px] font-extrabold uppercase tracking-wider text-[#6B6B63] bg-[#F8F5EF] border border-[#DDD5C8] rounded-md px-2 py-1">
+                                    <span key={option} className="text-[9px] font-extrabold uppercase tracking-wider text-[#6B6B63] bg-[#FAF9F6] border border-[#F5C2C2] rounded-md px-2 py-1">
                                       {option}
                                     </span>
                                   ))}
                                 </div>
                               )}
-                              <div className="mt-5 pt-4 border-t border-[#DDD5C8] flex items-center justify-between text-xs font-bold text-[#6E7757]">
+                              <div className="mt-5 pt-4 border-t border-[#F5C2C2] flex items-center justify-between text-xs font-bold text-[#D32F2F]">
                                 <span>{spotlight.cta}</span>
                                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                               </div>
@@ -243,16 +243,16 @@ export default function PromoMerchPage() {
           transition={{ duration: 0.6 }}
           className="p-8 md:p-16 rounded-3xl bg-[#2B2B2B] text-white relative overflow-hidden border border-white/5 shadow-2xl"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#6E7757]/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#C8A36A]/5 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#D32F2F]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#EF5350]/5 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 max-w-4xl flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-left">
-              <span className="text-[10px] font-bold tracking-widest text-[#C8A36A] uppercase block mb-3">
+              <span className="text-[10px] font-bold tracking-widest text-[#EF5350] uppercase block mb-3">
                 Bulk Branding Capabilities
               </span>
               <h3 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-4 text-white leading-tight">
-                Curating merchandise for a <span className="text-[#C8A36A]">large corporate event</span>?
+                Curating merchandise for a <span className="text-[#EF5350]">large corporate event</span>?
               </h3>
               <p className="text-gray-400 text-sm md:text-base leading-relaxed">
                 Connect with our account managers. We provide volume wholesale discounts, print sample runs, and offer warehouse consolidation with doorstep distribution.

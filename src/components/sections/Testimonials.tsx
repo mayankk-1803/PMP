@@ -28,7 +28,7 @@ const TESTIMONIALS = [
 
 export function Testimonials() {
   return (
-    <section className="py-24 bg-[#F8F5EF] border-y border-[#DDD5C8]">
+    <section className="py-24 bg-[#FAF9F6] border-y border-[#F5C2C2]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
@@ -39,7 +39,7 @@ export function Testimonials() {
           Partner Success Stories
         </motion.h2>
         
-        <div className="bg-[#EFE7DB] p-10 md:p-16 rounded-3xl border border-[#DDD5C8]">
+        <div className="bg-[#F8F7F3] p-10 md:p-16 rounded-3xl border border-[#F5C2C2]">
           <Swiper
             modules={[Autoplay, Pagination]}
             pagination={{ clickable: true }}
@@ -51,12 +51,12 @@ export function Testimonials() {
             {TESTIMONIALS.map((testimonial, idx) => (
               <SwiperSlide key={idx}>
                 <div className="flex flex-col items-center max-w-3xl mx-auto text-center">
-                  <Quote className="w-12 h-12 text-[#DDD5C8] mb-8" />
+                  <Quote className="w-12 h-12 text-[#F5C2C2] mb-8" />
                   <p className="text-xl md:text-2xl font-medium italic mb-8 text-[#2B2B2B] leading-relaxed">
                     "{testimonial.quote}"
                   </p>
                   <div>
-                    <h4 className="font-bold text-[#6E7757] text-lg">{testimonial.author}</h4>
+                    <h4 className="font-bold text-[#D32F2F] text-lg">{testimonial.author}</h4>
                     <p className="text-[#6B6B63] font-semibold">{testimonial.company}</p>
                   </div>
                 </div>
@@ -68,13 +68,13 @@ export function Testimonials() {
 
       <style jsx global>{`
         .swiper-pagination-bullet {
-          background-color: #DDD5C8 !important;
+          background-color: #F5C2C2 !important;
           opacity: 1 !important;
           width: 10px !important;
           height: 10px !important;
         }
         .swiper-pagination-bullet-active {
-          background-color: #6E7757 !important;
+          background-color: #D32F2F !important;
           opacity: 1 !important;
           transform: scale(1.2);
         }

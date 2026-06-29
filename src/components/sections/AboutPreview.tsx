@@ -15,32 +15,32 @@ const TIMELINE_SERVICES = [
     step: "01",
     title: "Premium Curation",
     description: "Our corporate styling experts curate items custom-tailored to your brand aesthetic.",
-    icon: <Compass className="w-4 h-4 text-[#6E7757]" />
+    icon: <Compass className="w-4 h-4 text-[#D32F2F]" />
   },
   {
     step: "02",
     title: "Global Sourcing",
     description: "We source authentic products directly from certified co-branded manufacturers.",
-    icon: <Workflow className="w-4 h-4 text-[#6E7757]" />
+    icon: <Workflow className="w-4 h-4 text-[#D32F2F]" />
   },
   {
     step: "03",
     title: "Bespoke Customization",
     description: "Logo embossing, hot foil stamping, screen print & precision laser engraving.",
-    icon: <Sparkles className="w-4 h-4 text-[#6E7757]" />
+    icon: <Sparkles className="w-4 h-4 text-[#D32F2F]" />
   },
   {
     step: "04",
     title: "End-to-End Fulfillment",
     description: "White-glove quality assurance and direct pan-India individual employee shipping.",
-    icon: <Truck className="w-4 h-4 text-[#6E7757]" />
+    icon: <Truck className="w-4 h-4 text-[#D32F2F]" />
   }
 ];
 
 export function AboutPreview() {
   const prefersReduced = useReducedMotion();
   return (
-    <section className="py-24 bg-[#F8F5EF] overflow-hidden relative">
+    <section className="py-24 bg-[#FAF9F6] overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-16 items-center">
           
@@ -53,10 +53,10 @@ export function AboutPreview() {
             className="lg:col-span-6 space-y-8 text-left"
           >
             <div>
-              <span className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-3 block">How We Deliver Excellence</span>
+              <span className="text-[#EF5350] text-xs font-bold tracking-widest uppercase mb-3 block">How We Deliver Excellence</span>
               <h2 className="text-3xl md:text-4xl font-black text-[#2B2B2B] leading-tight">
                 Your End-to-End Strategic <br />
-                <span className="text-[#6E7757]">Corporate Gifting Partner</span>
+                <span className="text-[#D32F2F]">Corporate Gifting Partner</span>
               </h2>
               <p className="text-sm sm:text-base text-[#6B6B63] mt-4 leading-relaxed max-w-xl font-medium">
                 We handle the complete corporate merchandising lifecycle. From design dielines to door-step delivery, we ensure brand consistency and premium B2B execution.
@@ -64,7 +64,7 @@ export function AboutPreview() {
             </div>
 
             {/* Timeline */}
-            <div className="relative border-l border-[#DDD5C8] ml-3.5 pl-8 space-y-8">
+            <div className="relative border-l border-[#F5C2C2] ml-3.5 pl-8 space-y-8">
               {TIMELINE_SERVICES.map((serv, idx) => (
                 <motion.div
                   key={idx}
@@ -75,14 +75,14 @@ export function AboutPreview() {
                   className="relative group text-left"
                 >
                   {/* Timeline Dot Indicator */}
-                  <span className="absolute -left-[45px] top-1 bg-white border-2 border-[#6E7757] w-8 h-8 rounded-full flex items-center justify-center shadow-sm group-hover:bg-[#6E7757] transition-colors duration-300">
+                  <span className="absolute -left-[45px] top-1 bg-white border-2 border-[#D32F2F] w-8 h-8 rounded-full flex items-center justify-center shadow-sm group-hover:bg-[#D32F2F] transition-colors duration-300">
                     <span className="text-[10px] font-extrabold text-[#2B2B2B] group-hover:text-white transition-colors">
                       {serv.step}
                     </span>
                   </span>
 
                   <div>
-                    <h3 className="text-sm sm:text-base font-bold text-[#2B2B2B] flex items-center gap-2 group-hover:text-[#6E7757] transition-colors">
+                    <h3 className="text-sm sm:text-base font-bold text-[#2B2B2B] flex items-center gap-2 group-hover:text-[#D32F2F] transition-colors">
                       {serv.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-[#6B6B63] mt-1 leading-relaxed max-w-lg">
@@ -98,7 +98,7 @@ export function AboutPreview() {
                 <Link href="/about">Learn More About Us</Link>
               </Button>
               <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#6B6B63] font-bold uppercase tracking-wider">
-                <CheckCircle2 className="w-4 h-4 text-[#6E7757]" /> SLA: 100% Quality Guarantee
+                <CheckCircle2 className="w-4 h-4 text-[#D32F2F]" /> SLA: 100% Quality Guarantee
               </div>
             </div>
           </motion.div>
@@ -127,7 +127,7 @@ export function AboutPreview() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#2B2B2B]/55 to-transparent" />
               <div className="absolute bottom-4 left-4 text-white text-left">
-                <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#C8A36A]">Festive curations</span>
+                <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#EF5350]">Festive curations</span>
                 <h4 className="text-sm font-bold mt-0.5">Luxury Gift Curation</h4>
               </div>
             </motion.div>
@@ -147,7 +147,7 @@ export function AboutPreview() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#2B2B2B]/55 to-transparent" />
               <div className="absolute bottom-4 left-4 text-white text-left">
-                <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#C8A36A]">Premium Branding</span>
+                <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#EF5350]">Premium Branding</span>
                 <h4 className="text-xs font-bold mt-0.5">Leather Journals</h4>
               </div>
             </motion.div>
@@ -158,9 +158,9 @@ export function AboutPreview() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="absolute right-12 top-16 bg-white p-5 rounded-2xl shadow-xl flex flex-col items-center justify-center text-center border border-[#DDD5C8] z-10 hover:scale-105 transition-transform"
+              className="absolute right-12 top-16 bg-white p-5 rounded-2xl shadow-xl flex flex-col items-center justify-center text-center border border-[#F5C2C2] z-10 hover:scale-105 transition-transform"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#EFE7DB] flex items-center justify-center text-[#6E7757] mb-2">
+              <div className="w-12 h-12 rounded-xl bg-[#F8F7F3] flex items-center justify-center text-[#D32F2F] mb-2">
                 <Award className="w-6 h-6" />
               </div>
               <div className="text-lg font-black text-[#2B2B2B]">15+ Years</div>

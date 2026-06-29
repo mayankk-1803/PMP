@@ -99,9 +99,9 @@ export function BulkEnquiryForm() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                    className="w-28 h-28 bg-green-50 rounded-full flex items-center justify-center mb-8"
+                    className="w-28 h-28 bg-[#FDECEC] rounded-full flex items-center justify-center mb-8"
                   >
-                    <CheckCircle2 className="w-16 h-16 text-green-600" />
+                    <CheckCircle2 className="w-16 h-16 text-[#D32F2F]" />
                   </motion.div>
                   <motion.h3 
                     initial={{ opacity: 0, y: 10 }}

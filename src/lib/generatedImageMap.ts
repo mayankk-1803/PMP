@@ -1,24 +1,6 @@
 // This file is auto-generated at build time. Do not edit manually.
-export const KIT_IMAGES_FILES = [
-  "architectkit.png",
-  "architectkitcontent.png",
-  "contractorkit.png",
-  "dealerkit.png",
-  "dealerkitwithcontent.png",
-  "doctorkit1.png",
-  "doctorkit2.png",
-  "doctorkitcontent.png",
-  "engineerkit.png",
-  "engineerkit1.png",
-  "engineerkit2.png",
-  "engineerkitcontent.png",
-  "masonkit.png",
-  "masonkit2.png",
-  "masonkit3.png",
-  "newjoinerkit.png",
-  "newjoinerkitcontent.png"
-];
-export const KITSIMAGES_FILES = [
+export const KIT_IMAGES_FILES: string[] = [];
+export const KITSIMAGES_FILES: string[] = [
   "alldoctorkits.png",
   "architechkit3.jpeg",
   "architectkit.png",

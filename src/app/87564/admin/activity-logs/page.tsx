@@ -101,7 +101,7 @@ export default function ActivityLogsPage() {
       <div className="space-y-6">
         
         {/* Filters Panel */}
-        <div className="rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-5 shadow-sm">
+        <div className="rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-5 shadow-sm">
           <form onSubmit={handleSearchSubmit} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7">
             
             {/* Search Input */}
@@ -114,7 +114,7 @@ export default function ActivityLogsPage() {
                   placeholder="Search user, action, entity name..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] pl-9 pr-3 py-2 text-sm outline-none focus:border-[#6E7757] focus:ring-1 focus:ring-[#6E7757]"
+                  className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] pl-9 pr-3 py-2 text-sm outline-none focus:border-[#D32F2F] focus:ring-1 focus:ring-[#D32F2F]"
                 />
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function ActivityLogsPage() {
               <select
                 value={selectedUser}
                 onChange={(e) => { setSelectedUser(e.target.value); setPage(1); }}
-                className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]"
+                className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]"
               >
                 <option value="">All Users</option>
                 {filterOptions.users.map((u) => (
@@ -140,7 +140,7 @@ export default function ActivityLogsPage() {
               <select
                 value={selectedAction}
                 onChange={(e) => { setSelectedAction(e.target.value); setPage(1); }}
-                className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]"
+                className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]"
               >
                 <option value="">All Actions</option>
                 {filterOptions.actions.map((act) => (
@@ -155,7 +155,7 @@ export default function ActivityLogsPage() {
               <select
                 value={selectedEntityType}
                 onChange={(e) => { setSelectedEntityType(e.target.value); setPage(1); }}
-                className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]"
+                className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]"
               >
                 <option value="">All Types</option>
                 {filterOptions.entityTypes.map((et) => (
@@ -171,7 +171,7 @@ export default function ActivityLogsPage() {
                 type="date"
                 value={startDate}
                 onChange={(e) => { setStartDate(e.target.value); setPage(1); }}
-                className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]"
+                className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]"
               />
             </div>
 
@@ -182,7 +182,7 @@ export default function ActivityLogsPage() {
                 type="date"
                 value={endDate}
                 onChange={(e) => { setEndDate(e.target.value); setPage(1); }}
-                className="w-full rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#6E7757]"
+                className="w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]"
               />
             </div>
 
@@ -190,13 +190,13 @@ export default function ActivityLogsPage() {
           <div className="mt-4 flex justify-end gap-2">
             <button
               onClick={handleReset}
-              className="rounded-lg border border-[#DDD5C8] px-4 py-2 text-xs font-bold text-[#4E583F] hover:bg-[#F8F5EF]"
+              className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-xs font-bold text-[#C62828] hover:bg-[#FAF9F6]"
             >
               Reset Filters
             </button>
             <button
               onClick={handleSearchSubmit}
-              className="rounded-lg bg-[#4E583F] px-4 py-2 text-xs font-bold text-white hover:bg-[#3F4734]"
+              className="rounded-lg bg-[#C62828] px-4 py-2 text-xs font-bold text-white hover:bg-[#3F4734]"
             >
               Apply Search
             </button>
@@ -204,10 +204,10 @@ export default function ActivityLogsPage() {
         </div>
 
         {/* Logs Table */}
-        <div className="overflow-hidden rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1000px] border-collapse text-left text-sm">
-              <thead className="bg-[#F8F5EF] text-xs uppercase tracking-wider text-[#6B6B63]">
+              <thead className="bg-[#FAF9F6] text-xs uppercase tracking-wider text-[#6B6B63]">
                 <tr>
                   <th className="px-5 py-4 font-bold">Timestamp</th>
                   <th className="px-5 py-4 font-bold">User</th>
@@ -223,7 +223,7 @@ export default function ActivityLogsPage() {
                   <tr>
                     <td colSpan={7} className="px-5 py-12 text-center text-[#9A9387]">
                       <div className="flex items-center justify-center gap-2">
-                        <Loader2 className="h-5 w-5 animate-spin text-[#6E7757]" />
+                        <Loader2 className="h-5 w-5 animate-spin text-[#D32F2F]" />
                         <span>Querying activity log database...</span>
                       </div>
                     </td>
@@ -236,7 +236,7 @@ export default function ActivityLogsPage() {
                   </tr>
                 ) : (
                   logs.map((log) => (
-                    <tr key={log.id} className="hover:bg-[#F8F5EF]/70 transition-colors">
+                    <tr key={log.id} className="hover:bg-[#FAF9F6]/70 transition-colors">
                       <td className="px-5 py-4 whitespace-nowrap text-xs text-[#6B6B63]">
                         {new Date(log.createdAt).toLocaleString()}
                       </td>
@@ -245,7 +245,7 @@ export default function ActivityLogsPage() {
                       </td>
                       <td className="px-5 py-4 whitespace-nowrap">
                         <span className={`rounded-full px-2.5 py-1 text-[10px] font-extrabold tracking-wider uppercase ${
-                          log.action.includes("CREATE") ? "bg-emerald-50 text-emerald-700 border border-emerald-100" :
+                          log.action.includes("CREATE") ? "bg-[#FDECEC] text-[#D32F2F] border border-[#F5C2C2]" :
                           log.action.includes("DELETE") ? "bg-[#F3E7D7] text-[#8A4B22] border border-[#EAD7C8]" :
                           log.action.includes("RESTORE") ? "bg-cyan-50 text-cyan-700 border border-cyan-100" :
                           "bg-amber-50 text-amber-700 border border-amber-100"
@@ -260,7 +260,7 @@ export default function ActivityLogsPage() {
                         {(log.oldValue || log.newValue) ? (
                           <button
                             onClick={() => setSelectedLog(log)}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#4E583F] hover:bg-[#F8F5EF] shadow-sm"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-2.5 py-1.5 text-xs font-bold text-[#C62828] hover:bg-[#FAF9F6] shadow-sm"
                           >
                             <Info className="h-3.5 w-3.5 text-[#8A6A3B]" /> View JSON
                           </button>
@@ -277,7 +277,7 @@ export default function ActivityLogsPage() {
 
           {/* Pagination */}
           {!loading && pages > 1 && (
-            <div className="flex items-center justify-between border-t border-[#DDD5C8] bg-[#F8F5EF] px-5 py-4">
+            <div className="flex items-center justify-between border-t border-[#F5C2C2] bg-[#FAF9F6] px-5 py-4">
               <span className="text-xs font-bold text-[#6B6B63] uppercase tracking-wider">
                 Total Logs: {total} (Page {page} of {pages})
               </span>
@@ -285,14 +285,14 @@ export default function ActivityLogsPage() {
                 <button
                   disabled={page === 1}
                   onClick={() => setPage(p => Math.max(1, p - 1))}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#4E583F] shadow-sm hover:bg-[#F8F5EF] disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#C62828] shadow-sm hover:bg-[#FAF9F6] disabled:opacity-50"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" /> Previous
                 </button>
                 <button
                   disabled={page === pages}
                   onClick={() => setPage(p => Math.min(pages, p + 1))}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#DDD5C8] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#4E583F] shadow-sm hover:bg-[#F8F5EF] disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-1.5 text-xs font-bold text-[#C62828] shadow-sm hover:bg-[#FAF9F6] disabled:opacity-50"
                 >
                   Next <ArrowRight className="h-3.5 w-3.5" />
                 </button>
@@ -305,7 +305,7 @@ export default function ActivityLogsPage() {
       {/* JSON Payload Details Modal */}
       {selectedLog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#2B2B2B]/45 p-4">
-          <div className="w-full max-w-2xl rounded-xl border border-[#DDD5C8] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
+          <div className="w-full max-w-2xl rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
             <div className="mb-4 flex items-center justify-between border-b border-[#E5DED2] pb-3">
               <div>
                 <h3 className="text-base font-black text-[#2B2B2B]">Audit Log Payload Detail</h3>
@@ -313,7 +313,7 @@ export default function ActivityLogsPage() {
               </div>
               <button
                 onClick={() => setSelectedLog(null)}
-                className="rounded-lg border border-[#DDD5C8] p-2 text-xs font-bold hover:bg-[#F8F5EF]"
+                className="rounded-lg border border-[#F5C2C2] p-2 text-xs font-bold hover:bg-[#FAF9F6]"
               >
                 Close
               </button>
@@ -321,16 +321,16 @@ export default function ActivityLogsPage() {
             <div className="max-h-[60vh] overflow-y-auto space-y-4 text-xs font-mono">
               {selectedLog.oldValue != null && (
                 <div className="space-y-1">
-                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#6E7757]">Previous State (oldValue):</div>
-                  <pre className="rounded-lg bg-[#F8F5EF] p-4 overflow-x-auto text-[#4E583F] border border-[#E9E1D5] max-h-56">
+                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F]">Previous State (oldValue):</div>
+                  <pre className="rounded-lg bg-[#FAF9F6] p-4 overflow-x-auto text-[#C62828] border border-[#E9E1D5] max-h-56">
                     {JSON.stringify(selectedLog.oldValue, null, 2)}
                   </pre>
                 </div>
               )}
               {selectedLog.newValue != null && (
                 <div className="space-y-1">
-                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600">New State (newValue):</div>
-                  <pre className="rounded-lg bg-[#F8F5EF] p-4 overflow-x-auto text-[#4E583F] border border-[#E9E1D5] max-h-56">
+                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F]">New State (newValue):</div>
+                  <pre className="rounded-lg bg-[#FAF9F6] p-4 overflow-x-auto text-[#C62828] border border-[#E9E1D5] max-h-56">
                     {JSON.stringify(selectedLog.newValue, null, 2)}
                   </pre>
                 </div>

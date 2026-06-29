@@ -30,7 +30,7 @@ const BENTO_MAPPING = [
     badge: "Most Popular",
     size: "large",
     icon: <Briefcase className="w-5 h-5" />,
-    color: "from-[#6E7757] to-[#4E583F]",
+    color: "from-[#D32F2F] to-[#C62828]",
     image: corporateKitImageOrFallback("Joining Kits")
   },
   {
@@ -93,11 +93,11 @@ export function BentoKitsShowcase() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#F8F5EF] overflow-hidden">
+      <section className="py-24 bg-[#FAF9F6] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="relative h-[380px] rounded-2xl bg-[#EFE7DB] border border-[#DDD5C8] overflow-hidden">
+              <div key={i} className="relative h-[380px] rounded-2xl bg-[#F8F7F3] border border-[#F5C2C2] overflow-hidden">
                 <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
               </div>
             ))}
@@ -108,7 +108,7 @@ export function BentoKitsShowcase() {
   }
 
   return (
-    <section className="py-24 bg-[#F8F5EF] overflow-hidden">
+    <section className="py-24 bg-[#FAF9F6] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
@@ -120,9 +120,9 @@ export function BentoKitsShowcase() {
           className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6"
         >
           <div className="max-w-2xl text-left">
-            <span className="text-[#C8A36A] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">Tailored Merchandise Packages</span>
+            <span className="text-[#EF5350] text-xs font-bold tracking-widest uppercase mb-3 flex items-center gap-1.5">Tailored Merchandise Packages</span>
             <h2 className="text-3xl md:text-4xl font-black text-[#2B2B2B] mb-4">
-              Corporate Kits for <span className="text-[#6E7757]">Every Field</span>
+              Corporate Kits for <span className="text-[#D32F2F]">Every Field</span>
             </h2>
             <p className="text-base text-[#6B6B63] font-medium">
               Select from curated, pre-designed kits tailored for internal employee success and external partner networks.
@@ -151,7 +151,7 @@ export function BentoKitsShowcase() {
                 transition={{ duration: 0.3 }}
                 className={`${
                   isLarge ? "md:col-span-2" : "col-span-1"
-                } relative group rounded-2xl overflow-hidden border border-[#DDD5C8]/60 shadow-lg hover:shadow-xl transition-all duration-500 flex flex-col h-[380px]`}
+                } relative group rounded-2xl overflow-hidden border border-[#F5C2C2]/60 shadow-lg hover:shadow-xl transition-all duration-500 flex flex-col h-[380px]`}
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 z-0">
@@ -173,7 +173,7 @@ export function BentoKitsShowcase() {
                 <div className="relative z-10 p-8 flex flex-col justify-between h-full text-white">
                   {/* Badge & Icon Row */}
                   <div className="flex justify-between items-start">
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-1.5 bg-[#6E7757] rounded-lg shadow-md">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-1.5 bg-[#D32F2F] rounded-lg shadow-md">
                       {kit.badge}
                     </span>
                     <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-xl border border-white/10">
@@ -195,14 +195,14 @@ export function BentoKitsShowcase() {
                       <Button
                         variant="default"
                         size="sm"
-                        className="rounded-xl px-4 py-2.5 text-xs font-bold bg-white text-[#2B2B2B] hover:bg-[#F8F5EF] shadow-sm border-0"
+                        className="rounded-xl px-4 py-2.5 text-xs font-bold bg-white text-[#2B2B2B] hover:bg-[#FAF9F6] shadow-sm border-0"
                         asChild
                       >
                         <Link href={kit.href}>Get Quote</Link>
                       </Button>
                       <Link
                         href={kit.href}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-[#C8A36A] transition-colors uppercase tracking-widest group"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-[#EF5350] transition-colors uppercase tracking-widest group"
                       >
                         Explore <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </Link>

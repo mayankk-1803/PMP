@@ -17,8 +17,8 @@ export const PROMOTIONAL_SUBCATEGORIES = [
   // Pens
   ["Premium Pens", "premium-pens", "pens", "Premium writing instruments for executive and corporate gifting."],
   ["Eco Pens", "eco-pens", "pens", "Eco-friendly branded pens for sustainable promotional campaigns."],
-  ["Gift Box Pens", "gift-box-pens", "Boxed pen sets for client gifting and milestone programs."],
-  ["Engraved Pens", "engraved-pens", "Engraved pens with polished finishes for long-term brand recall."],
+  ["Gift Box Pens", "gift-box-pens", "pens", "Boxed pen sets for client gifting and milestone programs."],
+  ["Engraved Pens", "engraved-pens", "pens", "Engraved pens with polished finishes for long-term brand recall."],
 
   // Drinkware
   ["Flasks", "flasks", "drinkware", "Premium vacuum flasks and sippers for office and travel use."],

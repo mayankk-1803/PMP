@@ -183,17 +183,23 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Engraved Corporate Pen")]: "/images/pen4.png",
   [normalizeImageTitle("Premium Ball Pen")]: "/images/pen1.png",
 
-  // Bottles & Drinkware
+  // Bottles & Drinkware — strict per type, NO cross-category substitutions
   [normalizeImageTitle("Drinkware")]: "/images/sportsbottle.png",
   [normalizeImageTitle("Flasks")]: "/images/flaskbottle.png",
   [normalizeImageTitle("Bottles")]: "/images/sportsbottle.png",
+  [normalizeImageTitle("Coffee Mugs")]: "",            // No mug image yet — renders neutral placeholder
+  [normalizeImageTitle("Travel Mugs")]: "/images/flaskbottle.png",
   [normalizeImageTitle("Vacuum Flask")]: "/images/premiumvaccumflask.png",
+  [normalizeImageTitle("Premium Vacuum Flask")]: "/images/premiumvaccumflask.png",
   [normalizeImageTitle("Copper Bottle")]: "/images/copperbottleset.png",
+  [normalizeImageTitle("Copper Bottle Set")]: "/images/copperbottleset.png",
   [normalizeImageTitle("Steel Bottle")]: "/images/steelbottle.png",
   [normalizeImageTitle("Smart Temperature Bottle")]: "/images/sportsbottle1.png",
   [normalizeImageTitle("Travel Mug")]: "/images/flaskbottle.png",
   [normalizeImageTitle("Bamboo Bottle")]: "/images/sportsbottle.png",
-  
+  [normalizeImageTitle("Sports Bottle")]: "/images/sportsbottle.png",
+  [normalizeImageTitle("Vacuum Insulated Flask")]: "/images/premiumvaccumflask.png",
+  [normalizeImageTitle("Smart Temperature LED Sipper")]: "/images/smartsipper.png",
   // Corporate Kits
   [normalizeImageTitle("Dealer Kits")]: "/images/dealerkit.png",
   [normalizeImageTitle("Distributor Kits")]: "/images/dealerkit.png",
@@ -221,9 +227,9 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Laptop Backpacks")]: LOCAL_IMAGE_POOLS.backpacks[1],
   [normalizeImageTitle("Travel Backpacks")]: LOCAL_IMAGE_POOLS.backpacks[2],
   [normalizeImageTitle("Laptop Bags")]: LOCAL_IMAGE_POOLS.laptopBags[0],
-  [normalizeImageTitle("Travel Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[1],
-  [normalizeImageTitle("Duffle Bags")]: LOCAL_IMAGE_POOLS.duffleBags[0],
-  [normalizeImageTitle("Trolley Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[0],
+  [normalizeImageTitle("Travel Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[1],   // Travel Bags → Trolley Bags folder
+  [normalizeImageTitle("Duffle Bags")]: LOCAL_IMAGE_POOLS.duffleBags[0],     // Duffle Bags → Duffle Bags folder only
+  [normalizeImageTitle("Trolley Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[0],   // Trolley Bags → Trolley Bags folder only
   [normalizeImageTitle("Sling Bags")]: LOCAL_IMAGE_POOLS.slingBags[0],
   [normalizeImageTitle("Classic Sling Bags")]: LOCAL_IMAGE_POOLS.slingBags[0],
   [normalizeImageTitle("Premium Sling Bags")]: LOCAL_IMAGE_POOLS.slingBags[1],
@@ -265,7 +271,11 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Holi Hampers")]: LOCAL_IMAGE_POOLS.holiHampers[0],
   [normalizeImageTitle("Eid Kits")]: LOCAL_IMAGE_POOLS.eidHampers[0],
   [normalizeImageTitle("Eid Hampers")]: LOCAL_IMAGE_POOLS.eidHampers[0],
-  [normalizeImageTitle("Women's Day Gifts")]: LOCAL_IMAGE_POOLS.festiveHampers[1],
+  // Women's Day — dedicated kitsimages path (NOT a generic festive hamper fallback)
+  [normalizeImageTitle("Women's Day Gifts")]: "/kitsimages/womendayhamper.png",
+  [normalizeImageTitle("Womens Day Gifts")]: "/kitsimages/womendayhamper.png",
+  [normalizeImageTitle("Women Day Appreciation Hamper")]: "/kitsimages/womendayhamper.png",
+  [normalizeImageTitle("Women's Day Appreciation Hamper")]: "/kitsimages/womendayhamper.png",
   [normalizeImageTitle("Christmas Kits")]: LOCAL_IMAGE_POOLS.festiveHampers[2],
   [normalizeImageTitle("New Year Gifts")]: LOCAL_IMAGE_POOLS.festiveHampers[0],
   [normalizeImageTitle("New Year Hampers")]: LOCAL_IMAGE_POOLS.festiveHampers[0],
@@ -275,7 +285,6 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Diwali Wellness Hamper")]: LOCAL_IMAGE_POOLS.diwaliHampers[2],
   [normalizeImageTitle("Holi Organic Color Hamper")]: LOCAL_IMAGE_POOLS.holiHampers[0],
   [normalizeImageTitle("Eid Gourmet Hamper")]: LOCAL_IMAGE_POOLS.eidHampers[1],
-  [normalizeImageTitle("Women Day Appreciation Hamper")]: LOCAL_IMAGE_POOLS.festiveHampers[1],
   [normalizeImageTitle("Christmas Gourmet Hamper")]: LOCAL_IMAGE_POOLS.festiveHampers[2],
   [normalizeImageTitle("New Year Desk Hamper")]: LOCAL_IMAGE_POOLS.festiveHampers[0],
   [normalizeImageTitle("Client Thank You Hamper")]: "/images/clientthankyouhamper.png",
@@ -289,19 +298,25 @@ export const localCatalogImage = (title: string) => {
 
   const normalized = normalizeImageTitle(title);
   const staticImage = LOCAL_CATALOG_IMAGES_BY_TITLE[normalized];
-  if (staticImage) {
-    const isGenericKitsFallback = 
-      staticImage.includes("/images/dealerkit.png") || 
-      staticImage.includes("/images/employeewelcome.png") ||
-      staticImage.includes("/images/joiningkit.png") ||
-      staticImage.includes("/images/doctorkit.png") ||
-      staticImage.includes("/images/contractorkits1.png") ||
-      staticImage.includes("/images/architectkit1.png") ||
-      staticImage.includes("/images/Festive Hampers/") ||
-      staticImage.includes("/images/clientthankyouhamper.png") ||
-      staticImage.includes("/images/employeemilestonehamper.png") ||
-      staticImage.includes("/images/salesteamkit.png") ||
-      staticImage.includes("/images/leadershipretreat.png");
+  if (staticImage !== undefined) {
+    // Empty string is intentional (Coffee Mugs) — renders neutral placeholder, NOT a missing entry
+    if (staticImage === "") return "";
+
+    // Exclude images that are generic corporate-kits fallbacks to prevent cross-category pollution
+    // NOTE: /kitsimages/ paths are dedicated, NOT generic — always allow them through
+    const isGenericKitsFallback =
+      !staticImage.startsWith("/kitsimages/") && (
+        staticImage.includes("/images/dealerkit.png") ||
+        staticImage.includes("/images/employeewelcome.png") ||
+        staticImage.includes("/images/joiningkit.png") ||
+        staticImage.includes("/images/doctorkit.png") ||
+        staticImage.includes("/images/contractorkits1.png") ||
+        staticImage.includes("/images/architectkit1.png") ||
+        staticImage.includes("/images/clientthankyouhamper.png") ||
+        staticImage.includes("/images/employeemilestonehamper.png") ||
+        staticImage.includes("/images/salesteamkit.png") ||
+        staticImage.includes("/images/leadershipretreat.png")
+      );
 
     if (isGenericKitsFallback) {
       return undefined;
