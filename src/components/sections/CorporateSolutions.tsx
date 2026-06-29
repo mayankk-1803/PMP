@@ -62,7 +62,7 @@ export function CorporateSolutions() {
           {/* Card Image Container */}
           <div className="absolute inset-0 z-0">
             <SafeImage
-              src={localCatalogImage(cat.name) || cat.image || DEFAULT_KIT_IMAGE}
+              src={cat.image || localCatalogImage(cat.name) || DEFAULT_KIT_IMAGE}
               alt={cat.name}
               category={cat.slug}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"

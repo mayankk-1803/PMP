@@ -115,7 +115,7 @@ export function FeaturedHampers() {
               const hamperPrice = "Custom Quote";
               const hamperBadge = "Festive Hamper";
               const hamperDesc = hamper.description || "Premium custom-branded festive corporate gift hampers.";
-              const hamperImg = localCatalogImage(hamper.name) || hamper.image || DEFAULT_KIT_IMAGE;
+              const hamperImg = hamper.image || localCatalogImage(hamper.name) || DEFAULT_KIT_IMAGE;
 
               return (
                 <SwiperSlide key={hamper.slug} className="h-auto">
