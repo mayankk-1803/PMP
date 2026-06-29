@@ -134,54 +134,96 @@ export function SafeImage({
   };
 
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   const fallback = getFallback();
   // Use src if it hasn't failed; if it has failed use fallback; if fallback is empty show neutral placeholder
   const imgSrc = failedSrc === src ? fallback : (src || fallback);
 
   if (!imgSrc) {
     return (
-      <div className="absolute inset-0 w-full h-full bg-[#FAF9F6] border border-neutral-100 flex items-center justify-center" aria-label="No image available" />
+      <div className="absolute inset-0 w-full h-full bg-[#FAF9F6] border border-neutral-100 flex items-center justify-center animate-pulse" aria-label="No image available" />
     );
   }
 
   const handleError = () => {
     setFailedSrc(src);
+    setIsLoaded(true); // Stop shimmer on error
   };
+
+  const shimmerStyle = (
+    <style dangerouslySetInnerHTML={{__html: `
+      @keyframes shimmer-sweep {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      .shimmer-sweep-bg {
+        background: linear-gradient(90deg, #FAF9F6 25%, #EAD7C8 50%, #FAF9F6 75%);
+        background-size: 200% 100%;
+        animation: shimmer-sweep 1.6s infinite linear;
+      }
+    `}} />
+  );
 
   if (useNextImage) {
     return (
-      <Image
-        src={imgSrc}
-        alt={alt}
-        onError={handleError}
-        className={className}
-        {...nextImageProps}
-      />
+      <div className="relative w-full h-full">
+        {shimmerStyle}
+        <Image
+          src={imgSrc}
+          alt={alt}
+          onError={handleError}
+          onLoad={() => setIsLoaded(true)}
+          className={`${className || ""} transition-all duration-500 ease-out ${isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+          {...nextImageProps}
+        />
+        {!isLoaded && <div className="absolute inset-0 w-full h-full shimmer-sweep-bg" />}
+      </div>
     );
   }
 
   if (isMotion) {
     return (
-      <motion.img
-        src={imgSrc}
-        alt={alt}
-        onError={handleError}
-        className={className}
-        {...motionProps}
-        {...(props as HTMLMotionProps<"img">)}
-      />
+      <div className="relative w-full h-full">
+        {shimmerStyle}
+        <motion.img
+          src={imgSrc}
+          alt={alt}
+          onError={handleError}
+          onLoad={() => setIsLoaded(true)}
+          className={`${className || ""} transition-all duration-500 ease-out ${isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+          {...motionProps}
+          {...(props as HTMLMotionProps<"img">)}
+        />
+        {!isLoaded && <div className="absolute inset-0 w-full h-full shimmer-sweep-bg" />}
+      </div>
     );
   }
 
   // Default: built-in lazy viewport reveal
-  return <RevealImg imgSrc={imgSrc} alt={alt} handleError={handleError} className={className} props={props as HTMLMotionProps<"img">} />;
+  return (
+    <div className="relative w-full h-full">
+      {shimmerStyle}
+      <RevealImg
+        imgSrc={imgSrc}
+        alt={alt}
+        handleError={handleError}
+        className={className}
+        isLoaded={isLoaded}
+        setIsLoaded={setIsLoaded}
+        props={props as HTMLMotionProps<"img">}
+      />
+      {!isLoaded && <div className="absolute inset-0 w-full h-full shimmer-sweep-bg" />}
+    </div>
+  );
 }
 
-function RevealImg({ imgSrc, alt, handleError, className, props }: {
+function RevealImg({ imgSrc, alt, handleError, className, isLoaded, setIsLoaded, props }: {
   imgSrc: string;
   alt: string;
   handleError: () => void;
   className?: string;
+  isLoaded: boolean;
+  setIsLoaded: (val: boolean) => void;
   props: HTMLMotionProps<"img">;
 }) {
   const ref = useRef<HTMLImageElement>(null);
@@ -193,9 +235,10 @@ function RevealImg({ imgSrc, alt, handleError, className, props }: {
       src={imgSrc}
       alt={alt}
       onError={handleError}
-      className={className}
+      onLoad={() => setIsLoaded(true)}
+      className={`${className || ""} transition-opacity duration-500`}
       initial={{ opacity: 0, scale: 1.05 }}
-      animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }}
+      animate={(inView && isLoaded) ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }}
       transition={{ duration: 0.7, ease: EASE_SMOOTH }}
       {...props}
     />

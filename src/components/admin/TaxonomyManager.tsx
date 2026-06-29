@@ -4,6 +4,7 @@
 import { ImagePlus, Pencil, Plus, Trash2, UploadCloud, X, GripVertical, Loader2 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { ImageUploader } from "./ImageUploader";
 
 type Mode = "categories" | "subcategories" | "brands";
 
@@ -67,8 +68,18 @@ interface TaxonomyForm {
   order: number;
 }
 
-const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const maxImageSize = 5 * 1024 * 1024; // 5MB
+const allowedTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+  "image/gif",
+  "image/bmp",
+  "image/tiff",
+  "image/svg+xml"
+];
+const maxImageSize = 10 * 1024 * 1024; // 10MB
 const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const emptyCategory: TaxonomyForm = {
@@ -125,12 +136,13 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // File Upload State (Preview before upload)
-  const [pendingFile, setPendingFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState("");
+  // Media Uploader states
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedPublicIdsInSession, setUploadedPublicIdsInSession] = useState<string[]>([]);
+  const [initialPublicIds, setInitialPublicIds] = useState<string[]>([]);
+  
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = async () => {
     setLoading(true);
@@ -156,8 +168,8 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
   const openCreate = () => {
     setEditingId(null);
     setForm(isBrand ? emptyBrand : isSubcategory ? emptySubcategory : emptyCategory);
-    setPendingFile(null);
-    setPreviewUrl("");
+    setInitialPublicIds([]);
+    setUploadedPublicIdsInSession([]);
     setUploadError("");
     setUploadSuccess("");
     setModalOpen(true);
@@ -177,8 +189,8 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
       active: record.active,
       order: "order" in record ? Number(record.order) || 0 : 0,
     });
-    setPendingFile(null);
-    setPreviewUrl("");
+    setInitialPublicIds(record.cloudinaryPublicId ? [record.cloudinaryPublicId] : []);
+    setUploadedPublicIdsInSession([]);
     setUploadError("");
     setUploadSuccess("");
     setModalOpen(true);
@@ -192,72 +204,40 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
     });
   };
 
-  // 1. IMAGE PREVIEW BEFORE UPLOAD HANDLERS
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploadError("");
-    setUploadSuccess("");
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!allowedTypes.includes(file.type)) {
-      setUploadError("Only jpg, jpeg, png, and webp images are allowed.");
-      return;
+  const handleCancelOrClose = async () => {
+    if (isUploading) return;
+    
+    if (uploadedPublicIdsInSession.length > 0) {
+      try {
+        const { deleteUnusedFiles } = require("@/lib/admin/uploadService");
+        await deleteUnusedFiles(uploadedPublicIdsInSession);
+      } catch (err) {
+        console.error("Cleanup failed:", err);
+      }
     }
-    if (file.size > maxImageSize) {
-      setUploadError("The file must be 5MB or smaller.");
-      return;
-    }
-
-    setPendingFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
-  };
-
-  const removePendingFile = () => {
-    setPendingFile(null);
-    setPreviewUrl("");
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  // Helper upload function
-  const uploadImageToServer = async (file: File): Promise<{ url: string; publicId: string }> => {
-    const body = new FormData();
-    body.append("files", file);
-
-    const response = await fetch(`/api/admin/upload?folder=pacmyproduct/${mode}`, {
-      method: "POST",
-      body,
-    });
-    const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Upload failed");
-    }
-    return { url: result.data[0].secure_url, publicId: result.data[0].public_id };
+    
+    setUploadedPublicIdsInSession([]);
+    setModalOpen(false);
   };
 
   const saveRecord = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isUploading) return;
     setSaving(true);
     setUploadError("");
     setUploadSuccess("");
 
     try {
-      let finalImageUrl = isBrand ? form.logo : form.image;
-      let finalCloudinaryPublicId = form.cloudinaryPublicId;
-      if (pendingFile) {
-        const uploaded = await uploadImageToServer(pendingFile);
-        finalImageUrl = uploaded.url;
-        finalCloudinaryPublicId = uploaded.publicId;
-      }
-
+      const imageUrl = isBrand ? form.logo : form.image;
       const payload = {
         name: form.name,
         slug: form.slug,
         description: form.description,
         category: isSubcategory ? form.category : undefined,
         parentGroup: form.parentGroup,
-        image: isBrand ? undefined : finalImageUrl,
-        logo: isBrand ? finalImageUrl : undefined,
-        cloudinaryPublicId: finalCloudinaryPublicId,
+        image: isBrand ? undefined : imageUrl,
+        logo: isBrand ? imageUrl : undefined,
+        cloudinaryPublicId: form.cloudinaryPublicId,
         industry: isBrand ? form.parentGroup : undefined,
         active: form.active,
         order: Number(form.order) || 0,
@@ -274,10 +254,9 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
         throw new Error(result.message || "Failed to save record");
       }
 
+      setUploadedPublicIdsInSession([]); // Clear session tracker so files aren't deleted
       setSaving(false);
       setModalOpen(false);
-      setPendingFile(null);
-      setPreviewUrl("");
       await load();
     } catch (err: any) {
       setUploadError(err.message || "An error occurred while saving the record.");
@@ -415,7 +394,7 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
           <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
             <div className="mb-4 flex items-center justify-between border-b border-[#E9E1D5] pb-3">
               <h2 className="text-xl font-black">{editingId ? `Edit ${entityLabel}` : addLabel}</h2>
-              <button onClick={() => setModalOpen(false)} className="rounded-md p-1.5 hover:bg-[#F8F7F3]"><X className="h-5 w-5" /></button>
+              <button onClick={handleCancelOrClose} className="rounded-md p-1.5 hover:bg-[#F8F7F3]"><X className="h-5 w-5" /></button>
             </div>
             
             <form onSubmit={saveRecord} className="grid gap-4 md:grid-cols-2 text-left">
@@ -446,36 +425,31 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
                 Publish Status (Active)
               </label>
 
-              {/* 3. IMAGE PREVIEW BEFORE UPLOAD FILE DROPAREA */}
+              {/* Centralized Image Uploader */}
               <div className="md:col-span-2 border-t border-[#E9E1D5] pt-4">
-                <span className="block text-sm font-bold text-[#C62828] mb-2">Image Upload</span>
-                <div className="flex flex-wrap items-center gap-4">
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#FAF9F6] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
-                    <UploadCloud className="h-5 w-5 text-[#D32F2F]" />
-                    <span className="text-xs font-black uppercase text-[#3F4734]">Select Image</span>
-                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                  </label>
-
-                  {/* Pre-existing preview */}
-                  {(isBrand ? form.logo : form.image) && !previewUrl && (
-                    <div className="relative h-20 w-20 rounded-lg overflow-hidden border border-[#F5C2C2]">
-                      <img src={isBrand ? form.logo : form.image} alt="Pre-existing" className="h-full w-full object-cover" />
-                      <button type="button" onClick={() => updateForm(isBrand ? "logo" : "image", "")} className="absolute right-1 top-1 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
-                    </div>
-                  )}
-
-                  {/* Pending upload preview */}
-                  {previewUrl && (
-                    <div className="flex items-center gap-3 bg-[#F3E7D7]/40 border border-[#EAD7C8] rounded-lg p-2 max-w-sm">
-                      <img src={previewUrl} alt="Pending upload" className="h-14 w-14 rounded object-cover" />
-                      <div className="min-w-0 text-left">
-                        <div className="text-xs font-bold text-[#2B2B2B] truncate">{pendingFile?.name}</div>
-                        <div className="text-[10px] text-[#6B6B63] font-semibold">{pendingFile ? (pendingFile.size / 1024).toFixed(1) : 0} KB</div>
-                        <button type="button" onClick={removePendingFile} className="text-[10px] text-[#D32F2F] hover:text-[#2B2B2B] font-black uppercase mt-1.5 block">Remove File</button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <ImageUploader
+                  label="Image Upload"
+                  value={isBrand ? form.logo : form.image}
+                  publicIds={form.cloudinaryPublicId}
+                  multiple={false}
+                  folder={`pacmyproduct/${mode}`}
+                  disabled={saving}
+                  onUploadStart={() => setIsUploading(true)}
+                  onUploadEnd={() => setIsUploading(false)}
+                  onChange={(url, id) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      [isBrand ? "logo" : "image"]: url as string,
+                      cloudinaryPublicId: id as string,
+                    }));
+                    if (id) {
+                      setUploadedPublicIdsInSession((prev) => {
+                        const combined = new Set([...prev, id as string]);
+                        return Array.from(combined);
+                      });
+                    }
+                  }}
+                />
               </div>
 
               {(uploadError || uploadSuccess) && (
@@ -485,8 +459,8 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
               )}
 
               <div className="md:col-span-2 flex justify-end gap-3 border-t border-[#E9E1D5] pt-4">
-                <button type="button" onClick={() => setModalOpen(false)} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
-                <button disabled={saving} type="submit" className="rounded-lg bg-[#D32F2F] px-5 py-2 text-sm font-black text-white hover:bg-[#C62828] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
+                <button type="button" onClick={handleCancelOrClose} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
+                <button disabled={saving || isUploading} type="submit" className="rounded-lg bg-[#D32F2F] px-5 py-2 text-sm font-black text-white hover:bg-[#C62828] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
                   {saving ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" /> Saving...

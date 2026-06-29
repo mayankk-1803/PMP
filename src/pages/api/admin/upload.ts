@@ -9,7 +9,18 @@ export const config = {
   },
 };
 
-const allowedMimeTypes = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
+const allowedMimeTypes = new Set([
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+  "image/gif",
+  "image/bmp",
+  "image/tiff",
+  "image/svg+xml"
+]);
+
 const allowedFolders = new Set([
   "pacmyproduct/admin",
   "pacmyproduct/products",
@@ -20,10 +31,10 @@ const allowedFolders = new Set([
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024, files: 10 },
+  limits: { fileSize: 10 * 1024 * 1024, files: 15 }, // Increase to 10MB and 15 files for better admin UX
   fileFilter: (_req, file, cb) => {
     if (!allowedMimeTypes.has(file.mimetype)) {
-      cb(new Error("Only jpg, jpeg, png, and webp images are allowed"));
+      cb(new Error(`Format ${file.mimetype} is not supported. Supported: JPG, JPEG, PNG, WEBP, AVIF, GIF, BMP, TIFF, SVG`));
       return;
     }
     cb(null, true);
@@ -32,9 +43,18 @@ const upload = multer({
 
 type MulterRequest = NextApiRequest & { files?: Express.Multer.File[] };
 
+const getCookieValue = (cookieHeader: string | undefined, name: string) => {
+  if (!cookieHeader) return "";
+  const match = cookieHeader
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${name}=`));
+  return match ? decodeURIComponent(match.slice(name.length + 1)) : "";
+};
+
 const runMiddleware = (req: NextApiRequest, res: NextApiResponse) =>
   new Promise<void>((resolve, reject) => {
-    upload.array("files", 10)(req as any, res as any, (result: any) => {
+    upload.array("files", 15)(req as any, res as any, (result: any) => {
       if (result instanceof Error) reject(result);
       else resolve();
     });
@@ -67,17 +87,55 @@ const uploadBuffer = (file: Express.Multer.File, folder: string) =>
   });
 
 export default async function handler(req: MulterRequest, res: NextApiResponse) {
-  const token = req.cookies.pmp_admin_access || "";
+  const cookieHeader = req.headers.cookie || "";
+  const token = getCookieValue(cookieHeader, "pmp_admin_access");
   const admin = verifyAdminAccessToken(token);
+
   if (!admin) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
+    return res.status(401).json({ success: false, message: "Authentication failed. Access token is missing or expired." });
   }
   if (!canAccessAdminApi(admin.role, "/api/admin/upload", req.method || "GET")) {
-    return res.status(403).json({ success: false, message: "Forbidden" });
+    return res.status(403).json({ success: false, message: "Forbidden. Your administrator role does not have upload access." });
+  }
+
+  if (req.method === "DELETE") {
+    try {
+      // Manually parse JSON body since Next.js bodyParser is false
+      const parseJsonBody = () =>
+        new Promise<any>((resolve, reject) => {
+          let buffer = "";
+          req.on("data", (chunk) => {
+            buffer += chunk;
+          });
+          req.on("end", () => {
+            try {
+              resolve(buffer ? JSON.parse(buffer) : {});
+            } catch {
+              reject(new Error("Invalid JSON body"));
+            }
+          });
+        });
+
+      const body = await parseJsonBody();
+      const publicIds = body.publicIds;
+
+      if (!Array.isArray(publicIds) || publicIds.length === 0) {
+        return res.status(400).json({ success: false, message: "No publicIds array provided for deletion" });
+      }
+
+      // Dynamic import of lifecycle helper to avoid build conflicts
+      const { destroyCloudinaryAssets } = require("@/lib/admin/cloudinaryLifecycle");
+      const results = await destroyCloudinaryAssets(publicIds);
+
+      return res.status(200).json({ success: true, results });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Deletion failed";
+      return res.status(400).json({ success: false, message });
+    }
   }
 
   if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
+    res.setHeader("Allow", ["POST", "DELETE"]);
     return res.status(405).json({ success: false, message: "Method not allowed" });
   }
 
@@ -87,7 +145,7 @@ export default async function handler(req: MulterRequest, res: NextApiResponse) 
 
     const files = req.files || [];
     if (files.length === 0) {
-      return res.status(400).json({ success: false, message: "No images uploaded" });
+      return res.status(400).json({ success: false, message: "No images selected for upload" });
     }
 
     const requestedFolder = typeof req.query.folder === "string" ? req.query.folder : "pacmyproduct/admin";

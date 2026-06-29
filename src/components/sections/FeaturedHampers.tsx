@@ -152,15 +152,17 @@ export function FeaturedHampers() {
 
                     {/* Content Box */}
                     <div className="p-6 flex flex-col flex-grow text-left">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-bold text-[#2B2B2B] text-base leading-tight group-hover:text-[#D32F2F] transition-colors">
+                      <div className="flex justify-between items-start mb-2 min-h-[44px]">
+                        <h3 className="font-bold text-[#2B2B2B] text-base leading-tight group-hover:text-[#D32F2F] transition-colors line-clamp-2">
                           {hamper.name}
                         </h3>
-                        <span className="font-extrabold text-[#EF5350] text-xs tracking-wider uppercase bg-[#EF5350]/10 px-2.5 py-1 rounded-md">{hamperPrice}</span>
+                        <span className="font-extrabold text-[#EF5350] text-xs tracking-wider uppercase bg-[#EF5350]/10 px-2.5 py-1 rounded-md ml-2 flex-shrink-0">{hamperPrice}</span>
                       </div>
-                      <p className="text-[#6B6B63] text-xs leading-relaxed mb-6 flex-grow">
-                        {hamperDesc}
-                      </p>
+                      <div className="min-h-[36px] mb-6 flex-grow">
+                        <p className="text-[#6B6B63] text-xs leading-relaxed line-clamp-2">
+                          {hamperDesc}
+                        </p>
+                      </div>
 
                       <div className="pt-4 border-t border-[#F5C2C2] flex items-center justify-between mt-auto">
                         <Link
