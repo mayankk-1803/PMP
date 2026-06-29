@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import { requireAdminRequest } from "@/lib/admin/apiAuth";
-import fs from "fs";
-import path from "path";
 import { cloudinary } from "@/lib/cloudinary";
 import {
   BRAND_LOGO_PATHS,
@@ -11,7 +9,6 @@ import {
   PROMOTIONAL_CATEGORIES,
   PROMOTIONAL_SUBCATEGORIES,
 } from "@/lib/admin/brandKitSyncData";
-import { localCatalogImage } from "@/lib/localCatalogImages";
 import { connectMongoDB } from "@/lib/mongodb";
 import { BrandModel, CategoryModel, ProductModel, SubcategoryModel } from "@/models/cmsModels";
 
@@ -100,14 +97,56 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-// Helper to upload a local asset to Cloudinary
-async function uploadToCloudinary(localPath: string, folder: string, publicId: string): Promise<{ url: string; publicId: string } | null> {
+// Lightweight image resolver that replicates frontend matching conventions
+// without importing generatedImageMap or filesystems, resolving Vercel deployment limits.
+const getSyncDefaultImage = (name: string): string => {
+  const clean = name.toLowerCase().replace(/[^a-z0-9]/g, "");
+  
+  if (clean.includes("welcome")) {
+    if (clean.includes("hamper")) return "/kitsimages/welcomehamper.png";
+    return "/kitsimages/generalemployeeonboardingkit.png";
+  }
+  if (clean.includes("joiner")) return "/kitsimages/newjoinerkit.png";
+  if (clean.includes("dealer")) return "/kitsimages/dealerkit.png";
+  if (clean.includes("distributor")) return "/kitsimages/dealerkit.png";
+  if (clean.includes("doctor")) return "/kitsimages/doctorkit1.png";
+  if (clean.includes("contractor")) return "/kitsimages/contractorkit.png";
+  if (clean.includes("mason")) return "/kitsimages/masonkit.png";
+  if (clean.includes("painter")) return "/kitsimages/paintergeneralkit.png";
+  if (clean.includes("plumber")) return "/kitsimages/plumberkit.png";
+  if (clean.includes("welder")) return "/kitsimages/builderkit.png";
+  if (clean.includes("electrician")) return "/kitsimages/electriciankit.png";
+  if (clean.includes("salesteam")) return "/images/salesteamkit.png";
+  if (clean.includes("diwali")) return "/kitsimages/diwalihamper.png";
+  if (clean.includes("eid")) return "/kitsimages/eidhamper.png";
+  if (clean.includes("christmas")) return "/kitsimages/christmasgift.png";
+  if (clean.includes("women")) return "/kitsimages/womensdaygifts.png";
+  if (clean.includes("luxury")) return "/kitsimages/luxuryhamper.png";
+  if (clean.includes("celebration")) return "/kitsimages/corporatecelebrationhamper.png";
+  
+  // Promotional fallback defaults
+  if (clean.includes("tshirt") || clean.includes("polo")) return "/images/polotshirt.png";
+  if (clean.includes("bag") || clean.includes("backpack")) return "/images/Backpacks/1.jpg";
+  if (clean.includes("pen")) return "/images/pen1.png";
+  if (clean.includes("mug") || clean.includes("flask") || clean.includes("bottle") || clean.includes("drinkware")) return "/images/sportsbottle.png";
+  if (clean.includes("cap")) return "/images/sportscap/classicsportcap.png";
+  if (clean.includes("keychain")) return "/images/executivemetalkeychain.png";
+  if (clean.includes("diary") || clean.includes("notebook")) return "/images/Diaries/1.jpg";
+  if (clean.includes("mats") || clean.includes("mat")) return "/images/Table Mat/1.jpg";
+  if (clean.includes("mousepad") || clean.includes("mouse")) return "/images/Mouse pad/General.jpg";
+  if (clean.includes("organiser") || clean.includes("organizer")) return "/images/Desk Organsier/1.jpg";
+  if (clean.includes("paperweight")) return "/images/Paper Weight/1.jpg";
+  
+  return "/images/joiningkit.png";
+};
+
+// Helper to upload a local asset to Cloudinary using remote HTTP URL
+async function uploadToCloudinary(localPath: string, folder: string, publicId: string, baseUrl: string): Promise<{ url: string; publicId: string } | null> {
   if (!localPath || !localPath.startsWith("/")) return null;
-  const absolutePath = path.join(process.cwd(), "public", localPath);
-  if (!fs.existsSync(absolutePath)) return null;
 
   try {
-    const result = await cloudinary.uploader.upload(absolutePath, {
+    const absoluteUrl = `${baseUrl}${localPath}`;
+    const result = await cloudinary.uploader.upload(absoluteUrl, {
       folder: `pacmyproduct/${folder}`,
       public_id: publicId,
       overwrite: true,
@@ -117,7 +156,7 @@ async function uploadToCloudinary(localPath: string, folder: string, publicId: s
       publicId: result.public_id,
     };
   } catch (error) {
-    console.error(`Failed to upload ${localPath} to Cloudinary:`, error);
+    console.error(`Failed to upload ${localPath} to Cloudinary via ${baseUrl}:`, error);
     return null;
   }
 }
@@ -129,6 +168,11 @@ export async function POST(req: Request) {
   if (!process.env.MONGODB_URI) {
     return NextResponse.json({ success: false, message: "MONGODB_URI is not configured" }, { status: 500 });
   }
+
+  // Resolve base URL for remote asset uploading to Cloudinary
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "localhost:3000";
+  const protocol = req.headers.get("x-forwarded-proto") || (host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https");
+  const baseUrl = `${protocol}://${host}`;
 
   await connectMongoDB();
 
@@ -167,7 +211,7 @@ export async function POST(req: Request) {
   const promotionalCategories = await Promise.all(
     PROMOTIONAL_CATEGORIES.map(async ([name, slug, description], index) => {
       const defaultImg = CATEGORY_DEFAULT_IMAGES[slug] || "/images/joiningkit.png";
-      const cloudUpload = await uploadToCloudinary(defaultImg, "categories", slug);
+      const cloudUpload = await uploadToCloudinary(defaultImg, "categories", slug, baseUrl);
       
       return CategoryModel.findOneAndUpdate(
         { slug },
@@ -194,7 +238,7 @@ export async function POST(req: Request) {
     PROMOTIONAL_SUBCATEGORIES.map(async ([name, slug, categorySlug, description], index) => {
       const category = promotionalCategoryBySlug.get(categorySlug);
       const defaultImg = CATEGORY_DEFAULT_IMAGES[categorySlug] || "/images/joiningkit.png";
-      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug);
+      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug, baseUrl);
 
       return SubcategoryModel.findOneAndUpdate(
         { slug },
@@ -220,8 +264,8 @@ export async function POST(req: Request) {
   // 4. Sync Corporate Kits Subcategories with exact requested ordering
   const kitSubcategories = await Promise.all(
     CORPORATE_KIT_SUBCATEGORIES.map(async ([name, slug, description], index) => {
-      const defaultImg = localCatalogImage(name) || "/images/joiningkit.png";
-      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug);
+      const defaultImg = getSyncDefaultImage(name);
+      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug, baseUrl);
 
       return SubcategoryModel.findOneAndUpdate(
         { slug },
@@ -247,8 +291,8 @@ export async function POST(req: Request) {
   // 5. Sync Festive Hampers Subcategories
   const hamperSubcategories = await Promise.all(
     HAMPER_SUBCATEGORIES.map(async ([name, slug, description], index) => {
-      const defaultImg = localCatalogImage(name) || "/images/Festive Hampers/1.jpg";
-      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug);
+      const defaultImg = getSyncDefaultImage(name);
+      const cloudUpload = await uploadToCloudinary(defaultImg, "subcategories", slug, baseUrl);
 
       return SubcategoryModel.findOneAndUpdate(
         { slug },
@@ -275,7 +319,7 @@ export async function POST(req: Request) {
   const brandResults = await Promise.all(
     BRAND_PARTNERS.map(async ([name, slug, industry, category], index) => {
       const localLogo = BRAND_LOGO_PATHS[slug] || "/logos/fallback.png";
-      const cloudUpload = await uploadToCloudinary(localLogo, "brands", slug);
+      const cloudUpload = await uploadToCloudinary(localLogo, "brands", slug, baseUrl);
 
       return BrandModel.findOneAndUpdate(
         { slug },
@@ -311,13 +355,13 @@ export async function POST(req: Request) {
       return PRODUCT_VARIANTS.map(async (variant, index) => {
         const title = `${variant} ${subcategoryName}`;
         const slug = `pmp-${subcategorySlug}-${slugify(variant)}`;
-        const localImg = localCatalogImage(title) || images[index % images.length];
+        const localImg = getSyncDefaultImage(title) || images[index % images.length];
         
         let imageUrl = localImg;
         let cloudPublicId = "";
         
         if (localImg.startsWith("/")) {
-          const cloudUpload = await uploadToCloudinary(localImg, "products", slug);
+          const cloudUpload = await uploadToCloudinary(localImg, "products", slug, baseUrl);
           if (cloudUpload) {
             imageUrl = cloudUpload.url;
             cloudPublicId = cloudUpload.publicId;
@@ -404,3 +448,4 @@ export async function POST(req: Request) {
     },
   });
 }
+
