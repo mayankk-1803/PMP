@@ -160,8 +160,7 @@ export const PRODUCT_HIERARCHY = [
         name: "Paper Weight",
         slug: "paper-weight",
         subcategories: [
-          { name: "Paper Weight", slug: "paper-weight-sub", href: "/products?subcategory=paper-weight-sub" },
-          { name: "Table Mats", slug: "table-mats-sub", href: "/products?subcategory=table-mats-sub" }
+          { name: "Paper Weight", slug: "paper-weight-sub", href: "/products?subcategory=paper-weight-sub" }
         ]
       },
       // Column 8: Table Top
@@ -171,8 +170,7 @@ export const PRODUCT_HIERARCHY = [
         subcategories: [
           { name: "Mouse Pad", slug: "mouse-pad", href: "/products?subcategory=mouse-pad" },
           { name: "Desk Organiser", slug: "desk-organiser", href: "/products?subcategory=desk-organiser" },
-          { name: "Table Mats", slug: "table-mats", href: "/products?subcategory=table-mats" },
-          { name: "Paper Weight", slug: "paper-weight", href: "/products?subcategory=paper-weight" }
+          { name: "Table Mats", slug: "table-mats", href: "/products?subcategory=table-mats" }
         ]
       },
       // Column 9: Diaries / Notebooks

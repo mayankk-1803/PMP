@@ -10,8 +10,8 @@ import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 import { Briefcase, HardHat, Gift, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { localCatalogImage } from "@/lib/localCatalogImages";
 import { getCanonicalKitSlug } from "@/lib/slugResolver";
+import { resolveProductImage, resolveSubcategoryImage } from "@/lib/imageResolver";
 
 type ActiveTab = "corporate" | "industry" | "festive";
 
@@ -90,7 +90,7 @@ const fallbackCorporateCards = (items: Subcategory[]) =>
   items.map((item) => ({
     title: item.name,
     description: item.description || "Curated premium corporate kit with custom branding and bulk fulfillment support.",
-    imageUrl: corporateKitImage(item.name) || corporateKitImage(item.slug) || "",
+    imageUrl: resolveSubcategoryImage(item) || corporateKitImage(item.name) || corporateKitImage(item.slug) || "",
     price: "Custom Quote",
     slug: item.slug,
     category: item.category,
@@ -204,7 +204,7 @@ function CorporateKitsContent() {
       return filtered.map((p) => ({
         title: p.title,
         description: p.description,
-        imageUrl: corporateKitImage(p.title) || corporateKitImage(p.subcategory) || "",
+        imageUrl: resolveProductImage(p) || "",
         price: p.price ? `₹${p.price}` : "Custom Quote",
         slug: p.slug,
         category: p.category,
@@ -225,7 +225,7 @@ function CorporateKitsContent() {
     const mapped = filtered.map((p) => ({
       title: p.title,
       description: p.description,
-      imageUrl: corporateKitImage(p.title) || corporateKitImage(p.subcategory) || "",
+      imageUrl: resolveProductImage(p) || "",
       price: p.price ? `₹${p.price}` : "Custom Quote",
       slug: p.slug,
       category: p.category,
