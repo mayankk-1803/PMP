@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, ImagePlus, Pencil, Plus, Trash2, UploadCloud, X, Se
 import { useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
+import { ImageUploader } from "./ImageUploader";
 
 interface ProductRecord {
   id: string;
@@ -52,8 +53,18 @@ const emptyProduct = {
   galleryPublicIds: [] as string[],
 };
 
-const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const maxImageSize = 5 * 1024 * 1024; // 5MB
+const allowedTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+  "image/gif",
+  "image/bmp",
+  "image/tiff",
+  "image/svg+xml"
+];
+const maxImageSize = 10 * 1024 * 1024; // 10MB
 const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 export function ProductManager() {
@@ -83,11 +94,12 @@ export function ProductManager() {
   const [deleteTarget, setDeleteTarget] = useState<ProductRecord | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Image Upload Pending States (Preview before upload)
-  const [featuredFile, setFeaturedFile] = useState<File | null>(null);
-  const [featuredPreviewUrl, setFeaturedPreviewUrl] = useState("");
-  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
-  const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
+  // Reusable Media Uploader states
+  const [featuredUploading, setFeaturedUploading] = useState(false);
+  const [galleryUploading, setGalleryUploading] = useState(false);
+  const isUploading = featuredUploading || galleryUploading;
+  const [uploadedPublicIdsInSession, setUploadedPublicIdsInSession] = useState<string[]>([]);
+  const [initialPublicIds, setInitialPublicIds] = useState<string[]>([]);
   
   const [uploadError, setUploadError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
@@ -151,10 +163,8 @@ export function ProductManager() {
   const openCreate = () => {
     setEditingId(null);
     setForm(emptyProduct);
-    setFeaturedFile(null);
-    setFeaturedPreviewUrl("");
-    setGalleryFiles([]);
-    setGalleryPreviewUrls([]);
+    setInitialPublicIds([]);
+    setUploadedPublicIdsInSession([]);
     setUploadError("");
     setUploadSuccess("");
     setModalOpen(true);
@@ -163,6 +173,10 @@ export function ProductManager() {
   const openEdit = (product: ProductRecord) => {
     const images = product.galleryImages?.length ? product.galleryImages : product.images || [];
     const featuredImage = product.featuredImage || images[0] || "";
+    const existingPids = [
+      product.cloudinaryPublicId,
+      ...(product.galleryPublicIds || [])
+    ].filter(Boolean) as string[];
     
     setEditingId(product.id);
     setForm({
@@ -183,10 +197,8 @@ export function ProductManager() {
       galleryPublicIds: (product.galleryPublicIds || []).filter((pid: string) => pid && pid !== product.cloudinaryPublicId),
     });
 
-    setFeaturedFile(null);
-    setFeaturedPreviewUrl("");
-    setGalleryFiles([]);
-    setGalleryPreviewUrls([]);
+    setInitialPublicIds(existingPids);
+    setUploadedPublicIdsInSession([]);
     setUploadError("");
     setUploadSuccess("");
     setModalOpen(true);
@@ -200,111 +212,32 @@ export function ProductManager() {
     });
   };
 
-  // 1. IMAGE PREVIEW BEFORE UPLOAD HANDLERS
-  const handleFeaturedImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploadError("");
-    setUploadSuccess("");
-    const file = e.target.files?.[0];
-    if (!file) return;
 
-    if (!allowedTypes.includes(file.type)) {
-      setUploadError("Only jpg, jpeg, png, and webp images are allowed.");
-      return;
-    }
-    if (file.size > maxImageSize) {
-      setUploadError("The image must be 5MB or smaller.");
-      return;
-    }
 
-    setFeaturedFile(file);
-    setFeaturedPreviewUrl(URL.createObjectURL(file));
-  };
-
-  const handleGalleryImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploadError("");
-    setUploadSuccess("");
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    const validFiles: File[] = [];
-    const newUrls: string[] = [];
-
-    for (const file of files) {
-      if (!allowedTypes.includes(file.type)) {
-        setUploadError("Only jpg, jpeg, png, and webp images are allowed.");
-        continue;
+  const handleCancelOrClose = async () => {
+    if (isUploading) return;
+    
+    if (uploadedPublicIdsInSession.length > 0) {
+      try {
+        const { deleteUnusedFiles } = require("@/lib/admin/uploadService");
+        await deleteUnusedFiles(uploadedPublicIdsInSession);
+      } catch (err) {
+        console.error("Cleanup failed:", err);
       }
-      if (file.size > maxImageSize) {
-        setUploadError("Each gallery image must be 5MB or smaller.");
-        continue;
-      }
-      validFiles.push(file);
-      newUrls.push(URL.createObjectURL(file));
     }
-
-    setGalleryFiles((prev) => [...prev, ...validFiles]);
-    setGalleryPreviewUrls((prev) => [...prev, ...newUrls]);
-  };
-
-  const removePendingFeatured = () => {
-    setFeaturedFile(null);
-    setFeaturedPreviewUrl("");
-    if (featuredFileInputRef.current) featuredFileInputRef.current.value = "";
-  };
-
-  const removePendingGallery = (index: number) => {
-    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
-    setGalleryPreviewUrls((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // Helper function to upload files to Cloudinary and get URLs
-  const uploadFilesToServer = async (files: File[]): Promise<Array<{ url: string; publicId: string }>> => {
-    if (files.length === 0) return [];
-    const body = new FormData();
-    files.forEach((file) => body.append("files", file));
-
-    const response = await fetch("/api/admin/upload?folder=pacmyproduct/products", {
-      method: "POST",
-      body,
-    });
-    const result = await response.json();
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Upload failed");
-    }
-    return result.data.map((item: any) => ({ url: item.secure_url, publicId: item.public_id }));
+    
+    setUploadedPublicIdsInSession([]);
+    setModalOpen(false);
   };
 
   const saveProduct = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isUploading) return;
     setSaving(true);
     setUploadError("");
     setUploadSuccess("");
 
     try {
-      // 1. Upload featured image if pending
-      let finalFeaturedImage = form.featuredImage;
-      let finalCloudinaryPublicId = form.cloudinaryPublicId;
-      if (featuredFile) {
-        const [uploaded] = await uploadFilesToServer([featuredFile]);
-        finalFeaturedImage = uploaded.url;
-        finalCloudinaryPublicId = uploaded.publicId;
-      }
-
-      // 2. Upload gallery images if pending
-      let uploadedGallery: Array<{ url: string; publicId: string }> = [];
-      if (galleryFiles.length > 0) {
-        uploadedGallery = await uploadFilesToServer(galleryFiles);
-      }
-
-      const finalGalleryImages = [
-        ...form.galleryImages,
-        ...uploadedGallery.map((item) => item.url)
-      ].filter(Boolean);
-      const finalGalleryPublicIds = [
-        ...form.galleryPublicIds,
-        ...uploadedGallery.map((item) => item.publicId),
-      ].filter(Boolean);
-
       const payload = {
         name: form.title,
         title: form.title,
@@ -318,10 +251,10 @@ export function ProductManager() {
         price: Number(form.price),
         status: form.status,
         featured: form.featured,
-        featuredImage: finalFeaturedImage,
-        galleryImages: finalGalleryImages,
-        cloudinaryPublicId: finalCloudinaryPublicId,
-        galleryPublicIds: finalGalleryPublicIds,
+        featuredImage: form.featuredImage,
+        galleryImages: form.galleryImages,
+        cloudinaryPublicId: form.cloudinaryPublicId,
+        galleryPublicIds: form.galleryPublicIds,
       };
 
       const res = await fetch(editingId ? `/api/admin/products/${editingId}` : "/api/admin/products", {
@@ -335,12 +268,9 @@ export function ProductManager() {
         throw new Error(result.message || "Failed to save product record");
       }
 
+      setUploadedPublicIdsInSession([]); // Clear session tracker so files aren't deleted
       setSaving(false);
       setModalOpen(false);
-      setFeaturedFile(null);
-      setFeaturedPreviewUrl("");
-      setGalleryFiles([]);
-      setGalleryPreviewUrls([]);
       await load();
     } catch (err: any) {
       setUploadError(err.message || "An error occurred while saving the product.");
@@ -910,7 +840,7 @@ export function ProductManager() {
           <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl">
             <div className="mb-4 flex items-center justify-between border-b border-[#E9E1D5] pb-3">
               <h2 className="text-xl font-black">{editingId ? "Edit Product Record" : "Add Product to Catalog"}</h2>
-              <button onClick={() => setModalOpen(false)} className="rounded-md p-1.5 hover:bg-[#F8F7F3]"><X className="h-5 w-5" /></button>
+              <button onClick={handleCancelOrClose} className="rounded-md p-1.5 hover:bg-[#F8F7F3]"><X className="h-5 w-5" /></button>
             </div>
             
             <form onSubmit={saveProduct} className="grid gap-4 md:grid-cols-2 text-left">
@@ -989,87 +919,57 @@ export function ProductManager() {
                 </select>
               </label>
 
-              {/* 5. IMAGE PREVIEW BEFORE UPLOAD INPUTS */}
-              <div className="md:col-span-2 border-t border-[#E9E1D5] pt-4 space-y-4">
-                
-                {/* Featured Image Upload */}
-                <div>
-                  <span className="block text-sm font-bold text-[#C62828] mb-2">Featured Image</span>
-                  <div className="flex flex-wrap items-center gap-4">
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#FAF9F6] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
-                      <ImagePlus className="h-5 w-5 text-[#D32F2F]" />
-                      <span className="text-xs font-black uppercase text-[#3F4734]">Select Image</span>
-                      <input ref={featuredFileInputRef} type="file" accept="image/*" onChange={handleFeaturedImageChange} className="hidden" />
-                    </label>
+              {/* 5. Centralized Reusable Image Upload System */}
+              <div className="md:col-span-2 border-t border-[#E9E1D5] pt-4 space-y-6">
+                <ImageUploader
+                  label="Featured Image"
+                  value={form.featuredImage}
+                  publicIds={form.cloudinaryPublicId}
+                  multiple={false}
+                  folder="pacmyproduct/products"
+                  disabled={saving}
+                  onUploadStart={() => setFeaturedUploading(true)}
+                  onUploadEnd={() => setFeaturedUploading(false)}
+                  onChange={(url, id) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      featuredImage: url as string,
+                      cloudinaryPublicId: id as string,
+                    }));
+                    if (id) {
+                      setUploadedPublicIdsInSession((prev) => {
+                        const combined = new Set([...prev, id as string]);
+                        return Array.from(combined);
+                      });
+                    }
+                  }}
+                />
 
-                    {/* Pre-existing URL preview if available */}
-                    {form.featuredImage && !featuredPreviewUrl && (
-                      <div className="relative h-20 w-20 rounded-lg overflow-hidden border border-[#F5C2C2]">
-                        <img src={form.featuredImage} alt="Featured preview" className="h-full w-full object-cover" />
-                        <button type="button" onClick={() => updateForm("featuredImage", "")} className="absolute right-1 top-1 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
-                      </div>
-                    )}
-
-                    {/* Pending upload preview */}
-                    {featuredPreviewUrl && (
-                      <div className="flex items-center gap-3 bg-[#F3E7D7]/40 border border-[#EAD7C8] rounded-lg p-2 max-w-sm">
-                        <img src={featuredPreviewUrl} alt="Pending upload" className="h-14 w-14 rounded object-cover" />
-                        <div className="min-w-0 text-left">
-                          <div className="text-xs font-bold text-[#2B2B2B] truncate">{featuredFile?.name}</div>
-                          <div className="text-[10px] text-[#6B6B63] font-semibold">{featuredFile ? (featuredFile.size / 1024).toFixed(1) : 0} KB</div>
-                          <button type="button" onClick={removePendingFeatured} className="text-[10px] text-[#D32F2F] hover:text-[#2B2B2B] font-black uppercase tracking-wider mt-1.5 block">Remove File</button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Gallery Images Upload */}
-                <div>
-                  <span className="block text-sm font-bold text-[#C62828] mb-2">Gallery Images</span>
-                  <div className="flex flex-wrap items-center gap-4">
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#CFC5B7] bg-[#FAF9F6] px-4 py-3 hover:bg-[#FFFDF8] hover:border-[#8A6A3B] transition">
-                      <ImagePlus className="h-5 w-5 text-[#D32F2F]" />
-                      <span className="text-xs font-black uppercase text-[#3F4734]">Add Gallery Files</span>
-                      <input ref={galleryFileInputRef} type="file" multiple accept="image/*" onChange={handleGalleryImagesChange} className="hidden" />
-                    </label>
-                  </div>
-
-                  {/* Pre-existing gallery preview */}
-                  {form.galleryImages.length > 0 && (
-                    <div className="mt-3">
-                      <div className="text-[10px] font-bold text-[#9A9387] uppercase tracking-widest mb-1.5">Saved Gallery:</div>
-                      <div className="flex flex-wrap gap-2">
-                        {form.galleryImages.map((img, i) => (
-                          <div key={img} className="relative h-14 w-14 rounded-lg overflow-hidden border border-[#F5C2C2]">
-                            <img src={img} alt="gallery" className="h-full w-full object-cover" />
-                            <button type="button" onClick={() => updateForm("galleryImages", form.galleryImages.filter((_, idx) => idx !== i))} className="absolute right-0.5 top-0.5 bg-[#FFFDF8]/90 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Pending gallery previews */}
-                  {galleryPreviewUrls.length > 0 && (
-                    <div className="mt-3">
-                      <div className="text-[10px] font-bold text-[#D32F2F] uppercase tracking-widest mb-1.5">Pending upload ({galleryFiles.length} files):</div>
-                      <div className="flex flex-wrap gap-2">
-                        {galleryPreviewUrls.map((url, i) => (
-                          <div key={url} className="relative h-14 w-14 rounded-lg overflow-hidden border border-[#F5C2C2] bg-[#FDECEC]">
-                            <img src={url} alt="pending gallery" className="h-full w-full object-cover" />
-                            <div className="absolute inset-x-0 bottom-0 bg-black/60 text-white text-[8px] text-center truncate px-0.5 font-mono">
-                              {(galleryFiles[i]?.size / 1024).toFixed(0)}K
-                            </div>
-                            <button type="button" onClick={() => removePendingGallery(i)} className="absolute right-0.5 top-0.5 bg-[#FFFDF8]/95 p-0.5 rounded shadow text-[#5F6752] hover:text-[#D32F2F]"><X className="h-3 w-3" /></button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                </div>
-
+                <ImageUploader
+                  label="Gallery Images"
+                  value={form.galleryImages}
+                  publicIds={form.galleryPublicIds}
+                  multiple={true}
+                  folder="pacmyproduct/products"
+                  disabled={saving}
+                  onUploadStart={() => setGalleryUploading(true)}
+                  onUploadEnd={() => setGalleryUploading(false)}
+                  onChange={(urls, ids) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      galleryImages: urls as string[],
+                      galleryPublicIds: ids as string[],
+                    }));
+                    // Accumulate any new public IDs uploaded in this session
+                    const newIds = (ids as string[]).filter(
+                      (id) => !initialPublicIds.includes(id)
+                    );
+                    setUploadedPublicIdsInSession((prev) => {
+                      const combined = new Set([...prev, ...newIds]);
+                      return Array.from(combined);
+                    });
+                  }}
+                />
               </div>
 
               {/* Status errors & success displays */}
@@ -1081,8 +981,8 @@ export function ProductManager() {
 
               {/* Footer action buttons */}
               <div className="md:col-span-2 flex justify-end gap-3 border-t border-[#E9E1D5] pt-4">
-                <button type="button" onClick={() => setModalOpen(false)} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
-                <button disabled={saving} type="submit" className="rounded-lg bg-[#D32F2F] px-5 py-2 text-sm font-black text-white hover:bg-[#C62828] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
+                <button type="button" onClick={handleCancelOrClose} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>
+                <button disabled={saving || isUploading} type="submit" className="rounded-lg bg-[#D32F2F] px-5 py-2 text-sm font-black text-white hover:bg-[#C62828] disabled:opacity-60 flex items-center gap-1.5 uppercase tracking-wide">
                   {saving ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" /> Saving...
@@ -1092,6 +992,7 @@ export function ProductManager() {
                   )}
                 </button>
               </div>
+
 
             </form>
           </div>

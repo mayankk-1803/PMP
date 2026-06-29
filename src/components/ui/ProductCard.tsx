@@ -111,33 +111,43 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
       </div>
       
       <div className="p-5 flex flex-col flex-grow">
-        <div className="mb-3">
+        <div className="mb-3 min-h-[44px]">
           <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{title}</h3>
         </div>
         
-        {description && <p className="text-[#6B6B63] text-[13px] mb-4 line-clamp-2 leading-relaxed">{description}</p>}
+        <div className="min-h-[40px] mb-4">
+          {description ? (
+            <p className="text-[#6B6B63] text-[13px] line-clamp-2 leading-relaxed">{description}</p>
+          ) : (
+            <p className="text-[#6B6B63] text-[13px] line-clamp-2 leading-relaxed">&nbsp;</p>
+          )}
+        </div>
 
-        {(moq || brandingOptions.length > 0) && (
-          <div className="mb-5 space-y-3">
-            {brandingOptions.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {brandingOptions.slice(0, 2).map((option) => (
-                  <span
-                    key={option}
-                    className="rounded-md border border-[#F5C2C2] bg-[#FAF9F6] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#6B6B63]"
-                  >
-                    {option}
-                  </span>
-                ))}
-              </div>
-            )}
-            {moq && (
-              <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63]">
-                MOQ {moq}+ Units
-              </div>
-            )}
-          </div>
-        )}
+        <div className="mb-5 space-y-3 min-h-[48px] flex flex-col justify-between">
+          {brandingOptions.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5">
+              {brandingOptions.slice(0, 2).map((option) => (
+                <span
+                  key={option}
+                  className="rounded-md border border-[#F5C2C2] bg-[#FAF9F6] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#6B6B63]"
+                >
+                  {option}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-1.5">&nbsp;</div>
+          )}
+          {moq ? (
+            <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63]">
+              MOQ {moq}+ Units
+            </div>
+          ) : (
+            <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#FAF9F6] select-none">
+              &nbsp;
+            </div>
+          )}
+        </div>
         
         <div className="mt-auto pt-4 border-t border-[#F5C2C2] flex items-center justify-between">
           {price ? (

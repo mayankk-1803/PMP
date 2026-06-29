@@ -53,7 +53,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
               Premium brand partners, organized for <span className="text-[#D32F2F]">corporate gifting</span>
             </h2>
             <p className="text-sm sm:text-base text-[#6B6B63] max-w-2xl font-medium">
-              Source curated brand-led kits across audio, travel, drinkware, apparel, utility, and executive gifting with tasteful logo placement and corporate-ready packaging.
+              Source curated brand-led kits across audio, travel, drink ware, apparel, utility, and executive gifting with tasteful logo placement and corporate-ready packaging.
             </p>
           </div>
           {!compact && (
@@ -104,7 +104,7 @@ export function BrandShowcase({ compact = false }: BrandShowcaseProps) {
               </div>
               <h3 className="text-2xl md:text-3xl font-black text-white mb-2">Build a co-branded kit around your audience.</h3>
               <p className="text-sm text-gray-300 max-w-2xl">
-                Mix apparel, drinkware, audio, travelware, stationery, and useful desk tech into one premium gifting experience.
+                Mix apparel, drink ware, audio, travelware, stationery, and useful desk tech into one premium gifting experience.
               </p>
             </div>
             <Link href="/enquiry?source=partner-showcase" className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-[#2B2B2B] px-6 py-3 text-sm font-bold hover:bg-[#FAF9F6] transition-colors">

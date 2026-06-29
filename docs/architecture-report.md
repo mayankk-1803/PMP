@@ -151,7 +151,7 @@ Professional seed uses category-specific image pools:
 - T-shirt products use t-shirt images.
 - Cap products use cap images.
 - Diary/journal/notebook products use diary/notebook images.
-- Drinkware products use bottle/mug/flask images.
+- Drink ware products use bottle/mug/flask images.
 - Backpack/bag products use bag images.
 - Gift boxes/kits/hampers use gift-box/hamper images.
 - Packaging products use carton/box images.

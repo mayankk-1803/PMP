@@ -224,14 +224,16 @@ export function OfficeUtilityShowcase() {
                 {/* Content Container */}
                 <div className="p-6 flex flex-col flex-grow justify-between">
                   <div className="space-y-2">
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-extrabold text-[#1F1F1F] text-base leading-tight group-hover:text-[#D32F2F] transition-colors">
+                    <div className="flex justify-between items-start min-h-[40px]">
+                      <h3 className="font-extrabold text-[#1F1F1F] text-base leading-tight group-hover:text-[#D32F2F] transition-colors line-clamp-2">
                         {prod.title}
                       </h3>
                     </div>
-                    <p className="text-[#555555] text-xs leading-relaxed line-clamp-2">
-                      {prod.description}
-                    </p>
+                    <div className="min-h-[32px]">
+                      <p className="text-[#555555] text-xs leading-relaxed line-clamp-2">
+                        {prod.description}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Customization Bullet List */}

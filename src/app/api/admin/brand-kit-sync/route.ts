@@ -70,6 +70,32 @@ const PRODUCT_IMAGE_BY_CATEGORY: Record<string, string[]> = {
     "/images/copperbottleset.png",
     "/images/premiumvaccumflask.png",
   ],
+  "mouse-pad": [
+    "/images/Mouse pad/General.jpg",
+    "/images/Mouse pad/1.jpg",
+    "/images/Mouse pad/2.jpg",
+    "/images/Mouse pad/3.jpg",
+  ],
+  "paper-weight": [
+    "/images/Paper Weight/1.jpg",
+    "/images/Paper Weight/2.jpg",
+    "/images/Paper Weight/3.jpg",
+  ],
+  "table-mats": [
+    "/images/Table Mat/1.jpg",
+    "/images/Table Mat/2.jpg",
+    "/images/Table Mat/3.jpg",
+    "/images/Table Mat/4.jpg",
+  ],
+  "desk-organiser": [
+    "/images/Desk Organsier/1.jpg",
+    "/images/Desk Organsier/2.jpg",
+    "/images/Desk Organsier/3.jpg",
+    "/images/Desk Organsier/4.jpg",
+  ],
+  "table-top": [
+    "/images/tabletopup.png",
+  ],
 };
 
 const CATEGORY_DEFAULT_IMAGES: Record<string, string> = {
@@ -350,7 +376,8 @@ export async function POST(req: Request) {
     PROMOTIONAL_SUBCATEGORIES.flatMap(([subcategoryName, subcategorySlug, categorySlug, subcategoryDescription]) => {
       const category = promotionalCategoryBySlug.get(categorySlug);
       const subcategory = promotionalSubcategories.find((item) => item.slug === subcategorySlug);
-      const images = PRODUCT_IMAGE_BY_CATEGORY[categorySlug] || PRODUCT_IMAGE_BY_CATEGORY.pens;
+      const subKey = subcategorySlug.replace("-sub", "");
+      const images = PRODUCT_IMAGE_BY_CATEGORY[subKey] || PRODUCT_IMAGE_BY_CATEGORY[categorySlug] || PRODUCT_IMAGE_BY_CATEGORY.pens;
 
       return PRODUCT_VARIANTS.map(async (variant, index) => {
         const title = `${variant} ${subcategoryName}`;

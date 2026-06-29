@@ -84,12 +84,12 @@ export function CorporateSolutions() {
 
           {/* Text Content */}
           <div className="relative z-10 p-6 flex flex-col justify-end h-full text-white">
-            <div className="space-y-1.5 transform group-hover:-translate-y-1 transition-transform duration-300">
-              <h3 className="text-lg font-bold tracking-tight text-white flex items-center gap-1 group-hover:text-[#EF5350] transition-colors">
-                {cat.name}
+            <div className="space-y-2 transform group-hover:-translate-y-1 transition-transform duration-300">
+              <h3 className="text-lg font-bold tracking-tight text-white leading-tight group-hover:text-[#EF5350] transition-colors">
+                {cat.name === "Drinkware" ? "Drink Ware" : cat.name}
               </h3>
-              <p className="text-gray-300 text-xs leading-relaxed max-w-[200px] sm:max-w-none">
-                {cat.description || `Custom corporate branding on premium ${cat.name.toLowerCase()} options.`}
+              <p className="text-gray-300 text-xs leading-relaxed max-w-[200px] sm:max-w-none line-clamp-2">
+                {cat.description || `Custom corporate branding on premium ${(cat.name === "Drinkware" ? "drink ware" : cat.name).toLowerCase()} options.`}
               </p>
             </div>
             

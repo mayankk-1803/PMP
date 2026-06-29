@@ -15,7 +15,7 @@ export default function BrandsPage() {
               Brand-led gifting for teams, clients, and channel partners.
             </h1>
             <p className="text-base md:text-lg text-gray-300 max-w-2xl font-medium">
-              Curate branded merchandise, corporate kits, and employee welcome gifts using premium retail partners across apparel, tech, travel, drinkware, stationery, and lifestyle.
+              Curate branded merchandise, corporate kits, and employee welcome gifts using premium retail partners across apparel, tech, travel, drink ware, stationery, and lifestyle.
             </p>
           </div>
         </div>
