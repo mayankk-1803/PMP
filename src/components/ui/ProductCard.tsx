@@ -31,7 +31,7 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
   const prefersReduced = useReducedMotion();
   
   const isSelected = isInShortlist(title);
-  const displayImage = localCatalogImage(title) || imageUrl;
+  const displayImage = imageUrl || localCatalogImage(title) || "";
 
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();

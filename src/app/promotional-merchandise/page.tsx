@@ -69,7 +69,7 @@ export default function PromoMerchPage() {
       .map((p) => ({
         title: p.title,
         description: p.description,
-        imageUrl: localCatalogImage(p.title) || p.featuredImage || p.images[0] || "/images/joiningkit.png",
+        imageUrl: p.featuredImage || p.images[0] || localCatalogImage(p.title) || "/images/joiningkit.png",
         cta: "View Product",
         brandingOptions: p.features?.slice(0, 2) || ["Logo Branding", "Custom Finishes"],
         href: `/products/${p.slug}`,
