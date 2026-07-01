@@ -46,23 +46,13 @@ export const CORPORATE_KITS = [
   { name: "Distributor Kits", slug: "distributor-kits", href: "/corporate-kits?kit=distributor-kits" },
   { name: "Doctor Kits", slug: "doctor-kits", href: "/corporate-kits?kit=doctor-kits" },
   { name: "Architect Kits", slug: "architect-kits", href: "/corporate-kits?kit=architect-kits" },
-  { name: "Contractor Kits", slug: "contractor-kits", href: "/corporate-kits?kit=contractor-kits" },
   { name: "Mason Kits", slug: "mason-kits", href: "/corporate-kits?kit=mason-kits" },
   { name: "Electrician Kits", slug: "electrician-kits", href: "/corporate-kits?kit=electrician-kits" },
   { name: "Interior Designer Kits", slug: "interior-designer-kits", href: "/corporate-kits?kit=interior-designer-kits" },
-  { name: "Pharma Representative Kits", slug: "pharma-representative-kits", href: "/corporate-kits?kit=pharma-representative-kits" },
-  { name: "Hospital Staff Kits", slug: "hospital-staff-kits", href: "/corporate-kits?kit=hospital-staff-kits" },
-  { name: "Channel Partner Kits", slug: "channel-partner-kits", href: "/corporate-kits?kit=channel-partner-kits" },
-  { name: "Training Kits", slug: "training-kits", href: "/corporate-kits?kit=training-kits" },
-  { name: "Seminar Kits", slug: "seminar-kits", href: "/corporate-kits?kit=seminar-kits" },
-  { name: "Startup Employee Onboarding Kits", slug: "startup-employee-onboarding-kits", href: "/corporate-kits?kit=startup-employee-onboarding-kits" },
-  { name: "Employee Welcome Kits", slug: "employee-welcome-kits", href: "/corporate-kits?kit=employee-welcome-kits" },
-  { name: "Leadership Kits", slug: "leadership-kits", href: "/corporate-kits?kit=leadership-kits" },
-  { name: "Executive Kits", slug: "executive-kits", href: "/corporate-kits?kit=executive-kits" },
-  { name: "Remote Onboarding Kits", slug: "remote-onboarding-kits", href: "/corporate-kits?kit=remote-onboarding-kits" },
-  { name: "Partner Kits", slug: "partner-kits", href: "/corporate-kits?kit=partner-kits" },
-  { name: "Sales Team Kits", slug: "sales-team-kits", href: "/corporate-kits?kit=sales-team-kits" },
-  { name: "Real Estate Kits", slug: "real-estate-kits", href: "/corporate-kits?kit=real-estate-kits" }
+  { name: "Retailer Kits", slug: "retailer-kits", href: "/corporate-kits?kit=retailer-kits" },
+  { name: "Plumber Kits", slug: "plumber-kits", href: "/corporate-kits?kit=plumber-kits" },
+  { name: "Painter Kits", slug: "painter-kits", href: "/corporate-kits?kit=painter-kits" },
+  { name: "Engineer Kits", slug: "engineer-kits", href: "/corporate-kits?kit=engineer-kits" }
 ];
 
 export const OCCASION_HAMPERS = [
@@ -71,13 +61,7 @@ export const OCCASION_HAMPERS = [
   { name: "Eid Kits", slug: "eid-kits", href: "/corporate-kits?kit=eid-kits" },
   { name: "Women's Day Gifts", slug: "womens-day-gifts", href: "/corporate-kits?kit=womens-day-gifts" },
   { name: "Christmas Kits", slug: "christmas-kits", href: "/corporate-kits?kit=christmas-kits" },
-  { name: "New Year Hampers", slug: "new-year-hampers", href: "/corporate-kits?kit=new-year-hampers" },
-  { name: "Corporate Celebration Hampers", slug: "corporate-celebration-hampers", href: "/corporate-kits?kit=corporate-celebration-hampers" },
-  { name: "Welcome Hampers", slug: "welcome-hampers", href: "/corporate-kits?kit=welcome-hampers" },
-  { name: "Luxury Hampers", slug: "luxury-hampers", href: "/corporate-kits?kit=luxury-hampers" },
-  { name: "Premium Gourmet Hampers", slug: "premium-gourmet-hampers", href: "/corporate-kits?kit=premium-gourmet-hampers" },
-  { name: "Dry Fruit Hampers", slug: "dry-fruit-hampers", href: "/corporate-kits?kit=dry-fruit-hampers" },
-  { name: "Tea & Coffee Hampers", slug: "tea-coffee-hampers", href: "/corporate-kits?kit=tea-coffee-hampers" }
+  { name: "New Year Hampers", slug: "new-year-hampers", href: "/corporate-kits?kit=new-year-hampers" }
 ];
 
 export const PACKAGING_SOLUTIONS = [

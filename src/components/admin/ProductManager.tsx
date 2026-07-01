@@ -238,10 +238,24 @@ export function ProductManager() {
     setUploadSuccess("");
 
     try {
+      let finalTitle = form.title;
+      let finalSlug = form.slug;
+      if (!editingId || !finalTitle) {
+        const brandText = form.brand || "PacMyProduct";
+        const catOrSub = form.subcategory || form.category || "General";
+        const displayCatOrSub = catOrSub.replace(/-/g, ' ');
+        const displayCatOrSubCap = displayCatOrSub.charAt(0).toUpperCase() + displayCatOrSub.slice(1);
+        finalTitle = `${brandText} - ${displayCatOrSubCap} - ${String(Date.now()).slice(-4)}`;
+        finalSlug = finalTitle
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, "");
+      }
+
       const payload = {
-        name: form.title,
-        title: form.title,
-        slug: form.slug,
+        name: finalTitle,
+        title: finalTitle,
+        slug: finalSlug,
         description: form.description,
         shortDescription: form.shortDescription,
         category: form.category,
@@ -590,22 +604,20 @@ export function ProductManager() {
                     <tr>
                       <th className="px-4 py-3 font-bold w-12 text-center">Move</th>
                       <th className="px-4 py-3 font-bold">Thumbnail</th>
-                      <th className="px-4 py-3 font-bold">Product Title</th>
-                      <th className="px-4 py-3 font-bold">Slug/SKU</th>
                       <th className="px-4 py-3 font-bold">Category</th>
                       <th className="px-4 py-3 font-bold">Subcategory</th>
                       <th className="px-4 py-3 font-bold">Brand</th>
                       <th className="px-4 py-3 font-bold">MOQ</th>
-                      <th className="px-4 py-3 font-bold">Starting Price</th>
+                      <th className="px-4 py-3 font-bold">Featured</th>
                       <th className="px-4 py-3 font-bold">Status</th>
                       <th className="px-4 py-3 font-bold">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#F5C2C2]">
                     {loading ? (
-                      <tr><td className="px-4 py-8 text-center text-[#6B6B63]" colSpan={11}><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#D32F2F] mb-2" />Loading product catalog database...</td></tr>
+                      <tr><td className="px-4 py-8 text-center text-[#6B6B63]" colSpan={9}><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#D32F2F] mb-2" />Loading product catalog database...</td></tr>
                     ) : paginatedProducts.length === 0 ? (
-                      <tr><td className="px-4 py-8 text-center text-[#9A9387] font-bold" colSpan={11}>No matching products yet. Create or import spreadsheet rows above.</td></tr>
+                      <tr><td className="px-4 py-8 text-center text-[#9A9387] font-bold" colSpan={9}>No matching products yet. Create or import spreadsheet rows above.</td></tr>
                     ) : (
                       paginatedProducts.map((product, idx) => (
                         <Draggable key={product.id} draggableId={product.id} index={idx}>
@@ -621,13 +633,15 @@ export function ProductManager() {
                                   <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#F8F7F3] text-[#9A9387]"><ImagePlus className="h-4 w-4" /></div>
                                 )}
                               </td>
-                              <td className="px-4 py-3 font-bold text-[#2B2B2B]">{product.title}</td>
-                              <td className="px-4 py-3 text-xs font-mono">{product.slug}</td>
                               <td className="px-4 py-3"><span className="rounded bg-[#F8F7F3] px-2 py-0.5 text-xs text-[#5F6752] font-semibold">{product.category}</span></td>
                               <td className="px-4 py-3 text-[#6B6B63] font-medium">{product.subcategory}</td>
                               <td className="px-4 py-3 font-semibold text-[#3F4734]">{product.brand || "PacMyProduct"}</td>
                               <td className="px-4 py-3 font-bold">{product.moq} Units</td>
-                              <td className="px-4 py-3 font-black text-[#2B2B2B]">₹{product.price || 0}</td>
+                              <td className="px-4 py-3">
+                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${product.featured ? "bg-amber-100 text-amber-700" : "bg-gray-150 text-gray-400"}`}>
+                                  {product.featured ? "Featured" : "No"}
+                                </span>
+                              </td>
                               <td className="px-4 py-3">
                                 <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${product.active ? "bg-[#FDECEC] text-[#D32F2F]" : "bg-[#F8F7F3] text-[#6B6B63]"}`}>
                                   {product.active ? "Active" : "Hidden"}
@@ -845,15 +859,7 @@ export function ProductManager() {
             
             <form onSubmit={saveProduct} className="grid gap-4 md:grid-cols-2 text-left">
               
-              <label className="block text-sm font-bold text-[#C62828]">
-                Product Title
-                <input required type="text" value={form.title} onChange={(e) => updateForm("title", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]" />
-              </label>
-
-              <label className="block text-sm font-bold text-[#C62828]">
-                Slug
-                <input required type="text" value={form.slug} onChange={(e) => updateForm("slug", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-sm outline-none focus:border-[#D32F2F]" />
-              </label>
+              {/* Product title and slug are auto-generated internally in B2B catalog mode */}
 
               <label className="block text-sm font-bold text-[#C62828]">
                 Category

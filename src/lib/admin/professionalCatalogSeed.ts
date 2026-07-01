@@ -101,15 +101,11 @@ const subcategoryNames: Record<string, string[]> = {
   "backpacks-bags": ["Laptop Backpacks", "Travel Backpacks", "Conference Bags", "Tote Bags"],
   "executive-gifts": ["Luxury Gift Boxes", "Desk Kits", "Office Kits", "VIP Welcome Boxes"],
   "corporate-kits": [
-    "Joining Kits", "Dealer Kits", "Distributor Kits", "Doctor Kits", "Architect Kits", "Contractor Kits", "Mason Kits",
-    "Electrician Kits", "Interior Designer Kits", "Pharma Representative Kits", "Hospital Staff Kits", "Channel Partner Kits",
-    "Training Kits", "Seminar Kits", "Startup Employee Onboarding Kits", "Employee Welcome Kits", "Leadership Kits",
-    "Executive Kits", "Remote Onboarding Kits", "Partner Kits", "Sales Team Kits", "Real Estate Kits", "Plumber Kits"
+    "Joining Kits", "Dealer Kits", "Distributor Kits", "Doctor Kits", "Architect Kits", "Mason Kits",
+    "Electrician Kits", "Interior Designer Kits", "Retailer Kits", "Plumber Kits", "Painter Kits", "Engineer Kits"
   ],
   "festive-hampers": [
-    "Diwali Hampers", "Holi Hampers", "Eid Kits", "Women's Day Gifts", "Christmas Kits", "New Year Hampers",
-    "Corporate Celebration Hampers", "Welcome Hampers", "Luxury Hampers", "Premium Gourmet Hampers", "Dry Fruit Hampers",
-    "Tea & Coffee Hampers"
+    "Diwali Hampers", "Holi Hampers", "Eid Kits", "Women's Day Gifts", "Christmas Kits", "New Year Hampers"
   ],
   packaging: ["Mono Cartons", "Rigid Boxes", "Corrugated Cartons"],
 };
@@ -120,9 +116,6 @@ export const PROFESSIONAL_SUBCATEGORIES: SubcategoryRecord[] = Object.entries(su
     let slug = slugify(name);
     if (name === "Women's Day Gifts") slug = "womens-day-gifts";
     if (name === "Eid Kits") slug = "eid-kits";
-    if (name === "Real Estate Kits") slug = "real-estate-kits";
-    if (name === "Partner Kits") slug = "partner-kits";
-    if (name === "Sales Team Kits") slug = "sales-team-kits";
 
     return {
       id: `sub_${categorySlug}_${index + 1}`,
@@ -200,15 +193,11 @@ const explicitProducts = [
 ] as const;
 
 const kitSubcategories = [
-  "joining-kits", "dealer-kits", "distributor-kits", "doctor-kits", "architect-kits", "contractor-kits", "mason-kits",
-  "electrician-kits", "interior-designer-kits", "pharma-representative-kits", "hospital-staff-kits", "channel-partner-kits",
-  "training-kits", "seminar-kits", "startup-employee-onboarding-kits", "employee-welcome-kits", "leadership-kits",
-  "executive-kits", "remote-onboarding-kits", "partner-kits", "sales-team-kits", "real-estate-kits", "plumber-kits"
+  "joining-kits", "dealer-kits", "distributor-kits", "doctor-kits", "architect-kits", "mason-kits",
+  "electrician-kits", "interior-designer-kits", "retailer-kits", "plumber-kits", "painter-kits", "engineer-kits"
 ];
 const hamperSubcategories = [
-  "diwali-hampers", "holi-hampers", "eid-kits", "womens-day-gifts", "christmas-kits", "new-year-hampers",
-  "corporate-celebration-hampers", "welcome-hampers", "luxury-hampers", "premium-gourmet-hampers", "dry-fruit-hampers",
-  "tea-coffee-hampers"
+  "diwali-hampers", "holi-hampers", "eid-kits", "womens-day-gifts", "christmas-kits", "new-year-hampers"
 ];
 const packagingProducts = [
   ["Cosmetic Cartons", "mono-cartons"],

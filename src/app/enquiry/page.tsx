@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { getShortlistItemDisplayName } from "@/lib/enquiryHelper";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -48,6 +49,10 @@ function EnquiryFormContainer() {
   const searchParams = useSearchParams();
   const singleProduct = searchParams?.get("product");
   const isShortlistSource = searchParams?.get("source") === "shortlist";
+  const category = searchParams?.get("category") || "";
+  const subcategory = searchParams?.get("subcategory") || "";
+  const brand = searchParams?.get("brand") || "";
+  const moq = searchParams?.get("moq") || "";
   const { items } = useShortlist();
   
   const [step, setStep] = useState(1);
@@ -72,6 +77,23 @@ function EnquiryFormContainer() {
     customProductsText: "",
   });
 
+  useEffect(() => {
+    if (moq) {
+      const moqNum = parseInt(moq, 10);
+      let qtyRange = "";
+      if (moqNum >= 2000) qtyRange = "2000+";
+      else if (moqNum >= 500) qtyRange = "500 - 2000";
+      else if (moqNum >= 100) qtyRange = "100 - 500";
+      else if (moqNum >= 50) qtyRange = "50 - 100";
+      else qtyRange = "50 - 100";
+      
+      setFormData(prev => ({
+        ...prev,
+        quantity: qtyRange
+      }));
+    }
+  }, [moq]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -85,7 +107,7 @@ function EnquiryFormContainer() {
 
   const validateStep = (currentStep: number) => {
     if (currentStep === 1) {
-      const hasPreselectedItems = (isShortlistSource && items.length > 0) || singleProduct;
+      const hasPreselectedItems = (isShortlistSource && items.length > 0) || singleProduct || category || subcategory || brand;
       if (!hasPreselectedItems && !formData.customProductsText.trim()) {
         return "Please specify the products you are interested in.";
       }
@@ -149,7 +171,17 @@ function EnquiryFormContainer() {
     };
 
     if (isShortlistSource && items.length > 0) {
-      finalPayload.shortlist = items;
+      finalPayload.shortlist = items.map(item => ({
+        title: getShortlistItemDisplayName(item),
+        price: item.price
+      }));
+    } else if (category || subcategory || brand) {
+      const parts = [];
+      if (brand) parts.push(`Brand: ${brand}`);
+      if (category) parts.push(`Category: ${category.replace(/-/g, ' ')}`);
+      if (subcategory) parts.push(`Subcategory: ${subcategory.replace(/-/g, ' ')}`);
+      if (moq) parts.push(`MOQ: ${moq}`);
+      finalPayload.shortlist = [{ title: parts.join(" | ") }];
     } else if (singleProduct) {
       finalPayload.shortlist = [{ title: singleProduct }];
     } else if (formData.customProductsText) {
@@ -325,7 +357,7 @@ function EnquiryFormContainer() {
                       <p className="text-xs text-gray-500 font-semibold">Review preselected items or describe custom items you need designed.</p>
                     </div>
 
-                    {((isShortlistSource && items.length > 0) || singleProduct) ? (
+                    {((isShortlistSource && items.length > 0) || singleProduct || category || subcategory || brand) ? (
                       <div className="bg-red-50/40 border border-red-100 rounded-2xl p-5">
                         <div className="flex items-center gap-2 mb-3">
                           <Check className="w-4 h-4 text-red-600" />
@@ -335,13 +367,37 @@ function EnquiryFormContainer() {
                           {isShortlistSource && items.length > 0 ? (
                             items.map(item => (
                               <span key={item.title} className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
-                                {item.title}
+                                {getShortlistItemDisplayName(item)}
                               </span>
                             ))
                           ) : (
-                            <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
-                              {singleProduct}
-                            </span>
+                            <>
+                              {singleProduct && (
+                                <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
+                                  {singleProduct}
+                                </span>
+                              )}
+                              {category && (
+                                <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
+                                  Category: {category.replace(/-/g, ' ')}
+                                </span>
+                              )}
+                              {subcategory && (
+                                <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
+                                  Subcategory: {subcategory.replace(/-/g, ' ')}
+                                </span>
+                              )}
+                              {brand && (
+                                <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
+                                  Brand: {brand}
+                                </span>
+                              )}
+                              {moq && (
+                                <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
+                                  MOQ: {moq} Units
+                                </span>
+                              )}
+                            </>
                           )}
                         </div>
                         <div className="space-y-2">
@@ -725,11 +781,13 @@ function EnquiryFormContainer() {
               <Package className="w-5 h-5 text-red-550 flex-shrink-0 mt-0.5" />
               <div>
                 <span className="text-[10px] font-bold text-gray-400 block uppercase tracking-wider">Gifts / Kits Requested</span>
-                {((isShortlistSource && items.length > 0) || singleProduct) ? (
+                {((isShortlistSource && items.length > 0) || singleProduct || category || subcategory || brand) ? (
                   <span className="text-sm font-semibold text-white">
                     {isShortlistSource && items.length > 0 
                       ? `${items.length} item(s) selected from shortlist` 
                       : singleProduct
+                        ? singleProduct
+                        : [brand, subcategory || category].filter(Boolean).map(s => s.replace(/-/g, ' ')).join(" ")
                     }
                   </span>
                 ) : (

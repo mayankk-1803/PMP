@@ -9,6 +9,7 @@ import {
 import { Button } from "../ui/Button";
 import { SITE_PACKAGING, PROCESS_STEPS } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 export function PackagingSolutions() {
   const [activeTab, setActiveTab] = useState("mono");
@@ -219,7 +220,7 @@ export function PackagingSolutions() {
                   <div className="pt-4 border-t border-[#F5C2C2] flex items-center justify-between">
                     <span className="text-[11px] font-bold text-[#6B6B63]">Custom Shapes & Sizes</span>
                     <Link
-                      href={`/enquiry?product=${encodeURIComponent(currentProduct.title + " Packaging")}`}
+                      href={buildEnquiryUrl({ category: "packaging", subcategory: currentProduct.title })}
                       className="text-xs font-bold text-[#D32F2F] hover:text-[#C62828] uppercase tracking-widest inline-flex items-center gap-1"
                     >
                       Configure Specs <ArrowRight className="w-3.5 h-3.5" />

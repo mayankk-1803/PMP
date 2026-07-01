@@ -10,6 +10,7 @@ import { ArrowUpRight, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { resolveProductImage, resolveCategoryImage } from "@/lib/imageResolver";
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 interface Category {
   id: string;
@@ -31,6 +32,8 @@ interface Product {
   featuredImage?: string;
   images: string[];
   features?: string[];
+  brand?: string;
+  moq?: number;
 }
 
 export default function PromoMerchPage() {
@@ -66,14 +69,22 @@ export default function PromoMerchPage() {
     return products
       .filter((p) => p.category === catSlug)
       .slice(0, 3)
-      .map((p) => ({
-        title: p.title,
-        description: p.description,
-        imageUrl: resolveProductImage(p) || "/images/joiningkit.png",
-        cta: "View Product",
-        brandingOptions: p.features?.slice(0, 2) || ["Logo Branding", "Custom Finishes"],
-        href: `/products/${p.slug}`,
-      }));
+      .map((p) => {
+        const titleText = (p.subcategory || p.category || "Corporate Gift").replace(/-/g, ' ');
+        return {
+          title: titleText.charAt(0).toUpperCase() + titleText.slice(1),
+          description: p.description,
+          imageUrl: resolveProductImage(p) || "/images/joiningkit.png",
+          cta: "Get Quote",
+          brandingOptions: p.features?.slice(0, 2) || ["Logo Branding", "Custom Finishes"],
+          href: buildEnquiryUrl({
+            category: p.category,
+            subcategory: p.subcategory,
+            brand: p.brand,
+            moq: p.moq,
+          }),
+        };
+      });
   };
 
   if (loading) {

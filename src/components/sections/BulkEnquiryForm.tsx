@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/Button";
 import { Send, CheckCircle2, Loader2, AlertCircle, Package } from "lucide-react";
 import { useShortlist } from "@/context/ShortlistContext";
+import { getShortlistItemDisplayName } from "@/lib/enquiryHelper";
 
 export function BulkEnquiryForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -21,7 +22,10 @@ export function BulkEnquiryForm() {
 
     let finalPayload: any = { ...data };
     if (items.length > 0) {
-      finalPayload.shortlist = items;
+      finalPayload.shortlist = items.map(item => ({
+        title: getShortlistItemDisplayName(item),
+        price: item.price
+      }));
     }
 
     try {

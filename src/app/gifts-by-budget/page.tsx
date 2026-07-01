@@ -36,6 +36,8 @@ function GiftsByBudgetContent() {
     price: `Starts from ₹${p.basePrice}`,
     budgetRange: p.budget,
     category: p.category,
+    subcategory: p.subcategory || "",
+    moq: p.moq,
   }));
 
   // Unique list of budget tiers based on BUDGETS config, preventing duplicate "₹2500+" values
@@ -138,6 +140,9 @@ function GiftsByBudgetContent() {
                     price={product.price}
                     index={idx}
                     category={product.category}
+                    subcategory={product.subcategory}
+                    moq={product.moq}
+                    isProduct={true}
                     className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
                   />
                 ))}

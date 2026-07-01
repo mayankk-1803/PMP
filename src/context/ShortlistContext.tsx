@@ -6,6 +6,9 @@ export interface ShortlistItem {
   title: string;
   imageUrl: string;
   price?: string;
+  category?: string;
+  subcategory?: string;
+  brand?: string;
 }
 
 interface ShortlistContextType {

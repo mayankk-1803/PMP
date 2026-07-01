@@ -74,18 +74,12 @@ export function SafeImage({
    * Promotional Product categories (pens, drinkware, bags, etc.) must NOT match here
    * — even if their titles contain words like 'executive', 'coffee', 'travel', 'gift'.
    */
-  const isKitOrHamper = (cat?: string) => {
-    const slug = (cat || "").toLowerCase().replace(/\s+/g, "-");
+  const isKitOrHamper = (slug?: string) => {
+    if (!slug) return false;
     return (
-      slug === "corporate-kits" ||
-      slug === "festive-hampers" ||
-      slug === "kits-hampers" ||
-      slug === "kits" ||
-      slug === "hampers" ||
       slug === "diwali-hampers" ||
       slug === "holi-hampers" ||
       slug === "eid-kits" ||
-      slug === "eid-hampers" ||
       slug === "christmas-kits" ||
       slug === "new-year-hampers" ||
       slug === "womens-day-gifts" ||
@@ -94,17 +88,13 @@ export function SafeImage({
       slug === "distributor-kits" ||
       slug === "doctor-kits" ||
       slug === "architect-kits" ||
-      slug === "contractor-kits" ||
       slug === "mason-kits" ||
       slug === "electrician-kits" ||
       slug === "plumber-kits" ||
-      slug === "interior-designer-kits" ||
-      slug === "pharma-representative-kits" ||
-      slug === "hospital-staff-kits" ||
-      slug === "real-estate-kits" ||
-      slug === "welcome-hampers" ||
-      slug === "luxury-hampers" ||
-      slug === "gourmet-hampers"
+      slug === "retailer-kits" ||
+      slug === "painter-kits" ||
+      slug === "engineer-kits" ||
+      slug === "interior-designer-kits"
     );
   };
 
