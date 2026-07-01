@@ -19,14 +19,13 @@ type ActiveTab = "corporate" | "industry" | "festive";
 const INDUSTRY_SLUGS = new Set([
   "doctor-kits",
   "architect-kits",
-  "contractor-kits",
   "mason-kits",
   "electrician-kits",
   "interior-designer-kits",
-  "pharma-representative-kits",
-  "hospital-staff-kits",
+  "retailer-kits",
   "plumber-kits",
-  "real-estate-kits"
+  "painter-kits",
+  "engineer-kits"
 ]);
 
 const FESTIVE_HAMPER_COLLECTIONS = [

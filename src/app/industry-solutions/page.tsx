@@ -17,7 +17,7 @@ const INDUSTRIES = [
     desc: "Specially curated doctor engagement kits, daily reporting MR (Medical Representative) starter packs, branded premium diagnostics utility cases, and clinical wellness gifts. Built to comply with health sector guidelines while projecting high visual quality.",
     img: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=800&auto=format&fit=crop",
     icon: <Activity className="h-6 h-6 text-red-600" />,
-    link: "/corporate-kits?kit=pharma-representative-kits",
+    link: "/corporate-kits?kit=doctor-kits",
     bulletPoints: [
       "Custom branded medical organizer bags",
       "Scribble pads & metal pen combinations",
@@ -47,7 +47,7 @@ const INDUSTRIES = [
     desc: "Custom point-of-sale promotional items, distributor incentive packaging, retail partner loyalty boxes, and branded clothing assets. Built to capture consumer attention in-store and incentivize reseller channel networks.",
     img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop",
     icon: <Store className="h-6 h-6 text-red-600" />,
-    link: "/corporate-kits?kit=channel-partner-kits",
+    link: "/corporate-kits?kit=retailer-kits",
     bulletPoints: [
       "Point-of-sale counter standees & banners",
       "Custom-printed merchant welcome kits",
