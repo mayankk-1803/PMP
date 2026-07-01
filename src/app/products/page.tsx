@@ -19,6 +19,8 @@ interface CatalogProduct {
   shortDescription?: string;
   category: string;
   subcategory: string;
+  brand?: string;
+  tags?: string[];
   images: string[];
   moq: number;
   features: string[];
@@ -154,8 +156,13 @@ function ProductsPageContent() {
   const filteredProducts = products.filter((product) => {
     const matchesCategory = selectedCategory === "all" || product.category === selectedCategory || product.subcategory === selectedCategory;
     const matchesBudget = selectedBudget === "all";
-    const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch = 
+      product.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.brand && product.brand.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))) ||
+      (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      product.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesBudget && matchesSearch;
   });
 
@@ -362,6 +369,9 @@ function ProductsPageContent() {
                           brandingOptions={product.features.slice(0, 2)}
                           index={idx}
                           category={product.category}
+                          subcategory={product.subcategory}
+                          brand={product.brand}
+                          isProduct={true}
                         />
                       </motion.div>
                     ))}

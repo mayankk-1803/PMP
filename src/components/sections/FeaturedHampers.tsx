@@ -10,6 +10,7 @@ import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { SafeImage } from "../ui/SafeImage";
 import { resolveSubcategoryImage } from "@/lib/imageResolver";
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -166,7 +167,7 @@ export function FeaturedHampers() {
 
                       <div className="pt-4 border-t border-[#F5C2C2] flex items-center justify-between mt-auto">
                         <Link
-                          href={`/enquiry?product=${encodeURIComponent(hamper.name)}`}
+                          href={buildEnquiryUrl({ category: "festive-hampers", subcategory: hamper.name })}
                           className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63] hover:text-[#D32F2F] transition-all flex items-center gap-1 group/link"
                         >
                           Request Customization <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />

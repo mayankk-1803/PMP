@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
+import { getShortlistItemDisplayName } from "@/lib/enquiryHelper";
 import { 
   COMPANY_INFO, 
   BUDGETS,
@@ -784,14 +785,14 @@ export function Navbar() {
                     <div className="w-20 h-20 rounded-lg overflow-hidden bg-[#FAF9F6] border border-[#F5C2C2] flex-shrink-0 relative">
                       <SafeImage 
                         src={item.imageUrl} 
-                        alt={item.title} 
-                        category={Object.values(PRODUCTS).find(p => p.title === item.title)?.category}
+                        alt={getShortlistItemDisplayName(item)} 
+                        category={Object.values(PRODUCTS).find(p => p.title === item.title)?.category || item.category}
                         className="w-full h-full object-cover" 
                       />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-between">
                       <div>
-                        <h4 className="font-bold text-[#2B2B2B] text-sm mb-0.5 truncate">{item.title}</h4>
+                        <h4 className="font-bold text-[#2B2B2B] text-sm mb-0.5 truncate">{getShortlistItemDisplayName(item)}</h4>
                         <p className="text-xs font-semibold text-[#D32F2F]">{item.price || "Contact for price"}</p>
                       </div>
                       <button 

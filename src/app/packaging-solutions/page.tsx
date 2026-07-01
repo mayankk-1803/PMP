@@ -10,6 +10,7 @@ import { SITE_PACKAGING, PROCESS_STEPS } from "@/data/siteConfig";
 import { ShieldCheck, Clock, CheckCircle2, ArrowRight } from "lucide-react";
 import { GiftsByBudget } from "@/components/sections/GiftsByBudget";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 export default function PackagingSolutionsPage() {
   return (
@@ -112,7 +113,7 @@ export default function PackagingSolutionsPage() {
                       className="rounded-xl font-bold py-3.5 px-6"
                       asChild
                     >
-                      <Link href={`/enquiry?product=${encodeURIComponent(pkg.title)}`}>
+                      <Link href={buildEnquiryUrl({ category: "packaging", subcategory: pkg.title })}>
                         Order Samples
                       </Link>
                     </Button>

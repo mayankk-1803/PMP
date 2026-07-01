@@ -12,6 +12,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { getCanonicalKitSlug } from "@/lib/slugResolver";
 import { resolveProductImage, resolveSubcategoryImage } from "@/lib/imageResolver";
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 type ActiveTab = "corporate" | "industry" | "festive";
 
@@ -75,15 +76,21 @@ const fallbackFestiveCards = (slug?: string) =>
   FESTIVE_HAMPER_COLLECTIONS
     .filter((collection) => !slug || collection.slug === slug)
     .flatMap((collection) =>
-      collection.images.map((imageUrl, index) => ({
-        title: collection.images.length === 1 ? collection.name : `${collection.name} ${index + 1}`,
-        description: collection.description,
-        imageUrl,
-        price: "Custom Quote",
-        slug: `${collection.slug}-${index + 1}`,
-        category: "festive-hampers",
-        href: `/enquiry?product=${encodeURIComponent(collection.images.length === 1 ? collection.name : `${collection.name} ${index + 1}`)}`,
-      }))
+      collection.images.map((imageUrl, index) => {
+        const title = collection.images.length === 1 ? collection.name : `${collection.name} ${index + 1}`;
+        return {
+          title,
+          description: collection.description,
+          imageUrl,
+          price: "Custom Quote",
+          slug: `${collection.slug}-${index + 1}`,
+          category: "festive-hampers",
+          subcategory: title,
+          brand: undefined,
+          moq: undefined,
+          href: buildEnquiryUrl({ category: "festive-hampers", subcategory: title }),
+        };
+      })
     );
 
 const fallbackCorporateCards = (items: Subcategory[]) =>
@@ -94,7 +101,10 @@ const fallbackCorporateCards = (items: Subcategory[]) =>
     price: "Custom Quote",
     slug: item.slug,
     category: item.category,
-    href: `/enquiry?product=${encodeURIComponent(item.name)}`,
+    subcategory: item.name,
+    brand: undefined,
+    moq: undefined,
+    href: buildEnquiryUrl({ category: item.category, subcategory: item.name }),
   }));
 interface Subcategory {
   id: string;
@@ -117,6 +127,8 @@ interface Product {
   featuredImage?: string;
   images: string[];
   price?: number;
+  brand?: string;
+  moq?: number;
 }
 
 function CorporateKitsContent() {
@@ -208,6 +220,9 @@ function CorporateKitsContent() {
         price: p.price ? `₹${p.price}` : "Custom Quote",
         slug: p.slug,
         category: p.category,
+        subcategory: p.subcategory,
+        brand: p.brand || "",
+        moq: p.moq || 0,
         href: undefined,
       }));
     }
@@ -229,6 +244,9 @@ function CorporateKitsContent() {
       price: p.price ? `₹${p.price}` : "Custom Quote",
       slug: p.slug,
       category: p.category,
+      subcategory: p.subcategory,
+      brand: p.brand || "",
+      moq: p.moq || 0,
       href: undefined,
     }));
 
@@ -359,7 +377,11 @@ function CorporateKitsContent() {
                     price={item.price}
                     index={idx}
                     category={item.category}
+                    subcategory={item.subcategory}
+                    brand={item.brand}
+                    moq={item.moq}
                     href={item.href}
+                    isProduct={item.href ? false : true}
                     className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
                   />
                 ))

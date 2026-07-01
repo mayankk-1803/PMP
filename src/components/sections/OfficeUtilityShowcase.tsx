@@ -2,15 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, Bookmark, ShieldCheck, ShoppingBag, Eye } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useShortlist } from "@/context/ShortlistContext";
 import { SafeImage } from "../ui/SafeImage";
 import { resolveProductImage } from "@/lib/imageResolver";
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 export function OfficeUtilityShowcase() {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [products, setProducts] = useState<any[]>([]);
@@ -94,6 +97,8 @@ export function OfficeUtilityShowcase() {
               key: p.slug,
               title: p.title,
               category: p.category,
+              subcategory: p.subcategory || "",
+              brand: p.brand || "",
               imageUrl: resolveProductImage(p) || "/images/joiningkit.png",
               moq: p.moq || 50,
               description: p.description || p.shortDescription || "",
@@ -172,6 +177,7 @@ export function OfficeUtilityShowcase() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
+                onClick={() => router.push(buildEnquiryUrl({ category: prod.category, subcategory: prod.subcategory, brand: prod.brand, moq: prod.moq }))}
                 className="group bg-white border border-[#F5C2C2] rounded-2xl overflow-hidden hover:border-[#D32F2F]/25 hover:shadow-xl transition-all duration-300 flex flex-col h-[460px] text-left relative cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
@@ -224,16 +230,19 @@ export function OfficeUtilityShowcase() {
 
                 {/* Content Container */}
                 <div className="p-6 flex flex-col flex-grow justify-between">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-start min-h-[40px]">
-                      <h3 className="font-extrabold text-[#1F1F1F] text-base leading-tight group-hover:text-[#D32F2F] transition-colors line-clamp-2">
-                        {prod.title}
-                      </h3>
+                  <div className="space-y-3 flex flex-col flex-grow text-left">
+                    {/* Category / Subcategory */}
+                    <div className="text-xs font-bold text-[#D32F2F] uppercase tracking-wider">
+                      {[prod.category, prod.subcategory].filter(Boolean).map(s => s.replace(/-/g, ' ')).join(" / ")}
                     </div>
-                    <div className="min-h-[32px]">
-                      <p className="text-[#555555] text-xs leading-relaxed line-clamp-2">
-                        {prod.description}
-                      </p>
+
+                    {/* Brand Badge */}
+                    <div className="flex flex-wrap gap-2 items-center">
+                      {prod.brand && (
+                        <span className="rounded-md border border-[#F5C2C2] bg-[#FAF9F6] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-[#555555]">
+                          {prod.brand}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -258,10 +267,11 @@ export function OfficeUtilityShowcase() {
                     </div>
 
                     <Link
-                      href={`/products/${prod.key}`}
+                      href={buildEnquiryUrl({ category: prod.category, subcategory: prod.subcategory, brand: prod.brand, moq: prod.moq })}
+                      onClick={(e) => e.stopPropagation()}
                       className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#D32F2F] hover:text-[#C62828] transition-colors uppercase tracking-widest"
                     >
-                      Configure <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      Get Quote <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
                 </div>

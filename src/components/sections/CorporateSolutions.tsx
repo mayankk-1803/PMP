@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowUpRight, MessageSquare } from "lucide-react";
 import { SafeImage } from "../ui/SafeImage";
 import { resolveCategoryImage } from "@/lib/imageResolver";
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 interface CategoryRecord {
   id: string;
@@ -74,7 +75,7 @@ export function CorporateSolutions() {
           {/* Action buttons */}
           <div className="absolute top-4 right-4 z-25 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <Link
-              href={`/enquiry?product=${encodeURIComponent(cat.name)}`}
+              href={buildEnquiryUrl({ category: cat.slug })}
               className="flex items-center justify-center p-2.5 bg-[#D32F2F] text-white rounded-xl shadow-md hover:bg-[#C62828] transition-colors"
               title="Quick Quote Request"
             >

@@ -12,6 +12,8 @@ import { SafeImage } from "./SafeImage";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { resolveProductImage } from "@/lib/imageResolver";
 
+import { buildEnquiryUrl } from "@/lib/enquiryHelper";
+
 interface ProductCardProps {
   title: string;
   description?: string;
@@ -22,11 +24,29 @@ interface ProductCardProps {
   className?: string;
   index?: number;
   category?: string;
+  subcategory?: string;
+  brand?: string;
   href?: string;
   slug?: string;
+  isProduct?: boolean;
 }
 
-export function ProductCard({ title, description, imageUrl, price, moq, brandingOptions = [], className, index = 0, category, href, slug }: ProductCardProps) {
+export function ProductCard({ 
+  title, 
+  description, 
+  imageUrl, 
+  price, 
+  moq, 
+  brandingOptions = [], 
+  className, 
+  index = 0, 
+  category, 
+  subcategory,
+  brand,
+  href, 
+  slug,
+  isProduct = true
+}: ProductCardProps) {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const router = useRouter();
   const prefersReduced = useReducedMotion();
@@ -39,13 +59,14 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
     if (isSelected) {
       removeFromShortlist(title);
     } else {
-      addToShortlist({ title, imageUrl: displayImage, price });
+      addToShortlist({ title, imageUrl: displayImage, price, category, subcategory, brand });
     }
   };
 
   const handleRequestQuote = (e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(`/enquiry?product=${encodeURIComponent(title)}`);
+    const targetUrl = buildEnquiryUrl({ category, subcategory, brand, moq });
+    router.push(targetUrl);
   };
 
   const handleCardClick = () => {
@@ -53,20 +74,13 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
       router.push(href);
       return;
     }
-    if (slug) {
-      router.push(`/products/${slug}`);
-      return;
-    }
-    const generatedSlug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
-    router.push(`/products/${generatedSlug}`);
+    const targetUrl = buildEnquiryUrl({ category, subcategory, brand, moq });
+    router.push(targetUrl);
   };
 
   return (
     <motion.div 
-      initial={prefersReduced ? false : { opacity: 0, y: 24, scale: 0.97 }}
+       initial={prefersReduced ? false : { opacity: 0, y: 24, scale: 0.97 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{ 
@@ -82,10 +96,10 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
         className
       )}
     >
-      <div className="relative w-full h-[240px] overflow-hidden bg-[#FAF9F6] flex-shrink-0">
+      <div className="relative w-full h-[250px] overflow-hidden bg-[#FAF9F6] flex-shrink-0">
         <SafeImage 
           src={displayImage} 
-          alt={title}
+          alt={isProduct ? "Product Catalog Image" : title}
           category={category}
           useNextImage={true}
           nextImageProps={{
@@ -98,79 +112,79 @@ export function ProductCard({ title, description, imageUrl, price, moq, branding
         {/* Subtle shimmer sweep on hover */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-700 ease-in-out pointer-events-none" />
 
-        <div className="absolute top-3 right-3 z-10">
-          <motion.button
-            whileHover={prefersReduced ? undefined : { scale: 1.1 }}
-            whileTap={prefersReduced ? undefined : { scale: 0.9 }}
-            onClick={handleToggleShortlist}
-            className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-all focus:outline-none"
-            aria-label="Save for quote"
-          >
-            <Bookmark className={cn("w-4 h-4 transition-colors", isSelected ? "fill-[#D32F2F] text-[#D32F2F]" : "text-[#6B6B63] hover:text-[#2B2B2B]")} />
-          </motion.button>
-        </div>
+        {!isProduct && (
+          <div className="absolute top-3 right-3 z-10">
+             <motion.button
+              whileHover={prefersReduced ? undefined : { scale: 1.1 }}
+              whileTap={prefersReduced ? undefined : { scale: 0.9 }}
+              onClick={handleToggleShortlist}
+              className="p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-all focus:outline-none"
+              aria-label="Save for quote"
+            >
+              <Bookmark className={cn("w-4 h-4 transition-colors", isSelected ? "fill-[#D32F2F] text-[#D32F2F]" : "text-[#6B6B63] hover:text-[#2B2B2B]")} />
+            </motion.button>
+          </div>
+        )}
       </div>
       
-      <div className="p-5 flex flex-col flex-grow">
-        <div className="mb-3 min-h-[44px]">
-          <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{title}</h3>
-        </div>
-        
-        <div className="min-h-[40px] mb-4">
-          {description ? (
-            <p className="text-[#6B6B63] text-[13px] line-clamp-2 leading-relaxed">{description}</p>
-          ) : (
-            <p className="text-[#6B6B63] text-[13px] line-clamp-2 leading-relaxed">&nbsp;</p>
-          )}
-        </div>
-
-        <div className="mb-5 space-y-3 min-h-[48px] flex flex-col justify-between">
-          {brandingOptions.length > 0 ? (
-            <div className="flex flex-wrap gap-1.5">
-              {brandingOptions.slice(0, 2).map((option) => (
-                <span
-                  key={option}
-                  className="rounded-md border border-[#F5C2C2] bg-[#FAF9F6] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wider text-[#6B6B63]"
-                >
-                  {option}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-1.5">&nbsp;</div>
-          )}
-          {moq ? (
-            <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63]">
-              MOQ {moq}+ Units
-            </div>
-          ) : (
-            <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#FAF9F6] select-none">
-              &nbsp;
-            </div>
-          )}
-        </div>
-        
-        <div className="mt-auto pt-4 border-t border-[#F5C2C2] flex items-center justify-between">
-          {price ? (
-            <span className="font-bold text-[#2B2B2B] text-sm">{price}</span>
-          ) : (
-            <span className="text-[11px] font-bold text-[#6B6B63] uppercase tracking-wider">Contact for Price</span>
-          )}
+      <div className="p-4 flex flex-col flex-grow justify-center items-center">
+        {isProduct ? (
+          // Product Card Layout: ONLY the Get Quote button, centered and clean
           <motion.div
-            initial={prefersReduced ? false : { y: 8, opacity: 0.7 }}
+            className="w-full text-center"
+            initial={prefersReduced ? false : { y: 4, opacity: 0.8 }}
             whileHover={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
           >
             <Button 
               variant="outline" 
-              size="sm" 
+              size="default" 
               onClick={handleRequestQuote}
-              className="text-[12px] h-8 px-3 hover:scale-[1.04] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-200"
+              className="w-full text-[13px] font-bold h-10 border-[#EF5350] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white transition-all duration-200 rounded-xl"
             >
               Get Quote
             </Button>
           </motion.div>
-        </div>
+        ) : (
+          // Category / Subcategory / Collection Card Layout (Keeps Name and Description)
+          <div className="flex flex-col w-full h-full justify-between flex-grow text-left">
+            <div className="flex flex-col flex-grow">
+              <div className="mb-3 min-h-[44px]">
+                <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{title}</h3>
+              </div>
+              
+              <div className="min-h-[40px] mb-4">
+                {description ? (
+                  <p className="text-[#6B6B63] text-[13px] line-clamp-2 leading-relaxed">{description}</p>
+                ) : (
+                  <p className="text-[#6B6B63] text-[13px] line-clamp-2 leading-relaxed">&nbsp;</p>
+                )}
+              </div>
+            </div>
+            
+            <div className="mt-auto pt-4 border-t border-[#F5C2C2] flex items-center justify-between w-full">
+              {price ? (
+                <span className="font-bold text-[#2B2B2B] text-sm">{price}</span>
+              ) : (
+                <span className="text-[11px] font-bold text-[#6B6B63] uppercase tracking-wider">Contact for Price</span>
+              )}
+              <motion.div
+                initial={prefersReduced ? false : { y: 8, opacity: 0.7 }}
+                whileHover={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.25 }}
+              >
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleRequestQuote}
+                  className="text-[12px] h-8 px-3 hover:scale-[1.04] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-200"
+                >
+                  Get Quote
+                </Button>
+              </motion.div>
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );
