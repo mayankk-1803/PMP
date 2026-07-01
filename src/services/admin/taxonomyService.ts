@@ -4,6 +4,7 @@ import { connectMongoDB } from "@/lib/mongodb";
 import { destroyCloudinaryAssets } from "@/lib/admin/cloudinaryLifecycle";
 import { CategoryModel, SubcategoryModel } from "@/models/cmsModels";
 import { getCanonicalCategorySlug, getCanonicalCategoryName, getCanonicalSubcategorySlug, getCanonicalSubcategoryName } from "@/lib/slugResolver";
+import { PRODUCT_HIERARCHY } from "@/data/siteConfig";
 
 const toIso = (value: any) => value?.toISOString?.() || new Date().toISOString();
 
@@ -54,8 +55,23 @@ export async function listAllCategories() {
     const raw = await CategoryModel.find({ isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
     categories = raw.map(mapCategory);
   }
+
+  const hierarchyCats: CategoryRecord[] = [];
+  PRODUCT_HIERARCHY.forEach((group) => {
+    group.categories.forEach((cat) => {
+      hierarchyCats.push({
+        id: `virtual_${cat.slug}`,
+        name: cat.name,
+        slug: cat.slug,
+        active: true,
+        createdAt: new Date().toISOString(),
+      });
+    });
+  });
+
+  const combined = [...categories, ...hierarchyCats];
   const seenSlugs = new Set<string>();
-  return categories.filter((c) => {
+  return combined.filter((c) => {
     if (seenSlugs.has(c.slug)) return false;
     seenSlugs.add(c.slug);
     return true;
@@ -107,8 +123,28 @@ export async function listAllSubcategories() {
     const raw = await SubcategoryModel.find({ isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
     subcategories = raw.map(mapSubcategory);
   }
+
+  const hierarchySubcats: SubcategoryRecord[] = [];
+  PRODUCT_HIERARCHY.forEach((group) => {
+    group.categories.forEach((cat) => {
+      cat.subcategories.forEach((sub) => {
+        hierarchySubcats.push({
+          id: `virtual_${sub.slug}`,
+          name: sub.name,
+          slug: sub.slug,
+          category: cat.slug,
+          parentGroup: "",
+          image: "",
+          active: true,
+          createdAt: new Date().toISOString(),
+        });
+      });
+    });
+  });
+
+  const combined = [...subcategories, ...hierarchySubcats];
   const seenSlugs = new Set<string>();
-  return subcategories.filter((s) => {
+  return combined.filter((s) => {
     if (seenSlugs.has(s.slug)) return false;
     seenSlugs.add(s.slug);
     return true;
