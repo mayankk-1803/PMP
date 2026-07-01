@@ -6,6 +6,7 @@ import { connectMongoDB } from "@/lib/mongodb";
 import { destroyCloudinaryAssets, uniquePublicIds } from "@/lib/admin/cloudinaryLifecycle";
 import { ProductModel } from "@/models/cmsModels";
 import { resolveProductImage } from "@/lib/imageResolver";
+import { getCanonicalCategorySlug, getCanonicalSubcategorySlug, getCategorySlugAliases, getSubcategorySlugAliases } from "@/lib/slugResolver";
 
 export function listProducts(): ProductRecord[] {
   return listRecords("products").filter((product) => product.active);
@@ -38,8 +39,8 @@ export async function searchProducts(options: {
   if (options.search) {
     query.$text = { $search: options.search };
   }
-  if (options.category) query.category = options.category;
-  if (options.subcategory) query.subcategory = options.subcategory;
+  if (options.category) query.category = { $in: getCategorySlugAliases(options.category) };
+  if (options.subcategory) query.subcategory = { $in: getSubcategorySlugAliases(options.subcategory) };
   if (options.brand) query.brand = options.brand;
   if (options.active === "true") query.status = { $ne: "HIDDEN" };
   if (options.active === "false") query.status = "HIDDEN";
@@ -94,16 +95,11 @@ export async function searchCatalogProducts(options: {
   const limit = Math.min(1000, Math.max(1, Number(options.limit) || 1000));
   const query: Record<string, any> = { status: "PUBLISHED", isDeleted: { $ne: true } };
   if (options.search) query.$text = { $search: options.search };
-  const activeFilter = options.subcategory || options.category;
-  if (activeFilter && activeFilter !== "all") {
-    let filterValues = [activeFilter];
-    if (activeFilter === "laptop-bags") filterValues = ["laptop-bags", "laptop-backpacks"];
-    if (activeFilter === "travel-bags") filterValues = ["travel-bags", "travel-backpacks"];
-    if (activeFilter === "bags") filterValues = ["bags", "backpacks-bags"];
-    if (activeFilter === "promotional-caps") filterValues = ["promotional-caps", "baseball-caps", "event-caps", "snapback-caps"];
-    if (activeFilter === "cotton-caps") filterValues = ["cotton-caps", "sports-caps"];
-
-    query.$and = [{ $or: [{ category: { $in: filterValues } }, { subcategory: { $in: filterValues } }] }];
+  if (options.subcategory && options.subcategory !== "all") {
+    query.subcategory = { $in: getSubcategorySlugAliases(options.subcategory) };
+  } else if (options.category && options.category !== "all") {
+    const categoryFilters = getCategorySlugAliases(options.category);
+    query.$and = [{ $or: [{ category: { $in: categoryFilters } }, { subcategory: { $in: categoryFilters } }] }];
   }
   if (options.brand) query.brand = options.brand;
   if (options.featured === "true") query.featured = true;
@@ -162,8 +158,8 @@ const normalizeForLookup = (str: string) => {
 
 const mapMongoProduct = (product: any): ProductRecord => {
   const title = product.name || product.title || "";
-  const category = product.category || "";
-  const subcategory = product.subcategory || "";
+  const category = getCanonicalCategorySlug(product.category) || product.category || "";
+  const subcategory = getCanonicalSubcategorySlug(product.subcategory) || product.subcategory || "";
   
   // Resolve primary image via database-first centralized resolver
   const matchedImage = resolveProductImage({

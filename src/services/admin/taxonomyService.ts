@@ -3,43 +3,63 @@ import type { CategoryRecord, SubcategoryRecord } from "@/lib/admin/types";
 import { connectMongoDB } from "@/lib/mongodb";
 import { destroyCloudinaryAssets } from "@/lib/admin/cloudinaryLifecycle";
 import { CategoryModel, SubcategoryModel } from "@/models/cmsModels";
+import { getCanonicalCategorySlug, getCanonicalCategoryName, getCanonicalSubcategorySlug, getCanonicalSubcategoryName } from "@/lib/slugResolver";
 
 const toIso = (value: any) => value?.toISOString?.() || new Date().toISOString();
 
-const mapCategory = (category: any): CategoryRecord => ({
-  id: String(category._id),
-  name: category.name,
-  slug: category.slug,
-  description: category.description,
-  parentGroup: category.parentGroup,
-  image: category.image,
-  cloudinaryPublicId: category.cloudinaryPublicId,
-  order: category.order || 0,
-  active: category.active !== false,
-  createdAt: toIso(category.createdAt),
-});
+const mapCategory = (category: any): CategoryRecord => {
+  const slug = getCanonicalCategorySlug(category.slug) || category.slug;
+  const name = getCanonicalCategoryName(category.name) || category.name;
+  return {
+    id: String(category._id),
+    name,
+    slug,
+    description: category.description,
+    parentGroup: category.parentGroup,
+    image: category.image,
+    cloudinaryPublicId: category.cloudinaryPublicId,
+    order: category.order || 0,
+    active: category.active !== false,
+    createdAt: toIso(category.createdAt),
+  };
+};
 
-const mapSubcategory = (subcategory: any): SubcategoryRecord => ({
-  id: String(subcategory._id),
-  name: subcategory.name,
-  slug: subcategory.slug,
-  categoryId: subcategory.categoryId ? String(subcategory.categoryId) : undefined,
-  category: subcategory.category,
-  parentGroup: subcategory.parentGroup || "",
-  description: subcategory.description,
-  image: subcategory.image || "",
-  featuredImage: subcategory.featuredImage,
-  cloudinaryPublicId: subcategory.cloudinaryPublicId,
-  order: subcategory.order || 0,
-  active: subcategory.active !== false,
-  createdAt: toIso(subcategory.createdAt),
-});
+const mapSubcategory = (subcategory: any): SubcategoryRecord => {
+  const slug = getCanonicalSubcategorySlug(subcategory.slug) || subcategory.slug;
+  const name = getCanonicalSubcategoryName(subcategory.name) || subcategory.name;
+  const category = getCanonicalCategorySlug(subcategory.category) || subcategory.category;
+  return {
+    id: String(subcategory._id),
+    name,
+    slug,
+    categoryId: subcategory.categoryId ? String(subcategory.categoryId) : undefined,
+    category,
+    parentGroup: subcategory.parentGroup || "",
+    description: subcategory.description,
+    image: subcategory.image || "",
+    featuredImage: subcategory.featuredImage,
+    cloudinaryPublicId: subcategory.cloudinaryPublicId,
+    order: subcategory.order || 0,
+    active: subcategory.active !== false,
+    createdAt: toIso(subcategory.createdAt),
+  };
+};
 
 export async function listAllCategories() {
-  if (!process.env.MONGODB_URI) return listRecords("categories");
-  await connectMongoDB();
-  const categories = await CategoryModel.find({ isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
-  return categories.map(mapCategory);
+  let categories: CategoryRecord[] = [];
+  if (!process.env.MONGODB_URI) {
+    categories = listRecords("categories").map((c: any) => mapCategory({ ...c, _id: c.id }));
+  } else {
+    await connectMongoDB();
+    const raw = await CategoryModel.find({ isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
+    categories = raw.map(mapCategory);
+  }
+  const seenSlugs = new Set<string>();
+  return categories.filter((c) => {
+    if (seenSlugs.has(c.slug)) return false;
+    seenSlugs.add(c.slug);
+    return true;
+  });
 }
 
 export async function createCategory(input: Omit<CategoryRecord, "id" | "createdAt">) {
@@ -79,10 +99,20 @@ export async function deleteCategory(id: string, permanent: boolean = false, adm
 }
 
 export async function listAllSubcategories() {
-  if (!process.env.MONGODB_URI) return listRecords("subcategories");
-  await connectMongoDB();
-  const subcategories = await SubcategoryModel.find({ isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
-  return subcategories.map(mapSubcategory);
+  let subcategories: SubcategoryRecord[] = [];
+  if (!process.env.MONGODB_URI) {
+    subcategories = listRecords("subcategories").map((s: any) => mapSubcategory({ ...s, _id: s.id }));
+  } else {
+    await connectMongoDB();
+    const raw = await SubcategoryModel.find({ isDeleted: { $ne: true } }).sort({ order: 1, name: 1 }).lean<any[]>();
+    subcategories = raw.map(mapSubcategory);
+  }
+  const seenSlugs = new Set<string>();
+  return subcategories.filter((s) => {
+    if (seenSlugs.has(s.slug)) return false;
+    seenSlugs.add(s.slug);
+    return true;
+  });
 }
 
 export async function createSubcategory(input: Omit<SubcategoryRecord, "id" | "createdAt">) {
