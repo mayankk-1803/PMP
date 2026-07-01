@@ -22,8 +22,8 @@ const INDUSTRY_SLUGS = new Set([
   "mason-kits",
   "electrician-kits",
   "interior-designer-kits",
-  "retailer-kits",
   "plumber-kits",
+  "retailer-kits",
   "painter-kits",
   "engineer-kits"
 ]);

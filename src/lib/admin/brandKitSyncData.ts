@@ -69,16 +69,15 @@ export const PROMOTIONAL_SUBCATEGORIES = [
 export const CORPORATE_KIT_SUBCATEGORIES = [
   ["Joining Kits", "joining-kits", "Employee onboarding kits with diary, pen, sipper, welcome card, and branded box."],
   ["Dealer Kits", "dealer-kits", "Dealer launch kits with sales collateral, partner folders, and channel welcome packs."],
-  ["Distributor Kits", "distributor-kits", "Distributor growth kits with travel utilities, trophies, and campaign literature."],
   ["Doctor Kits", "doctor-kits", "Medical-themed stationery, desk utilities, planners, and clinic-ready branded packs."],
   ["Architect Kits", "architect-kits", "Sketchbooks, design tools, swatches, rulers, and premium studio presentation kits."],
   ["Mason Kits", "mason-kits", "Recognition and utility kits for masonry teams with workwear, drinkware, and field packaging."],
   ["Electrician Kits", "electrician-kits", "Safety and utility kits with gloves, testers, notebooks, caps, and branded field packs."],
-  ["Interior Designer Kits", "interior-designer-kits", "Designer sample kits with swatches, notebooks, rulers, templates, and presentation boxes."],
-  ["Retailer Kits", "retailer-kits", "Retailer welcome kits with display cards, diaries, custom keychains, and branded packaging."],
+  ["Interior Designer Kits", "interior-designer-kits", "Designer sample kits with swatches, notebooks, rulers, pens, and presentation boxes."],
   ["Plumber Kits", "plumber-kits", "Functional kits with branded toolbags, notebooks, drinkware, and trade accessories."],
-  ["Painter Kits", "painter-kits", "Painter kit with custom caps, branded uniforms, paint charts, and utility notebooks."],
-  ["Engineer Kits", "engineer-kits", "Engineer kit with steel calipers, technical notebooks, calculators, and safety utilities."]
+  ["Retailer Kits", "retailer-kits", "Retailer and dealer kits with sales tools, branding panels, and onboarding packages."],
+  ["Painter Kits", "painter-kits", "Professional painter utility kits with branded overalls, hats, notebooks, and gear."],
+  ["Engineer Kits", "engineer-kits", "Safety and engineering tools, premium notebooks, high-visibility caps, and technical kits."]
 ] as const;
 
 export const HAMPER_SUBCATEGORIES = [

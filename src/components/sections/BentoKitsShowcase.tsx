@@ -50,12 +50,12 @@ const BENTO_MAPPING = [
     image: corporateKitImageOrFallback("Dealer Kits")
   },
   {
-    slug: "distributor",
-    badge: "Channel Growth",
+    slug: "engineer",
+    badge: "Field Ops",
     size: "large",
     icon: <Sparkles className="w-5 h-5" />,
     color: "from-neutral-900 to-neutral-700",
-    image: corporateKitImageOrFallback("Distributor Kits")
+    image: corporateKitImageOrFallback("Engineer Kits")
   }
 ];
 

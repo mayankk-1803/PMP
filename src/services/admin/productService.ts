@@ -93,11 +93,17 @@ export async function searchCatalogProducts(options: {
   const page = Math.max(1, Number(options.page) || 1);
   const limit = Math.min(1000, Math.max(1, Number(options.limit) || 1000));
   const query: Record<string, any> = { status: "PUBLISHED", isDeleted: { $ne: true } };
-
   if (options.search) query.$text = { $search: options.search };
   const activeFilter = options.subcategory || options.category;
   if (activeFilter && activeFilter !== "all") {
-    query.$and = [{ $or: [{ category: activeFilter }, { subcategory: activeFilter }] }];
+    let filterValues = [activeFilter];
+    if (activeFilter === "laptop-bags") filterValues = ["laptop-bags", "laptop-backpacks"];
+    if (activeFilter === "travel-bags") filterValues = ["travel-bags", "travel-backpacks"];
+    if (activeFilter === "bags") filterValues = ["bags", "backpacks-bags"];
+    if (activeFilter === "promotional-caps") filterValues = ["promotional-caps", "baseball-caps", "event-caps", "snapback-caps"];
+    if (activeFilter === "cotton-caps") filterValues = ["cotton-caps", "sports-caps"];
+
+    query.$and = [{ $or: [{ category: { $in: filterValues } }, { subcategory: { $in: filterValues } }] }];
   }
   if (options.brand) query.brand = options.brand;
   if (options.featured === "true") query.featured = true;
@@ -173,14 +179,16 @@ const mapMongoProduct = (product: any): ProductRecord => {
     slug: product.slug
   });
 
-  const sourceImages = product.galleryImages?.length
+  const sourceImages = (product.galleryImages?.length
     ? product.galleryImages
     : product.images?.length
       ? product.images
       : product.featuredImage
         ? [product.featuredImage]
-        : [];
-  const images = [matchedImage, ...sourceImages].filter((image, index, self) => self.indexOf(image) === index);
+        : []
+  ).filter(Boolean);
+  const images = [matchedImage, ...sourceImages].filter((image, index, self) => image && self.indexOf(image) === index);
+  const finalFeaturedImage = matchedImage || images[0] || "";
 
   return {
     id: String(product._id),
@@ -191,7 +199,7 @@ const mapMongoProduct = (product: any): ProductRecord => {
     category,
     subcategory,
     brand: product.brand,
-    featuredImage: matchedImage,
+    featuredImage: finalFeaturedImage,
     galleryImages: images,
     cloudinaryPublicId: product.cloudinaryPublicId,
     galleryPublicIds: product.galleryPublicIds || [],

@@ -74,27 +74,32 @@ export function SafeImage({
    * Promotional Product categories (pens, drinkware, bags, etc.) must NOT match here
    * — even if their titles contain words like 'executive', 'coffee', 'travel', 'gift'.
    */
-  const isKitOrHamper = (slug?: string) => {
-    if (!slug) return false;
+  const isKitOrHamper = (cat?: string) => {
+    const slug = (cat || "").toLowerCase().replace(/\s+/g, "-");
     return (
+      slug === "corporate-kits" ||
+      slug === "festive-hampers" ||
+      slug === "kits-hampers" ||
+      slug === "kits" ||
+      slug === "hampers" ||
       slug === "diwali-hampers" ||
       slug === "holi-hampers" ||
       slug === "eid-kits" ||
+      slug === "eid-hampers" ||
       slug === "christmas-kits" ||
       slug === "new-year-hampers" ||
       slug === "womens-day-gifts" ||
       slug === "joining-kits" ||
       slug === "dealer-kits" ||
-      slug === "distributor-kits" ||
       slug === "doctor-kits" ||
       slug === "architect-kits" ||
       slug === "mason-kits" ||
       slug === "electrician-kits" ||
       slug === "plumber-kits" ||
+      slug === "interior-designer-kits" ||
       slug === "retailer-kits" ||
       slug === "painter-kits" ||
-      slug === "engineer-kits" ||
-      slug === "interior-designer-kits"
+      slug === "engineer-kits"
     );
   };
 
