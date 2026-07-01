@@ -43,14 +43,13 @@ export const PROMOTIONAL_PRODUCT_GROUPS = [
 export const CORPORATE_KITS = [
   { name: "Joining Kits", slug: "joining-kits", href: "/corporate-kits?kit=joining-kits" },
   { name: "Dealer Kits", slug: "dealer-kits", href: "/corporate-kits?kit=dealer-kits" },
-  { name: "Distributor Kits", slug: "distributor-kits", href: "/corporate-kits?kit=distributor-kits" },
   { name: "Doctor Kits", slug: "doctor-kits", href: "/corporate-kits?kit=doctor-kits" },
   { name: "Architect Kits", slug: "architect-kits", href: "/corporate-kits?kit=architect-kits" },
   { name: "Mason Kits", slug: "mason-kits", href: "/corporate-kits?kit=mason-kits" },
   { name: "Electrician Kits", slug: "electrician-kits", href: "/corporate-kits?kit=electrician-kits" },
   { name: "Interior Designer Kits", slug: "interior-designer-kits", href: "/corporate-kits?kit=interior-designer-kits" },
-  { name: "Retailer Kits", slug: "retailer-kits", href: "/corporate-kits?kit=retailer-kits" },
   { name: "Plumber Kits", slug: "plumber-kits", href: "/corporate-kits?kit=plumber-kits" },
+  { name: "Retailer Kits", slug: "retailer-kits", href: "/corporate-kits?kit=retailer-kits" },
   { name: "Painter Kits", slug: "painter-kits", href: "/corporate-kits?kit=painter-kits" },
   { name: "Engineer Kits", slug: "engineer-kits", href: "/corporate-kits?kit=engineer-kits" }
 ];
@@ -1207,7 +1206,7 @@ const normalizeProductImages = (products: Record<string, ProductItem>) => {
         library[(startIndex + 1) % library.length],
         library[(startIndex + 2) % library.length]
       ];
-      const images = [titleMatchedImage, ...supportingImages].filter((image, imageIndex, self) => self.indexOf(image) === imageIndex);
+      const images = [titleMatchedImage, ...supportingImages].filter((image, imageIndex, self) => image && self.indexOf(image) === imageIndex);
 
       return [key, { ...product, ...taxonomy, images }];
     })
@@ -1242,14 +1241,6 @@ const BASE_SITE_KITS = [
     slug: "dealer"
   },
   {
-    title: "Distributor Kits",
-    price: "Custom Quote",
-    description: "Durable and functional kits for distribution channel partners.",
-    imageUrl: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop",
-    category: "corporate",
-    slug: "distributor"
-  },
-  {
     title: "Doctor Kits",
     price: "Custom Quote",
     description: "Specially curated medical-themed stationery and utility items.",
@@ -1266,36 +1257,12 @@ const BASE_SITE_KITS = [
     slug: "architect"
   },
   {
-    title: "Contractor Kits",
-    price: "Custom Quote",
-    description: "Durable site-ready kits with branded bags, measurement tools, drinkware, and daily-use safety essentials for contractor networks.",
-    imageUrl: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=800&auto=format&fit=crop",
-    category: "industry",
-    slug: "contractor"
-  },
-  {
     title: "Plumber Kits",
     price: "Custom Quote",
     description: "Branded toolbags and functional accessories for plumbing professionals.",
     imageUrl: "https://images.unsplash.com/photo-1585704032915-c3400ca1f965?q=80&w=800&auto=format&fit=crop",
     category: "corporate",
     slug: "plumber"
-  },
-  {
-    title: "Mason Kits",
-    price: "Custom Quote",
-    description: "Rugged and durable utility kits for masonry and construction staff.",
-    imageUrl: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop",
-    category: "corporate",
-    slug: "mason"
-  },
-  {
-    title: "Electrician Kits",
-    price: "Custom Quote",
-    description: "Safety-focused kits with branded utility tools for electricians.",
-    imageUrl: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop",
-    category: "corporate",
-    slug: "electrician"
   },
   {
     title: "Interior Designer Kits",
@@ -1306,101 +1273,45 @@ const BASE_SITE_KITS = [
     slug: "interior-designer"
   },
   {
-    title: "Pharma Representative Kits",
-    price: "Custom Quote",
-    description: "Professional bags and daily reporting tools for pharma field teams.",
-    imageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop",
-    category: "industry",
-    slug: "pharma"
-  },
-  {
-    title: "Hospital Staff Kits",
-    price: "Custom Quote",
-    description: "Useful staff appreciation kits with hygienic drinkware, utility pouches, notebooks, wellness items, and branded ID accessories.",
-    imageUrl: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=800&auto=format&fit=crop",
-    category: "industry",
-    slug: "hospital-staff"
-  },
-  {
-    title: "Startup Employee Onboarding Kits",
-    price: "Custom Quote",
-    description: "Modern welcome kits for fast-growing teams with branded notebooks, drinkware, hoodies, stickers, tech organizers, and founder notes.",
-    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop",
-    category: "corporate",
-    slug: "startup-onboarding"
-  },
-  {
-    title: "Training Kits",
-    price: "Custom Quote",
-    description: "Structured learning kits with notebooks, lanyards, writing tools, certificates, drinkware, and branded training folders.",
-    imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop",
-    category: "corporate",
-    slug: "training"
-  },
-  {
-    title: "Seminar Kits",
-    price: "Custom Quote",
-    description: "Event-ready seminar kits with folders, delegate badges, writing tools, agenda inserts, drinkware, and sponsor-branded packaging.",
-    imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop",
-    category: "corporate",
-    slug: "seminar"
-  },
-  {
-    title: "Retail Partner Kit",
+    title: "Retailer Kits",
     price: "Custom Quote",
     description: "In-store branding items and utility kits for retail outlet owners.",
     imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop",
     category: "industry",
-    slug: "retail"
+    slug: "retailer"
   },
   {
-    title: "Partner Kits",
+    title: "Painter Kits",
     price: "Custom Quote",
-    description: "Premium channel partner kits built for relationship milestones, product launches, annual meets, and loyalty programs.",
-    imageUrl: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=800&auto=format&fit=crop",
+    description: "Professional painter utility kits with branded overalls, hats, and protective gear.",
+    imageUrl: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?q=80&w=800&auto=format&fit=crop",
     category: "industry",
-    slug: "partner"
+    slug: "painter"
   },
   {
-    title: "Sales Team Kits",
+    title: "Engineer Kits",
     price: "Custom Quote",
-    description: "Motivation kits with tech gadgets and high-end lifestyle items for sales professionals.",
-    imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
+    description: "Safety and engineering tools, premium notebooks, high-visibility caps, and technical gear.",
+    imageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop",
     category: "industry",
-    slug: "sales"
-  },
-  {
-    title: "Real Estate Kits",
-    price: "Custom Quote",
-    description: "Premium launch, broker, and handover kits with key boxes, branded folders, drinkware, site merchandise, and executive presentation packaging.",
-    imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=800&auto=format&fit=crop",
-    category: "industry",
-    slug: "real-estate"
+    slug: "engineer"
   }
 ];
 
 const KIT_EXPANSIONS = [
   { title: "Essential Joining Kit", price: "Custom Quote", description: "Notebook, metal pen, bottle, ID card holder, welcome card, and branded mailer for fast onboarding rollouts.", imageUrl: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "essential-joining-kit" },
   { title: "Premium Joining Kit", price: "Custom Quote", description: "Luxury notebook, insulated bottle, desk mat, tech pouch, greeting card, and rigid presentation box.", imageUrl: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "premium-joining-kit" },
-  { title: "Remote Employee Kit", price: "Custom Quote", description: "Doorstep-ready work-from-home kit with desk organizer, mug, notebook, charging cable, and custom welcome note.", imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "remote-employee-kit" },
-  { title: "Executive Leadership Kit", price: "Custom Quote", description: "Premium folder, roller pen, tumbler, wireless charger, and magnetic rigid box for leadership welcomes.", imageUrl: "https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "executive-leadership-kit" },
   { title: "Campus Hire Kit", price: "Custom Quote", description: "Youthful onboarding kit with oversized tee, tote, sipper, sticker sheet, and brand story card.", imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "campus-hire-kit" },
   { title: "Dealer Launch Kit", price: "Custom Quote", description: "Dealer certificate folder, product samples, metal keychain, desk nameplate, and branded sales collateral.", imageUrl: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "dealer-launch-kit" },
-  { title: "Distributor Growth Kit", price: "Custom Quote", description: "Channel partner kit with trophy plaque, premium diary, pen, travel pouch, and campaign literature.", imageUrl: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "distributor-growth-kit" },
-  { title: "Partner Appreciation Kit", price: "Custom Quote", description: "Elegant partner hamper with dry fruits, candle, thank-you note, trophy plate, and premium box.", imageUrl: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "partner-appreciation-kit" },
-  { title: "Sales Starter Kit", price: "Custom Quote", description: "Field-ready sales kit with polo tee, backpack, bottle, planner, lanyard, and product pitch cards.", imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "sales-starter-kit" },
-  { title: "Training Delegate Kit", price: "Custom Quote", description: "Seminar delegate pack with notebook, pen, badge, tote, agenda sheets, and refreshment voucher sleeve.", imageUrl: "https://images.unsplash.com/photo-1517971129774-8a2b38fa128e?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "training-delegate-kit" },
-  { title: "Conference Speaker Kit", price: "Custom Quote", description: "Speaker-ready kit with executive pen, desk clock, folder, bottle, certificate case, and premium packaging.", imageUrl: "https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "conference-speaker-kit" },
-  { title: "Startup Culture Kit", price: "Custom Quote", description: "Vibrant kit with branded tee, stickers, tumbler, notebook, tote, and social-media ready packaging.", imageUrl: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=900&auto=format&fit=crop", category: "corporate", slug: "startup-culture-kit" },
   { title: "Doctor Desk Kit", price: "Custom Quote", description: "Clinic desk kit with pen stand, planner, prescription pad cover, tumbler, and dignified branded box.", imageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "doctor-desk-kit" },
-  { title: "Hospital Staff Kit", price: "Custom Quote", description: "Practical staff kit with insulated bottle, badge reel, notebook, sanitizer pouch, and appreciation card.", imageUrl: "https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "hospital-staff-care-kit" },
   { title: "Architect Studio Kit", price: "Custom Quote", description: "Creative kit with sketchbook, ruler, premium pen, desk organizer, sample swatches, and rigid portfolio box.", imageUrl: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "architect-studio-kit" },
-  { title: "Contractor Field Kit", price: "Custom Quote", description: "Rugged field kit with cap, rainwear, tape measure, diary, pen, and durable corrugated carry box.", imageUrl: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "contractor-field-kit" },
-  { title: "Electrician Safety Kit", price: "Custom Quote", description: "Utility kit with insulated gloves, branded cap, notepad, safety card, tester pouch, and field packaging.", imageUrl: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "electrician-safety-kit" },
+  { title: "Electrician Safety Kit", price: "Custom Quote", description: "Utility kit with insulated gloves, branded cap, notepad, safety card, tester pouch, and field packaging.", imageUrl: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "electrician-safety-kit" },
   { title: "Mason Recognition Kit", price: "Custom Quote", description: "Recognition pack with branded tee, cap, bottle, tool pouch, certificate, and rugged outer carton.", imageUrl: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "mason-recognition-kit" },
-  { title: "Real Estate Handover Kit", price: "Custom Quote", description: "Premium property handover kit with key box, folder, pen, welcome card, and luxury rigid packaging.", imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "real-estate-handover-kit" },
-  { title: "Pharma Representative Kit", price: "Custom Quote", description: "Medical representative kit with folder, pen, planner, bottle, sample insert tray, and branded carton.", imageUrl: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "pharma-representative-kit" },
-  { title: "Interior Designer Kit", price: "Custom Quote", description: "Designer sample kit with notebook, swatch cards, ruler, premium pen, and presentation-ready box.", imageUrl: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "interior-designer-sample-kit" }
+  { title: "Interior Designer Kit", price: "Custom Quote", description: "Designer sample kit with notebook, swatch cards, ruler, premium pen, and presentation-ready box.", imageUrl: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "interior-designer-sample-kit" },
+  { title: "Plumber Toolkit Kit", price: "Custom Quote", description: "Professional toolbag with custom measuring tape, insulated bottle, protective gloves, and branded note pads.", imageUrl: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "plumber-toolkit" },
+  { title: "Retailer Store Kit", price: "Custom Quote", description: "Branded shop counter display standee, premium metal keychain, visitor notebook, and merchant pen.", imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "retailer-store" },
+  { title: "Painter Gear Kit", price: "Custom Quote", description: "Painter overall clothing, branded cap, customized paint-swatch notebook, and metal signature pen.", imageUrl: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "painter-gear" },
+  { title: "Engineer Safety Kit", price: "Custom Quote", description: "High-visibility vest, branded engineering hard hat, technical drawing notepad, and premium stylus pen.", imageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=900&auto=format&fit=crop", category: "industry", slug: "engineer-safety" }
 ];
 
 const RAW_SITE_KITS = [

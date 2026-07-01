@@ -10,14 +10,13 @@ export const getCanonicalKitSlug = (slug: string | null | undefined): string | u
   // Corporate Kits mapping
   if (clean === "joining" || clean === "joiningkits") return "joining-kits";
   if (clean === "dealer" || clean === "dealerkits") return "dealer-kits";
-  if (clean === "distributor" || clean === "distributorkits") return "distributor-kits";
   if (clean === "doctor" || clean === "doctorkits") return "doctor-kits";
   if (clean === "architect" || clean === "architectkits") return "architect-kits";
   if (clean === "mason" || clean === "masonkits") return "mason-kits";
   if (clean === "electrician" || clean === "electriciankits") return "electrician-kits";
   if (clean === "interiordesigner" || clean === "interiordesignerkit" || clean === "interiordesignerkits") return "interior-designer-kits";
-  if (clean === "retailer" || clean === "retailerkits") return "retailer-kits";
   if (clean === "plumber" || clean === "plumberkits") return "plumber-kits";
+  if (clean === "retailer" || clean === "retailerkits") return "retailer-kits";
   if (clean === "painter" || clean === "painterkits") return "painter-kits";
   if (clean === "engineer" || clean === "engineerkits") return "engineer-kits";
   

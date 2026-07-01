@@ -1,13 +1,18 @@
 import { NextResponse } from "next/server";
 import { getCatalogProducts, searchCatalogProducts } from "@/services/admin/productService";
+import { getCanonicalKitSlug } from "@/lib/slugResolver";
 
 export const dynamic = "force-dynamic";
 
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const category = url.searchParams.get("category");
-  const subcategory = url.searchParams.get("subcategory");
+  let category = url.searchParams.get("category");
+  let subcategory = url.searchParams.get("subcategory");
+  
+  if (category) category = getCanonicalKitSlug(category) || category;
+  if (subcategory) subcategory = getCanonicalKitSlug(subcategory) || subcategory;
+
   const query = url.searchParams.get("q")?.toLowerCase();
   const brand = url.searchParams.get("brand");
   const featured = url.searchParams.get("featured");
@@ -31,7 +36,25 @@ export async function GET(req: Request) {
 
   const products = (await getCatalogProducts()).filter((product) => {
     const activeFilter = subcategory || category;
-    const matchesCategory = !activeFilter || activeFilter === "all" || product.category === activeFilter || product.subcategory === activeFilter;
+    
+    const matchSubcategory = (selected: string, productSubOrCat: string): boolean => {
+      if (selected === productSubOrCat) return true;
+      if (selected === "laptop-bags" && (productSubOrCat === "laptop-backpacks" || productSubOrCat === "laptop-bags")) return true;
+      if (selected === "travel-bags" && (productSubOrCat === "travel-backpacks" || productSubOrCat === "travel-bags")) return true;
+      if (selected === "bags" && (productSubOrCat === "backpacks-bags" || productSubOrCat === "bags")) return true;
+      if (selected === "promotional-caps" && (productSubOrCat === "baseball-caps" || productSubOrCat === "event-caps" || productSubOrCat === "snapback-caps" || productSubOrCat === "promotional-caps")) return true;
+      if (selected === "cotton-caps" && (productSubOrCat === "cotton-caps" || productSubOrCat === "sports-caps")) return true;
+      return false;
+    };
+
+    const matchesCategory = 
+      !activeFilter || 
+      activeFilter === "all" || 
+      product.category === activeFilter || 
+      product.subcategory === activeFilter ||
+      matchSubcategory(activeFilter, product.category) ||
+      matchSubcategory(activeFilter, product.subcategory);
+
     const matchesQuery = !query || product.title.toLowerCase().includes(query) || product.description.toLowerCase().includes(query) || product.slug.toLowerCase().includes(query);
     const matchesBrand = !brand || product.brand === brand;
     const matchesFeatured = !featured || (featured === "true" ? product.featured : !product.featured);

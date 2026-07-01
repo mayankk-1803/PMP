@@ -88,7 +88,12 @@ function ProductsPageContent() {
       const orderedPromoCategories: CatalogNode[] = [];
       for (const cat of PRODUCT_HIERARCHY[0].categories) {
         for (const sub of cat.subcategories) {
-          if (PROMO_SUBCATEGORY_SLUGS.has(sub.slug) && slugsWithProducts.has(sub.slug)) {
+          const hasProducts = slugsWithProducts.has(sub.slug) || 
+            (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
+            (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks")) ||
+            (sub.slug === "promotional-caps" && (slugsWithProducts.has("baseball-caps") || slugsWithProducts.has("event-caps") || slugsWithProducts.has("snapback-caps")));
+
+          if (PROMO_SUBCATEGORY_SLUGS.has(sub.slug) && hasProducts) {
             orderedPromoCategories.push({ name: sub.name, slug: sub.slug });
           }
         }
@@ -98,9 +103,17 @@ function ProductsPageContent() {
       // (for newly synced products), while still excluding Kits & Hampers
       const apiSubcats: CatalogNode[] = (subcategoriesResult.data ?? []).filter(
         (item: CatalogNode) =>
-          PROMO_SUBCATEGORY_SLUGS.has(item.slug) &&
+          (PROMO_SUBCATEGORY_SLUGS.has(item.slug) || 
+           item.slug === "laptop-backpacks" || 
+           item.slug === "travel-backpacks" || 
+           item.slug === "baseball-caps" || 
+           item.slug === "event-caps" || 
+           item.slug === "snapback-caps") &&
           slugsWithProducts.has(item.slug) &&
-          !orderedPromoCategories.some((c) => c.slug === item.slug)
+          !orderedPromoCategories.some((c) => c.slug === item.slug || 
+            (c.slug === "laptop-bags" && item.slug === "laptop-backpacks") ||
+            (c.slug === "travel-bags" && item.slug === "travel-backpacks") ||
+            (c.slug === "promotional-caps" && (item.slug === "baseball-caps" || item.slug === "event-caps" || item.slug === "snapback-caps")))
       );
 
       setCategories([
@@ -154,7 +167,39 @@ function ProductsPageContent() {
 
   // Filter logic
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory || product.subcategory === selectedCategory;
+    // Exclude Kits and Hampers and Packaging on promotional page if selectedCategory is "all"
+    const isPromo = 
+      PROMO_SUBCATEGORY_SLUGS.has(product.subcategory) ||
+      product.subcategory === "laptop-backpacks" ||
+      product.subcategory === "travel-backpacks" ||
+      product.subcategory === "baseball-caps" ||
+      product.subcategory === "event-caps" ||
+      product.subcategory === "snapback-caps" ||
+      product.category === "corporate-gifts" ||
+      product.category === "pens" ||
+      product.category === "t-shirts" ||
+      product.category === "caps" ||
+      product.category === "diaries" ||
+      product.category === "drinkware" ||
+      product.category === "backpacks-bags" ||
+      product.category === "executive-gifts";
+
+    if (!isPromo) return false;
+
+    const matchSubcategory = (selected: string, productSub: string): boolean => {
+      if (selected === productSub) return true;
+      if (selected === "laptop-bags" && (productSub === "laptop-backpacks" || productSub === "laptop-bags")) return true;
+      if (selected === "travel-bags" && (productSub === "travel-backpacks" || productSub === "travel-bags")) return true;
+      if (selected === "promotional-caps" && (productSub === "baseball-caps" || productSub === "event-caps" || productSub === "snapback-caps" || productSub === "promotional-caps")) return true;
+      if (selected === "cotton-caps" && (productSub === "cotton-caps" || productSub === "sports-caps")) return true;
+      return false;
+    };
+
+    const matchesCategory = 
+      selectedCategory === "all" || 
+      product.category === selectedCategory || 
+      matchSubcategory(selectedCategory, product.subcategory);
+
     const matchesBudget = selectedBudget === "all";
     const matchesSearch = 
       product.category.toLowerCase().includes(searchQuery.toLowerCase()) ||

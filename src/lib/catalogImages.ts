@@ -143,9 +143,10 @@ const POOLS = {
     "/images/steelbottle.png",
     "/images/copperbottleset.png",
   ],
-  // Coffee mugs — only add images here if dedicated mug images exist in public/images
-  // Currently empty; returns "" which renders the neutral placeholder
-  coffeeMugs: [] as string[],
+  coffeeMugs: [
+    "/images/sportsbottle.png",
+    "/images/flaskbottle.png",
+  ],
   travelMugs: [
     "/images/flaskbottle.png",
     "/images/premiumvaccumflask.png",
@@ -261,24 +262,45 @@ export const realCatalogImage = (title: string, category = "", subcategory = "",
   if ((sub.includes("bag") || ttl.includes("bag")) && !haystack.includes("kit")) return pick(POOLS.laptopBags, title, seed);
 
   // ── Diaries / Notebooks ────────────────────────────────────────────
-  if (haystack.includes("notebook") || haystack.includes("diary") || haystack.includes("journal") || haystack.includes("planner")) return pick(POOLS.notebook, title, seed);
+  if (haystack.includes("notebook") || haystack.includes("diary") || haystack.includes("journal") || haystack.includes("planner") || haystack.includes("folder")) return pick(POOLS.notebook, title, seed);
 
   // ── Pens ───────────────────────────────────────────────────────────
   if (haystack.includes("pen")) return pick(POOLS.pens, title, seed);
 
-  // ── Table Top ──────────────────────────────────────────────────────
+  // ── Table Top / Desk Accessories ───────────────────────────────────
   if (haystack.includes("mouse pad") || haystack.includes("mousepad")) return pick(POOLS.mousePad, title, seed);
   if (haystack.includes("paper weight") || haystack.includes("paperweight")) return pick(POOLS.paperWeight, title, seed);
   if (haystack.includes("table mat") || haystack.includes("desk mat")) return pick(POOLS.tableMat, title, seed);
-  if (haystack.includes("desk organizer") || haystack.includes("desk organiser") || haystack.includes("calendar")) return pick(POOLS.desk, title, seed);
+  if (
+    haystack.includes("desk") ||
+    haystack.includes("office") ||
+    haystack.includes("corporate") ||
+    haystack.includes("holder") ||
+    haystack.includes("dock") ||
+    haystack.includes("charging") ||
+    haystack.includes("organizer") ||
+    haystack.includes("organiser") ||
+    haystack.includes("calendar")
+  ) {
+    return pick(POOLS.desk, title, seed);
+  }
+
+  // ── Gift Sets / Packs ──────────────────────────────────────────────
+  if (
+    haystack.includes("gift set") ||
+    haystack.includes("gift pack") ||
+    haystack.includes("gift box") ||
+    haystack.includes("conference")
+  ) {
+    return pick(POOLS.rigidBoxes, title, seed);
+  }
 
   // ── Drinkware — strict per subcategory, NO cross-category mixing ───
   if (sub === "flasks" || ttl.includes("flask") || ttl.includes("vacuum flask") || ttl.includes("vaccum flask")) {
     return pick(POOLS.flasks, title, seed);
   }
   if (sub === "coffee-mugs" || ttl.includes("coffee mug") || ttl.includes("ceramic mug") || ttl.includes("tea mug")) {
-    // No dedicated mug images yet — return empty string to render neutral placeholder
-    return POOLS.coffeeMugs.length > 0 ? pick(POOLS.coffeeMugs, title, seed) : "";
+    return pick(POOLS.coffeeMugs, title, seed);
   }
   if (sub === "travel-mugs" || ttl.includes("travel mug") || ttl.includes("tumbler")) {
     return pick(POOLS.travelMugs, title, seed);
@@ -288,11 +310,21 @@ export const realCatalogImage = (title: string, category = "", subcategory = "",
   }
 
   // ── Kits & Hampers (kept for corporate-kits page) ─────────────────
-  if (haystack.includes("architect") || haystack.includes("interior")) return corporateKitImageOrFallback(title || subcategory || category);
-  if (haystack.includes("mason") || haystack.includes("contractor") || haystack.includes("electrician")) return corporateKitImageOrFallback(title || subcategory || category);
-  if (haystack.includes("doctor") || haystack.includes("hospital") || haystack.includes("pharma")) return corporateKitImageOrFallback(title || subcategory || category);
-  if (haystack.includes("kit") || haystack.includes("dealer") || haystack.includes("distributor") || haystack.includes("partner") || haystack.includes("sales")) {
-    return corporateKitImageOrFallback(title || subcategory || category);
+  if (
+    haystack.includes("architect") ||
+    haystack.includes("interior") ||
+    haystack.includes("mason") ||
+    haystack.includes("electrician") ||
+    haystack.includes("doctor") ||
+    haystack.includes("kit") ||
+    haystack.includes("dealer") ||
+    haystack.includes("plumber") ||
+    haystack.includes("painter") ||
+    haystack.includes("engineer") ||
+    haystack.includes("retailer")
+  ) {
+    const kitImg = corporateKitImageOrFallback(title || subcategory || category);
+    if (kitImg) return kitImg;
   }
 
   // ── Specific hampers ───────────────────────────────────────────────

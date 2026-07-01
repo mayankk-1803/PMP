@@ -101,8 +101,8 @@ const subcategoryNames: Record<string, string[]> = {
   "backpacks-bags": ["Laptop Backpacks", "Travel Backpacks", "Conference Bags", "Tote Bags"],
   "executive-gifts": ["Luxury Gift Boxes", "Desk Kits", "Office Kits", "VIP Welcome Boxes"],
   "corporate-kits": [
-    "Joining Kits", "Dealer Kits", "Distributor Kits", "Doctor Kits", "Architect Kits", "Mason Kits",
-    "Electrician Kits", "Interior Designer Kits", "Retailer Kits", "Plumber Kits", "Painter Kits", "Engineer Kits"
+    "Joining Kits", "Dealer Kits", "Doctor Kits", "Architect Kits", "Mason Kits",
+    "Electrician Kits", "Interior Designer Kits", "Plumber Kits", "Retailer Kits", "Painter Kits", "Engineer Kits"
   ],
   "festive-hampers": [
     "Diwali Hampers", "Holi Hampers", "Eid Kits", "Women's Day Gifts", "Christmas Kits", "New Year Hampers"
@@ -193,8 +193,8 @@ const explicitProducts = [
 ] as const;
 
 const kitSubcategories = [
-  "joining-kits", "dealer-kits", "distributor-kits", "doctor-kits", "architect-kits", "mason-kits",
-  "electrician-kits", "interior-designer-kits", "retailer-kits", "plumber-kits", "painter-kits", "engineer-kits"
+  "joining-kits", "dealer-kits", "doctor-kits", "architect-kits", "mason-kits",
+  "electrician-kits", "interior-designer-kits", "plumber-kits", "retailer-kits", "painter-kits", "engineer-kits"
 ];
 const hamperSubcategories = [
   "diwali-hampers", "holi-hampers", "eid-kits", "womens-day-gifts", "christmas-kits", "new-year-hampers"

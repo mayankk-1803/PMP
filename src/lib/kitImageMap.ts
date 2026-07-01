@@ -19,10 +19,31 @@ const cleanString = (value: string) =>
     .replace(/kit/g, "")
     .replace(/[^a-z0-9]/g, "");
 
+const hashText = (value: string): number =>
+  value.split("").reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) >>> 0, 17);
+
+const uniqueIndex = (title: string, seed: string, length: number): number => {
+  const lower = title.toLowerCase();
+  const numbered = lower.match(/\b(\d+)\b/);
+  if (numbered) return (Number(numbered[1]) - 1) % length;
+  return hashText(`${title}-${seed}`) % length;
+};
+
+const pick = (pool: string[], title: string, seed: string): string =>
+  pool[uniqueIndex(title, seed, pool.length)];
+
 export const getKitsAndHampersImage = (titleOrSlug: string): string | undefined => {
   if (!titleOrSlug) return undefined;
   
-  const cleanedTarget = cleanString(titleOrSlug);
+  let cleanedTarget = cleanString(titleOrSlug);
+  
+  // Normalization maps
+  if (cleanedTarget.includes("joining") || cleanedTarget.includes("joiner")) {
+    cleanedTarget = cleanedTarget.replace("joining", "join").replace("joiner", "join");
+  }
+  if (cleanedTarget.includes("retailer")) {
+    cleanedTarget = cleanedTarget.replace("retailer", "dealer");
+  }
 
   // 1. Try to find a match in the primary "public/kit images/" folder
   const kitImageMatch = KIT_IMAGES_FILES.find((file) => {
@@ -62,6 +83,44 @@ export const getKitsAndHampersImage = (titleOrSlug: string): string | undefined 
 
   if (kitsImageMatch) {
     return `/kitsimages/${kitsImageMatch}`;
+  }
+
+  // 3. Fallback: Prefix/substring matching for dynamic resolution
+  const baseTarget = cleanedTarget.replace(/\d+$/, "");
+  if (baseTarget.length >= 3) {
+    // Search KIT_IMAGES_FILES
+    const kitMatches = KIT_IMAGES_FILES.filter((file) => {
+      let cleanedFile = cleanString(file.split(".")[0]);
+      if (cleanedFile.includes("joining") || cleanedFile.includes("joiner")) {
+        cleanedFile = cleanedFile.replace("joining", "join").replace("joiner", "join");
+      }
+      if (cleanedFile.includes("retailer")) {
+        cleanedFile = cleanedFile.replace("retailer", "dealer");
+      }
+      return cleanedFile.includes(baseTarget) || baseTarget.includes(cleanedFile);
+    });
+
+    if (kitMatches.length > 0) {
+      const chosen = pick(kitMatches, titleOrSlug, titleOrSlug);
+      return `/kit images/${chosen}`;
+    }
+
+    // Search KITSIMAGES_FILES
+    const kitsMatches = KITSIMAGES_FILES.filter((file) => {
+      let cleanedFile = cleanString(file.split(".")[0]);
+      if (cleanedFile.includes("joining") || cleanedFile.includes("joiner")) {
+        cleanedFile = cleanedFile.replace("joining", "join").replace("joiner", "join");
+      }
+      if (cleanedFile.includes("retailer")) {
+        cleanedFile = cleanedFile.replace("retailer", "dealer");
+      }
+      return cleanedFile.includes(baseTarget) || baseTarget.includes(cleanedFile);
+    });
+
+    if (kitsMatches.length > 0) {
+      const chosen = pick(kitsMatches, titleOrSlug, titleOrSlug);
+      return `/kitsimages/${chosen}`;
+    }
   }
 
   return undefined;

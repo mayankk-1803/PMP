@@ -129,22 +129,26 @@ const getSyncDefaultImage = (name: string): string => {
   const clean = name.toLowerCase().replace(/[^a-z0-9]/g, "");
   
   if (clean.includes("welcome")) {
+    if (clean.includes("hamper")) return "/kitsimages/welcomehamper.png";
     return "/kitsimages/generalemployeeonboardingkit.png";
   }
   if (clean.includes("joiner")) return "/kitsimages/newjoinerkit.png";
   if (clean.includes("dealer")) return "/kitsimages/dealerkit.png";
   if (clean.includes("distributor")) return "/kitsimages/dealerkit.png";
-  if (clean.includes("retailer")) return "/kitsimages/dealerkit.png";
   if (clean.includes("doctor")) return "/kitsimages/doctorkit1.png";
+  if (clean.includes("contractor")) return "/kitsimages/contractorkit.png";
   if (clean.includes("mason")) return "/kitsimages/masonkit.png";
   if (clean.includes("painter")) return "/kitsimages/paintergeneralkit.png";
   if (clean.includes("plumber")) return "/kitsimages/plumberkit.png";
-  if (clean.includes("engineer")) return "/kitsimages/builderkit.png";
+  if (clean.includes("welder")) return "/kitsimages/builderkit.png";
   if (clean.includes("electrician")) return "/kitsimages/electriciankit.png";
+  if (clean.includes("salesteam")) return "/images/salesteamkit.png";
   if (clean.includes("diwali")) return "/kitsimages/diwalihamper.png";
   if (clean.includes("eid")) return "/kitsimages/eidhamper.png";
   if (clean.includes("christmas")) return "/kitsimages/christmasgift.png";
   if (clean.includes("women")) return "/kitsimages/womensdaygifts.png";
+  if (clean.includes("luxury")) return "/kitsimages/luxuryhamper.png";
+  if (clean.includes("celebration")) return "/kitsimages/corporatecelebrationhamper.png";
   
   // Promotional fallback defaults
   if (clean.includes("tshirt") || clean.includes("polo")) return "/images/polotshirt.png";
