@@ -5,6 +5,7 @@ import { ProductModel, CategoryModel, SubcategoryModel, BrandModel } from "@/mod
 import { logActivity } from "@/lib/admin/activityLogger";
 import { revalidatePathsAndTags } from "@/lib/admin/cacheRevalidation";
 import * as XLSX from "xlsx";
+import { getCanonicalCategorySlug } from "@/lib/slugResolver";
 
 const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
       BrandModel.find({ isDeleted: { $ne: true } }).lean(),
     ]);
 
-    const categorySlugs = new Set(allCategories.map((c) => c.slug));
+    const categorySlugs = new Set(allCategories.map((c) => getCanonicalCategorySlug(c.slug)));
     const brandNames = new Set(allBrands.map((b) => b.name.toLowerCase()));
 
     for (let index = 0; index < rawRows.length; index++) {
@@ -88,7 +89,7 @@ export async function POST(req: Request) {
           const subcategory = row.subcategory || category;
 
           // Validate category
-          if (!categorySlugs.has(category)) {
+          if (!categorySlugs.has(getCanonicalCategorySlug(category))) {
             summary.failed++;
             errors.push(`Row ${rowNum}: Invalid category slug "${category}"`);
             continue;
@@ -264,7 +265,7 @@ export async function POST(req: Request) {
           const category = row.category;
 
           // Check if parent category exists
-          if (!categorySlugs.has(category)) {
+          if (!categorySlugs.has(getCanonicalCategorySlug(category))) {
             summary.failed++;
             errors.push(`Row ${rowNum}: Invalid parent category slug "${category}"`);
             continue;
