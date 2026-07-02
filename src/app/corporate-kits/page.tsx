@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { getCanonicalKitSlug } from "@/lib/slugResolver";
 import { resolveProductImage, resolveSubcategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
+import { PRODUCT_HIERARCHY } from "@/data/siteConfig";
 
 type ActiveTab = "corporate" | "industry" | "festive";
 
@@ -146,7 +147,35 @@ function CorporateKitsContent() {
       fetch("/api/catalog/products").then((res) => res.json())
     ])
       .then(([, subRes, prodRes]) => {
-        if (subRes.success && subRes.data) setSubcategories(subRes.data);
+        if (subRes.success && subRes.data) {
+          const apiSubs = subRes.data;
+          const virtualSubs: any[] = [];
+          const kitsGroup = PRODUCT_HIERARCHY.find(g => g.slug === "kits-hampers");
+          if (kitsGroup) {
+            kitsGroup.categories.forEach(cat => {
+              if (["electronics", "clocks", "grooming-kits", "executive-kits"].includes(cat.slug)) {
+                cat.subcategories.forEach(sub => {
+                  virtualSubs.push({
+                    id: `virtual_${sub.slug}`,
+                    name: sub.name,
+                    slug: sub.slug,
+                    category: cat.slug,
+                    parentGroup: "Corporate Kits",
+                    description: `Premium bespoke B2B ${sub.name.toLowerCase()} gift set customized with corporate branding.`,
+                    image: ""
+                  });
+                });
+              }
+            });
+          }
+          const mergedSubs = [...apiSubs];
+          virtualSubs.forEach(vs => {
+            if (!mergedSubs.some(s => s.slug === vs.slug)) {
+              mergedSubs.push(vs);
+            }
+          });
+          setSubcategories(mergedSubs);
+        }
         if (prodRes.success && prodRes.data) setProducts(prodRes.data);
         setLoading(false);
       })

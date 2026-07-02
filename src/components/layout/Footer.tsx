@@ -15,8 +15,7 @@ import {
 import { 
   COMPANY_INFO, 
   CORPORATE_GIFTS, 
-  OCCASION_HAMPERS, 
-  PACKAGING_SOLUTIONS 
+  OCCASION_HAMPERS
 } from "@/data/siteConfig";
 
 // Inline SVGs for Brand Icons
@@ -137,7 +136,7 @@ export function Footer() {
         </div>
 
         {/* Structured Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 py-16">
           
           {/* COLUMN 1: Gifting Products */}
           <div className="space-y-4">
@@ -179,34 +178,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* COLUMN 3: Packaging Solutions */}
-          <div className="space-y-4">
-            <h3 className="font-extrabold text-white uppercase tracking-wider text-xs border-b border-[#F5C2C2]/10 pb-2">
-              Packaging Solutions
-            </h3>
-            <ul className="space-y-2.5">
-              {PACKAGING_SOLUTIONS.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-[rgba(255,255,255,0.90)] hover:text-[#D32F2F] hover:pl-1.5 transition-all text-xs font-semibold flex items-center gap-1 group"
-                  >
-                    <ArrowRight className="w-3 h-3 text-[#D32F2F] opacity-0 group-hover:opacity-100 transition-opacity" />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link
-                  href="/packaging-solutions"
-                  className="text-[rgba(255,255,255,0.90)] hover:text-[#D32F2F] hover:pl-1.5 transition-all text-xs font-semibold flex items-center gap-1 group"
-                >
-                  <ArrowRight className="w-3 h-3 text-[#D32F2F] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  Premium Finishes
-                </Link>
-              </li>
-            </ul>
-          </div>
+
 
           {/* COLUMN 4: Contact Details */}
           <div className="space-y-4">
