@@ -1,16 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useInView, animate } from "framer-motion";
-import { ArrowRight, ChevronRight, Star, CheckCircle2 } from "lucide-react";
+import { ArrowRight, ChevronRight, CheckCircle2 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import {
   EASE_OUT,
   SPRING_SOFT,
-  floatY,
 } from "@/lib/animations";
 
 // ─── Animated Counter (viewport-triggered) ────────────────────────────────────
@@ -171,26 +169,23 @@ export function HeroSection() {
   return (
     <section className="relative min-h-[100svh] lg:min-h-[70vh] pt-[72px] pb-5 sm:pt-[88px] sm:pb-8 lg:pt-28 lg:pb-16 flex items-center overflow-hidden">
 
-      {/* ── Background Image — scale 1.08 → 1 ── */}
+      {/* ── Background Video ── */}
       <motion.div
         className="absolute inset-0 w-full h-full overflow-hidden z-0 select-none pointer-events-none"
         initial={prefersReduced ? false : { scale: 1.08, opacity: 0.7 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.8, ease: EASE_OUT }}
       >
-        {/* Subtle floating motion on the image */}
-        <motion.div
-          className="relative w-full h-full overflow-hidden"
-          animate={prefersReduced ? {} : floatY}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
         >
-          <Image
-            src="/pacmyproductherosectionimage.png"
-            alt="PacMyProduct Hero"
-            fill
-            priority
-            className="object-cover"
-          />
-        </motion.div>
+          <source src="/gifting.mp4" type="video/mp4" />
+        </video>
       </motion.div>
 
       {/* ── Overlays — fade in after bg ── */}
