@@ -166,6 +166,22 @@ export const PRODUCT_HIERARCHY = [
           { name: "Eco Notebooks", slug: "eco-notebooks", href: "/products?subcategory=eco-notebooks" },
           { name: "Standard Notebooks", slug: "standard-notebooks", href: "/products?subcategory=standard-notebooks" }
         ]
+      },
+      // Column 10: Badges
+      {
+        name: "Badges",
+        slug: "badges",
+        subcategories: [
+          { name: "Badges", slug: "badges-sub", href: "/products?subcategory=badges-sub" }
+        ]
+      },
+      // Column 11: Neck Rest / Back Rest
+      {
+        name: "Neck Rest / Back Rest",
+        slug: "neck-rest-back-rest",
+        subcategories: [
+          { name: "Neck Rest / Back Rest", slug: "neck-rest-back-rest-sub", href: "/products?subcategory=neck-rest-back-rest-sub" }
+        ]
       }
     ]
   },
@@ -174,7 +190,38 @@ export const PRODUCT_HIERARCHY = [
     slug: "kits-hampers",
     categories: [
       { name: "Corporate Kits", slug: "corporate-kits", subcategories: CORPORATE_KITS.map((item) => ({ ...item, image: localCatalogImage(item.name) || `/category-images/${item.slug}.jpg` })) },
-      { name: "Festive Hampers", slug: "festive-hampers", subcategories: OCCASION_HAMPERS.map((item) => ({ ...item, image: localCatalogImage(item.name) || `/category-images/${item.slug}.jpg` })) }
+      { name: "Festive Hampers", slug: "festive-hampers", subcategories: OCCASION_HAMPERS.map((item) => ({ ...item, image: localCatalogImage(item.name) || `/category-images/${item.slug}.jpg` })) },
+      {
+        name: "Electronics",
+        slug: "electronics",
+        subcategories: [
+          { name: "Wireless Charger", slug: "wireless-charger", href: "/corporate-kits?kit=wireless-charger" },
+          { name: "Bluetooth Speaker", slug: "bluetooth-speaker", href: "/corporate-kits?kit=bluetooth-speaker" }
+        ]
+      },
+      {
+        name: "Clocks",
+        slug: "clocks",
+        subcategories: [
+          { name: "Wall Clock", slug: "wall-clock", href: "/corporate-kits?kit=wall-clock" },
+          { name: "Wrist Watch", slug: "wrist-watch", href: "/corporate-kits?kit=wrist-watch" }
+        ]
+      },
+      {
+        name: "Grooming Kits",
+        slug: "grooming-kits",
+        subcategories: [
+          { name: "Male Grooming Kit", slug: "male-grooming-kit", href: "/corporate-kits?kit=male-grooming-kit" },
+          { name: "Female Grooming Kit", slug: "female-grooming-kit", href: "/corporate-kits?kit=female-grooming-kit" }
+        ]
+      },
+      {
+        name: "Executive Kits",
+        slug: "executive-kits",
+        subcategories: [
+          { name: "Executive Kit", slug: "executive-kits-sub", href: "/corporate-kits?kit=executive-kits-sub" }
+        ]
+      }
     ]
   },
   {

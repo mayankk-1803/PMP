@@ -261,48 +261,105 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[min(980px,calc(100vw-2rem))] max-h-[72vh] overflow-hidden rounded-2xl border border-[#F5C2C2] bg-white p-5 shadow-[0_20px_50px_rgba(43,43,43,0.12)] z-50 grid grid-cols-12 gap-5 pointer-events-auto"
+                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[min(1180px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#F5C2C2] bg-white p-5 pb-4 shadow-[0_20px_50px_rgba(43,43,43,0.12)] z-50 flex flex-row items-start justify-between gap-12 pointer-events-auto h-auto min-h-fit"
                       >
                         {/* Column 1: Corporate Kits */}
-                        <div className="col-span-5 text-left">
-                          <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Briefcase className="w-3.5 h-3.5 text-[#D32F2F]" /> Corporate Kits
-                          </h4>
-                          <div className="grid max-h-[52vh] grid-cols-2 gap-x-4 gap-y-1 overflow-y-auto pr-2">
-                            {corporateKits.map((item) => (
+                        {(() => {
+                          const cat = PRODUCT_HIERARCHY[1]?.categories.find(c => c.slug === "corporate-kits");
+                          if (!cat) return null;
+                          return (
+                            <div className="w-[300px] shrink max-h-[520px] overflow-y-auto overflow-x-hidden pr-2 text-left self-start">
                               <Link
-                                key={item.name}
-                                href={kitHref(item)}
+                                href={`/corporate-kits?kit=${cat.slug}`}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#D32F2F] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
+                                className="mb-3 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
                               >
-                                {item.name}
+                                {cat.name}
                               </Link>
-                            ))}
-                          </div>
-                        </div>
+                              {cat.subcategories.length > 0 && (
+                                <div className="space-y-1">
+                                  {cat.subcategories.map((item) => (
+                                    <Link
+                                      key={item.name}
+                                      href={item.href || `/corporate-kits?kit=${item.slug}`}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#D32F2F] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
 
                         {/* Column 2: Festive Hampers */}
-                        <div className="col-span-4 text-left">
-                          <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide mb-3 flex items-center gap-2">
-                            <Sparkles className="w-3.5 h-3.5 text-[#EF5350]" /> Festive Hampers
-                          </h4>
-                          <div className="max-h-[52vh] space-y-1 overflow-y-auto pr-2">
-                            {festiveHampers.map((item) => (
+                        {(() => {
+                          const cat = PRODUCT_HIERARCHY[1]?.categories.find(c => c.slug === "festive-hampers");
+                          if (!cat) return null;
+                          return (
+                            <div className="w-[260px] shrink text-left self-start">
                               <Link
-                                key={item.name}
-                                href={kitHref(item)}
+                                href={`/corporate-kits?kit=${cat.slug}`}
                                 onClick={() => setActiveDropdown(null)}
-                                className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#EF5350] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
+                                className="mb-3 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
                               >
-                                {item.name}
+                                {cat.name}
                               </Link>
-                            ))}
-                          </div>
+                              {cat.subcategories.length > 0 && (
+                                <div className="space-y-1">
+                                  {cat.subcategories.map((item) => (
+                                    <Link
+                                      key={item.name}
+                                      href={item.href || `/corporate-kits?kit=${item.slug}`}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#D32F2F] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
+
+                        {/* Column 3: Combined Categories */}
+                        <div className="w-[240px] shrink text-left self-start space-y-6">
+                          {["electronics", "clocks", "grooming-kits", "executive-kits"].map((slug) => {
+                            const cat = PRODUCT_HIERARCHY[1]?.categories.find(c => c.slug === slug);
+                            if (!cat) return null;
+                            return (
+                              <div key={cat.slug}>
+                                <Link
+                                  href={`/corporate-kits?kit=${cat.slug}`}
+                                  onClick={() => setActiveDropdown(null)}
+                                  className="mb-2 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
+                                >
+                                  {cat.name}
+                                </Link>
+                                {cat.subcategories.length > 0 && (
+                                  <div className="space-y-1">
+                                    {cat.subcategories.map((item) => (
+                                      <Link
+                                        key={item.name}
+                                        href={item.href || `/corporate-kits?kit=${item.slug}`}
+                                        onClick={() => setActiveDropdown(null)}
+                                        className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#D32F2F] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
+                                      >
+                                        {item.name}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
 
-                        {/* Column 3: Featured Panel */}
-                        <div className="col-span-3 flex flex-col justify-between rounded-xl border border-[#F5C2C2] bg-gradient-to-br from-[#F8F7F3] to-[#FAF9F6] p-4 text-left">
+                        {/* Column 4: Info Card */}
+                        <div className="w-[260px] shrink flex flex-col justify-between rounded-xl border border-[#F5C2C2] bg-gradient-to-br from-[#F8F7F3] to-[#FAF9F6] p-4 text-left self-start sticky top-0 h-fit">
                           <div>
                             <span className="text-[9px] font-extrabold text-[#EF5350] uppercase tracking-widest block mb-1">Kit Onboarding</span>
                             <h4 className="text-[13px] font-bold text-[#2B2B2B] mb-1.5">
@@ -582,36 +639,23 @@ export function Navbar() {
                         className="overflow-hidden pb-4"
                       >
                         <div className="pl-2 space-y-4 pt-1">
-                          <div>
-                            <h4 className="text-[10px] font-extrabold text-[#D32F2F] uppercase tracking-widest mb-2">Corporate Kits</h4>
-                            <div className="grid grid-cols-2 gap-2">
-                              {corporateKits.map((item) => (
-                                <Link
-                                  key={item.name}
-                                  href={kitHref(item)}
-                                  onClick={() => setIsOpen(false)}
-                                  className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
-                                >
-                                  {item.name}
-                                </Link>
-                              ))}
+                          {(PRODUCT_HIERARCHY[1]?.categories || []).map((cat, idx) => (
+                            <div key={cat.slug} className={idx > 0 ? "pt-2 border-t border-[#F5C2C2]" : ""}>
+                              <h4 className="text-[10px] font-extrabold text-[#D32F2F] uppercase tracking-widest mb-2">{cat.name}</h4>
+                              <div className="grid grid-cols-2 gap-2">
+                                {cat.subcategories.map((item) => (
+                                  <Link
+                                    key={item.name}
+                                    href={item.href || `/corporate-kits?kit=${item.slug}`}
+                                    onClick={() => setIsOpen(false)}
+                                    className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
+                                  >
+                                    {item.name}
+                                  </Link>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                          <div className="pt-2 border-t border-[#F5C2C2]">
-                            <h4 className="text-[10px] font-extrabold text-[#EF5350] uppercase tracking-widest mb-2">Festive Hampers</h4>
-                            <div className="grid grid-cols-2 gap-2">
-                              {festiveHampers.map((item) => (
-                                <Link
-                                  key={item.name}
-                                  href={kitHref(item)}
-                                  onClick={() => setIsOpen(false)}
-                                  className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
-                                >
-                                  {item.name}
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
+                          ))}
                           <Link
                             key="explore-all-kits"
                             href="/corporate-kits"

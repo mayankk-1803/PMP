@@ -145,8 +145,43 @@ export function ProductManager() {
       fetchedProducts.sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
 
       setProducts(fetchedProducts);
-      setCategories(categoryData.data ?? []);
-      setSubcategories(subcategoryData.data ?? []);
+
+      const backendCategories = categoryData.data ?? [];
+      const runtimeCategories = [
+        { name: "Badges", slug: "badges" },
+        { name: "Neck Rest / Back Rest", slug: "neck-rest-back-rest" },
+        { name: "Electronics", slug: "electronics" },
+        { name: "Clocks", slug: "clocks" },
+        { name: "Grooming Kits", slug: "grooming-kits" },
+        { name: "Executive Kits", slug: "executive-kits" },
+      ];
+      const mergedCategories = [...backendCategories];
+      runtimeCategories.forEach((rc) => {
+        if (!mergedCategories.some((c) => c.slug === rc.slug)) {
+          mergedCategories.push(rc);
+        }
+      });
+      setCategories(mergedCategories);
+
+      const backendSubcategories = subcategoryData.data ?? [];
+      const runtimeSubcategories = [
+        { name: "Badges", slug: "badges-sub", category: "badges" },
+        { name: "Neck Rest / Back Rest", slug: "neck-rest-back-rest-sub", category: "neck-rest-back-rest" },
+        { name: "Wireless Charger", slug: "wireless-charger", category: "electronics" },
+        { name: "Bluetooth Speaker", slug: "bluetooth-speaker", category: "electronics" },
+        { name: "Wall Clock", slug: "wall-clock", category: "clocks" },
+        { name: "Wrist Watch", slug: "wrist-watch", category: "clocks" },
+        { name: "Male Grooming Kit", slug: "male-grooming-kit", category: "grooming-kits" },
+        { name: "Female Grooming Kit", slug: "female-grooming-kit", category: "grooming-kits" },
+        { name: "Executive Kit", slug: "executive-kits-sub", category: "executive-kits" },
+      ];
+      const mergedSubcategories = [...backendSubcategories];
+      runtimeSubcategories.forEach((rs) => {
+        if (!mergedSubcategories.some((s) => s.slug === rs.slug)) {
+          mergedSubcategories.push(rs);
+        }
+      });
+      setSubcategories(mergedSubcategories);
       setBrands(brandData.data ?? []);
     } catch (err) {
       console.error(err);

@@ -88,7 +88,8 @@ function ProductsPageContent() {
       const orderedPromoCategories: CatalogNode[] = [];
       for (const cat of PRODUCT_HIERARCHY[0].categories) {
         for (const sub of cat.subcategories) {
-          const hasProducts = slugsWithProducts.has(sub.slug) || 
+          const isNewCategory = sub.slug === "badges-sub" || sub.slug === "neck-rest-back-rest-sub";
+          const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
             (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
             (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks")) ||
             (sub.slug === "promotional-caps" && (slugsWithProducts.has("baseball-caps") || slugsWithProducts.has("event-caps") || slugsWithProducts.has("snapback-caps")));

@@ -73,6 +73,24 @@ export const getCanonicalCategorySlug = (slug: string | null | undefined): strin
   if (clean === "paperweight") {
     return "paper-weight";
   }
+  if (clean === "badges" || clean === "badge") {
+    return "badges";
+  }
+  if (clean === "neckrestbackrest" || clean === "neckrest" || clean === "backrest" || clean === "neckbackrest") {
+    return "neck-rest-back-rest";
+  }
+  if (clean === "electronics" || clean === "electronic") {
+    return "electronics";
+  }
+  if (clean === "clocks" || clean === "clock") {
+    return "clocks";
+  }
+  if (clean === "groomingkits" || clean === "groomingkit" || clean === "grooming") {
+    return "grooming-kits";
+  }
+  if (clean === "executivekits" || clean === "executivekit" || clean === "executive") {
+    return "executive-kits";
+  }
   
   return slug;
 };
@@ -96,6 +114,24 @@ export const getCanonicalCategoryName = (name: string | null | undefined): strin
   }
   if (clean === "paperweight") {
     return "Paper Weight";
+  }
+  if (clean === "badges" || clean === "badge") {
+    return "Badges";
+  }
+  if (clean === "neckrestbackrest" || clean === "neckrest" || clean === "backrest" || clean === "neckbackrest") {
+    return "Neck Rest / Back Rest";
+  }
+  if (clean === "electronics" || clean === "electronic") {
+    return "Electronics";
+  }
+  if (clean === "clocks" || clean === "clock") {
+    return "Clocks";
+  }
+  if (clean === "groomingkits" || clean === "groomingkit" || clean === "grooming") {
+    return "Grooming Kits";
+  }
+  if (clean === "executivekits" || clean === "executivekit" || clean === "executive") {
+    return "Executive Kits";
   }
   
   return name;
@@ -199,6 +235,19 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
   if (clean === "christmas" || clean === "christmaskits" || clean === "christmashampers") return "christmas-kits";
   if (clean === "newyear" || clean === "newyearhampers" || clean === "newyeargifts") return "new-year-hampers";
 
+  // Badges & Neck Rest
+  if (clean === "badges" || clean === "badge" || clean === "badgessub" || clean === "badgesub") return "badges-sub";
+  if (clean === "neckrestbackrest" || clean === "neckrest" || clean === "backrest" || clean === "neckbackrest" || clean === "neckrestbackrestsub") return "neck-rest-back-rest-sub";
+
+  // Electronics & Clocks & Grooming & Executive
+  if (clean === "wirelesscharger" || clean === "wirelesschargers") return "wireless-charger";
+  if (clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "bluetooth-speaker";
+  if (clean === "wallclock" || clean === "wallclocks") return "wall-clock";
+  if (clean === "wristwatch" || clean === "wristwatches" || clean === "watch" || clean === "watches") return "wrist-watch";
+  if (clean === "malegroomingkit" || clean === "malegroomingkits" || clean === "malegrooming") return "male-grooming-kit";
+  if (clean === "femalegroomingkit" || clean === "femalegroomingkits" || clean === "femalegrooming") return "female-grooming-kit";
+  if (clean === "executivekits" || clean === "executivekit" || clean === "executivekitssub" || clean === "executivekitsub") return "executive-kits-sub";
+
   return slug;
 };
 
@@ -299,6 +348,19 @@ export const getCanonicalSubcategoryName = (name: string | null | undefined): st
   ) return "Women's Day Gifts";
   if (clean === "christmas" || clean === "christmaskits" || clean === "christmashampers") return "Christmas Kits";
   if (clean === "newyear" || clean === "newyearhampers" || clean === "newyeargifts") return "New Year Hampers";
+
+  // Badges & Neck Rest Name Mappings
+  if (clean === "badges" || clean === "badge" || clean === "badgessub" || clean === "badgesub") return "Badges";
+  if (clean === "neckrestbackrest" || clean === "neckrest" || clean === "backrest" || clean === "neckbackrest" || clean === "neckrestbackrestsub") return "Neck Rest / Back Rest";
+
+  // Electronics & Clocks & Grooming & Executive Name Mappings
+  if (clean === "wirelesscharger" || clean === "wirelesschargers") return "Wireless Charger";
+  if (clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "Bluetooth Speaker";
+  if (clean === "wallclock" || clean === "wallclocks") return "Wall Clock";
+  if (clean === "wristwatch" || clean === "wristwatches" || clean === "watch" || clean === "watches") return "Wrist Watch";
+  if (clean === "malegroomingkit" || clean === "malegroomingkits" || clean === "malegrooming") return "Male Grooming Kit";
+  if (clean === "femalegroomingkit" || clean === "femalegroomingkits" || clean === "femalegrooming") return "Female Grooming Kit";
+  if (clean === "executivekits" || clean === "executivekit" || clean === "executivekitssub" || clean === "executivekitsub") return "Executive Kits";
 
   return name;
 };
