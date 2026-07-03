@@ -16,6 +16,9 @@ export function ProductShowcase() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [products, setProducts] = useState<ShowcaseProduct[]>([]);
 
+  // Frontend-only: subcategory slugs to hide from public showcase
+  const HIDDEN_SUBCATEGORY_SLUGS = new Set(["travel-bags", "travel-backpacks", "travel-mugs"]);
+
   useEffect(() => {
     let active = true;
 
@@ -26,6 +29,8 @@ export function ProductShowcase() {
         const seen = new Set();
         const unique: ShowcaseProduct[] = [];
         (result.data ?? []).forEach((product: any) => {
+          // Frontend-only: skip hidden subcategories
+          if (HIDDEN_SUBCATEGORY_SLUGS.has(product.subcategory)) return;
           if (!seen.has(product.title) && product.images?.[0]) {
             seen.add(product.title);
             unique.push({

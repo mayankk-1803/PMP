@@ -100,9 +100,19 @@ export function Navbar() {
 
   const promotionalCats = PRODUCT_HIERARCHY[0]?.categories || [];
 
+  // Frontend-only: slugs to hide from all public navigation
+  const HIDDEN_SUBCATEGORY_SLUGS = new Set([
+    "travel-bags",
+    "travel-backpacks",
+    "travel-mugs",
+  ]);
+
   const getSubcategories = (catSlug: string) => {
     const cat = promotionalCats.find((c) => c.slug === catSlug);
-    return cat ? cat.subcategories : [];
+    if (!cat) return [];
+    return cat.subcategories.filter(
+      (sub) => !HIDDEN_SUBCATEGORY_SLUGS.has(sub.slug)
+    );
   };
 
   const corporateKits = CORPORATE_KITS;
