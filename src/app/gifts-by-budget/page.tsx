@@ -28,7 +28,12 @@ function GiftsByBudgetContent() {
   const selectedRange = searchParams?.get("range") || "";
 
   // Convert products object to array and transform images/price fields
-  const allProducts = Object.entries(PRODUCTS).map(([slug, p]) => ({
+  // Frontend-only: exclude travel-bags, travel-backpacks, travel-mugs
+  const HIDDEN_SUBCATEGORY_SLUGS = new Set(["travel-bags", "travel-backpacks", "travel-mugs"]);
+
+  const allProducts = Object.entries(PRODUCTS)
+    .filter(([, p]) => !HIDDEN_SUBCATEGORY_SLUGS.has(p.subcategory || ""))
+    .map(([slug, p]) => ({
     slug,
     title: p.title,
     description: p.description,

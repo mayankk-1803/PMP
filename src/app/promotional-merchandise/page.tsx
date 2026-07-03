@@ -41,6 +41,10 @@ export default function PromoMerchPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Frontend-only: category slugs to hide from all public promotional pages
+  const HIDDEN_CATEGORY_SLUGS = new Set(["travel-bags", "travel-mugs"]);
+  const HIDDEN_SUBCATEGORY_SLUGS = new Set(["travel-bags", "travel-backpacks", "travel-mugs"]);
+
   useEffect(() => {
     Promise.all([
       fetch("/api/catalog/categories").then((res) => res.json()),
@@ -49,12 +53,17 @@ export default function PromoMerchPage() {
       .then(([catRes, prodRes]) => {
         if (catRes.success && catRes.data) {
           const promoCats = catRes.data.filter(
-            (c: Category) => c.parentGroup === "Promotional Products"
+            (c: Category) =>
+              c.parentGroup === "Promotional Products" &&
+              !HIDDEN_CATEGORY_SLUGS.has(c.slug)
           );
           setCategories(promoCats);
         }
         if (prodRes.success && prodRes.data) {
-          setProducts(prodRes.data);
+          const filtered = prodRes.data.filter(
+            (p: Product) => !HIDDEN_SUBCATEGORY_SLUGS.has(p.subcategory)
+          );
+          setProducts(filtered);
         }
         setLoading(false);
       })

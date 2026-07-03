@@ -33,7 +33,14 @@ interface CatalogNode {
 
 const BUDGET_TIERS = [{ name: "All Budgets", value: "all" }];
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 9;
+
+// Frontend-only: subcategory slugs to hide everywhere on the public site
+const HIDDEN_PRODUCT_SLUGS = new Set([
+  "travel-bags",
+  "travel-backpacks",
+  "travel-mugs",
+]);
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
@@ -88,6 +95,9 @@ function ProductsPageContent() {
       const orderedPromoCategories: CatalogNode[] = [];
       for (const cat of PRODUCT_HIERARCHY[0].categories) {
         for (const sub of cat.subcategories) {
+          // Frontend-only: skip hidden subcategories
+          if (HIDDEN_PRODUCT_SLUGS.has(sub.slug)) continue;
+
           const isNewCategory = sub.slug === "badges-sub" || sub.slug === "neck-rest-back-rest-sub";
           const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
             (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
@@ -104,16 +114,15 @@ function ProductsPageContent() {
       // (for newly synced products), while still excluding Kits & Hampers
       const apiSubcats: CatalogNode[] = (subcategoriesResult.data ?? []).filter(
         (item: CatalogNode) =>
+          !HIDDEN_PRODUCT_SLUGS.has(item.slug) &&
           (PROMO_SUBCATEGORY_SLUGS.has(item.slug) || 
            item.slug === "laptop-backpacks" || 
-           item.slug === "travel-backpacks" || 
            item.slug === "baseball-caps" || 
            item.slug === "event-caps" || 
            item.slug === "snapback-caps") &&
           slugsWithProducts.has(item.slug) &&
           !orderedPromoCategories.some((c) => c.slug === item.slug || 
             (c.slug === "laptop-bags" && item.slug === "laptop-backpacks") ||
-            (c.slug === "travel-bags" && item.slug === "travel-backpacks") ||
             (c.slug === "promotional-caps" && (item.slug === "baseball-caps" || item.slug === "event-caps" || item.slug === "snapback-caps")))
       );
 
@@ -168,11 +177,13 @@ function ProductsPageContent() {
 
   // Filter logic
   const filteredProducts = products.filter((product) => {
+    // Frontend-only: exclude hidden subcategories
+    if (HIDDEN_PRODUCT_SLUGS.has(product.subcategory)) return false;
+
     // Exclude Kits and Hampers and Packaging on promotional page if selectedCategory is "all"
     const isPromo = 
       PROMO_SUBCATEGORY_SLUGS.has(product.subcategory) ||
       product.subcategory === "laptop-backpacks" ||
-      product.subcategory === "travel-backpacks" ||
       product.subcategory === "baseball-caps" ||
       product.subcategory === "event-caps" ||
       product.subcategory === "snapback-caps" ||
@@ -190,7 +201,6 @@ function ProductsPageContent() {
     const matchSubcategory = (selected: string, productSub: string): boolean => {
       if (selected === productSub) return true;
       if (selected === "laptop-bags" && (productSub === "laptop-backpacks" || productSub === "laptop-bags")) return true;
-      if (selected === "travel-bags" && (productSub === "travel-backpacks" || productSub === "travel-bags")) return true;
       if (selected === "promotional-caps" && (productSub === "baseball-caps" || productSub === "event-caps" || productSub === "snapback-caps" || productSub === "promotional-caps")) return true;
       if (selected === "cotton-caps" && (productSub === "cotton-caps" || productSub === "sports-caps")) return true;
       return false;
@@ -439,10 +449,10 @@ function ProductsPageContent() {
                       <button
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${
+                        className={`w-9 h-9 rounded-xl text-xs font-bold transition-all duration-200 ${
                           currentPage === i + 1
-                            ? "bg-red-650 text-white shadow-md shadow-red-650/15"
-                            : "border border-gray-250 hover:bg-white text-gray-655"
+                            ? "bg-[#D32F2F] text-white shadow-md shadow-[#D32F2F]/25 scale-105"
+                            : "bg-white border border-gray-200 text-gray-700 hover:-translate-y-0.5 hover:shadow-md hover:border-gray-300"
                         }`}
                       >
                         {i + 1}
