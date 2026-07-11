@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Activity, BarChart3, Boxes, Building2, Gauge, Inbox, Layers3, PackageCheck, Shield, ShoppingBag, Trash2 } from "lucide-react";
 import { AdminAccountMenu } from "./AdminAccountMenu";
 import { useEffect, useState } from "react";
@@ -45,13 +46,17 @@ export function AdminShell({ title, subtitle, children }: { title: string; subti
     <div className="min-h-screen bg-[#FAF9F6] text-[#2B2B2B]">
       <div className="grid lg:grid-cols-[280px_1fr]">
         <aside className="border-r border-[#F5C2C2] bg-[#FFFDF8] px-4 py-6 shadow-sm">
-          <Link href="/87564/admin/dashboard" className="mb-8 flex items-center gap-3 px-2">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#D32F2F]">
-              <Shield className="h-5 w-5 text-white" />
-            </span>
-            <span>
-              <span className="block text-sm font-black uppercase tracking-wider">PacMyProduct</span>
-              <span className="block text-xs text-[#6B6B63]">Enterprise Admin</span>
+          <Link href="/87564/admin/dashboard" className="mb-8 flex flex-col items-start gap-1 px-2">
+            <div className="relative h-9 w-40">
+              <Image
+                src="/pacmyproductlogo.png"
+                alt="PacMyProduct Logo"
+                fill
+                className="object-contain object-left"
+              />
+            </div>
+            <span className="block text-[10px] font-bold uppercase tracking-wider text-[#6B6B63] pl-0.5">
+              Enterprise Admin Portal
             </span>
           </Link>
           <nav className="space-y-1">

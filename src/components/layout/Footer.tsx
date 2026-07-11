@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   Mail, 
   Phone, 
@@ -20,7 +21,7 @@ import {
 
 // Inline SVGs for Brand Icons
 const LinkedinIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+  <svg xmlns="http://www.w3.org/2500/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
 );
 
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -64,9 +65,14 @@ export function Footer() {
         <div className="grid lg:grid-cols-12 gap-8 pb-16 border-b border-[#F5C2C2]/10">
           <div className="lg:col-span-5 space-y-5">
             <Link href="/" className="inline-block">
-              <span className="font-extrabold text-2xl tracking-tight text-white flex items-center gap-2">
-                PACMY<span className="text-[#D32F2F]">PRODUCT</span>
-              </span>
+              <div className="relative h-10 w-44">
+                <Image
+                  src="/pacmyproductlogo.png"
+                  alt="PacMyProduct Logo"
+                  fill
+                  className="object-contain object-left invert brightness-0"
+                />
+              </div>
             </Link>
             <p className="text-[rgba(255,255,255,0.88)] text-sm leading-relaxed max-w-md font-medium">
               Bespoke B2B packaging and luxury corporate gifting solutions. Crafting premium onboarding kits, custom merchandise, and rigid custom cartons to elevate your enterprise brand presence.

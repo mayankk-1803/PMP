@@ -11,6 +11,7 @@ import { useShortlist } from "@/context/ShortlistContext";
 import { SafeImage } from "../ui/SafeImage";
 import { resolveSubcategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
+import { useProductPreview } from "@/context/ProductPreviewContext";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -30,6 +31,7 @@ export function FeaturedHampers() {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const [hampers, setHampers] = useState<HamperSubcategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const { openPreview } = useProductPreview();
 
   useEffect(() => {
     fetch("/api/catalog/subcategories")
@@ -54,6 +56,18 @@ export function FeaturedHampers() {
     } else {
       addToShortlist({ title, imageUrl: image, price });
     }
+  };
+
+  const handleHamperClick = (hamper: HamperSubcategory, imageUrl: string, price: string, description: string) => {
+    openPreview({
+      title: hamper.name,
+      description: description,
+      imageUrl: imageUrl,
+      price: price,
+      category: hamper.category,
+      subcategory: hamper.name,
+      images: [imageUrl]
+    });
   };
 
   if (loading) {
@@ -120,7 +134,10 @@ export function FeaturedHampers() {
 
               return (
                 <SwiperSlide key={hamper.slug} className="h-auto">
-                  <div className="group flex flex-col h-full bg-white border border-[#F5C2C2] rounded-2xl overflow-hidden hover:border-[#D32F2F]/30 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(43,43,43,0.08)] relative">
+                  <div 
+                    onClick={() => handleHamperClick(hamper, hamperImg, hamperPrice, hamperDesc)}
+                    className="group flex flex-col h-full bg-white border border-[#F5C2C2] rounded-2xl overflow-hidden hover:border-[#D32F2F]/30 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(43,43,43,0.08)] relative cursor-pointer"
+                  >
                     
                     {/* Image Box */}
                     <div className="relative aspect-[4/3] w-full bg-[#FAF9F6] overflow-hidden flex-shrink-0 border-b border-[#F5C2C2]">
@@ -166,12 +183,12 @@ export function FeaturedHampers() {
                       </div>
 
                       <div className="pt-4 border-t border-[#F5C2C2] flex items-center justify-between mt-auto">
-                        <Link
-                          href={buildEnquiryUrl({ category: "festive-hampers", subcategory: hamper.name })}
-                          className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63] hover:text-[#D32F2F] transition-all flex items-center gap-1 group/link"
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleHamperClick(hamper, hamperImg, hamperPrice, hamperDesc); }}
+                          className="text-[10px] font-extrabold uppercase tracking-widest text-[#6B6B63] hover:text-[#D32F2F] transition-all flex items-center gap-1 group/link bg-transparent border-none outline-none cursor-pointer"
                         >
                           Request Customization <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>

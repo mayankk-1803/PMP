@@ -169,22 +169,13 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
   }
 
   // Caps subcategories
-  if (clean === "baseballcap" || clean === "baseballcaps" || clean === "eventcap" || clean === "eventcaps" || clean === "snapbackcap" || clean === "snapbackcaps" || clean === "promotionalcap" || clean === "promotionalcaps") {
-    return "promotional-caps";
-  }
-  if (clean === "sportscap" || clean === "sportscaps" || clean === "cottoncap" || clean === "cottoncaps") {
-    return "cotton-caps";
+  if (clean === "baseballcap" || clean === "baseballcaps" || clean === "eventcap" || clean === "eventcaps" || clean === "snapbackcap" || clean === "snapbackcaps" || clean === "promotionalcap" || clean === "promotionalcaps" || clean === "sportscap" || clean === "sportscaps" || clean === "cottoncap" || clean === "cottoncaps" || clean === "cap" || clean === "caps") {
+    return "caps";
   }
 
   // Table Top subcategories
-  if (clean === "mousepad" || clean === "mousepadsub" || clean === "mousepads") {
-    return "mouse-pad";
-  }
-  if (clean === "deskorganiser" || clean === "deskorganizersub" || clean === "deskorganisers" || clean === "deskorganizer" || clean === "deskorganizersub" || clean === "deskorganizers") {
-    return "desk-organiser";
-  }
-  if (clean === "tablemat" || clean === "tablematssub" || clean === "tablemats") {
-    return "table-mats";
+  if (clean === "mousepad" || clean === "mousepadsub" || clean === "mousepads" || clean === "deskorganiser" || clean === "deskorganizersub" || clean === "deskorganisers" || clean === "deskorganizer" || clean === "deskorganizersub" || clean === "deskorganizers" || clean === "tablemat" || clean === "tablematssub" || clean === "tablemats" || clean === "tabletop" || clean === "tabletopitems" || clean === "table-top") {
+    return "table-top";
   }
 
   // Paper Weight
@@ -192,18 +183,14 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
     return "paper-weight-sub";
   }
 
+  // Pens
+  if (clean === "premiumpens" || clean === "premiumpen" || clean === "ecopens" || clean === "ecopen" || clean === "giftboxpens" || clean === "giftboxpen" || clean === "engravedpens" || clean === "engravedpen" || clean === "pen" || clean === "pens") {
+    return "pens";
+  }
+
   // Diaries / Notebooks
-  if (clean === "executivediary" || clean === "executivediaries") {
-    return "executive-diaries";
-  }
-  if (clean === "premiumdiary" || clean === "premiumdiaries") {
-    return "premium-diaries";
-  }
-  if (clean === "econotebook" || clean === "econotebooks") {
-    return "eco-notebooks";
-  }
-  if (clean === "standardnotebook" || clean === "standardnotebooks") {
-    return "standard-notebooks";
+  if (clean === "executivediary" || clean === "executivediaries" || clean === "premiumdiary" || clean === "premiumdiaries" || clean === "econotebook" || clean === "econotebooks" || clean === "standardnotebook" || clean === "standardnotebooks" || clean === "diariesnotebooks" || clean === "diaries" || clean === "diaries-notebooks") {
+    return "diaries-notebooks";
   }
 
   // Festive Hampers
@@ -410,35 +397,20 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
   if (canon === "sling-bags") {
     return ["sling-bags", "slingbag", "slingbags"];
   }
-  if (canon === "promotional-caps") {
-    return ["promotional-caps", "baseball-caps", "event-caps", "snapback-caps"];
+  if (canon === "pens") {
+    return ["pens", "premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"];
   }
-  if (canon === "cotton-caps") {
-    return ["cotton-caps", "sports-caps"];
+  if (canon === "caps") {
+    return ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"];
   }
-  if (canon === "mouse-pad") {
-    return ["mouse-pad", "mouse-pad-sub", "mousepad"];
+  if (canon === "table-top") {
+    return ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat"];
   }
-  if (canon === "desk-organiser") {
-    return ["desk-organiser", "desk-organiser-sub", "deskorganiser", "desk-organizer", "desk-organizer-sub", "deskorganizer"];
-  }
-  if (canon === "table-mats") {
-    return ["table-mats", "table-mats-sub", "tablemat"];
+  if (canon === "diaries-notebooks") {
+    return ["diaries-notebooks", "diaries", "executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks"];
   }
   if (canon === "paper-weight-sub") {
     return ["paper-weight-sub", "paperweight", "paperweightsub"];
-  }
-  if (canon === "executive-diaries") {
-    return ["executive-diaries", "executivediary", "executivediaries"];
-  }
-  if (canon === "premium-diaries") {
-    return ["premium-diaries", "premiumdiary", "premiumdiaries"];
-  }
-  if (canon === "eco-notebooks") {
-    return ["eco-notebooks", "econotebook", "econotebooks"];
-  }
-  if (canon === "standard-notebooks") {
-    return ["standard-notebooks", "standardnotebook", "standardnotebooks"];
   }
   
   return [slug, canon].filter((v, i, a) => a.indexOf(v) === i);

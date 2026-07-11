@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect, useState, useMemo } from "react";
 import { DEFAULT_KIT_IMAGE, corporateKitImageOrFallback, corporateKitImage } from "@/lib/kitImageMap";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
@@ -129,6 +130,7 @@ interface Product {
   price?: number;
   brand?: string;
   moq?: number;
+  features?: string[];
 }
 
 function CorporateKitsContent() {
@@ -153,7 +155,7 @@ function CorporateKitsContent() {
           const kitsGroup = PRODUCT_HIERARCHY.find(g => g.slug === "kits-hampers");
           if (kitsGroup) {
             kitsGroup.categories.forEach(cat => {
-              if (["electronics", "clocks", "grooming-kits", "executive-kits"].includes(cat.slug)) {
+              if (["grooming-kits", "executive-kits"].includes(cat.slug)) {
                 cat.subcategories.forEach(sub => {
                   virtualSubs.push({
                     id: `virtual_${sub.slug}`,
@@ -252,6 +254,8 @@ function CorporateKitsContent() {
         brand: p.brand || "",
         moq: p.moq || 0,
         href: undefined,
+        images: p.images || [],
+        features: p.features || []
       }));
     }
 
@@ -276,6 +280,8 @@ function CorporateKitsContent() {
       brand: p.brand || "",
       moq: p.moq || 0,
       href: undefined,
+      images: p.images || [],
+      features: p.features || []
     }));
 
     if (mapped.length > 0) return mapped;
@@ -296,7 +302,19 @@ function CorporateKitsContent() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6]">
-        <Loader2 className="w-8 h-8 text-[#D32F2F] animate-spin" />
+        <motion.div
+          animate={{ scale: [1, 1.04, 1] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="relative w-44 h-12"
+        >
+          <Image
+            src="/pacmyproductlogo.png"
+            alt="Loading..."
+            fill
+            priority
+            className="object-contain"
+          />
+        </motion.div>
       </div>
     );
   }
@@ -410,6 +428,8 @@ function CorporateKitsContent() {
                     moq={item.moq}
                     href={item.href}
                     isProduct={item.href ? false : true}
+                    images={(item as any).images || []}
+                    features={(item as any).features || []}
                     className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
                   />
                 ))

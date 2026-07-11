@@ -46,7 +46,15 @@ function ProductsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const initialCategory = searchParams?.get("category") || searchParams?.get("subcategory") || "all";
+  const mapLegacyCategory = (slug: string): string => {
+    if (["premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"].includes(slug)) return "pens";
+    if (["promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(slug)) return "caps";
+    if (["mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "tabletop"].includes(slug)) return "table-top";
+    if (["executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks", "diaries", "diariesnotebooks"].includes(slug)) return "diaries-notebooks";
+    return slug;
+  };
+
+  const initialCategory = mapLegacyCategory(searchParams?.get("category") || searchParams?.get("subcategory") || "all");
   const initialBudget = searchParams?.get("range") || "all";
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -60,7 +68,7 @@ function ProductsPageContent() {
 
   useEffect(() => {
     const cat = searchParams?.get("category") || searchParams?.get("subcategory") || "all";
-    setSelectedCategory(cat);
+    setSelectedCategory(mapLegacyCategory(cat));
     const bud = searchParams?.get("range") || "all";
     setSelectedBudget(bud);
     setCurrentPage(1);
@@ -94,36 +102,46 @@ function ProductsPageContent() {
       //  2. Have at least one product in the database
       const orderedPromoCategories: CatalogNode[] = [];
       for (const cat of PRODUCT_HIERARCHY[0].categories) {
-        for (const sub of cat.subcategories) {
-          // Frontend-only: skip hidden subcategories
-          if (HIDDEN_PRODUCT_SLUGS.has(sub.slug)) continue;
+        if (cat.subcategories.length === 0) {
+          const legacySlugs = new Set(
+            cat.slug === "pens" ? ["pens", "premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"] :
+            cat.slug === "caps" ? ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"] :
+            cat.slug === "table-top" ? ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat"] :
+            cat.slug === "diaries-notebooks" ? ["diaries-notebooks", "diaries", "executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks"] :
+            [cat.slug]
+          );
 
-          const isNewCategory = sub.slug === "badges-sub" || sub.slug === "neck-rest-back-rest-sub";
-          const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
-            (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
-            (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks")) ||
-            (sub.slug === "promotional-caps" && (slugsWithProducts.has("baseball-caps") || slugsWithProducts.has("event-caps") || slugsWithProducts.has("snapback-caps")));
+          const hasProducts = allProducts.some(
+            (p) => p.category === cat.slug || legacySlugs.has(p.subcategory)
+          );
 
-          if (PROMO_SUBCATEGORY_SLUGS.has(sub.slug) && hasProducts) {
-            orderedPromoCategories.push({ name: sub.name, slug: sub.slug });
+          if (hasProducts) {
+            orderedPromoCategories.push({ name: cat.name, slug: cat.slug });
+          }
+        } else {
+          for (const sub of cat.subcategories) {
+            if (HIDDEN_PRODUCT_SLUGS.has(sub.slug)) continue;
+
+            const isNewCategory = sub.slug === "badges-sub" || sub.slug === "neck-rest-back-rest-sub";
+            const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
+              (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
+              (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks"));
+
+            if (PROMO_SUBCATEGORY_SLUGS.has(sub.slug) && hasProducts) {
+              orderedPromoCategories.push({ name: sub.name, slug: sub.slug });
+            }
           }
         }
       }
 
-      // Also accept any DB subcategories that are in our promo set but weren't in hierarchy
-      // (for newly synced products), while still excluding Kits & Hampers
       const apiSubcats: CatalogNode[] = (subcategoriesResult.data ?? []).filter(
         (item: CatalogNode) =>
           !HIDDEN_PRODUCT_SLUGS.has(item.slug) &&
           (PROMO_SUBCATEGORY_SLUGS.has(item.slug) || 
-           item.slug === "laptop-backpacks" || 
-           item.slug === "baseball-caps" || 
-           item.slug === "event-caps" || 
-           item.slug === "snapback-caps") &&
+           item.slug === "laptop-backpacks") &&
           slugsWithProducts.has(item.slug) &&
           !orderedPromoCategories.some((c) => c.slug === item.slug || 
-            (c.slug === "laptop-bags" && item.slug === "laptop-backpacks") ||
-            (c.slug === "promotional-caps" && (item.slug === "baseball-caps" || item.slug === "event-caps" || item.slug === "snapback-caps")))
+            (c.slug === "laptop-bags" && item.slug === "laptop-backpacks"))
       );
 
       setCategories([
@@ -181,17 +199,20 @@ function ProductsPageContent() {
     if (HIDDEN_PRODUCT_SLUGS.has(product.subcategory)) return false;
 
     // Exclude Kits and Hampers and Packaging on promotional page if selectedCategory is "all"
+    const isPens = product.category === "pens" || ["premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"].includes(product.subcategory);
+    const isCaps = product.category === "caps" || ["promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(product.subcategory);
+    const isTableTop = product.category === "table-top" || ["mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "tabletop"].includes(product.subcategory);
+    const isDiaries = product.category === "diaries-notebooks" || ["executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks", "diaries", "diariesnotebooks"].includes(product.subcategory);
+
     const isPromo = 
       PROMO_SUBCATEGORY_SLUGS.has(product.subcategory) ||
       product.subcategory === "laptop-backpacks" ||
-      product.subcategory === "baseball-caps" ||
-      product.subcategory === "event-caps" ||
-      product.subcategory === "snapback-caps" ||
+      isPens ||
+      isCaps ||
+      isTableTop ||
+      isDiaries ||
       product.category === "corporate-gifts" ||
-      product.category === "pens" ||
       product.category === "t-shirts" ||
-      product.category === "caps" ||
-      product.category === "diaries" ||
       product.category === "drinkware" ||
       product.category === "backpacks-bags" ||
       product.category === "executive-gifts";
@@ -201,15 +222,17 @@ function ProductsPageContent() {
     const matchSubcategory = (selected: string, productSub: string): boolean => {
       if (selected === productSub) return true;
       if (selected === "laptop-bags" && (productSub === "laptop-backpacks" || productSub === "laptop-bags")) return true;
-      if (selected === "promotional-caps" && (productSub === "baseball-caps" || productSub === "event-caps" || productSub === "snapback-caps" || productSub === "promotional-caps")) return true;
-      if (selected === "cotton-caps" && (productSub === "cotton-caps" || productSub === "sports-caps")) return true;
       return false;
     };
 
     const matchesCategory = 
       selectedCategory === "all" || 
       product.category === selectedCategory || 
-      matchSubcategory(selectedCategory, product.subcategory);
+      matchSubcategory(selectedCategory, product.subcategory) ||
+      (selectedCategory === "pens" && isPens) ||
+      (selectedCategory === "caps" && isCaps) ||
+      (selectedCategory === "table-top" && isTableTop) ||
+      (selectedCategory === "diaries-notebooks" && isDiaries);
 
     const matchesBudget = selectedBudget === "all";
     const matchesSearch = 
@@ -428,6 +451,8 @@ function ProductsPageContent() {
                           subcategory={product.subcategory}
                           brand={product.brand}
                           isProduct={true}
+                          images={product.images}
+                          features={product.features}
                         />
                       </motion.div>
                     ))}

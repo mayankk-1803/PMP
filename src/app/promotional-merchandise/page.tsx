@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
@@ -52,7 +53,12 @@ export default function PromoMerchPage() {
     ])
       .then(([catRes, prodRes]) => {
         if (catRes.success && catRes.data) {
-          const promoCats = catRes.data.filter(
+          const promoCats = catRes.data.map((c: Category) => {
+            if (c.slug === "electronics" || c.slug === "clocks") {
+              return { ...c, parentGroup: "Promotional Products" };
+            }
+            return c;
+          }).filter(
             (c: Category) =>
               c.parentGroup === "Promotional Products" &&
               !HIDDEN_CATEGORY_SLUGS.has(c.slug)
@@ -99,7 +105,19 @@ export default function PromoMerchPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6]">
-        <Loader2 className="w-8 h-8 text-[#D32F2F] animate-spin" />
+        <motion.div
+          animate={{ scale: [1, 1.04, 1] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="relative w-44 h-12"
+        >
+          <Image
+            src="/pacmyproductlogo.png"
+            alt="Loading..."
+            fill
+            priority
+            className="object-contain"
+          />
+        </motion.div>
       </div>
     );
   }
