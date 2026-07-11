@@ -102,12 +102,7 @@ export const PRODUCT_HIERARCHY = [
       {
         name: "Pens",
         slug: "pens",
-        subcategories: [
-          { name: "Premium Pens", slug: "premium-pens", href: "/products?subcategory=premium-pens" },
-          { name: "Eco Pens", slug: "eco-pens", href: "/products?subcategory=eco-pens" },
-          { name: "Gift Box Pens", slug: "gift-box-pens", href: "/products?subcategory=gift-box-pens" },
-          { name: "Engraved Pens", slug: "engraved-pens", href: "/products?subcategory=engraved-pens" }
-        ]
+        subcategories: []
       },
       // Column 4: Keychains
       {
@@ -123,11 +118,7 @@ export const PRODUCT_HIERARCHY = [
       {
         name: "Caps",
         slug: "caps",
-        subcategories: [
-          { name: "Promotional Caps", slug: "promotional-caps", href: "/products?subcategory=promotional-caps" },
-          { name: "Sports Caps", slug: "sports-caps", href: "/products?subcategory=sports-caps" },
-          { name: "Cotton Caps", slug: "cotton-caps", href: "/products?subcategory=cotton-caps" }
-        ]
+        subcategories: []
       },
       // Column 6: T-Shirts
       {
@@ -150,22 +141,13 @@ export const PRODUCT_HIERARCHY = [
       {
         name: "Table Top",
         slug: "table-top",
-        subcategories: [
-          { name: "Mouse Pad", slug: "mouse-pad", href: "/products?subcategory=mouse-pad" },
-          { name: "Desk Organiser", slug: "desk-organiser", href: "/products?subcategory=desk-organiser" },
-          { name: "Table Mats", slug: "table-mats", href: "/products?subcategory=table-mats" }
-        ]
+        subcategories: []
       },
       // Column 9: Diaries / Notebooks
       {
         name: "Diaries / Notebooks",
         slug: "diaries-notebooks",
-        subcategories: [
-          { name: "Executive Diaries", slug: "executive-diaries", href: "/products?subcategory=executive-diaries" },
-          { name: "Premium Diaries", slug: "premium-diaries", href: "/products?subcategory=premium-diaries" },
-          { name: "Eco Notebooks", slug: "eco-notebooks", href: "/products?subcategory=eco-notebooks" },
-          { name: "Standard Notebooks", slug: "standard-notebooks", href: "/products?subcategory=standard-notebooks" }
-        ]
+        subcategories: []
       },
       // Column 10: Badges
       {
@@ -182,6 +164,24 @@ export const PRODUCT_HIERARCHY = [
         subcategories: [
           { name: "Neck Rest / Back Rest", slug: "neck-rest-back-rest-sub", href: "/products?subcategory=neck-rest-back-rest-sub" }
         ]
+      },
+      // Moved Column 12: Electronics
+      {
+        name: "Electronics",
+        slug: "electronics",
+        subcategories: [
+          { name: "Wireless Charger", slug: "wireless-charger", href: "/products?subcategory=wireless-charger" },
+          { name: "Bluetooth Speaker", slug: "bluetooth-speaker", href: "/products?subcategory=bluetooth-speaker" }
+        ]
+      },
+      // Moved Column 13: Clocks
+      {
+        name: "Clocks",
+        slug: "clocks",
+        subcategories: [
+          { name: "Wall Clock", slug: "wall-clock", href: "/products?subcategory=wall-clock" },
+          { name: "Wrist Watch", slug: "wrist-watch", href: "/products?subcategory=wrist-watch" }
+        ]
       }
     ]
   },
@@ -191,22 +191,6 @@ export const PRODUCT_HIERARCHY = [
     categories: [
       { name: "Corporate Kits", slug: "corporate-kits", subcategories: CORPORATE_KITS.map((item) => ({ ...item, image: localCatalogImage(item.name) || `/category-images/${item.slug}.jpg` })) },
       { name: "Festive Hampers", slug: "festive-hampers", subcategories: OCCASION_HAMPERS.map((item) => ({ ...item, image: localCatalogImage(item.name) || `/category-images/${item.slug}.jpg` })) },
-      {
-        name: "Electronics",
-        slug: "electronics",
-        subcategories: [
-          { name: "Wireless Charger", slug: "wireless-charger", href: "/corporate-kits?kit=wireless-charger" },
-          { name: "Bluetooth Speaker", slug: "bluetooth-speaker", href: "/corporate-kits?kit=bluetooth-speaker" }
-        ]
-      },
-      {
-        name: "Clocks",
-        slug: "clocks",
-        subcategories: [
-          { name: "Wall Clock", slug: "wall-clock", href: "/corporate-kits?kit=wall-clock" },
-          { name: "Wrist Watch", slug: "wrist-watch", href: "/corporate-kits?kit=wrist-watch" }
-        ]
-      },
       {
         name: "Grooming Kits",
         slug: "grooming-kits",

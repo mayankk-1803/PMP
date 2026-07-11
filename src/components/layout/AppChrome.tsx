@@ -3,11 +3,13 @@
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShortlistProvider } from "@/context/ShortlistContext";
+import { ProductPreviewProvider } from "@/context/ProductPreviewContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { MobileStickyCTA } from "@/components/ui/MobileStickyCTA";
 import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
+import { ProductPreviewModal } from "@/components/ui/ProductPreviewModal";
 
 const pageVariants = {
   hidden:  { opacity: 0, y: 16 },
@@ -25,25 +27,28 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
 
   return (
     <ShortlistProvider>
-      <ScrollProgressBar />
-      <Navbar />
-      <main className="flex-1 flex flex-col pt-20">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={pathname}
-            variants={pageVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="flex-1 flex flex-col"
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
-      </main>
-      <Footer />
-      <FloatingWhatsApp />
-      <MobileStickyCTA />
+      <ProductPreviewProvider>
+        <ScrollProgressBar />
+        <Navbar />
+        <main className="flex-1 flex flex-col pt-[80px] lg:pt-[90px]">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={pathname}
+              variants={pageVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex-1 flex flex-col"
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+        <Footer />
+        <FloatingWhatsApp />
+        <MobileStickyCTA />
+        <ProductPreviewModal />
+      </ProductPreviewProvider>
     </ShortlistProvider>
   );
 }

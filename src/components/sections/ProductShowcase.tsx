@@ -4,17 +4,20 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/Button";
 import { resolveProductImage } from "@/lib/imageResolver";
+import { useProductPreview } from "@/context/ProductPreviewContext";
 
 interface ShowcaseProduct {
   id: string;
   category: string;
   title: string;
   image: string;
+  rawProduct?: any;
 }
 
 export function ProductShowcase() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [products, setProducts] = useState<ShowcaseProduct[]>([]);
+  const { openPreview } = useProductPreview();
 
   // Frontend-only: subcategory slugs to hide from public showcase
   const HIDDEN_SUBCATEGORY_SLUGS = new Set(["travel-bags", "travel-backpacks", "travel-mugs"]);
@@ -38,6 +41,7 @@ export function ProductShowcase() {
               category: product.category,
               title: product.title,
               image: resolveProductImage(product),
+              rawProduct: product
             });
           }
         });
@@ -62,6 +66,20 @@ export function ProductShowcase() {
   const categories = useMemo(() => ["All", ...Array.from(new Set(products.map((product) => product.category))).slice(0, 4)], [products]);
 
   const filteredProducts = products.filter((product) => activeFilter === "All" || product.category === activeFilter).slice(0, 4);
+
+  const handleProductClick = (prod: ShowcaseProduct) => {
+    openPreview({
+      title: prod.title,
+      description: prod.rawProduct?.description || "",
+      imageUrl: prod.image,
+      moq: prod.rawProduct?.moq || 0,
+      category: prod.rawProduct?.category,
+      subcategory: prod.rawProduct?.subcategory,
+      brand: prod.rawProduct?.brand || "",
+      images: prod.rawProduct?.images || [prod.image],
+      features: prod.rawProduct?.features || []
+    });
+  };
 
   return (
     <section className="py-24 bg-[#F8F7F3]">
@@ -99,7 +117,8 @@ export function ProductShowcase() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 key={product.id}
-                className="group bg-white rounded-2xl overflow-hidden border border-[#F5C2C2] shadow-sm hover:shadow-xl hover:shadow-[#F5C2C2]/50 transition-all flex flex-col h-full"
+                onClick={() => handleProductClick(product)}
+                className="group bg-white rounded-2xl overflow-hidden border border-[#F5C2C2] shadow-sm hover:shadow-xl hover:shadow-[#F5C2C2]/50 transition-all flex flex-col h-full cursor-pointer"
               >
                 <div className="relative h-64 overflow-hidden flex-shrink-0">
                   <div
@@ -107,7 +126,11 @@ export function ProductShowcase() {
                     style={{ backgroundImage: `url(${product.image})` }}
                   />
                   <div className="absolute inset-0 bg-[#2B2B2B]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <Button variant="default" className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 bg-white text-[#2B2B2B] hover:bg-[#FAF9F6] border-none shadow-xl">
+                    <Button 
+                      variant="default" 
+                      onClick={(e) => { e.stopPropagation(); handleProductClick(product); }}
+                      className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 bg-white text-[#2B2B2B] hover:bg-[#FAF9F6] border-none shadow-xl"
+                    >
                       Request Quote
                     </Button>
                   </div>

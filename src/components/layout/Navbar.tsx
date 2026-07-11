@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -108,12 +109,62 @@ export function Navbar() {
   ]);
 
   const getSubcategories = (catSlug: string) => {
+    if (["pens", "caps", "table-top", "diaries-notebooks"].includes(catSlug)) {
+      return [];
+    }
     const cat = promotionalCats.find((c) => c.slug === catSlug);
     if (!cat) return [];
     return cat.subcategories.filter(
       (sub) => !HIDDEN_SUBCATEGORY_SLUGS.has(sub.slug)
     );
   };
+
+  const sortedPromoCats = React.useMemo(() => {
+    return [...promotionalCats].sort((a, b) => {
+      const aSubs = getSubcategories(a.slug);
+      const bSubs = getSubcategories(b.slug);
+      
+      const aHasChildren = aSubs.length > 0;
+      const bHasChildren = bSubs.length > 0;
+      
+      // 3. Categories with no visible children always appear at the end.
+      if (aHasChildren && !bHasChildren) return -1;
+      if (!aHasChildren && bHasChildren) return 1;
+      
+      // 1. Highest visible item count first.
+      const aCount = aSubs.length;
+      const bCount = bSubs.length;
+      if (aCount !== bCount) {
+        return bCount - aCount;
+      }
+      
+      // 2. If counts are equal, sort alphabetically.
+      return a.name.localeCompare(b.name);
+    });
+  }, [promotionalCats]);
+
+  const promoColumns = React.useMemo(() => {
+    const cols: typeof promotionalCats[] = [[], [], []];
+    const heights = [0, 0, 0];
+
+    sortedPromoCats.forEach((cat) => {
+      // Find shortest column
+      let minIdx = 0;
+      if (heights[1] < heights[minIdx]) minIdx = 1;
+      if (heights[2] < heights[minIdx]) minIdx = 2;
+
+      cols[minIdx].push(cat);
+
+      // Estimate category height:
+      // estimatedHeight = headingHeight + (visibleItemCount * rowHeight) + blockMargin
+      const visibleItemCount = getSubcategories(cat.slug).length || 1;
+      const estimatedHeight = 24 + (visibleItemCount * 32) + 24;
+
+      heights[minIdx] += estimatedHeight;
+    });
+
+    return cols;
+  }, [sortedPromoCats]);
 
   const corporateKits = CORPORATE_KITS;
 
@@ -136,17 +187,28 @@ export function Navbar() {
           }`}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-[72px] lg:h-20">
+            <div className="flex justify-between items-center h-[80px] lg:h-[90px] gap-4 lg:gap-8">
               
               {/* Logo */}
-              <div className="flex-shrink-0 flex items-center">
+              <div className="flex items-center gap-3 shrink-0 w-auto lg:w-[260px] pl-2 md:pl-3 lg:pl-5 pr-2 md:pr-3 lg:pr-4 bg-transparent justify-start">
                 <Link href="/" className="flex items-center gap-3 group">
-                  <div className="bg-gradient-to-br from-[#D32F2F] to-[#C62828] p-2.5 rounded-xl transition-all duration-500 group-hover:scale-105 shadow-[0_0_15px_rgba(110,119,87,0.3)]">
-                    <Gift className="h-5 w-5 text-white" />
+                  <Image
+                    src="/pacmyproductlogo1.png"
+                    alt="PacMyProduct Logo"
+                    width={443}
+                    height={563}
+                    priority
+                    className="w-[38px] md:w-[44px] lg:w-[48px] h-auto object-contain select-none transition-all duration-300 hover:scale-105"
+                  />
+                  <div className="flex flex-col text-left">
+                    <span className="text-[18px] md:text-[20px] lg:text-[22px] font-bold tracking-tight leading-none transition-colors duration-300">
+                      <span className="text-[#2B2B2B]">PACMY</span>
+                      <span className="text-[#D32F2F]">PRODUCT</span>
+                    </span>
+                    <span className="text-[10px] md:text-xs text-neutral-500 tracking-wide font-medium mt-0.5 leading-none">
+                      Corporate Gifting Solutions
+                    </span>
                   </div>
-                  <span className="font-black text-xl tracking-wider text-[#2B2B2B] transition-colors">
-                    PACMY<span className="text-[#D32F2F]">PRODUCT</span>
-                  </span>
                 </Link>
               </div>
               
@@ -156,7 +218,7 @@ export function Navbar() {
                 initial={mounted ? { opacity: 0 } : false}
                 animate={{ opacity: 1 }}
                 transition={{ staggerChildren: 0.06, delayChildren: 0.3 }}
-                className="hidden lg:flex items-center space-x-2"
+                className="hidden lg:flex flex-1 justify-center items-center space-x-2"
               >
                 
                 {/* 1. Promotional Products Dropdown */}
@@ -190,35 +252,39 @@ export function Navbar() {
                           <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide mb-3 flex items-center gap-2">
                             <Gift className="w-3.5 h-3.5 text-[#D32F2F]" /> Promotional Categories
                           </h4>
-                          <div className="grid max-h-[52vh] grid-cols-3 gap-x-6 gap-y-5 overflow-y-auto pr-2">
-                            {promotionalCats.map((cat) => {
-                              const subs = getSubcategories(cat.slug);
-                              return (
-                                <div key={cat.slug} className="min-w-0">
-                                  <Link
-                                    href={`/products?category=${cat.slug}`}
-                                    onClick={() => setActiveDropdown(null)}
-                                    className="mb-2 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
-                                  >
-                                    {cat.name}
-                                  </Link>
-                                  {subs.length > 0 && (
-                                    <div className="space-y-1">
-                                      {subs.map((item) => (
-                                        <Link
-                                          key={item.name}
-                                          href={menuHref(item)}
-                                          onClick={() => setActiveDropdown(null)}
-                                          className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#D32F2F] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
-                                        >
-                                          {item.name}
-                                        </Link>
-                                      ))}
+                          <div className="grid grid-cols-3 gap-x-12 max-h-[52vh] overflow-y-auto pr-2">
+                            {promoColumns.map((col, colIdx) => (
+                              <div key={colIdx} className="flex flex-col">
+                                {col.map((cat) => {
+                                  const subs = getSubcategories(cat.slug);
+                                  return (
+                                    <div key={cat.slug} className="mb-6 flex flex-col self-start w-full">
+                                      <Link
+                                        href={`/products?category=${cat.slug}`}
+                                        onClick={() => setActiveDropdown(null)}
+                                        className="mb-3 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
+                                      >
+                                        {cat.name}
+                                      </Link>
+                                      {subs.length > 0 && (
+                                        <div className="flex flex-col gap-2">
+                                          {subs.map((item) => (
+                                            <Link
+                                              key={item.name}
+                                              href={menuHref(item)}
+                                              onClick={() => setActiveDropdown(null)}
+                                              className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#D32F2F] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
+                                            >
+                                              {item.name}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                      )}
                                     </div>
-                                  )}
-                                </div>
-                              );
-                            })}
+                                  );
+                                })}
+                              </div>
+                            ))}
                           </div>
                         </div>
 
@@ -271,7 +337,7 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[min(1180px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#F5C2C2] bg-white p-5 pb-4 shadow-[0_20px_50px_rgba(43,43,43,0.12)] z-50 flex flex-row items-start justify-between gap-12 pointer-events-auto h-auto min-h-fit"
+                        className="absolute left-1/2 -translate-x-1/2 mt-3 w-[min(920px,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#F5C2C2] bg-white p-5 pb-4 shadow-[0_20px_50px_rgba(43,43,43,0.12)] z-50 flex flex-row items-start justify-between gap-12 pointer-events-auto h-auto min-h-fit"
                       >
                         {/* Column 1: Corporate Kits */}
                         {(() => {
@@ -287,7 +353,7 @@ export function Navbar() {
                                 {cat.name}
                               </Link>
                               {cat.subcategories.length > 0 && (
-                                <div className="space-y-1">
+                                <div className="flex flex-col gap-2">
                                   {cat.subcategories.map((item) => (
                                     <Link
                                       key={item.name}
@@ -304,53 +370,21 @@ export function Navbar() {
                           );
                         })()}
 
-                        {/* Column 2: Festive Hampers */}
-                        {(() => {
-                          const cat = PRODUCT_HIERARCHY[1]?.categories.find(c => c.slug === "festive-hampers");
-                          if (!cat) return null;
-                          return (
-                            <div className="w-[260px] shrink text-left self-start">
-                              <Link
-                                href={`/corporate-kits?kit=${cat.slug}`}
-                                onClick={() => setActiveDropdown(null)}
-                                className="mb-3 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
-                              >
-                                {cat.name}
-                              </Link>
-                              {cat.subcategories.length > 0 && (
-                                <div className="space-y-1">
-                                  {cat.subcategories.map((item) => (
-                                    <Link
-                                      key={item.name}
-                                      href={item.href || `/corporate-kits?kit=${item.slug}`}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className="block rounded-md border-l border-transparent py-1.5 pl-2 text-[13px] font-medium leading-snug text-[#6B6B63] transition-colors hover:border-[#D32F2F] hover:bg-[#FAF9F6] hover:text-[#D32F2F]"
-                                    >
-                                      {item.name}
-                                    </Link>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })()}
-
-                        {/* Column 3: Combined Categories */}
-                        <div className="w-[240px] shrink text-left self-start space-y-6">
-                          {["electronics", "clocks", "grooming-kits", "executive-kits"].map((slug) => {
-                            const cat = PRODUCT_HIERARCHY[1]?.categories.find(c => c.slug === slug);
-                            if (!cat) return null;
-                            return (
-                              <div key={cat.slug}>
+                        {/* Column 2: Other Kit Categories (Festive, Grooming, Executive, etc.) */}
+                        <div className="w-[260px] shrink text-left self-start flex flex-col gap-[28px]">
+                          {(PRODUCT_HIERARCHY[1]?.categories || [])
+                            .filter(c => c.slug !== "corporate-kits")
+                            .map((cat) => (
+                              <div key={cat.slug} className="flex flex-col">
                                 <Link
                                   href={`/corporate-kits?kit=${cat.slug}`}
                                   onClick={() => setActiveDropdown(null)}
-                                  className="mb-2 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
+                                  className="mb-3 block text-[10px] font-extrabold uppercase tracking-widest text-[#D32F2F] hover:text-[#C62828] transition-colors"
                                 >
                                   {cat.name}
                                 </Link>
                                 {cat.subcategories.length > 0 && (
-                                  <div className="space-y-1">
+                                  <div className="flex flex-col gap-2">
                                     {cat.subcategories.map((item) => (
                                       <Link
                                         key={item.name}
@@ -364,11 +398,10 @@ export function Navbar() {
                                   </div>
                                 )}
                               </div>
-                            );
-                          })}
+                            ))}
                         </div>
 
-                        {/* Column 4: Info Card */}
+                        {/* Column 3: Info Card */}
                         <div className="w-[260px] shrink flex flex-col justify-between rounded-xl border border-[#F5C2C2] bg-gradient-to-br from-[#F8F7F3] to-[#FAF9F6] p-4 text-left self-start sticky top-0 h-fit">
                           <div>
                             <span className="text-[9px] font-extrabold text-[#EF5350] uppercase tracking-widest block mb-1">Kit Onboarding</span>
@@ -438,19 +471,6 @@ export function Navbar() {
                   </AnimatePresence>
                 </div>
   
-                {/* 3. Packaging Link */}
-                <Link
-                  href="/packaging-solutions"
-                  className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
-                    pathname === "/packaging-solutions" ? "text-[#D32F2F]" : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
-                  }`}
-                >
-                  <span>Packaging</span>
-                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#EF5350] origin-left transition-transform duration-300 ${
-                    pathname === "/packaging-solutions" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
-                  }`} />
-                </Link>
-
                 {/* 5. Brands Link */}
                 <Link
                   href="/brands"
@@ -461,6 +481,19 @@ export function Navbar() {
                   <span>Brands</span>
                   <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#EF5350] origin-left transition-transform duration-300 ${
                     pathname === "/brands" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
+                  }`} />
+                </Link>
+
+                {/* 3. Packaging Link */}
+                <Link
+                  href="/packaging-solutions"
+                  className={`relative group/nav-item px-3 py-2 rounded-xl text-[13px] font-semibold tracking-wide transition-all duration-300 block ${
+                    pathname === "/packaging-solutions" ? "text-[#D32F2F]" : "text-[#2B2B2B]/80 hover:text-[#2B2B2B]"
+                  }`}
+                >
+                  <span>Packaging</span>
+                  <span className={`absolute bottom-0 left-4 right-4 h-[2px] bg-[#EF5350] origin-left transition-transform duration-300 ${
+                    pathname === "/packaging-solutions" ? "scale-x-100" : "scale-x-0 group-hover/nav-item:scale-x-100"
                   }`} />
                 </Link>
 
@@ -492,7 +525,7 @@ export function Navbar() {
               </motion.div>
 
               {/* Desktop Action Buttons */}
-              <div className="hidden lg:flex items-center gap-4">
+              <div className="hidden lg:flex items-center justify-end gap-4 lg:w-[260px] lg:shrink-0">
                 <button 
                   suppressHydrationWarning
                   onClick={() => setIsDrawerOpen(true)}
@@ -553,13 +586,24 @@ export function Navbar() {
             >
               {/* Header inside drawer */}
               <div className="flex justify-between items-center h-[72px] px-5 border-b border-[#F5C2C2] flex-shrink-0">
-                <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                  <div className="bg-gradient-to-br from-[#D32F2F] to-[#C62828] p-2.5 rounded-xl">
-                    <Gift className="h-5 w-5 text-white" />
+                <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5">
+                  <Image
+                    src="/pacmyproductlogo1.png"
+                    alt="PacMyProduct Logo"
+                    width={443}
+                    height={563}
+                    priority
+                    className="w-[34px] h-auto object-contain select-none transition-all duration-300 hover:scale-105"
+                  />
+                  <div className="flex flex-col text-left">
+                    <span className="text-[16px] font-bold tracking-tight leading-none">
+                      <span className="text-[#2B2B2B]">PACMY</span>
+                      <span className="text-[#D32F2F]">PRODUCT</span>
+                    </span>
+                    <span className="text-[9px] text-neutral-500 tracking-wide font-medium mt-0.5 leading-none">
+                      Corporate Gifting Solutions
+                    </span>
                   </div>
-                  <span className="font-black text-xl tracking-wider text-[#2B2B2B]">
-                    PACMY<span className="text-[#D32F2F]">PRODUCT</span>
-                  </span>
                 </Link>
                 <button
                   suppressHydrationWarning
@@ -608,19 +652,27 @@ export function Navbar() {
                           </Link>
                             {promotionalCats.map((cat) => (
                               <div key={cat.slug} className="col-span-2 mt-2 first:mt-0">
-                                <h5 className="text-[10px] font-extrabold text-[#D32F2F] uppercase tracking-wider mb-1">{cat.name}</h5>
-                                <div className="grid grid-cols-2 gap-2">
-                                  {getSubcategories(cat.slug).map((item) => (
-                                    <Link
-                                      key={item.name}
-                                      href={menuHref(item)}
-                                      onClick={() => setIsOpen(false)}
-                                      className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
-                                    >
-                                      {item.name}
-                                    </Link>
-                                  ))}
-                                </div>
+                                <Link 
+                                  href={`/products?category=${cat.slug}`}
+                                  onClick={() => setIsOpen(false)}
+                                  className="text-[10px] font-extrabold text-[#D32F2F] uppercase tracking-wider mb-1 block hover:text-[#C62828]"
+                                >
+                                  {cat.name}
+                                </Link>
+                                {getSubcategories(cat.slug).length > 0 && (
+                                  <div className="grid grid-cols-2 gap-2">
+                                    {getSubcategories(cat.slug).map((item) => (
+                                      <Link
+                                        key={item.name}
+                                        href={menuHref(item)}
+                                        onClick={() => setIsOpen(false)}
+                                        className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
+                                      >
+                                        {item.name}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             ))}
                         </div>
@@ -716,7 +768,19 @@ export function Navbar() {
                   </AnimatePresence>
                 </div>
 
-                {/* 3. Direct Link: Packaging */}
+                {/* Direct Link: Brands */}
+                <div className="border-b border-[#F5C2C2]">
+                  <Link
+                    key="brands"
+                    href="/brands"
+                    onClick={() => setIsOpen(false)}
+                    className="flex justify-between items-center w-full py-4 text-[#2B2B2B] text-base font-bold text-left hover:text-[#D32F2F] transition-colors"
+                  >
+                    Brands
+                  </Link>
+                </div>
+
+                {/* Direct Link: Packaging */}
                 <div className="border-b border-[#F5C2C2]">
                   <Link
                     key="packaging-solutions"
@@ -728,7 +792,7 @@ export function Navbar() {
                   </Link>
                 </div>
 
-                {/* 5. Direct Link: Company */}
+                {/* Direct Link: Company */}
                 <div className="border-b border-[#F5C2C2]">
                   <Link
                     key="about-company"
@@ -740,7 +804,7 @@ export function Navbar() {
                   </Link>
                 </div>
 
-                {/* 6. Direct Link: Contact */}
+                {/* Direct Link: Contact */}
                 <div className="border-b border-[#F5C2C2]">
                   <Link
                     key="contact-us"

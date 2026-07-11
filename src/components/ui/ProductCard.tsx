@@ -6,6 +6,7 @@ import { Button } from "../ui/Button";
 import { cn } from "@/lib/utils";
 import { Bookmark } from "lucide-react";
 import { useShortlist } from "@/context/ShortlistContext";
+import { useProductPreview } from "@/context/ProductPreviewContext";
 import { useRouter } from "next/navigation";
 import { localCatalogImage } from "@/lib/localCatalogImages";
 import { SafeImage } from "./SafeImage";
@@ -29,6 +30,8 @@ interface ProductCardProps {
   href?: string;
   slug?: string;
   isProduct?: boolean;
+  images?: string[];
+  features?: string[];
 }
 
 export function ProductCard({ 
@@ -45,9 +48,12 @@ export function ProductCard({
   brand,
   href, 
   slug,
-  isProduct = true
+  isProduct = true,
+  images = [],
+  features = []
 }: ProductCardProps) {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
+  const { openPreview } = useProductPreview();
   const router = useRouter();
   const prefersReduced = useReducedMotion();
   
@@ -65,11 +71,41 @@ export function ProductCard({
 
   const handleRequestQuote = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (isProduct) {
+      openPreview({
+        title,
+        description: description || "",
+        imageUrl: displayImage,
+        price,
+        moq,
+        category,
+        subcategory,
+        brand,
+        images: images.length > 0 ? images : [displayImage],
+        features: features.length > 0 ? features : brandingOptions
+      });
+      return;
+    }
     const targetUrl = buildEnquiryUrl({ category, subcategory, brand, moq });
     router.push(targetUrl);
   };
 
   const handleCardClick = () => {
+    if (isProduct) {
+      openPreview({
+        title,
+        description: description || "",
+        imageUrl: displayImage,
+        price,
+        moq,
+        category,
+        subcategory,
+        brand,
+        images: images.length > 0 ? images : [displayImage],
+        features: features.length > 0 ? features : brandingOptions
+      });
+      return;
+    }
     if (href) {
       router.push(href);
       return;
