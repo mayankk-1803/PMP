@@ -42,8 +42,10 @@ export async function GET(req: Request) {
       if (selected === "laptop-bags" && (productSubOrCat === "laptop-backpacks" || productSubOrCat === "laptop-bags")) return true;
       if (selected === "travel-bags" && (productSubOrCat === "travel-backpacks" || productSubOrCat === "travel-bags")) return true;
       if (selected === "bags" && (productSubOrCat === "backpacks-bags" || productSubOrCat === "bags")) return true;
-      if (selected === "promotional-caps" && (productSubOrCat === "baseball-caps" || productSubOrCat === "event-caps" || productSubOrCat === "snapback-caps" || productSubOrCat === "promotional-caps")) return true;
-      if (selected === "cotton-caps" && (productSubOrCat === "cotton-caps" || productSubOrCat === "sports-caps")) return true;
+      if (selected === "pens" && ["pens", "premium-pens", "eco-pens", "plastic-pens", "metal-pens", "executive-pens", "engraved-pens", "gift-box-pens"].includes(productSubOrCat)) return true;
+      if (selected === "caps" && ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(productSubOrCat)) return true;
+      if (selected === "table-top" && ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "paper-weight", "paperweight", "desktop-accessories", "desktopaccessories"].includes(productSubOrCat)) return true;
+      if (selected === "diaries-notebooks" && ["diaries-notebooks", "diaries", "executive-diaries", "eco-notebooks", "premium-notebooks", "notebooks", "premium-diaries", "standard-notebooks"].includes(productSubOrCat)) return true;
       return false;
     };
 
@@ -55,7 +57,21 @@ export async function GET(req: Request) {
       matchSubcategory(activeFilter, product.category) ||
       matchSubcategory(activeFilter, product.subcategory);
 
-    const matchesQuery = !query || product.title.toLowerCase().includes(query) || product.description.toLowerCase().includes(query) || product.slug.toLowerCase().includes(query);
+    const isPenQuery = query && (query.includes("pen") || query === "pens");
+    const isCapQuery = query && (query.includes("cap") || query === "caps");
+    const isTableTopQuery = query && (query.includes("table") || query.includes("mousepad") || query.includes("paperweight") || query.includes("organiser") || query.includes("organizer") || query.includes("tablemat") || query.includes("tabletop"));
+    const isDiaryQuery = query && (query.includes("diar") || query.includes("notebook") || query.includes("diary") || query.includes("diaries"));
+
+    const matchesQuery = 
+      !query || 
+      product.title.toLowerCase().includes(query) || 
+      product.description.toLowerCase().includes(query) || 
+      product.slug.toLowerCase().includes(query) ||
+      (isPenQuery && (product.category === "pens" || product.subcategory === "pens")) ||
+      (isCapQuery && (product.category === "caps" || product.subcategory === "caps")) ||
+      (isTableTopQuery && (product.category === "table-top" || product.subcategory === "table-top")) ||
+      (isDiaryQuery && (product.category === "diaries-notebooks" || product.subcategory === "diaries-notebooks"));
+      
     const matchesBrand = !brand || product.brand === brand;
     const matchesFeatured = !featured || (featured === "true" ? product.featured : !product.featured);
     return matchesCategory && matchesQuery && matchesBrand && matchesFeatured;

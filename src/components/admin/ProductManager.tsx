@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { ImageUploader } from "./ImageUploader";
+import { getCanonicalCategoryName, getCanonicalSubcategoryName, cleanProductTitle } from "@/lib/slugResolver";
 
 interface ProductRecord {
   id: string;
@@ -148,6 +149,10 @@ export function ProductManager() {
 
       const backendCategories = categoryData.data ?? [];
       const runtimeCategories = [
+        { name: "Pens", slug: "pens" },
+        { name: "Caps", slug: "caps" },
+        { name: "Table Top", slug: "table-top" },
+        { name: "Diaries / Notebooks", slug: "diaries-notebooks" },
         { name: "Badges", slug: "badges" },
         { name: "Neck Rest / Back Rest", slug: "neck-rest-back-rest" },
         { name: "Electronics", slug: "electronics" },
@@ -165,10 +170,14 @@ export function ProductManager() {
 
       const backendSubcategories = subcategoryData.data ?? [];
       const runtimeSubcategories = [
+        { name: "Pens", slug: "pens", category: "pens" },
+        { name: "Caps", slug: "caps", category: "caps" },
+        { name: "Table Top", slug: "table-top", category: "table-top" },
+        { name: "Diaries / Notebooks", slug: "diaries-notebooks", category: "diaries-notebooks" },
         { name: "Badges", slug: "badges-sub", category: "badges" },
         { name: "Neck Rest / Back Rest", slug: "neck-rest-back-rest-sub", category: "neck-rest-back-rest" },
-        { name: "Wireless Charger", slug: "wireless-charger", category: "electronics" },
-        { name: "Bluetooth Speaker", slug: "bluetooth-speaker", category: "electronics" },
+        { name: "Wireless", slug: "wireless-charger", category: "electronics" },
+        { name: "Wired", slug: "bluetooth-speaker", category: "electronics" },
         { name: "Wall Clock", slug: "wall-clock", category: "clocks" },
         { name: "Wrist Watch", slug: "wrist-watch", category: "clocks" },
         { name: "Male Grooming Kit", slug: "male-grooming-kit", category: "grooming-kits" },
@@ -663,13 +672,13 @@ export function ProductManager() {
                               </td>
                               <td className="px-4 py-3">
                                 {product.featuredImage ? (
-                                  <img src={product.featuredImage} alt={product.title} className="h-11 w-11 rounded-lg object-cover border border-[#E5DED2]" />
+                                  <img src={product.featuredImage} alt={cleanProductTitle(product.title)} className="h-11 w-11 rounded-lg object-cover border border-[#E5DED2]" />
                                 ) : (
                                   <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#F8F7F3] text-[#9A9387]"><ImagePlus className="h-4 w-4" /></div>
                                 )}
                               </td>
-                              <td className="px-4 py-3"><span className="rounded bg-[#F8F7F3] px-2 py-0.5 text-xs text-[#5F6752] font-semibold">{product.category}</span></td>
-                              <td className="px-4 py-3 text-[#6B6B63] font-medium">{product.subcategory}</td>
+                              <td className="px-4 py-3"><span className="rounded bg-[#F8F7F3] px-2 py-0.5 text-xs text-[#5F6752] font-semibold">{getCanonicalCategoryName(product.category)}</span></td>
+                              <td className="px-4 py-3 text-[#6B6B63] font-medium">{getCanonicalSubcategoryName(product.subcategory)}</td>
                               <td className="px-4 py-3 font-semibold text-[#3F4734]">{product.brand || "PacMyProduct"}</td>
                               <td className="px-4 py-3 font-bold">{product.moq} Units</td>
                               <td className="px-4 py-3">
@@ -1046,7 +1055,7 @@ export function ProductManager() {
           <div className="w-full max-w-md rounded-xl border border-[#F5C2C2] bg-[#FFFDF8] p-6 text-[#2B2B2B] shadow-2xl text-left">
             <h2 className="text-lg font-black text-[#2B2B2B]">Archive catalog item?</h2>
             <p className="mt-2 text-sm text-[#6B6B63]">
-              Are you sure you want to delete <strong>{deleteTarget.title}</strong>? It will be moved to the Trash Bin and hidden from the store.
+              Are you sure you want to delete <strong>{cleanProductTitle(deleteTarget.title)}</strong>? It will be moved to the Trash Bin and hidden from the store.
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button onClick={() => setDeleteTarget(null)} className="rounded-lg border border-[#F5C2C2] px-4 py-2 text-sm font-bold text-[#C62828] hover:bg-[#FAF9F6]">Cancel</button>

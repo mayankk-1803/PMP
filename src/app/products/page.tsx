@@ -122,7 +122,13 @@ function ProductsPageContent() {
           for (const sub of cat.subcategories) {
             if (HIDDEN_PRODUCT_SLUGS.has(sub.slug)) continue;
 
-            const isNewCategory = sub.slug === "badges-sub" || sub.slug === "neck-rest-back-rest-sub";
+            const isNewCategory = 
+              sub.slug === "badges-sub" || 
+              sub.slug === "neck-rest-back-rest-sub" ||
+              sub.slug === "pens" ||
+              sub.slug === "caps" ||
+              sub.slug === "table-top" ||
+              sub.slug === "diaries-notebooks";
             const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
               (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
               (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks"));
@@ -235,13 +241,21 @@ function ProductsPageContent() {
       (selectedCategory === "diaries-notebooks" && isDiaries);
 
     const matchesBudget = selectedBudget === "all";
+    const matchesSearchText = (text: string, q: string) => {
+      if (!text || !q) return false;
+      const normalizedText = text.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const normalizedQ = q.toLowerCase().replace(/[^a-z0-9]/g, "");
+      return normalizedText.includes(normalizedQ);
+    };
+
     const matchesSearch = 
-      product.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (product.brand && product.brand.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (product.tags && product.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))) ||
-      (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      product.title.toLowerCase().includes(searchQuery.toLowerCase());
+      !searchQuery ||
+      matchesSearchText(product.category, searchQuery) ||
+      matchesSearchText(product.subcategory, searchQuery) ||
+      (product.brand && matchesSearchText(product.brand, searchQuery)) ||
+      (product.tags && product.tags.some(tag => matchesSearchText(tag, searchQuery))) ||
+      (product.description && matchesSearchText(product.description, searchQuery)) ||
+      matchesSearchText(product.title, searchQuery);
     return matchesCategory && matchesBudget && matchesSearch;
   });
 

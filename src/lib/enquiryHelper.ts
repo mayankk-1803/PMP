@@ -1,3 +1,5 @@
+import { getCanonicalCategoryName, getCanonicalSubcategoryName, cleanProductTitle } from "@/lib/slugResolver";
+
 export interface EnquiryUrlParams {
   category?: string;
   subcategory?: string;
@@ -34,17 +36,24 @@ export function getShortlistItemDisplayName(item: {
     
     const catOrSub = item.subcategory || item.category;
     if (catOrSub) {
-      // Capitalize words
-      const cleaned = catOrSub.replace(/-/g, ' ');
-      parts.push(cleaned.charAt(0).toUpperCase() + cleaned.slice(1));
+      const canonicalName = item.subcategory 
+        ? getCanonicalSubcategoryName(item.subcategory) 
+        : getCanonicalCategoryName(item.category);
+      
+      let displayValue = canonicalName;
+      if (displayValue && displayValue === catOrSub) {
+        const cleaned = displayValue.replace(/-/g, ' ');
+        displayValue = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+      }
+      parts.push(displayValue || "");
     }
     
-    return parts.join(" ");
+    return parts.filter(Boolean).join(" ");
   }
   
   if (item.title) {
     // Fallback if title is custom or fallback string
-    return item.title;
+    return cleanProductTitle(item.title);
   }
   
   return "Gifting Swag Item";
