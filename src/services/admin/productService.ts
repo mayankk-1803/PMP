@@ -6,14 +6,19 @@ import { connectMongoDB } from "@/lib/mongodb";
 import { destroyCloudinaryAssets, uniquePublicIds } from "@/lib/admin/cloudinaryLifecycle";
 import { ProductModel } from "@/models/cmsModels";
 import { resolveProductImage } from "@/lib/imageResolver";
-import { getCanonicalCategorySlug, getCanonicalSubcategorySlug, getCategorySlugAliases, getSubcategorySlugAliases } from "@/lib/slugResolver";
+import { getCanonicalCategorySlug, getCanonicalSubcategorySlug, getCategorySlugAliases, getSubcategorySlugAliases, cleanProductTitle } from "@/lib/slugResolver";
 
 export function listProducts(): ProductRecord[] {
-  return listRecords("products").filter((product) => product.active);
+  return listRecords("products").filter((product) => product.active).map(p => ({
+    ...p,
+    title: cleanProductTitle(p.title),
+    category: getCanonicalCategorySlug(p.category) || p.category || "",
+    subcategory: getCanonicalSubcategorySlug(p.subcategory) || p.subcategory || "",
+  }));
 }
 
 export async function listAllProducts(): Promise<ProductRecord[]> {
-  if (!process.env.MONGODB_URI) return listRecords("products");
+  if (!process.env.MONGODB_URI) return listProducts();
   await connectMongoDB();
   const products = await ProductModel.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 }).lean<any[]>();
   return products.map(mapMongoProduct);
@@ -37,7 +42,39 @@ export async function searchProducts(options: {
   const query: Record<string, any> = { isDeleted: { $ne: true } };
 
   if (options.search) {
-    query.$text = { $search: options.search };
+    const cleanSearch = options.search.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const isPenQuery = cleanSearch.includes("pen") || cleanSearch === "pens" || cleanSearch === "pen";
+    const isCapQuery = cleanSearch.includes("cap") || cleanSearch === "caps" || cleanSearch === "cap";
+    const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
+    const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
+
+    if (isPenQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("pens") } },
+        { subcategory: { $in: getSubcategorySlugAliases("pens") } }
+      ];
+    } else if (isCapQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("caps") } },
+        { subcategory: { $in: getSubcategorySlugAliases("caps") } }
+      ];
+    } else if (isTableTopQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("table-top") } },
+        { subcategory: { $in: getSubcategorySlugAliases("table-top") } }
+      ];
+    } else if (isDiaryQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("diaries-notebooks") } },
+        { subcategory: { $in: getSubcategorySlugAliases("diaries-notebooks") } }
+      ];
+    } else {
+      query.$text = { $search: options.search };
+    }
   }
   if (options.category) query.category = { $in: getCategorySlugAliases(options.category) };
   if (options.subcategory) query.subcategory = { $in: getSubcategorySlugAliases(options.subcategory) };
@@ -94,7 +131,43 @@ export async function searchCatalogProducts(options: {
   const page = Math.max(1, Number(options.page) || 1);
   const limit = Math.min(1000, Math.max(1, Number(options.limit) || 1000));
   const query: Record<string, any> = { status: "PUBLISHED", isDeleted: { $ne: true } };
-  if (options.search) query.$text = { $search: options.search };
+  
+  if (options.search) {
+    const cleanSearch = options.search.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const isPenQuery = cleanSearch.includes("pen") || cleanSearch === "pens" || cleanSearch === "pen";
+    const isCapQuery = cleanSearch.includes("cap") || cleanSearch === "caps" || cleanSearch === "cap";
+    const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
+    const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
+
+    if (isPenQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("pens") } },
+        { subcategory: { $in: getSubcategorySlugAliases("pens") } }
+      ];
+    } else if (isCapQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("caps") } },
+        { subcategory: { $in: getSubcategorySlugAliases("caps") } }
+      ];
+    } else if (isTableTopQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("table-top") } },
+        { subcategory: { $in: getSubcategorySlugAliases("table-top") } }
+      ];
+    } else if (isDiaryQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("diaries-notebooks") } },
+        { subcategory: { $in: getSubcategorySlugAliases("diaries-notebooks") } }
+      ];
+    } else {
+      query.$text = { $search: options.search };
+    }
+  }
+  
   if (options.subcategory && options.subcategory !== "all") {
     query.subcategory = { $in: getSubcategorySlugAliases(options.subcategory) };
   } else if (options.category && options.category !== "all") {
@@ -137,7 +210,14 @@ export async function searchCatalogProducts(options: {
 }
 
 export function getProductBySlug(slug: string): ProductRecord | null {
-  return listRecords("products").find((product) => product.slug === slug) ?? null;
+  const product = listRecords("products").find((product) => product.slug === slug) ?? null;
+  if (!product) return null;
+  return {
+    ...product,
+    title: cleanProductTitle(product.title),
+    category: getCanonicalCategorySlug(product.category) || product.category || "",
+    subcategory: getCanonicalSubcategorySlug(product.subcategory) || product.subcategory || "",
+  };
 }
 
 const normalizeSpecifications = (specifications: any) => {
@@ -188,7 +268,7 @@ const mapMongoProduct = (product: any): ProductRecord => {
 
   return {
     id: String(product._id),
-    title,
+    title: cleanProductTitle(title),
     slug: product.slug,
     description: product.description || "",
     shortDescription: product.shortDescription,

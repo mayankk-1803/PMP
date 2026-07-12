@@ -102,7 +102,9 @@ export const PRODUCT_HIERARCHY = [
       {
         name: "Pens",
         slug: "pens",
-        subcategories: []
+        subcategories: [
+          { name: "Pens", slug: "pens", href: "/products?subcategory=pens" }
+        ]
       },
       // Column 4: Keychains
       {
@@ -118,7 +120,9 @@ export const PRODUCT_HIERARCHY = [
       {
         name: "Caps",
         slug: "caps",
-        subcategories: []
+        subcategories: [
+          { name: "Caps", slug: "caps", href: "/products?subcategory=caps" }
+        ]
       },
       // Column 6: T-Shirts
       {
@@ -129,25 +133,21 @@ export const PRODUCT_HIERARCHY = [
           { name: "Round Neck T-Shirts", slug: "round-neck-t-shirts", href: "/products?subcategory=round-neck-t-shirts" }
         ]
       },
-      // Column 7: Paper Weight
-      {
-        name: "Paper Weight",
-        slug: "paper-weight",
-        subcategories: [
-          { name: "Paper Weight", slug: "paper-weight-sub", href: "/products?subcategory=paper-weight-sub" }
-        ]
-      },
       // Column 8: Table Top
       {
         name: "Table Top",
         slug: "table-top",
-        subcategories: []
+        subcategories: [
+          { name: "Table Top", slug: "table-top", href: "/products?subcategory=table-top" }
+        ]
       },
       // Column 9: Diaries / Notebooks
       {
         name: "Diaries / Notebooks",
         slug: "diaries-notebooks",
-        subcategories: []
+        subcategories: [
+          { name: "Diaries / Notebooks", slug: "diaries-notebooks", href: "/products?subcategory=diaries-notebooks" }
+        ]
       },
       // Column 10: Badges
       {
@@ -170,8 +170,8 @@ export const PRODUCT_HIERARCHY = [
         name: "Electronics",
         slug: "electronics",
         subcategories: [
-          { name: "Wireless Charger", slug: "wireless-charger", href: "/products?subcategory=wireless-charger" },
-          { name: "Bluetooth Speaker", slug: "bluetooth-speaker", href: "/products?subcategory=bluetooth-speaker" }
+          { name: "Wireless", slug: "wireless-charger", href: "/products?subcategory=wireless-charger" },
+          { name: "Wired", slug: "bluetooth-speaker", href: "/products?subcategory=bluetooth-speaker" }
         ]
       },
       // Moved Column 13: Clocks

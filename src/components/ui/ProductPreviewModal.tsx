@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Share2, Clipboard, ShieldCheck, Box } from "lucide-react";
 import { useProductPreview } from "@/context/ProductPreviewContext";
 import { buildEnquiryUrl, getShortlistItemDisplayName } from "@/lib/enquiryHelper";
+import { getCanonicalSubcategoryName, getCanonicalCategoryName, cleanProductTitle } from "@/lib/slugResolver";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -116,11 +117,11 @@ export function ProductPreviewModal() {
 
   // Safe category & subcategory name formatting
   const displayCategory = product.category
-    ? product.category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+    ? getCanonicalCategoryName(product.category) || product.category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
     : "Gifts";
   
   const displaySubcategory = product.subcategory
-    ? product.subcategory.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+    ? getCanonicalSubcategoryName(product.subcategory) || product.subcategory.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
     : "";
 
   return (
@@ -161,7 +162,7 @@ export function ProductPreviewModal() {
               >
                 <Image
                   src={images[activeIndex]}
-                  alt={product.title}
+                  alt={cleanProductTitle(product.title)}
                   fill
                   sizes="(min-width: 768px) 500px, 90vw"
                   priority
@@ -210,7 +211,7 @@ export function ProductPreviewModal() {
                   >
                     <Image
                       src={img}
-                      alt={`${product.title} thumbnail ${i + 1}`}
+                      alt={`${cleanProductTitle(product.title)} thumbnail ${i + 1}`}
                       fill
                       sizes="64px"
                       className="object-cover"
@@ -250,8 +251,13 @@ export function ProductPreviewModal() {
                   )}
                 </div>
                 <h2 className="text-2xl font-black tracking-tight text-gray-950">
-                  {product.title}
+                  PacMyProduct
                 </h2>
+                {(displaySubcategory || displayCategory) && (
+                  <p className="text-sm font-bold text-gray-500 mt-1 uppercase tracking-wide">
+                    {displaySubcategory || displayCategory}
+                  </p>
+                )}
               </div>
 
               {/* Description */}

@@ -3,6 +3,7 @@
 import React, { useState, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getShortlistItemDisplayName } from "@/lib/enquiryHelper";
+import { getCanonicalCategoryName, getCanonicalSubcategoryName, cleanProductTitle } from "@/lib/slugResolver";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -178,8 +179,16 @@ function EnquiryFormContainer() {
     } else if (category || subcategory || brand) {
       const parts = [];
       if (brand) parts.push(`Brand: ${brand}`);
-      if (category) parts.push(`Category: ${category.replace(/-/g, ' ')}`);
-      if (subcategory) parts.push(`Subcategory: ${subcategory.replace(/-/g, ' ')}`);
+      if (category) {
+        const resolved = getCanonicalCategoryName(category);
+        const formattedCat = resolved === category ? category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : resolved;
+        parts.push(`Category: ${formattedCat}`);
+      }
+      if (subcategory) {
+        const resolved = getCanonicalSubcategoryName(subcategory);
+        const formattedSub = resolved === subcategory ? subcategory.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : resolved;
+        parts.push(`Subcategory: ${formattedSub}`);
+      }
       if (moq) parts.push(`MOQ: ${moq}`);
       finalPayload.shortlist = [{ title: parts.join(" | ") }];
     } else if (singleProduct) {
@@ -372,19 +381,19 @@ function EnquiryFormContainer() {
                             ))
                           ) : (
                             <>
-                              {singleProduct && (
+                              {singleProduct && !singleProduct.startsWith("PacMyProduct") && (
                                 <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
-                                  {singleProduct}
+                                  {cleanProductTitle(singleProduct)}
                                 </span>
                               )}
                               {category && (
                                 <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
-                                  Category: {category.replace(/-/g, ' ')}
+                                  Category: {getCanonicalCategoryName(category)}
                                 </span>
                               )}
                               {subcategory && (
                                 <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
-                                  Subcategory: {subcategory.replace(/-/g, ' ')}
+                                  Subcategory: {getCanonicalSubcategoryName(subcategory)}
                                 </span>
                               )}
                               {brand && (
@@ -787,7 +796,14 @@ function EnquiryFormContainer() {
                       ? `${items.length} item(s) selected from shortlist` 
                       : singleProduct
                         ? singleProduct
-                        : [brand, subcategory || category].filter(Boolean).map(s => s.replace(/-/g, ' ')).join(" ")
+                        : [
+                            brand,
+                            subcategory 
+                              ? (getCanonicalSubcategoryName(subcategory) === subcategory ? subcategory.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : getCanonicalSubcategoryName(subcategory))
+                              : category 
+                                ? (getCanonicalCategoryName(category) === category ? category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : getCanonicalCategoryName(category))
+                                : ""
+                          ].filter(Boolean).join(" ")
                     }
                   </span>
                 ) : (

@@ -12,7 +12,7 @@ import { localCatalogImage } from "@/lib/localCatalogImages";
 import { SafeImage } from "./SafeImage";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { resolveProductImage } from "@/lib/imageResolver";
-
+import { getCanonicalCategoryName, getCanonicalSubcategoryName, getCanonicalCategorySlug, getCanonicalSubcategorySlug, cleanProductTitle } from "@/lib/slugResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 interface ProductCardProps {
@@ -135,7 +135,7 @@ export function ProductCard({
       <div className="relative w-full h-[250px] overflow-hidden bg-[#FAF9F6] flex-shrink-0">
         <SafeImage 
           src={displayImage} 
-          alt={isProduct ? "Product Catalog Image" : title}
+          alt={cleanProductTitle(title)}
           category={category}
           useNextImage={true}
           nextImageProps={{
@@ -163,30 +163,45 @@ export function ProductCard({
         )}
       </div>
       
-      <div className="p-4 flex flex-col flex-grow justify-center items-center">
+      <div className="p-4 flex flex-col flex-grow justify-between items-center h-full">
         {isProduct ? (
-          // Product Card Layout: ONLY the Get Quote button, centered and clean
-          <motion.div
-            className="w-full text-center"
-            initial={prefersReduced ? false : { y: 4, opacity: 0.8 }}
-            whileHover={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Button 
-              variant="outline" 
-              size="default" 
-              onClick={handleRequestQuote}
-              className="w-full text-[13px] font-bold h-10 border-[#EF5350] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white transition-all duration-200 rounded-xl"
+          // Product Card Layout: Category, Subcategory (if applicable), and Get Quote button
+          <div className="w-full flex flex-col justify-between flex-grow text-center h-full">
+            <div className="mb-4 text-center">
+              <span className="block text-sm font-black text-gray-900 uppercase tracking-tight mb-1">
+                PacMyProduct
+              </span>
+              <span className="block text-[11px] font-black uppercase tracking-widest text-[#EF5350]">
+                {category ? getCanonicalCategoryName(category) : "Gifts"}
+              </span>
+              {subcategory && getCanonicalSubcategorySlug(subcategory) !== getCanonicalCategorySlug(category) && (
+                <span className="block text-xs font-bold text-gray-500 mt-1 uppercase tracking-wide">
+                  {getCanonicalSubcategoryName(subcategory)}
+                </span>
+              )}
+            </div>
+            <motion.div
+              className="w-full text-center"
+              initial={prefersReduced ? false : { y: 4, opacity: 0.8 }}
+              whileHover={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.2 }}
             >
-              Get Quote
-            </Button>
-          </motion.div>
+              <Button 
+                variant="outline" 
+                size="default" 
+                onClick={handleRequestQuote}
+                className="w-full text-[13px] font-bold h-10 border-[#EF5350] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white transition-all duration-200 rounded-xl"
+              >
+                Get Quote
+              </Button>
+            </motion.div>
+          </div>
         ) : (
           // Category / Subcategory / Collection Card Layout (Keeps Name and Description)
           <div className="flex flex-col w-full h-full justify-between flex-grow text-left">
             <div className="flex flex-col flex-grow">
               <div className="mb-3 min-h-[44px]">
-                <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{title}</h3>
+                <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{cleanProductTitle(title)}</h3>
               </div>
               
               <div className="min-h-[40px] mb-4">

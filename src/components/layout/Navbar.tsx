@@ -109,9 +109,6 @@ export function Navbar() {
   ]);
 
   const getSubcategories = (catSlug: string) => {
-    if (["pens", "caps", "table-top", "diaries-notebooks"].includes(catSlug)) {
-      return [];
-    }
     const cat = promotionalCats.find((c) => c.slug === catSlug);
     if (!cat) return [];
     return cat.subcategories.filter(

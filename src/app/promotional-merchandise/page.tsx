@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/Button";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { resolveProductImage, resolveCategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
+import { getCanonicalCategoryName, getCanonicalSubcategoryName } from "@/lib/slugResolver";
 
 interface Category {
   id: string;
@@ -85,9 +86,14 @@ export default function PromoMerchPage() {
       .filter((p) => p.category === catSlug)
       .slice(0, 3)
       .map((p) => {
-        const titleText = (p.subcategory || p.category || "Corporate Gift").replace(/-/g, ' ');
+        const subName = p.subcategory ? getCanonicalSubcategoryName(p.subcategory) : "";
+        const catName = getCanonicalCategoryName(p.category);
+        const resolved = subName || catName;
+        const titleText = resolved === p.subcategory || resolved === p.category 
+          ? (resolved || "Corporate Gift").replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+          : (resolved || "Corporate Gift");
         return {
-          title: titleText.charAt(0).toUpperCase() + titleText.slice(1),
+          title: titleText,
           description: p.description,
           imageUrl: resolveProductImage(p) || "/images/joiningkit.png",
           cta: "Get Quote",
