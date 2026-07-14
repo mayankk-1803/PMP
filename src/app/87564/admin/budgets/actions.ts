@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import { getCurrentAdmin, logActivity } from "@/lib/admin/activityLogger";
 import { revalidatePath } from "next/cache";
+import { BUDGET_IMAGES_MAP } from "@/lib/generatedImageMap";
 
 const RUNTIME_DIR = path.join(process.cwd(), "data", "runtime");
 const BUDGETS_FILE = path.join(RUNTIME_DIR, "budgets.json");
@@ -57,8 +58,7 @@ const defaultBudgets: BudgetConfigItem[] = [
 async function getFirstPublicImage(id: string): Promise<string> {
   try {
     const folder = id === "5000" ? "5000+" : id;
-    const dirPath = path.join(process.cwd(), "public", folder);
-    const files = await fs.readdir(dirPath);
+    const files = BUDGET_IMAGES_MAP[folder] || [];
     const imgFile = files.find((f) => /\.(png|jpe?g|webp|svg)$/i.test(f));
     if (imgFile) {
       return `/${folder}/${imgFile}`;
@@ -221,11 +221,10 @@ export async function getBudgetCardImageAction(rangeValue: string): Promise<stri
 
     if (!folder) return "/default-budget.jpg";
 
-    const dirPath = path.join(process.cwd(), "public", folder);
-    const files = await fs.readdir(dirPath);
+    const files = BUDGET_IMAGES_MAP[folder] || [];
     
     // Sort alphabetically as requested
-    const sortedFiles = files.sort((a, b) => a.localeCompare(b));
+    const sortedFiles = [...files].sort((a, b) => a.localeCompare(b));
 
     const imgFile = sortedFiles.find((f) => /\.(png|jpe?g|webp|avif|svg)$/i.test(f));
     if (imgFile) {
