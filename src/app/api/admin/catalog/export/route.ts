@@ -87,6 +87,12 @@ export async function GET(req: Request) {
         row["Price"] = rec.price || 0;
         row["Status"] = rec.status || "";
         row["Featured"] = rec.featured ? "Yes" : "No";
+        row["Display Name"] = rec.specifications instanceof Map 
+          ? rec.specifications.get("displayName") 
+          : rec.specifications?.displayName || "";
+        row["Budget"] = rec.specifications instanceof Map 
+          ? rec.specifications.get("budget") 
+          : rec.specifications?.budget || "";
       } 
       else if (entityType === "brands") {
         row["Name"] = rec.name || "";

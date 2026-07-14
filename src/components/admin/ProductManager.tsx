@@ -27,6 +27,8 @@ interface ProductRecord {
   featured: boolean;
   active: boolean;
   order?: number;
+  budget?: string;
+  displayName?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -52,6 +54,8 @@ const emptyProduct = {
   galleryImages: [] as string[],
   cloudinaryPublicId: "",
   galleryPublicIds: [] as string[],
+  budget: "",
+  displayName: "",
 };
 
 const allowedTypes = [
@@ -94,6 +98,7 @@ export function ProductManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<ProductRecord | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isDisplayNameEdited, setIsDisplayNameEdited] = useState(false);
 
   // Reusable Media Uploader states
   const [featuredUploading, setFeaturedUploading] = useState(false);
@@ -207,6 +212,7 @@ export function ProductManager() {
   const openCreate = () => {
     setEditingId(null);
     setForm(emptyProduct);
+    setIsDisplayNameEdited(false);
     setInitialPublicIds([]);
     setUploadedPublicIdsInSession([]);
     setUploadError("");
@@ -215,6 +221,7 @@ export function ProductManager() {
   };
 
   const openEdit = (product: ProductRecord) => {
+    setIsDisplayNameEdited(true);
     const images = product.galleryImages?.length ? product.galleryImages : product.images || [];
     const featuredImage = product.featuredImage || images[0] || "";
     const existingPids = [
@@ -239,6 +246,10 @@ export function ProductManager() {
       galleryImages: images.filter((image) => image !== featuredImage),
       cloudinaryPublicId: product.cloudinaryPublicId || "",
       galleryPublicIds: (product.galleryPublicIds || []).filter((pid: string) => pid && pid !== product.cloudinaryPublicId),
+      // @ts-ignore
+      budget: product.budget || "",
+      // @ts-ignore
+      displayName: product.displayName || "",
     });
 
     setInitialPublicIds(existingPids);
@@ -252,6 +263,19 @@ export function ProductManager() {
     setForm((current) => {
       const next = { ...current, [field]: value };
       if (field === "title" && !editingId) next.slug = slugify(String(value));
+      
+      if ((field === "subcategory" || field === "category") && !editingId && !isDisplayNameEdited) {
+        const targetSub = field === "subcategory" ? value : next.subcategory;
+        const subName = subcategories.find((s) => s.slug === targetSub)?.name || "";
+        if (subName) {
+          next.displayName = subName;
+        }
+      }
+
+      if (field === "displayName") {
+        setIsDisplayNameEdited(true);
+      }
+
       return next;
     });
   };
@@ -313,6 +337,10 @@ export function ProductManager() {
         galleryImages: form.galleryImages,
         cloudinaryPublicId: form.cloudinaryPublicId,
         galleryPublicIds: form.galleryPublicIds,
+        // @ts-ignore
+        budget: form.budget || "",
+        // @ts-ignore
+        displayName: form.displayName || "",
       };
 
       const res = await fetch(editingId ? `/api/admin/products/${editingId}` : "/api/admin/products", {
@@ -935,6 +963,24 @@ export function ProductManager() {
                   {brands.map((b) => (
                     <option key={b.slug} value={b.name}>{b.name}</option>
                   ))}
+                </select>
+              </label>
+
+              <label className="block text-sm font-bold text-[#C62828]">
+                Display Name
+                <input required type="text" value={(form as any).displayName || ""} onChange={(e) => updateForm("displayName", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2 text-[#2B2B2B] text-sm outline-none focus:border-[#D32F2F]" placeholder="Customer Facing Product Name" />
+              </label>
+
+              <label className="block text-sm font-bold text-[#C62828]">
+                Budget Range (Optional)
+                <select value={(form as any).budget || ""} onChange={(e) => updateForm("budget", e.target.value)} className="mt-2 w-full rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] px-3 py-2.5 text-sm outline-none focus:border-[#D32F2F]">
+                  <option value="">Select Budget Range</option>
+                  <option value="₹0–250">₹0–250</option>
+                  <option value="₹250–500">₹250–500</option>
+                  <option value="₹500–1000">₹500–1000</option>
+                  <option value="₹1000–2500">₹1000–2500</option>
+                  <option value="₹2500–5000">₹2500–5000</option>
+                  <option value="₹5000+">₹5000+</option>
                 </select>
               </label>
 

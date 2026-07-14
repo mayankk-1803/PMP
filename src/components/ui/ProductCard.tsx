@@ -12,7 +12,7 @@ import { localCatalogImage } from "@/lib/localCatalogImages";
 import { SafeImage } from "./SafeImage";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { resolveProductImage } from "@/lib/imageResolver";
-import { getCanonicalCategoryName, getCanonicalSubcategoryName, getCanonicalCategorySlug, getCanonicalSubcategorySlug, cleanProductTitle } from "@/lib/slugResolver";
+import { getCanonicalCategoryName, getCanonicalSubcategoryName, getCanonicalCategorySlug, getCanonicalSubcategorySlug, cleanProductTitle, resolveDisplayName } from "@/lib/slugResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 interface ProductCardProps {
@@ -32,6 +32,7 @@ interface ProductCardProps {
   isProduct?: boolean;
   images?: string[];
   features?: string[];
+  displayName?: string;
 }
 
 export function ProductCard({ 
@@ -50,7 +51,8 @@ export function ProductCard({
   slug,
   isProduct = true,
   images = [],
-  features = []
+  features = [],
+  displayName
 }: ProductCardProps) {
   const { addToShortlist, removeFromShortlist, isInShortlist } = useShortlist();
   const { openPreview } = useProductPreview();
@@ -59,6 +61,10 @@ export function ProductCard({
   
   const isSelected = isInShortlist(title);
   const displayImage = resolveProductImage({ title, imageUrl, category, slug }) || "";
+
+  const getCardDisplayName = () => {
+    return resolveDisplayName({ title, category, subcategory, displayName });
+  };
 
   const handleToggleShortlist = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -82,7 +88,8 @@ export function ProductCard({
         subcategory,
         brand,
         images: images.length > 0 ? images : [displayImage],
-        features: features.length > 0 ? features : brandingOptions
+        features: features.length > 0 ? features : brandingOptions,
+        displayName
       });
       return;
     }
@@ -102,7 +109,8 @@ export function ProductCard({
         subcategory,
         brand,
         images: images.length > 0 ? images : [displayImage],
-        features: features.length > 0 ? features : brandingOptions
+        features: features.length > 0 ? features : brandingOptions,
+        displayName
       });
       return;
     }
@@ -110,13 +118,11 @@ export function ProductCard({
       router.push(href);
       return;
     }
-    const targetUrl = buildEnquiryUrl({ category, subcategory, brand, moq });
-    router.push(targetUrl);
   };
 
   return (
     <motion.div 
-       initial={prefersReduced ? false : { opacity: 0, y: 24, scale: 0.97 }}
+      initial={prefersReduced ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 15, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-20px" }}
       transition={{ 
@@ -165,20 +171,21 @@ export function ProductCard({
       
       <div className="p-4 flex flex-col flex-grow justify-between items-center h-full">
         {isProduct ? (
-          // Product Card Layout: Category, Subcategory (if applicable), and Get Quote button
+          // Product Card Layout: Company, Category, Display Name, and Get Quote button
           <div className="w-full flex flex-col justify-between flex-grow text-center h-full">
             <div className="mb-4 text-center">
-              <span className="block text-sm font-black text-gray-900 uppercase tracking-tight mb-1">
+              <span className="block text-sm font-bold text-[#1F2937] leading-none mb-0.5">
                 PacMyProduct
               </span>
-              <span className="block text-[11px] font-black uppercase tracking-widest text-[#EF5350]">
+              <span className="block text-[11px] text-gray-500 mb-2">
+                Corporate Gifting Solutions
+              </span>
+              <span className="block text-[10px] font-black uppercase tracking-widest text-[#D32F2F] mb-2.5">
                 {category ? getCanonicalCategoryName(category) : "Gifts"}
               </span>
-              {subcategory && getCanonicalSubcategorySlug(subcategory) !== getCanonicalCategorySlug(category) && (
-                <span className="block text-xs font-bold text-gray-500 mt-1 uppercase tracking-wide">
-                  {getCanonicalSubcategoryName(subcategory)}
-                </span>
-              )}
+              <h3 className="text-sm font-bold text-gray-800 leading-snug line-clamp-2 min-h-[40px] flex items-center justify-center px-1">
+                {getCardDisplayName()}
+              </h3>
             </div>
             <motion.div
               className="w-full text-center"
@@ -201,7 +208,7 @@ export function ProductCard({
           <div className="flex flex-col w-full h-full justify-between flex-grow text-left">
             <div className="flex flex-col flex-grow">
               <div className="mb-3 min-h-[44px]">
-                <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{cleanProductTitle(title)}</h3>
+                <h3 className="text-[17px] font-bold text-[#D32F2F] leading-tight line-clamp-2 transition-colors group-hover:text-[#C62828]">{getCardDisplayName()}</h3>
               </div>
               
               <div className="min-h-[40px] mb-4">

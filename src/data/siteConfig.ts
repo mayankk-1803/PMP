@@ -234,13 +234,12 @@ export const PROMO_SUBCATEGORY_SLUGS = new Set(
 );
 
 export const BUDGETS = [
-
-  { name: "₹0–₹250", value: "Under ₹250", href: "/gifts-by-budget?range=Under%20%E2%82%B9250" },
-  { name: "₹250–₹500", value: "₹250 - ₹500", href: "/gifts-by-budget?range=%E2%82%B9250%20-%20%E2%82%B9500" },
-  { name: "₹500–₹1000", value: "₹500 - ₹1000", href: "/gifts-by-budget?range=%E2%82%B9500%20-%20%E2%82%B91000" },
-  { name: "₹1000–₹2500", value: "₹1000 - ₹2500", href: "/gifts-by-budget?range=%E2%82%B91000%20-%20%E2%82%B92500" },
-  { name: "₹2500–₹5000", value: "₹2500+", href: "/gifts-by-budget?range=%E2%82%B92500%2B" },
-  { name: "₹5000+ Premium", value: "₹2500+", href: "/gifts-by-budget?range=%E2%82%B92500%2B" }
+  { name: "₹0–₹250", value: "Under ₹250", href: "/gifts-by-budget/under-250" },
+  { name: "₹250–₹500", value: "₹250 - ₹500", href: "/gifts-by-budget/250-500" },
+  { name: "₹500–₹1000", value: "₹500 - ₹1000", href: "/gifts-by-budget/500-1000" },
+  { name: "₹1000–₹2500", value: "₹1000 - ₹2500", href: "/gifts-by-budget/1000-2500" },
+  { name: "₹2500–₹5000", value: "₹2500+", href: "/gifts-by-budget/2500-5000" },
+  { name: "₹5000+ Premium", value: "₹2500+", href: "/gifts-by-budget/5000-plus" }
 ];
 
 export const BRANDS = [

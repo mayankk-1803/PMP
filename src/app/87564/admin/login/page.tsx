@@ -6,9 +6,9 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#FAF9F6] px-4 text-[#2B2B2B]">
       <div className="w-full max-w-md rounded-lg border border-[#F5C2C2] bg-[#FFFDF8] p-8 shadow-xl">
         <div className="mb-6 flex items-center gap-3">
-          <div className="relative h-10 w-40">
+          <div className="relative w-[220px] h-[70px]">
             <Image
-              src="/pacmyproductlogo.png"
+              src="/pacmyproductlogo1.png"
               alt="PacMyProduct Logo"
               fill
               priority

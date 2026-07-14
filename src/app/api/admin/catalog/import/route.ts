@@ -87,6 +87,8 @@ export async function POST(req: Request) {
           const slug = row.slug || slugify(title);
           const category = row.category;
           const subcategory = row.subcategory || category;
+          const budgetVal = row.budget || row.Budget || row["Budget Range"] || row["budget range"] || row["BudgetRange"] || row["budgetRange"];
+          const displayNameVal = row["Display Name"] || row["display name"] || row.displayName || row.DisplayName || row["display_name"];
 
           // Validate category
           if (!categorySlugs.has(getCanonicalCategorySlug(category))) {
@@ -124,6 +126,8 @@ export async function POST(req: Request) {
                     isDeleted: false,
                     deletedAt: null,
                     deletedBy: null,
+                    ...(budgetVal ? { "specifications.budget": budgetVal } : {}),
+                    ...(displayNameVal ? { "specifications.displayName": displayNameVal } : {}),
                   },
                 }
               );
@@ -145,6 +149,8 @@ export async function POST(req: Request) {
                     price: Number(row.price) || 0,
                     status: row.status || "PUBLISHED",
                     active: row.status !== "HIDDEN",
+                    ...(budgetVal ? { "specifications.budget": budgetVal } : {}),
+                    ...(displayNameVal ? { "specifications.displayName": displayNameVal } : {}),
                   },
                 }
               );
@@ -167,6 +173,10 @@ export async function POST(req: Request) {
               active: row.status !== "HIDDEN",
               images: ["/images/joiningkit.png"],
               featuredImage: "/images/joiningkit.png",
+              specifications: {
+                ...(budgetVal ? { budget: budgetVal } : {}),
+                ...(displayNameVal ? { displayName: displayNameVal } : {}),
+              },
             });
             summary.created++;
           }

@@ -125,6 +125,7 @@ export async function searchCatalogProducts(options: {
   sortBy?: string;
   page?: number;
   limit?: number;
+  budget?: string;
 }) {
   await connectMongoDB();
 
@@ -177,6 +178,25 @@ export async function searchCatalogProducts(options: {
   if (options.brand) query.brand = options.brand;
   if (options.featured === "true") query.featured = true;
   if (options.featured === "false") query.featured = { $ne: true };
+
+  if (options.budget && options.budget !== "all") {
+    const norm = options.budget.toLowerCase().trim();
+    let possibleBudgets = [options.budget];
+    if (norm.includes("under 250") || norm.includes("0-250")) {
+      possibleBudgets = ["Under ₹250", "₹0–250", "0-250", "₹0–₹250"];
+    } else if (norm.includes("250 - 500") || norm.includes("250-500")) {
+      possibleBudgets = ["₹250 - ₹500", "₹250–500", "250-500", "₹250–₹500"];
+    } else if (norm.includes("500 - 1000") || norm.includes("500-1000")) {
+      possibleBudgets = ["₹500 - ₹1000", "₹500–1000", "500-1000", "₹500–₹1000"];
+    } else if (norm.includes("1000 - 2500") || norm.includes("1000-2500")) {
+      possibleBudgets = ["₹1000 - ₹2500", "₹1000–2500", "1000-2500", "₹1000–₹2500"];
+    } else if (norm.includes("2500-5000") || norm.includes("2500 - 5000")) {
+      possibleBudgets = ["₹2500+", "₹2500–5000", "2500-5000", "₹2500–₹5000"];
+    } else if (norm.includes("5000") || norm.includes("5000+")) {
+      possibleBudgets = ["₹2500+", "₹5000+", "5000+", "₹5000+ Premium"];
+    }
+    query["specifications.budget"] = { $in: possibleBudgets };
+  }
 
   const sortMap: Record<string, Record<string, 1 | -1>> = {
     name: { title: 1, name: 1 },
@@ -289,6 +309,12 @@ const mapMongoProduct = (product: any): ProductRecord => {
     active: product.status !== "HIDDEN",
     status: product.status,
     order: product.order || 0,
+    budget: product.specifications instanceof Map 
+      ? product.specifications.get("budget") 
+      : product.specifications?.budget || "",
+    displayName: product.specifications instanceof Map 
+      ? product.specifications.get("displayName") 
+      : product.specifications?.displayName || "",
     createdAt: product.createdAt?.toISOString?.() || new Date().toISOString(),
     updatedAt: product.updatedAt?.toISOString?.() || new Date().toISOString(),
   };
@@ -333,6 +359,18 @@ export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt
       : input.cloudinaryPublicId
         ? [input.cloudinaryPublicId]
         : [];
+    const specs = { ...(input.specifications || {}) };
+    // @ts-ignore
+    if (input.budget) {
+      // @ts-ignore
+      specs.budget = input.budget;
+    }
+    // @ts-ignore
+    if (input.displayName) {
+      // @ts-ignore
+      specs.displayName = input.displayName;
+    }
+
     const product = await ProductModel.create({
       name: input.title,
       title: input.title,
@@ -348,7 +386,7 @@ export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt
       galleryPublicIds,
       images,
       features: input.features,
-      specifications: input.specifications,
+      specifications: specs,
       tags: input.tags,
       moq: input.moq,
       price: input.price,
@@ -372,6 +410,21 @@ export async function updateProduct(id: string, patch: Partial<ProductRecord> & 
       : patch.cloudinaryPublicId
         ? [patch.cloudinaryPublicId]
         : undefined;
+    let specs = patch.specifications;
+    // @ts-ignore
+    if (patch.budget !== undefined || patch.displayName !== undefined) {
+      const existingProduct = await ProductModel.findById(id).lean<any>();
+      const existingSpecs = normalizeSpecifications(existingProduct?.specifications) || {};
+      specs = {
+        ...existingSpecs,
+        ...(specs || {}),
+      };
+      // @ts-ignore
+      if (patch.budget !== undefined) specs.budget = patch.budget;
+      // @ts-ignore
+      if (patch.displayName !== undefined) specs.displayName = patch.displayName;
+    }
+
     const update: Record<string, unknown> = {
       ...patch,
       name: patch.title,
@@ -380,6 +433,7 @@ export async function updateProduct(id: string, patch: Partial<ProductRecord> & 
       cloudinaryPublicId: patch.cloudinaryPublicId || galleryPublicIds?.[0],
       galleryPublicIds,
       status: patch.status ?? (patch.active === false ? "HIDDEN" : patch.active === true ? "PUBLISHED" : undefined),
+      specifications: specs,
     };
 
     Object.keys(update).forEach((key) => update[key] === undefined && delete update[key]);

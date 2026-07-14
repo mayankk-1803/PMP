@@ -570,4 +570,36 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
   return [slug, canon].filter((v, i, a) => a.indexOf(v) === i);
 };
 
+/**
+ * Shared helper to resolve product display name based on priority:
+ * Display Name -> Subcategory -> Title -> Name -> Category
+ */
+export const resolveDisplayName = (product?: {
+  title?: string;
+  name?: string;
+  displayName?: string;
+  category?: string;
+  subcategory?: string;
+}): string => {
+  if (!product) return "";
+  
+  if (product.displayName && product.displayName.trim() !== "") {
+    return cleanProductTitle(product.displayName);
+  }
+  if (product.subcategory && product.subcategory.trim() !== "") {
+    return getCanonicalSubcategoryName(product.subcategory);
+  }
+  if (product.title && product.title.trim() !== "") {
+    return cleanProductTitle(product.title);
+  }
+  if (product.name && product.name.trim() !== "") {
+    return cleanProductTitle(product.name);
+  }
+  if (product.category && product.category.trim() !== "") {
+    return getCanonicalCategoryName(product.category);
+  }
+  
+  return "Corporate Gift";
+};
+
 
