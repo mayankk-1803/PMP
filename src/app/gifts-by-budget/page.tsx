@@ -198,7 +198,7 @@ function GiftsByBudgetContent() {
                     {resolvedImage ? (
                       <div className="aspect-video w-full overflow-hidden bg-gray-50 border-b border-[#F5C2C2] relative">
                         <Image
-                          src={resolvedImage}
+                          src={encodeURI(resolvedImage)}
                           alt={item.title}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

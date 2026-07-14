@@ -232,6 +232,79 @@
       }
     ],
     "collectionImages": [],
-    "products": []
+    "products": [
+      {
+        "slug": "assorted-christmas-chocolate-delights-box",
+        "displayName": "Assorted Christmas & Chocolate Delights Box",
+        "category": "Festive Hampers",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784025457/pacmyproduct/admin/q85f9gk4skctgaqyqmr3.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "id": "bp-1784025463480-jwm575erb"
+      },
+      {
+        "slug": "travel-duffle-bag",
+        "displayName": "Travel Duffle Bag",
+        "category": "Bags",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784025538/pacmyproduct/admin/llipmw6ksosnmesovgtp.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "id": "bp-1784025544817-i649krku7"
+      },
+      {
+        "slug": "starbucks-mug-dry-fruits-chocolates-hamper",
+        "displayName": "Starbucks Mug, Dry Fruits & Chocolates Hamper",
+        "category": "Festive Hampers",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784025943/pacmyproduct/admin/bq3w5azpujp6rr3dzdxs.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "id": "bp-1784025948454-siqg6i8ye"
+      }
+    ]
   }
 ]

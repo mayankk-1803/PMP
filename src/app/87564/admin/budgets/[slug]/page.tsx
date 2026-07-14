@@ -317,7 +317,7 @@ export default function BudgetCollectionDetailPage() {
                           <tr key={prod.id} className="hover:bg-[#FAF9F6] transition-colors">
                             <td className="px-4 py-3 whitespace-nowrap">
                               {prod.featuredImage ? (
-                                <img src={prod.featuredImage} alt={prod.displayName} className="h-10 w-10 object-cover rounded border border-gray-200" />
+                                <img src={encodeURI(prod.featuredImage)} alt={prod.displayName} className="h-10 w-10 object-cover rounded border border-gray-200" />
                               ) : (
                                 <div className="h-10 w-10 bg-gray-50 rounded border border-dashed border-gray-300 flex items-center justify-center text-gray-400">
                                   <ImagePlus className="w-3.5 h-3.5 text-gray-300" />

@@ -403,6 +403,7 @@ function BudgetCollectionContent() {
                               title={p.title}
                               description={p.description}
                               imageUrl={p.images?.[0] || "/images/joiningkit.png"}
+                              images={p.images || []}
                               price={p.price ? typeof p.price === "number" ? `Starts from ₹${p.price}` : p.price : "Custom Quote"}
                               index={idx}
                               category={p.category}
@@ -424,7 +425,7 @@ function BudgetCollectionContent() {
                             >
                               <div className="aspect-square relative w-full overflow-hidden bg-gray-50 border-b border-gray-100">
                                 <Image
-                                  src={img.url}
+                                  src={encodeURI(img.url)}
                                   alt={img.title || "Showcase"}
                                   fill
                                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -515,7 +516,7 @@ function BudgetCollectionContent() {
               ✕
             </button>
             <div className="max-w-4xl max-h-[85vh] relative" onClick={(e) => e.stopPropagation()}>
-              <img src={lightboxImageUrl} alt="Expanded showcase" className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl" />
+              <img src={encodeURI(lightboxImageUrl)} alt="Expanded showcase" className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl" />
             </div>
           </motion.div>
         )}

@@ -26,7 +26,9 @@ const emptyProduct: Omit<BudgetProduct, "id"> = {
   gallery: [],
   tags: [],
   order: 1,
-  active: true
+  active: true,
+  cloudinaryPublicId: "",
+  galleryPublicIds: []
 };
 
 const defaultBrandingOptions = [
@@ -101,7 +103,9 @@ export default function BudgetProductModal({
         gallery: editingProduct.gallery || [],
         tags: editingProduct.tags || [],
         order: editingProduct.order || 1,
-        active: editingProduct.active !== false
+        active: editingProduct.active !== false,
+        cloudinaryPublicId: editingProduct.cloudinaryPublicId || "",
+        galleryPublicIds: editingProduct.galleryPublicIds || []
       });
     } else {
       setIsDisplayNameEdited(false);
@@ -114,7 +118,8 @@ export default function BudgetProductModal({
           colors: "",
           packaging: ""
         },
-        brandingOptions: []
+        brandingOptions: [],
+        galleryPublicIds: []
       });
     }
   }, [editingProduct, isOpen]);
@@ -415,25 +420,31 @@ export default function BudgetProductModal({
             <ImageUploader 
               label="Featured Image (Primary)"
               value={productForm.featuredImage}
-              publicIds=""
+              publicIds={productForm.cloudinaryPublicId || ""}
               multiple={false}
               folder="pacmyproduct/budgets/products"
               disabled={saving || isUploading}
               onUploadStart={() => setIsUploading(true)}
               onUploadEnd={() => setIsUploading(false)}
-              onChange={(url) => updateProductField("featuredImage", url as string)}
+              onChange={(url, id) => {
+                updateProductField("featuredImage", url as string);
+                updateProductField("cloudinaryPublicId", id as string);
+              }}
             />
 
             <ImageUploader 
               label="Gallery Images (Multiple)"
               value={productForm.gallery || []}
-              publicIds={[]}
+              publicIds={productForm.galleryPublicIds || []}
               multiple={true}
               folder="pacmyproduct/budgets/products/gallery"
               disabled={saving || isUploading}
               onUploadStart={() => setIsUploading(true)}
               onUploadEnd={() => setIsUploading(false)}
-              onChange={(urls) => updateProductField("gallery", Array.isArray(urls) ? urls : [urls])}
+              onChange={(urls, ids) => {
+                updateProductField("gallery", Array.isArray(urls) ? urls : [urls]);
+                updateProductField("galleryPublicIds", Array.isArray(ids) ? ids : [ids]);
+              }}
             />
           </div>
 
