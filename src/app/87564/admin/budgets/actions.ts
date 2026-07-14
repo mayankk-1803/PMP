@@ -26,6 +26,8 @@ export interface BudgetProduct {
   tags?: string[];
   order: number;
   active: boolean;
+  cloudinaryPublicId?: string;
+  galleryPublicIds?: string[];
 }
 
 export interface BudgetConfigItem {

@@ -132,7 +132,8 @@ export function SafeImage({
   const [isLoaded, setIsLoaded] = useState(false);
   const fallback = getFallback();
   // Use src if it hasn't failed; if it has failed use fallback; if fallback is empty show neutral placeholder
-  const imgSrc = failedSrc === src ? fallback : (src || fallback);
+  const rawImgSrc = failedSrc === src ? fallback : (src || fallback);
+  const imgSrc = rawImgSrc ? (rawImgSrc.startsWith("data:") ? rawImgSrc : encodeURI(rawImgSrc)) : "";
 
   if (!imgSrc) {
     return (
