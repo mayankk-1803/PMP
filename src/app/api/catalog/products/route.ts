@@ -9,6 +9,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   let category = url.searchParams.get("category");
   let subcategory = url.searchParams.get("subcategory");
+  const budget = url.searchParams.get("budget");
   
   if (category) category = getCanonicalKitSlug(category) || category;
   if (subcategory) subcategory = getCanonicalKitSlug(subcategory) || subcategory;
@@ -30,8 +31,27 @@ export async function GET(req: Request) {
       sortBy,
       page,
       limit,
+      budget: budget || undefined,
     });
     return NextResponse.json({ success: true, data: result.data, pagination: result.pagination });
+  }
+
+  let possibleBudgets: string[] = [];
+  if (budget) {
+    const norm = budget.toLowerCase().trim();
+    if (norm.includes("under 250") || norm.includes("0-250")) {
+      possibleBudgets = ["Under ₹250", "₹0–250", "0-250", "₹0–₹250"];
+    } else if (norm.includes("250 - 500") || norm.includes("250-500")) {
+      possibleBudgets = ["₹250 - ₹500", "₹250–500", "250-500", "₹250–₹500"];
+    } else if (norm.includes("500 - 1000") || norm.includes("500-1000")) {
+      possibleBudgets = ["₹500 - ₹1000", "₹500–1000", "500-1000", "₹500–₹1000"];
+    } else if (norm.includes("1000 - 2500") || norm.includes("1000-2500")) {
+      possibleBudgets = ["₹1000 - ₹2500", "₹1000–2500", "1000-2500", "₹1000–₹2500"];
+    } else if (norm.includes("2500-5000") || norm.includes("2500 - 5000")) {
+      possibleBudgets = ["₹2500+", "₹2500–5000", "2500-5000", "₹2500–₹5000"];
+    } else if (norm.includes("5000") || norm.includes("5000+")) {
+      possibleBudgets = ["₹2500+", "₹5000+", "5000+", "₹5000+ Premium"];
+    }
   }
 
   const products = (await getCatalogProducts()).filter((product) => {
@@ -74,7 +94,11 @@ export async function GET(req: Request) {
       
     const matchesBrand = !brand || product.brand === brand;
     const matchesFeatured = !featured || (featured === "true" ? product.featured : !product.featured);
-    return matchesCategory && matchesQuery && matchesBrand && matchesFeatured;
+    
+    // @ts-ignore
+    const matchesBudget = !budget || product.budget === budget || possibleBudgets.includes(product.budget || "") || possibleBudgets.includes(product.specifications?.budget || "");
+
+    return matchesCategory && matchesQuery && matchesBrand && matchesFeatured && matchesBudget;
   });
 
   products.sort((a, b) => {

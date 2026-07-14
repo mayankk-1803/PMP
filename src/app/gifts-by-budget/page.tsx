@@ -1,13 +1,14 @@
 "use client";
 
-import React, { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { Suspense, useEffect, useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ProductCard } from "@/components/ui/ProductCard";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { PRODUCTS, BUDGETS } from "@/data/siteConfig";
-import { Wallet, PiggyBank, Coins, Briefcase, Gem, Crown } from "lucide-react";
+import { getBudgetsConfig, BudgetConfigItem, getBudgetCardImageAction } from "@/app/87564/admin/budgets/actions";
+import { BUDGETS } from "@/data/siteConfig";
+import { Wallet, PiggyBank, Coins, Briefcase, Gem, Crown, ChevronRight, Loader2 } from "lucide-react";
 
 // Helper to assign icons to budget ranges
 const getBudgetIcon = (index: number) => {
@@ -22,48 +23,131 @@ const getBudgetIcon = (index: number) => {
   return icons[index] || <Coins key="default" className="w-4 h-4" />;
 };
 
+const initialBudgets: BudgetConfigItem[] = BUDGETS.map((b, idx) => ({
+  id: String(idx),
+  title: b.name,
+  value: b.value,
+  description: "Perfect curated gifting solutions",
+  image: "",
+  displayOrder: idx + 1,
+  active: true,
+}));
+
+export function normalizeBudgetRange(val: string | null | undefined): string {
+  if (!val) return "";
+  const clean = val
+    .toLowerCase()
+    .replace(/[₹\s,]/g, "")
+    .replace(/[–—]/g, "-")
+    .trim();
+
+  if (clean === "under250" || clean === "0-250" || clean === "under-250") {
+    return "0-250";
+  }
+  if (clean === "250-500") {
+    return "250-500";
+  }
+  if (clean === "500-1000") {
+    return "500-1000";
+  }
+  if (clean === "1000-2500") {
+    return "1000-2500";
+  }
+  if (clean === "2500-5000") {
+    return "2500-5000";
+  }
+  if (clean === "5000" || clean === "5000+" || clean === "above5000" || clean === "above-5000") {
+    return "5000+";
+  }
+  if (clean === "2500+") {
+    return "2500+";
+  }
+  return clean;
+}
+
+export function budgetsMatch(prodBudget: string, targetRange: string): boolean {
+  const normProd = normalizeBudgetRange(prodBudget);
+  const normTarget = normalizeBudgetRange(targetRange);
+
+  if (normProd === normTarget) return true;
+
+  if (normTarget === "2500-5000") {
+    return normProd === "2500-5000" || normProd === "2500+";
+  }
+  if (normTarget === "5000+") {
+    return normProd === "5000+" || normProd === "2500+";
+  }
+  return false;
+}
+
+export function getBudgetCardImage(item: BudgetConfigItem): string {
+  return item.image || item.bannerImage || "/default-budget.jpg";
+}
+
+const BUDGET_ID_TO_SLUG: Record<string, string> = {
+  "0-250": "under-250",
+  "250-500": "250-500",
+  "500-1000": "500-1000",
+  "1000-2500": "1000-2500",
+  "2500-5000": "2500-5000",
+  "5000": "5000-plus",
+};
+
 function GiftsByBudgetContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const selectedRange = searchParams?.get("range") || "";
+  const [budgets, setBudgets] = useState<BudgetConfigItem[]>(initialBudgets);
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Convert products object to array and transform images/price fields
-  // Frontend-only: exclude travel-bags, travel-backpacks, travel-mugs
-  const HIDDEN_SUBCATEGORY_SLUGS = new Set(["travel-bags", "travel-backpacks", "travel-mugs"]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [configData, productsRes] = await Promise.all([
+          getBudgetsConfig(),
+          fetch("/api/catalog/products?limit=1000").then((res) => res.json())
+        ]);
 
-  const allProducts = Object.entries(PRODUCTS)
-    .filter(([, p]) => !HIDDEN_SUBCATEGORY_SLUGS.has(p.subcategory || ""))
-    .map(([slug, p]) => ({
-    slug,
-    title: p.title,
-    description: p.description,
-    imageUrl: p.images[0] || "",
-    price: `Starts from ₹${p.basePrice}`,
-    budgetRange: p.budget,
-    category: p.category,
-    subcategory: p.subcategory || "",
-    moq: p.moq,
-  }));
+        // Resolve budget image fallbacks from their specific folders dynamically on mount
+        const resolvedBudgets = await Promise.all(
+          configData.map(async (item) => {
+            let resolvedImage = item.bannerImage || item.image || "";
+            // If no custom image is configured, scan the folder server-side
+            if (!resolvedImage) {
+              resolvedImage = await getBudgetCardImageAction(item.id || item.title || item.value);
+            }
+            return {
+              ...item,
+              image: resolvedImage,
+              bannerImage: resolvedImage
+            };
+          })
+        );
 
-  // Unique list of budget tiers based on BUDGETS config, preventing duplicate "₹2500+" values
-  const uniqueBudgetTiers = BUDGETS.filter(
-    (item, index, self) => self.findIndex((t) => t.value === item.value) === index
-  );
+        setBudgets(resolvedBudgets.filter((b) => b.active).sort((a, b) => a.displayOrder - b.displayOrder));
+        if (productsRes.success && productsRes.data) {
+          setDbProducts(productsRes.data);
+        }
+      } catch (err) {
+        console.error("Failed to load dynamic budget catalog:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const filteredProducts = selectedRange
-    ? allProducts.filter(
-        (p) => p.budgetRange.toLowerCase() === selectedRange.toLowerCase()
-      )
-    : allProducts;
-
-  const handleSelectRange = (rangeValue: string) => {
-    const params = new URLSearchParams(searchParams?.toString());
-    if (rangeValue) {
-      params.set("range", rangeValue);
-    } else {
-      params.delete("range");
+  const allProducts = useMemo(() => {
+    if (dbProducts.length > 0) {
+      return dbProducts.map((p) => ({
+        budgetRange: p.budget || p.specifications?.budget || "",
+      }));
     }
-    router.push(`/gifts-by-budget?${params.toString()}`);
+    return [];
+  }, [dbProducts]);
+
+  const getAssignedProductsCount = (value: string) => {
+    return allProducts.filter((p) => budgetsMatch(p.budgetRange, value)).length;
   };
 
   return (
@@ -87,79 +171,69 @@ function GiftsByBudgetContent() {
           />
         </div>
 
-        {/* Dynamic Budget Range Selection Tabs */}
-        <div className="flex justify-center mb-16 px-4">
-          <div className="inline-flex flex-wrap p-1.5 bg-white border border-gray-200/80 rounded-2xl shadow-sm max-w-5xl w-full justify-center gap-2">
-            {/* "All Budgets" Pill */}
-            <button
-              onClick={() => handleSelectRange("")}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 w-full sm:w-auto ${
-                selectedRange === ""
-                  ? "bg-gray-900 text-white shadow-md shadow-gray-900/10"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <Coins className="w-4 h-4" />
-              All Budgets
-            </button>
-
-            {uniqueBudgetTiers.map((tier, idx) => {
-              const isActive = selectedRange.toLowerCase() === tier.value.toLowerCase();
-              return (
-                <button
-                  key={tier.name}
-                  onClick={() => handleSelectRange(tier.value)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 w-full sm:w-auto ${
-                    isActive
-                      ? "bg-gray-900 text-white shadow-md shadow-gray-900/10"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
-                >
-                  {getBudgetIcon(idx)}
-                  {tier.name}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Products Grid */}
-        <div className="relative min-h-[300px]">
-          {filteredProducts.length > 0 ? (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedRange}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-              >
-                {filteredProducts.map((product, idx) => (
-                  <ProductCard
-                    key={product.title}
-                    slug={product.slug}
-                    title={product.title}
-                    description={product.description}
-                    imageUrl={product.imageUrl}
-                    price={product.price}
-                    index={idx}
-                    category={product.category}
-                    subcategory={product.subcategory}
-                    moq={product.moq}
-                    isProduct={true}
-                    className="glass-card hover:shadow-xl hover:shadow-gray-200/40 border-gray-200/60"
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+        {/* Top Budget Category Navigation Cards */}
+        <div className="mb-16">
+          {loading ? (
+            <div className="flex h-60 items-center justify-center rounded-2xl border border-[#F5C2C2] bg-white">
+              <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-[#5F6752]">
+                <Loader2 className="h-5 w-5 animate-spin text-[#D32F2F]" />
+                Initializing smart budgets...
+              </div>
+            </div>
           ) : (
-            <div className="text-center py-20 bg-white border border-gray-200 rounded-3xl p-8 max-w-md mx-auto shadow-sm">
-              <Coins className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h4 className="text-lg font-bold text-gray-800 mb-2">No products found</h4>
-              <p className="text-gray-500 text-sm">
-                We don't currently have products categorized directly in this segment. Let us customize a custom gift proposal for you!
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {budgets.map((item, idx) => {
+                const liveCount = getAssignedProductsCount(item.value);
+                const resolvedImage = getBudgetCardImage(item);
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => {
+                      const slug = BUDGET_ID_TO_SLUG[item.id] || item.id;
+                      router.push(`/gifts-by-budget/${slug}`);
+                    }}
+                    className="group flex flex-col bg-white border border-[#F5C2C2] hover:border-[#D32F2F]/60 rounded-3xl overflow-hidden shadow-xs hover:shadow-lg transition-all duration-300 cursor-pointer h-full text-left"
+                  >
+                    {/* Card Cover Image */}
+                    {resolvedImage ? (
+                      <div className="aspect-video w-full overflow-hidden bg-gray-50 border-b border-[#F5C2C2] relative">
+                        <Image
+                          src={resolvedImage}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-video w-full rounded-2xl bg-[#FFFDF8] flex flex-col items-center justify-center mb-4 border border-dashed border-[#F5C2C2] text-[#D32F2F] hover:bg-[#FAF9F6]">
+                        {getBudgetIcon(idx)}
+                        <span className="text-xs font-bold text-gray-400 mt-2">No cover image</span>
+                      </div>
+                    )}
+                    <div className="p-6 flex-grow flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-xl font-black text-gray-950 group-hover:text-[#D32F2F] transition-colors leading-tight">
+                          {item.title}
+                        </h3>
+                        {item.description && (
+                          <p className="text-sm text-gray-500 font-semibold mt-2 line-clamp-2 leading-relaxed">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-black text-[#D32F2F] uppercase tracking-wider">
+                          {item.buttonText || "Explore Collection"} <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                        </span>
+                        <span className="text-xs font-bold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-full border border-gray-200">
+                          {liveCount} Products
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Activity, BarChart3, Boxes, Building2, Gauge, Inbox, Layers3, PackageCheck, Shield, ShoppingBag, Trash2 } from "lucide-react";
+import { Activity, BarChart3, Boxes, Building2, Gauge, Inbox, Layers3, PackageCheck, Shield, ShoppingBag, Trash2, Coins } from "lucide-react";
 import { AdminAccountMenu } from "./AdminAccountMenu";
 import { useEffect, useState } from "react";
 
@@ -12,6 +12,7 @@ const navItems = [
   { href: "/87564/admin/categories", label: "Categories", icon: Layers3 },
   { href: "/87564/admin/subcategories", label: "Subcategories", icon: Layers3 },
   { href: "/87564/admin/brands", label: "Brands", icon: Building2 },
+  { href: "/87564/admin/budgets", label: "Budget Collections", icon: Coins },
   { href: "/87564/admin/orders", label: "Orders", icon: ShoppingBag },
   { href: "/87564/admin/quotes", label: "Quotes", icon: PackageCheck },
   { href: "/87564/admin/enquiries", label: "Enquiries", icon: Inbox },
@@ -47,9 +48,9 @@ export function AdminShell({ title, subtitle, children }: { title: string; subti
       <div className="grid lg:grid-cols-[280px_1fr]">
         <aside className="border-r border-[#F5C2C2] bg-[#FFFDF8] px-4 py-6 shadow-sm">
           <Link href="/87564/admin/dashboard" className="mb-8 flex flex-col items-start gap-1 px-2">
-            <div className="relative h-9 w-40">
+            <div className="relative w-[180px] h-[55px]">
               <Image
-                src="/pacmyproductlogo.png"
+                src="/pacmyproductlogo1.png"
                 alt="PacMyProduct Logo"
                 fill
                 className="object-contain object-left"

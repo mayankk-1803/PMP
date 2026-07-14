@@ -65,12 +65,14 @@ export function Footer() {
         <div className="grid lg:grid-cols-12 gap-8 pb-16 border-b border-[#F5C2C2]/10">
           <div className="lg:col-span-5 space-y-5">
             <Link href="/" className="inline-block">
-              <div className="relative h-10 w-44">
+              <div className="flex items-center">
                 <Image
-                  src="/pacmyproductlogo.png"
+                  src="/pacmyproductlogo1.png"
                   alt="PacMyProduct Logo"
-                  fill
-                  className="object-contain object-left invert brightness-0"
+                  width={44}
+                  height={56}
+                  priority={false}
+                  className="w-11 h-auto object-contain select-none"
                 />
               </div>
             </Link>

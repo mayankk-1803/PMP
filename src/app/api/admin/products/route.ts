@@ -67,6 +67,10 @@ export async function POST(req: Request) {
       featured: Boolean(data.featured),
       active: status !== "HIDDEN",
       status,
+      // @ts-ignore
+      budget: data.budget,
+      // @ts-ignore
+      displayName: data.displayName,
     });
 
     if (product) {

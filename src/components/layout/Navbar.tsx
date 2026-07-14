@@ -21,6 +21,23 @@ import {
   OCCASION_HAMPERS
 } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
+import { getBudgetsConfig, BudgetConfigItem } from "@/app/87564/admin/budgets/actions";
+
+const initialBudgets: BudgetConfigItem[] = BUDGETS.map((b, idx) => ({
+  id: String(idx),
+  title: b.name,
+  value: b.value,
+  description: "",
+  image: "",
+  displayOrder: idx + 1,
+  active: true,
+}));
+
+const getSlugFromBudgetId = (id: string): string => {
+  if (id === "0-250") return "under-250";
+  if (id === "5000") return "5000-plus";
+  return id;
+};
 
 interface MenuSubcategory {
   name: string;
@@ -37,11 +54,20 @@ export function Navbar() {
   
   const [mounted, setMounted] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [budgets, setBudgets] = useState<BudgetConfigItem[]>(initialBudgets);
   
   const { items, removeFromShortlist } = useShortlist();
   const router = useRouter();
   const pathname = usePathname() || "";
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    getBudgetsConfig().then((data) => {
+      setBudgets(data);
+    }).catch((err) => {
+      console.error("Error loading budgets in Navbar:", err);
+    });
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -448,21 +474,31 @@ export function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 15 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                        className="absolute right-0 mt-3 w-[240px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(43,43,43,0.12)] border border-[#F5C2C2] p-4 z-50 space-y-1 pointer-events-auto"
+                        className="absolute right-0 mt-3 bg-white rounded-2xl shadow-[0_20px_50px_rgba(43,43,43,0.12)] border border-[#F5C2C2] p-4 z-50 pointer-events-auto w-[280px]"
                       >
                         <h4 className="text-[11px] font-bold text-[#2B2B2B] uppercase tracking-wide px-3 py-1 mb-2 flex items-center gap-2">
                           <Coins className="w-3.5 h-3.5 text-[#EF5350]" /> Shop by Budget
                         </h4>
-                        {BUDGETS.map((item) => (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            onClick={() => setActiveDropdown(null)}
-                            className="block text-[13px] text-[#6B6B63] hover:text-[#D32F2F] hover:bg-[#FAF9F6] font-medium px-3 py-2 rounded-lg transition-all"
-                          >
-                            {item.name}
-                          </Link>
-                        ))}
+                        
+                        <div className="space-y-1">
+                          {budgets.filter((b) => b.active).map((item) => (
+                            <Link
+                              key={item.id}
+                              href={`/gifts-by-budget/${getSlugFromBudgetId(item.id)}`}
+                              onClick={() => setActiveDropdown(null)}
+                              className="block rounded-xl hover:bg-[#FAF9F6] px-3 py-2.5 transition-all text-left group"
+                            >
+                              <span className="block text-sm font-extrabold text-[#2B2B2B] group-hover:text-[#D32F2F] transition-colors leading-tight">
+                                {item.title}
+                              </span>
+                              {item.description && (
+                                <span className="block text-[11px] text-[#6B6B63] font-medium mt-0.5 leading-snug">
+                                  {item.description}
+                                </span>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -749,14 +785,14 @@ export function Navbar() {
                         className="overflow-hidden pb-4"
                       >
                         <div className="grid grid-cols-2 gap-2 pl-2 pt-1">
-                          {BUDGETS.map((item) => (
+                          {budgets.filter((b) => b.active).map((item) => (
                             <Link
-                              key={item.name}
-                              href={item.href}
+                              key={item.id}
+                              href={`/gifts-by-budget/${getSlugFromBudgetId(item.id)}`}
                               onClick={() => setIsOpen(false)}
-                              className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors"
+                              className="text-sm font-semibold text-[#6B6B63] hover:text-[#2B2B2B] py-1 block truncate transition-colors text-left"
                             >
-                              {item.name}
+                              {item.title}
                             </Link>
                           ))}
                         </div>

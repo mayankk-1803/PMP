@@ -54,6 +54,8 @@ export interface ProductRecord {
   active: boolean;
   status?: "DRAFT" | "PUBLISHED" | "HIDDEN";
   order?: number;
+  budget?: string;
+  displayName?: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -10,6 +10,7 @@ import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { MobileStickyCTA } from "@/components/ui/MobileStickyCTA";
 import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 import { ProductPreviewModal } from "@/components/ui/ProductPreviewModal";
+import { SmartTimedPopup } from "@/components/ui/SmartTimedPopup";
 
 const pageVariants = {
   hidden:  { opacity: 0, y: 16 },
@@ -48,6 +49,7 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
         <FloatingWhatsApp />
         <MobileStickyCTA />
         <ProductPreviewModal />
+        <SmartTimedPopup />
       </ProductPreviewProvider>
     </ShortlistProvider>
   );

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Share2, Clipboard, ShieldCheck, Box } from "lucide-react";
 import { useProductPreview } from "@/context/ProductPreviewContext";
 import { buildEnquiryUrl, getShortlistItemDisplayName } from "@/lib/enquiryHelper";
-import { getCanonicalSubcategoryName, getCanonicalCategoryName, cleanProductTitle } from "@/lib/slugResolver";
+import { getCanonicalSubcategoryName, getCanonicalCategoryName, cleanProductTitle, resolveDisplayName } from "@/lib/slugResolver";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -123,6 +123,16 @@ export function ProductPreviewModal() {
   const displaySubcategory = product.subcategory
     ? getCanonicalSubcategoryName(product.subcategory) || product.subcategory.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
     : "";
+
+  const getProductPreviewTitle = () => {
+    return resolveDisplayName({
+      title: product.title,
+      name: product.name,
+      displayName: product.displayName,
+      category: product.category,
+      subcategory: product.subcategory
+    });
+  };
 
   return (
     <AnimatePresence>
@@ -250,14 +260,12 @@ export function ProductPreviewModal() {
                     </span>
                   )}
                 </div>
-                <h2 className="text-2xl font-black tracking-tight text-gray-950">
+                <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide">
                   PacMyProduct
                 </h2>
-                {(displaySubcategory || displayCategory) && (
-                  <p className="text-sm font-bold text-gray-500 mt-1 uppercase tracking-wide">
-                    {displaySubcategory || displayCategory}
-                  </p>
-                )}
+                <h3 className="text-2xl font-black tracking-tight text-gray-950 mt-1">
+                  {getProductPreviewTitle()}
+                </h3>
               </div>
 
               {/* Description */}

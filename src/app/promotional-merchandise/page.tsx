@@ -117,7 +117,7 @@ export default function PromoMerchPage() {
           className="relative w-44 h-12"
         >
           <Image
-            src="/pacmyproductlogo.png"
+            src="/pacmyproductlogo1.png"
             alt="Loading..."
             fill
             priority

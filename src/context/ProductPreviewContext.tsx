@@ -13,6 +13,9 @@ export interface PreviewProduct {
   brand?: string;
   images?: string[];
   features?: string[];
+  name?: string;
+  displayName?: string;
+  budget?: string;
 }
 
 interface ProductPreviewContextType {

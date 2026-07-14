@@ -1,0 +1,237 @@
+[
+  {
+    "id": "0-250",
+    "title": "₹0–250",
+    "value": "Under ₹250",
+    "description": "Perfect for Promotional Gifts",
+    "image": "/0-250/Screenshot 2026-07-14 122913.png",
+    "bannerImage": "/0-250/Screenshot 2026-07-14 122913.png",
+    "subtitle": "Affordable Gifting",
+    "buttonText": "Explore Collection",
+    "displayOrder": 1,
+    "active": true,
+    "publicId": "",
+    "bannerPublicId": "",
+    "images": [
+      {
+        "url": "/0-250/Screenshot 2026-07-14 122913.png",
+        "publicId": "",
+        "isCover": true
+      }
+    ],
+    "collectionImages": [],
+    "products": [
+      {
+        "slug": "diary",
+        "displayName": "Diary",
+        "category": "Office & Stationery",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784018799/pacmyproduct/admin/vjnlwzmmcelvlncglbaw.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "id": "bp-1784018806690-ewvcgtf6n"
+      },
+      {
+        "slug": "stainless-steel-bottle",
+        "displayName": "Stainless Steel Bottle",
+        "category": "Drinkware",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784018872/pacmyproduct/admin/wacrczxwwv1n1cpa7cfr.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "id": "bp-1784018885020-7xrpa2173"
+      },
+      {
+        "slug": "coffee-mug",
+        "displayName": "Coffee Mug",
+        "category": "Drinkware",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784018988/pacmyproduct/admin/fdkchkdlxbtvz6kk73cl.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "id": "bp-1784018993792-dnv0hqv1w"
+      },
+      {
+        "slug": "glass-coffee-mug-with-cork-sleeve",
+        "displayName": "Glass Coffee Mug with Cork Sleeve",
+        "category": "Drinkware",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784019153/pacmyproduct/admin/tsshkfr7j4hxafux8qef.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "id": "bp-1784019158441-h2ogfkai7"
+      }
+    ]
+  },
+  {
+    "id": "250-500",
+    "title": "₹250–500",
+    "value": "₹250 - ₹500",
+    "description": "Perfect for Standard Swag",
+    "image": "/250-500/Screenshot 2026-07-14 122926.png",
+    "bannerImage": "/250-500/Screenshot 2026-07-14 122926.png",
+    "subtitle": "Value Swag Kits",
+    "buttonText": "Explore Collection",
+    "displayOrder": 2,
+    "active": true,
+    "publicId": "",
+    "bannerPublicId": "",
+    "images": [
+      {
+        "url": "/250-500/Screenshot 2026-07-14 122926.png",
+        "publicId": "",
+        "isCover": true
+      }
+    ],
+    "collectionImages": [],
+    "products": []
+  },
+  {
+    "id": "500-1000",
+    "title": "₹500–1000",
+    "value": "₹500 - ₹1000",
+    "description": "Perfect for Premium Accessories",
+    "image": "/500-1000/Screenshot 2026-07-14 125025.png",
+    "bannerImage": "/500-1000/Screenshot 2026-07-14 125025.png",
+    "subtitle": "Premium Gifts",
+    "buttonText": "Explore Collection",
+    "displayOrder": 3,
+    "active": true,
+    "publicId": "",
+    "bannerPublicId": "",
+    "images": [
+      {
+        "url": "/500-1000/Screenshot 2026-07-14 125025.png",
+        "publicId": "",
+        "isCover": true
+      }
+    ],
+    "collectionImages": [],
+    "products": []
+  },
+  {
+    "id": "1000-2500",
+    "title": "₹1000–2500",
+    "value": "₹1000 - ₹2500",
+    "description": "Perfect for Executive Hampers",
+    "image": "/1000-2500/Screenshot 2026-07-14 125427.png",
+    "bannerImage": "/1000-2500/Screenshot 2026-07-14 125427.png",
+    "subtitle": "Executive Selection",
+    "buttonText": "Explore Collection",
+    "displayOrder": 4,
+    "active": true,
+    "publicId": "",
+    "bannerPublicId": "",
+    "images": [
+      {
+        "url": "/1000-2500/Screenshot 2026-07-14 125427.png",
+        "publicId": "",
+        "isCover": true
+      }
+    ],
+    "collectionImages": [],
+    "products": []
+  },
+  {
+    "id": "2500-5000",
+    "title": "₹2500–5000",
+    "value": "₹2500+",
+    "description": "Perfect for Luxury & VIP Gifts",
+    "image": "/2500-5000/Screenshot 2026-07-14 125820.png",
+    "bannerImage": "/2500-5000/Screenshot 2026-07-14 125820.png",
+    "subtitle": "Luxury VIP Collection",
+    "buttonText": "Explore Collection",
+    "displayOrder": 5,
+    "active": true,
+    "publicId": "",
+    "bannerPublicId": "",
+    "images": [
+      {
+        "url": "/2500-5000/Screenshot 2026-07-14 125820.png",
+        "publicId": "",
+        "isCover": true
+      }
+    ],
+    "collectionImages": [],
+    "products": []
+  },
+  {
+    "id": "5000",
+    "title": "₹5000+",
+    "value": "₹2500+",
+    "description": "Perfect for Ultra-Luxury VIP Gifts",
+    "image": "/5000+/Screenshot 2026-07-14 130252.png",
+    "bannerImage": "/5000+/Screenshot 2026-07-14 130252.png",
+    "subtitle": "Ultra-Luxury VIP",
+    "buttonText": "Explore Collection",
+    "displayOrder": 6,
+    "active": true,
+    "publicId": "",
+    "bannerPublicId": "",
+    "images": [
+      {
+        "url": "/5000+/Screenshot 2026-07-14 130252.png",
+        "publicId": "",
+        "isCover": true
+      }
+    ],
+    "collectionImages": [],
+    "products": []
+  }
+]

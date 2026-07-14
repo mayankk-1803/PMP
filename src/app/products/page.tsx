@@ -24,6 +24,8 @@ interface CatalogProduct {
   images: string[];
   moq: number;
   features: string[];
+  displayName?: string;
+  budget?: string;
 }
 
 interface CatalogNode {
@@ -467,6 +469,7 @@ function ProductsPageContent() {
                           isProduct={true}
                           images={product.images}
                           features={product.features}
+                          displayName={product.displayName}
                         />
                       </motion.div>
                     ))}
