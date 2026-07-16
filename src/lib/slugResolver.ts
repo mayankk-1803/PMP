@@ -9,14 +9,13 @@ export const getCanonicalKitSlug = (slug: string | null | undefined): string | u
   
   // Corporate Kits mapping
   if (clean === "joining" || clean === "joiningkits") return "joining-kits";
-  if (clean === "dealer" || clean === "dealerkits") return "dealer-kits";
+  if (clean === "dealer" || clean === "dealerkits" || clean === "retailer" || clean === "retailerkits") return "dealer-kits";
   if (clean === "doctor" || clean === "doctorkits") return "doctor-kits";
   if (clean === "architect" || clean === "architectkits") return "architect-kits";
   if (clean === "mason" || clean === "masonkits") return "mason-kits";
   if (clean === "electrician" || clean === "electriciankits") return "electrician-kits";
   if (clean === "interiordesigner" || clean === "interiordesignerkit" || clean === "interiordesignerkits") return "interior-designer-kits";
   if (clean === "plumber" || clean === "plumberkits") return "plumber-kits";
-  if (clean === "retailer" || clean === "retailerkits") return "retailer-kits";
   if (clean === "painter" || clean === "painterkits") return "painter-kits";
   if (clean === "engineer" || clean === "engineerkits") return "engineer-kits";
   
@@ -257,6 +256,10 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
   if (!slug) return "";
   const clean = slug.toLowerCase().replace(/[^a-z0-9]/g, "");
   
+  if (clean === "dealer" || clean === "dealerkits" || clean === "retailer" || clean === "retailerkits") {
+    return "dealer-kits";
+  }
+  
   // Bags subcategories
   if (clean === "laptopbackpack" || clean === "laptopbackpacks" || clean === "laptopbag" || clean === "laptopbags") {
     return "laptop-bags";
@@ -377,6 +380,17 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
 export const getCanonicalSubcategoryName = (name: string | null | undefined): string => {
   if (!name) return "";
   const clean = name.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  if (
+    clean === "dealerkits" ||
+    clean === "dealer" ||
+    clean === "retailerkits" ||
+    clean === "retailer" ||
+    clean === "dealerretailerkit" ||
+    clean === "dealerretailerkits"
+  ) {
+    return "Dealer / Retailer Kit";
+  }
 
   // Bags subcategories
   if (clean === "laptopbackpack" || clean === "laptopbackpacks" || clean === "laptopbag" || clean === "laptopbags") {
@@ -523,6 +537,10 @@ export const getCategorySlugAliases = (slug: string | null | undefined): string[
 export const getSubcategorySlugAliases = (slug: string | null | undefined): string[] => {
   if (!slug) return [];
   const canon = getCanonicalSubcategorySlug(slug);
+  
+  if (canon === "dealer-kits" || canon === "retailer-kits" || slug === "dealer-kits" || slug === "retailer-kits") {
+    return ["dealer-kits", "retailer-kits"];
+  }
   
   if (canon === "laptop-bags") {
     return ["laptop-bags", "laptop-backpacks"];

@@ -41,6 +41,9 @@ export const getKitsAndHampersImage = (titleOrSlug: string): string | undefined 
   if (cleanedTarget.includes("joining") || cleanedTarget.includes("joiner")) {
     cleanedTarget = cleanedTarget.replace("joining", "join").replace("joiner", "join");
   }
+  if (cleanedTarget.includes("dealer") && cleanedTarget.includes("retailer")) {
+    cleanedTarget = "dealer";
+  }
   if (cleanedTarget.includes("retailer")) {
     cleanedTarget = cleanedTarget.replace("retailer", "dealer");
   }

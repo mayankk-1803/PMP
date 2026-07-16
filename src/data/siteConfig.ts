@@ -42,14 +42,13 @@ export const PROMOTIONAL_PRODUCT_GROUPS = [
 
 export const CORPORATE_KITS = [
   { name: "Joining Kits", slug: "joining-kits", href: "/corporate-kits?kit=joining-kits" },
-  { name: "Dealer Kits", slug: "dealer-kits", href: "/corporate-kits?kit=dealer-kits" },
+  { name: "Dealer / Retailer Kit", slug: "dealer-kits", href: "/corporate-kits?kit=dealer-kits" },
   { name: "Doctor Kits", slug: "doctor-kits", href: "/corporate-kits?kit=doctor-kits" },
   { name: "Architect Kits", slug: "architect-kits", href: "/corporate-kits?kit=architect-kits" },
   { name: "Mason Kits", slug: "mason-kits", href: "/corporate-kits?kit=mason-kits" },
   { name: "Electrician Kits", slug: "electrician-kits", href: "/corporate-kits?kit=electrician-kits" },
   { name: "Interior Designer Kits", slug: "interior-designer-kits", href: "/corporate-kits?kit=interior-designer-kits" },
   { name: "Plumber Kits", slug: "plumber-kits", href: "/corporate-kits?kit=plumber-kits" },
-  { name: "Retailer Kits", slug: "retailer-kits", href: "/corporate-kits?kit=retailer-kits" },
   { name: "Painter Kits", slug: "painter-kits", href: "/corporate-kits?kit=painter-kits" },
   { name: "Engineer Kits", slug: "engineer-kits", href: "/corporate-kits?kit=engineer-kits" }
 ];
@@ -1263,9 +1262,9 @@ const BASE_SITE_KITS = [
     slug: "joining"
   },
   {
-    title: "Dealer Kits",
+    title: "Dealer / Retailer Kit",
     price: "Custom Quote",
-    description: "High-value kits designed for your business partners and dealers.",
+    description: "High-value kits designed for your business partners, dealers, and retail outlet owners.",
     imageUrl: "https://images.pexels.com/photos/6590930/pexels-photo-6590930.jpeg",
     category: "corporate",
     slug: "dealer"
@@ -1301,14 +1300,6 @@ const BASE_SITE_KITS = [
     imageUrl: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop",
     category: "industry",
     slug: "interior-designer"
-  },
-  {
-    title: "Retailer Kits",
-    price: "Custom Quote",
-    description: "In-store branding items and utility kits for retail outlet owners.",
-    imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop",
-    category: "industry",
-    slug: "retailer"
   },
   {
     title: "Painter Kits",

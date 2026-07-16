@@ -152,7 +152,17 @@ export function TaxonomyManager({ mode }: { mode: Mode }) {
     const payloads = await Promise.all(responses.map((response) => response.json()));
     
     // Sort by order field
-    const fetchedRecords = payloads[0].data ?? [];
+    let fetchedRecords = payloads[0].data ?? [];
+    if (isSubcategory) {
+      fetchedRecords = fetchedRecords
+        .filter((rec: any) => rec.slug !== "retailer-kits")
+        .map((rec: any) => {
+          if (rec.slug === "dealer-kits") {
+            return { ...rec, name: "Dealer / Retailer Kit" };
+          }
+          return rec;
+        });
+    }
     fetchedRecords.sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
 
     setRecords(fetchedRecords);

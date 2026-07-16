@@ -47,7 +47,7 @@ const INDUSTRIES = [
     desc: "Custom point-of-sale promotional items, distributor incentive packaging, retail partner loyalty boxes, and branded clothing assets. Built to capture consumer attention in-store and incentivize reseller channel networks.",
     img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800&auto=format&fit=crop",
     icon: <Store className="h-6 h-6 text-red-600" />,
-    link: "/corporate-kits?kit=retailer-kits",
+    link: "/corporate-kits?kit=dealer-kits",
     bulletPoints: [
       "Point-of-sale counter standees & banners",
       "Custom-printed merchant welcome kits",

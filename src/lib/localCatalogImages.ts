@@ -201,6 +201,7 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Vacuum Insulated Flask")]: "/images/premiumvaccumflask.png",
   [normalizeImageTitle("Smart Temperature LED Sipper")]: "/images/smartsipper.png",
   // Corporate Kits
+  [normalizeImageTitle("Dealer / Retailer Kit")]: "/images/dealerkit.png",
   [normalizeImageTitle("Dealer Kits")]: "/images/dealerkit.png",
   [normalizeImageTitle("Distributor Kits")]: "/images/dealerkit.png",
   [normalizeImageTitle("Employee Welcome Kit")]: "/images/employeewelcome.png",
