@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 export default function BrandsPage() {
   return (
@@ -22,9 +23,13 @@ export default function BrandsPage() {
       </section>
       <section className="py-12 lg:py-20">
         <div className="max-w-7xl mx-auto px-4">
-          <img
-            src="/images/pacmyproductlogos.png"
-            alt="PacMyProduct Brand Partners"
+          <Image
+            src="/brands.png"
+            alt="Top Brands for Premium Corporate Gifting"
+            width={1200}
+            height={900}
+            priority
+            sizes="(max-width:768px) 100vw, (max-width:1200px) 90vw, 1200px"
             className="w-full max-w-[1400px] h-auto mx-auto object-contain"
           />
         </div>
