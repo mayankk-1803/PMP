@@ -230,6 +230,7 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Laptop Bags")]: LOCAL_IMAGE_POOLS.laptopBags[0],
   [normalizeImageTitle("Travel Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[1],   // Travel Bags → Trolley Bags folder
   [normalizeImageTitle("Duffle Bags")]: LOCAL_IMAGE_POOLS.duffleBags[0],     // Duffle Bags → Duffle Bags folder only
+  [normalizeImageTitle("Canvas Trolley Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[0],
   [normalizeImageTitle("Trolley Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[0],   // Trolley Bags → Trolley Bags folder only
   [normalizeImageTitle("Sling Bags")]: LOCAL_IMAGE_POOLS.slingBags[0],
   [normalizeImageTitle("Classic Sling Bags")]: LOCAL_IMAGE_POOLS.slingBags[0],
