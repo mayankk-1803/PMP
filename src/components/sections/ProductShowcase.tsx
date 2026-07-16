@@ -135,9 +135,8 @@ export function ProductShowcase() {
                     </Button>
                   </div>
                 </div>
-                <div className="p-6 flex flex-col flex-grow text-left">
-                  <p className="text-xs text-[#6B6B63] font-medium uppercase tracking-wider mb-2">{formatCategoryLabel(product.category)}</p>
-                  <h3 className="text-lg font-bold text-[#D32F2F] mb-1 line-clamp-2 min-h-[56px]">{product.title}</h3>
+                <div className="p-6 flex flex-col flex-grow text-center justify-between">
+                  <h3 className="text-xl font-semibold text-[#D32F2F] leading-tight line-clamp-2 min-h-[56px] flex items-center justify-center px-1 text-center mt-4 mb-6">{product.title}</h3>
                   <p className="text-[#2B2B2B] font-semibold mt-auto">Custom Quote</p>
                 </div>
               </motion.div>
