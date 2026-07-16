@@ -171,19 +171,13 @@ export function ProductCard({
       
       <div className="p-4 flex flex-col flex-grow justify-between items-center h-full">
         {isProduct ? (
-          // Product Card Layout: Company, Category, Display Name, and Get Quote button
+          // Product Card Layout: Category, Display Name, and Get Quote button
           <div className="w-full flex flex-col justify-between flex-grow text-center h-full">
-            <div className="mb-4 text-center">
-              <span className="block text-sm font-bold text-[#1F2937] leading-none mb-0.5">
-                PacMyProduct
-              </span>
-              <span className="block text-[11px] text-gray-500 mb-2">
-                Corporate Gifting Solutions
-              </span>
-              <span className="block text-[10px] font-black uppercase tracking-widest text-[#D32F2F] mb-2.5">
+            <div className="mb-4 text-center flex flex-col justify-center items-center flex-grow">
+              <span className="block text-xs font-semibold uppercase tracking-widest text-[#D32F2F] mb-2.5">
                 {category ? getCanonicalCategoryName(category) : "Gifts"}
               </span>
-              <h3 className="text-sm font-bold text-gray-800 leading-snug line-clamp-2 min-h-[40px] flex items-center justify-center px-1">
+              <h3 className="text-base font-semibold text-gray-900 leading-snug line-clamp-2 min-h-[48px] flex items-center justify-center px-1 text-center">
                 {getCardDisplayName()}
               </h3>
             </div>

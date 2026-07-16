@@ -11,7 +11,7 @@ import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 import { Briefcase, HardHat, Gift, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { getCanonicalKitSlug } from "@/lib/slugResolver";
+import { getCanonicalKitSlug, getSubcategorySlugAliases } from "@/lib/slugResolver";
 import { resolveProductImage, resolveSubcategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 import { PRODUCT_HIERARCHY } from "@/data/siteConfig";
@@ -150,7 +150,29 @@ function CorporateKitsContent() {
     ])
       .then(([, subRes, prodRes]) => {
         if (subRes.success && subRes.data) {
-          const apiSubs = subRes.data;
+          let apiSubs = subRes.data || [];
+          
+          // Merge dealer-kits and retailer-kits at the subcategory level
+          const hasDealer = apiSubs.some((s: any) => s.slug === "dealer-kits");
+          const hasRetailer = apiSubs.some((s: any) => s.slug === "retailer-kits");
+          
+          if (hasDealer || hasRetailer) {
+            apiSubs = apiSubs.filter((s: any) => s.slug !== "retailer-kits");
+            const target = apiSubs.find((s: any) => s.slug === "dealer-kits");
+            if (target) {
+              target.name = "Dealer / Retailer Kit";
+              target.description = "Dealer and retailer kits with sales tools, branding panels, and onboarding packages.";
+            } else {
+              const retailerObj = subRes.data.find((s: any) => s.slug === "retailer-kits");
+              if (retailerObj) {
+                retailerObj.name = "Dealer / Retailer Kit";
+                retailerObj.slug = "dealer-kits";
+                apiSubs.push(retailerObj);
+              }
+            }
+          }
+          
+          const apiSubsData = apiSubs;
           const virtualSubs: any[] = [];
           const kitsGroup = PRODUCT_HIERARCHY.find(g => g.slug === "kits-hampers");
           if (kitsGroup) {
@@ -170,7 +192,7 @@ function CorporateKitsContent() {
               }
             });
           }
-          const mergedSubs = [...apiSubs];
+          const mergedSubs = [...apiSubsData];
           virtualSubs.forEach(vs => {
             if (!mergedSubs.some(s => s.slug === vs.slug)) {
               mergedSubs.push(vs);
@@ -242,7 +264,8 @@ function CorporateKitsContent() {
         return [];
       }
       
-      const filtered = products.filter((p) => p.subcategory === selectedSubcategory.slug);
+      const subcategoryAliases = new Set(getSubcategorySlugAliases(selectedSubcategory.slug));
+      const filtered = products.filter((p) => subcategoryAliases.has(p.subcategory) || p.subcategory === selectedSubcategory.slug);
       return filtered.map((p) => ({
         title: p.title,
         description: p.description,
@@ -266,7 +289,7 @@ function CorporateKitsContent() {
         : activeTab === "industry"
           ? corporateOptions.filter((s) => INDUSTRY_SLUGS.has(s.slug))
           : corporateOptions.filter((s) => !INDUSTRY_SLUGS.has(s.slug));
-    const activeSlugs = new Set(activeOptions.map((s) => s.slug));
+    const activeSlugs = new Set(activeOptions.flatMap((s) => getSubcategorySlugAliases(s.slug)));
     const filtered = products.filter((p) => activeSlugs.has(p.subcategory));
 
     const mapped = filtered.map((p) => ({

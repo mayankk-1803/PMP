@@ -173,7 +173,14 @@ export function ProductManager() {
       });
       setCategories(mergedCategories);
 
-      const backendSubcategories = subcategoryData.data ?? [];
+      let backendSubcategories = subcategoryData.data ?? [];
+      backendSubcategories = backendSubcategories.map((sub: any) => {
+        if (sub.slug === "dealer-kits" || sub.slug === "retailer-kits") {
+          return { ...sub, name: "Dealer / Retailer Kit" };
+        }
+        return sub;
+      });
+      
       const runtimeSubcategories = [
         { name: "Pens", slug: "pens", category: "pens" },
         { name: "Caps", slug: "caps", category: "caps" },
@@ -480,7 +487,11 @@ export function ProductManager() {
       brand.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesCategory = !filterCategory || prod.category === filterCategory;
-    const matchesSubcategory = !filterSubcategory || prod.subcategory === filterSubcategory;
+    const matchesSubcategory =
+      !filterSubcategory ||
+      prod.subcategory === filterSubcategory ||
+      (filterSubcategory === "dealer-kits" && prod.subcategory === "retailer-kits") ||
+      (filterSubcategory === "retailer-kits" && prod.subcategory === "dealer-kits");
     const matchesBrand = !filterBrand || prod.brand === filterBrand;
     const matchesActive =
       !filterActive ||
@@ -575,6 +586,7 @@ export function ProductManager() {
               <option value="">All Subcategories</option>
               {subcategories
                 .filter((sub: any) => !filterCategory || sub.category === filterCategory)
+                .filter((sub: any) => sub.slug !== "retailer-kits" || filterSubcategory === "retailer-kits")
                 .map((s) => (
                   <option key={s.slug} value={s.slug}>{s.name}</option>
                 ))}
@@ -949,6 +961,7 @@ export function ProductManager() {
                   <option value="">Select Subcategory</option>
                   {subcategories
                     .filter((sub: any) => !form.category || sub.category === form.category)
+                    .filter((sub: any) => sub.slug !== "retailer-kits" || form.subcategory === "retailer-kits")
                     .map((s) => (
                       <option key={s.slug} value={s.slug}>{s.name}</option>
                     ))}
