@@ -12,7 +12,7 @@ import { localCatalogImage } from "@/lib/localCatalogImages";
 import { SafeImage } from "./SafeImage";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { resolveProductImage } from "@/lib/imageResolver";
-import { getCanonicalCategoryName, getCanonicalSubcategoryName, getCanonicalCategorySlug, getCanonicalSubcategorySlug, cleanProductTitle, resolveDisplayName } from "@/lib/slugResolver";
+import { cleanProductTitle, resolveDisplayName } from "@/lib/slugResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 
 interface ProductCardProps {
@@ -171,13 +171,10 @@ export function ProductCard({
       
       <div className="p-4 flex flex-col flex-grow justify-between items-center h-full">
         {isProduct ? (
-          // Product Card Layout: Category, Display Name, and Get Quote button
+          // Product Card Layout: Display Name and Get Quote button
           <div className="w-full flex flex-col justify-between flex-grow text-center h-full">
-            <div className="mb-4 text-center flex flex-col justify-center items-center flex-grow">
-              <span className="block text-xs font-semibold uppercase tracking-widest text-[#D32F2F] mb-2.5">
-                {category ? getCanonicalCategoryName(category) : "Gifts"}
-              </span>
-              <h3 className="text-base font-semibold text-gray-900 leading-snug line-clamp-2 min-h-[48px] flex items-center justify-center px-1 text-center">
+            <div className="text-center flex flex-col justify-center items-center flex-grow">
+              <h3 className="text-xl font-semibold text-[#D32F2F] leading-tight line-clamp-2 min-h-[56px] flex items-center justify-center px-1 text-center mt-4 mb-6">
                 {getCardDisplayName()}
               </h3>
             </div>
