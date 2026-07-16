@@ -148,6 +148,12 @@ export const getCanonicalCategorySlug = (slug: string | null | undefined): strin
   if (clean === "electronics" || clean === "electronic") {
     return "electronics";
   }
+  if (clean === "decoratives" || clean === "decorative") {
+    return "decoratives";
+  }
+  if (clean === "householdutilities" || clean === "householdutility") {
+    return "household-utilities";
+  }
   if (clean === "clocks" || clean === "clock") {
     return "clocks";
   }
@@ -234,6 +240,12 @@ export const getCanonicalCategoryName = (name: string | null | undefined): strin
   }
   if (clean === "electronics" || clean === "electronic") {
     return "Electronics";
+  }
+  if (clean === "decoratives" || clean === "decorative") {
+    return "Decoratives";
+  }
+  if (clean === "householdutilities" || clean === "householdutility") {
+    return "Household Utilities";
   }
   if (clean === "clocks" || clean === "clock") {
     return "Clocks";
@@ -363,7 +375,8 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
 
   // Electronics & Clocks & Grooming & Executive
   if (clean === "wireless" || clean === "wirelesscharger" || clean === "wirelesschargers") return "wireless-charger";
-  if (clean === "wired" || clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "bluetooth-speaker";
+  if (clean === "decorative" || clean === "decoratives") return "decorative";
+  if (clean === "householdutilities" || clean === "householdutility" || clean === "wired" || clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "household-utilities";
   if (clean === "wallclock" || clean === "wallclocks") return "wall-clock";
   if (clean === "wristwatch" || clean === "wristwatches" || clean === "watch" || clean === "watches") return "wrist-watch";
   if (clean === "malegroomingkit" || clean === "malegroomingkits" || clean === "malegrooming") return "male-grooming-kit";
@@ -402,8 +415,8 @@ export const getCanonicalSubcategoryName = (name: string | null | undefined): st
   if (clean === "duffelbag" || clean === "duffelbags" || clean === "dufflebag" || clean === "dufflebags" || clean === "duffel" || clean === "duffle") {
     return "Duffle Bags";
   }
-  if (clean === "trolleybag" || clean === "trolleybags") {
-    return "Trolley Bags";
+  if (clean === "trolleybag" || clean === "trolleybags" || clean === "canvastrolleybag" || clean === "canvastrolleybags") {
+    return "Canvas Trolley Bags";
   }
   if (clean === "slingbag" || clean === "slingbags") {
     return "Sling Bags";
@@ -495,7 +508,8 @@ export const getCanonicalSubcategoryName = (name: string | null | undefined): st
 
   // Electronics & Clocks & Grooming & Executive Name Mappings
   if (clean === "wireless" || clean === "wirelesscharger" || clean === "wirelesschargers") return "Wireless";
-  if (clean === "wired" || clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "Wired";
+  if (clean === "decorative" || clean === "decoratives") return "Decorative";
+  if (clean === "householdutilities" || clean === "householdutility" || clean === "wired" || clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "Household Utilities";
   if (clean === "wallclock" || clean === "wallclocks") return "Wall Clock";
   if (clean === "wristwatch" || clean === "wristwatches" || clean === "watch" || clean === "watches") return "Wrist Watch";
   if (clean === "malegroomingkit" || clean === "malegroomingkits" || clean === "malegrooming") return "Male Grooming Kit";
@@ -581,8 +595,8 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
   if (canon === "wireless-charger") {
     return ["wireless-charger", "wireless", "wirelesscharger", "wireless-chargers"];
   }
-  if (canon === "bluetooth-speaker") {
-    return ["bluetooth-speaker", "wired", "bluetoothspeaker", "bluetoothspeakers", "speaker", "speakers"];
+  if (canon === "household-utilities" || canon === "bluetooth-speaker") {
+    return ["household-utilities", "bluetooth-speaker", "wired", "bluetoothspeaker", "bluetoothspeakers", "speaker", "speakers"];
   }
   
   return [slug, canon].filter((v, i, a) => a.indexOf(v) === i);
