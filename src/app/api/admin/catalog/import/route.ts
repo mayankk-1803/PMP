@@ -5,7 +5,8 @@ import { ProductModel, CategoryModel, SubcategoryModel, BrandModel } from "@/mod
 import { logActivity } from "@/lib/admin/activityLogger";
 import { revalidatePathsAndTags } from "@/lib/admin/cacheRevalidation";
 import * as XLSX from "xlsx";
-import { getCanonicalCategorySlug } from "@/lib/slugResolver";
+import { getCanonicalCategorySlug, getCanonicalSubcategorySlug } from "@/lib/slugResolver";
+import { listAllCategories, listAllSubcategories } from "@/services/admin/taxonomyService";
 
 const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -62,13 +63,15 @@ export async function POST(req: Request) {
     const summary = { created: 0, updated: 0, skipped: 0, failed: 0 };
     const errors: string[] = [];
 
-    // Pre-cache categories and brands for validation
-    const [allCategories, allBrands] = await Promise.all([
-      CategoryModel.find({ isDeleted: { $ne: true } }).lean(),
+    // Pre-cache categories, subcategories and brands for validation
+    const [categoriesList, subcategoriesList, allBrands] = await Promise.all([
+      listAllCategories(),
+      listAllSubcategories(),
       BrandModel.find({ isDeleted: { $ne: true } }).lean(),
     ]);
 
-    const categorySlugs = new Set(allCategories.map((c) => getCanonicalCategorySlug(c.slug)));
+    const categorySlugs = new Set(categoriesList.map((c) => getCanonicalCategorySlug(c.slug)));
+    const subcategorySlugs = new Set(subcategoriesList.map((s) => getCanonicalSubcategorySlug(s.slug)));
     const brandNames = new Set(allBrands.map((b) => b.name.toLowerCase()));
 
     for (let index = 0; index < rawRows.length; index++) {
@@ -90,10 +93,20 @@ export async function POST(req: Request) {
           const budgetVal = row.budget || row.Budget || row["Budget Range"] || row["budget range"] || row["BudgetRange"] || row["budgetRange"];
           const displayNameVal = row["Display Name"] || row["display name"] || row.displayName || row.DisplayName || row["display_name"];
 
+          const canonicalCat = getCanonicalCategorySlug(category);
+          const canonicalSub = getCanonicalSubcategorySlug(subcategory);
+
           // Validate category
-          if (!categorySlugs.has(getCanonicalCategorySlug(category))) {
+          if (!categorySlugs.has(canonicalCat)) {
             summary.failed++;
             errors.push(`Row ${rowNum}: Invalid category slug "${category}"`);
+            continue;
+          }
+
+          // Validate subcategory
+          if (row.subcategory && !subcategorySlugs.has(canonicalSub)) {
+            summary.failed++;
+            errors.push(`Row ${rowNum}: Invalid subcategory slug "${subcategory}"`);
             continue;
           }
 
@@ -116,8 +129,8 @@ export async function POST(req: Request) {
                     name: title,
                     description: row.description || "",
                     shortDescription: row.shortDescription || "",
-                    category,
-                    subcategory,
+                    category: canonicalCat,
+                    subcategory: canonicalSub,
                     brand: row.brand || "PacMyProduct",
                     moq: Number(row.moq) || 50,
                     price: Number(row.price) || 0,
@@ -142,8 +155,8 @@ export async function POST(req: Request) {
                     name: title,
                     description: row.description || "",
                     shortDescription: row.shortDescription || "",
-                    category,
-                    subcategory,
+                    category: canonicalCat,
+                    subcategory: canonicalSub,
                     brand: row.brand || "PacMyProduct",
                     moq: Number(row.moq) || 50,
                     price: Number(row.price) || 0,
@@ -164,8 +177,8 @@ export async function POST(req: Request) {
               slug,
               description: row.description || "",
               shortDescription: row.shortDescription || "",
-              category,
-              subcategory,
+              category: canonicalCat,
+              subcategory: canonicalSub,
               brand: row.brand || "PacMyProduct",
               moq: Number(row.moq) || 50,
               price: Number(row.price) || 0,

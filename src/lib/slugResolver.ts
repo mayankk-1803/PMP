@@ -282,8 +282,8 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
   if (clean === "duffelbag" || clean === "duffelbags" || clean === "dufflebag" || clean === "dufflebags" || clean === "duffel" || clean === "duffle") {
     return "duffle-bags";
   }
-  if (clean === "trolleybag" || clean === "trolleybags" || clean === "canvastrolleybag" || clean === "canvastrolleybags") {
-    return "canvas-trolley-bags";
+  if (clean === "trolleybag" || clean === "trolleybags" || clean === "canvastrolleybag" || clean === "canvastrolleybags" || clean === "canvastrolley") {
+    return "trolley-bags";
   }
   if (clean === "slingbag" || clean === "slingbags") {
     return "sling-bags";
