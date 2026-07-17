@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, Suspense } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +13,8 @@ import { ProductCard } from "@/components/ui/ProductCard";
 import { getBudgetsConfig, BudgetConfigItem } from "@/app/87564/admin/budgets/actions";
 import { normalizeBudgetRange, budgetsMatch } from "@/app/gifts-by-budget/page";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
+import { clientCache } from "@/lib/clientCache";
+import { useNavigationCache } from "@/context/NavigationCacheContext";
 
 interface CatalogProduct {
   title: string;
@@ -59,19 +61,73 @@ const BUDGET_ID_TO_SLUG: Record<string, string> = {
 function BudgetCollectionContent() {
   const params = useParams();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { getPageState, setPageState, getScrollPosition, setScrollPosition } = useNavigationCache();
   const rawSlug = (params?.slug as string) || "";
   
   const budgetId = SLUG_TO_BUDGET_ID[rawSlug] || rawSlug;
 
-  const [budgets, setBudgets] = useState<BudgetConfigItem[]>([]);
-  const [products, setProducts] = useState<CatalogProduct[]>([]);
-  const [categories, setCategories] = useState<CatalogNode[]>([{ name: "All Categories", slug: "all" }]);
+  const cacheKey = useMemo(() => {
+    const paramsStr = searchParams?.toString();
+    return pathname + (paramsStr ? `?${paramsStr}` : "");
+  }, [pathname, searchParams]);
+
+  // Read config from global clientCache to hydrate instantly if visited
+  const [budgets, setBudgets] = useState<BudgetConfigItem[]>(() => {
+    if (typeof window !== "undefined") {
+      return clientCache.get<BudgetConfigItem[]>("budgets-config") ?? [];
+    }
+    return [];
+  });
+
+  const [products, setProducts] = useState<CatalogProduct[]>(() => {
+    if (typeof window !== "undefined") {
+      return clientCache.get<CatalogProduct[]>(`budget-products-${budgetId}`) ?? [];
+    }
+    return [];
+  });
+
+  const [categories, setCategories] = useState<CatalogNode[]>(() => {
+    if (typeof window !== "undefined") {
+      return clientCache.get<CatalogNode[]>(`budget-categories-${budgetId}`) ?? [{ name: "All Categories", slug: "all" }];
+    }
+    return [{ name: "All Categories", slug: "all" }];
+  });
   
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const saved = getPageState<any>(cacheKey);
+      return saved?.selectedCategory ?? "all";
+    }
+    return "all";
+  });
+
+  const [searchQuery, setSearchQuery] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const saved = getPageState<any>(cacheKey);
+      return saved?.searchQuery ?? "";
+    }
+    return "";
+  });
+
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      const saved = getPageState<any>(cacheKey);
+      return saved?.currentPage ?? 1;
+    }
+    return 1;
+  });
+
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !clientCache.has(`budget-products-${budgetId}`);
+    }
+    return true;
+  });
+
   const [lightboxImageUrl, setLightboxImageUrl] = useState<string | null>(null);
 
   // Active selected budget configuration metadata
@@ -79,17 +135,61 @@ function BudgetCollectionContent() {
     return budgets.find((b) => b.id === budgetId);
   }, [budgets, budgetId]);
 
+  // Save state (filters & page index) into context on changes
+  useEffect(() => {
+    setPageState(cacheKey, {
+      selectedCategory,
+      searchQuery,
+      currentPage,
+    });
+  }, [cacheKey, selectedCategory, searchQuery, currentPage, setPageState]);
+
+  // Track window scroll and save to state context
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(cacheKey, window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [cacheKey, setScrollPosition]);
+
+  // Restore scroll Y position once rendering is complete
+  useEffect(() => {
+    if (!isLoading) {
+      const savedScroll = getScrollPosition(cacheKey);
+      if (savedScroll > 0) {
+        const timer = setTimeout(() => {
+          window.scrollTo({ top: savedScroll, behavior: "instant" });
+        }, 80);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [cacheKey, isLoading, getScrollPosition]);
+
   useEffect(() => {
     let active = true;
 
     async function loadData() {
-      setIsLoading(true);
+      const hasCached = clientCache.has(`budget-products-${budgetId}`);
+      if (!hasCached) {
+        setIsLoading(true);
+      }
+
       try {
-        const configRes = await getBudgetsConfig();
+        // Execute server action with cache (promise de-duplicated)
+        const configRes = await clientCache.executeWithCache<BudgetConfigItem[]>(
+          "budgets-config",
+          () => getBudgetsConfig(),
+          true // Always fetch latest in background
+        );
 
         if (!active) return;
 
-        setBudgets(configRes);
+        if (JSON.stringify(configRes) !== JSON.stringify(budgets)) {
+          setBudgets(configRes);
+        }
 
         const currentBudget = configRes.find((b) => b.id === budgetId);
         const rawProducts = currentBudget?.products || [];
@@ -111,18 +211,26 @@ function BudgetCollectionContent() {
           price: p.price || ""
         }));
 
-        setProducts(allProducts);
+        if (JSON.stringify(allProducts) !== JSON.stringify(products)) {
+          setProducts(allProducts);
+          clientCache.set(`budget-products-${budgetId}`, allProducts);
+        }
 
         const uniqueCategories = Array.from(new Set(allProducts.map((p) => p.category))).filter(Boolean);
-        setCategories([
+        const finalCategories = [
           { name: "All Categories", slug: "all" },
           ...uniqueCategories.map((catName) => ({
             name: catName,
             slug: catName.toLowerCase().replace(/[^a-z0-9]+/g, "-")
           }))
-        ]);
+        ];
+
+        if (JSON.stringify(finalCategories) !== JSON.stringify(categories)) {
+          setCategories(finalCategories);
+          clientCache.set(`budget-categories-${budgetId}`, finalCategories);
+        }
       } catch (err) {
-        console.error("Failed to load budget collection data:", err);
+        console.error("Failed to load budget collection data in background:", err);
       } finally {
         setIsLoading(false);
       }
@@ -162,13 +270,26 @@ function BudgetCollectionContent() {
         return text.toLowerCase().replace(/[^a-z0-9]/g, "").includes(q.toLowerCase().replace(/[^a-z0-9]/g, ""));
       };
 
+      const normalizedSearchQuery = searchQuery.toLowerCase().replace(/[^a-z0-9]/g, "");
       const matchesSearch = 
         !searchQuery ||
-        matchesSearchText(product.category, searchQuery) ||
-        (product.brand && matchesSearchText(product.brand, searchQuery)) ||
-        (product.tags && product.tags.some(tag => matchesSearchText(tag, searchQuery))) ||
-        (product.description && matchesSearchText(product.description, searchQuery)) ||
-        matchesSearchText(product.title, searchQuery);
+        (normalizedSearchQuery === "household" || normalizedSearchQuery === "householdutilities" || normalizedSearchQuery === "householdutility"
+          ? (product.category === "household-utilities" || product.subcategory === "household-utilities" || product.title.toLowerCase().includes("household"))
+          : (normalizedSearchQuery === "eidkits" || normalizedSearchQuery === "eidkit" || normalizedSearchQuery === "eidhampers" || normalizedSearchQuery === "eidhamper" || normalizedSearchQuery === "eid"
+            ? (product.subcategory === "eid-kits" || product.title.toLowerCase().includes("eid"))
+            : (normalizedSearchQuery === "christmaskits" || normalizedSearchQuery === "christmaskit" || normalizedSearchQuery === "christmashampers" || normalizedSearchQuery === "christmashamper" || normalizedSearchQuery === "christmas"
+              ? (product.subcategory === "christmas-kits" || product.title.toLowerCase().includes("christmas"))
+              : (
+                matchesSearchText(product.category, searchQuery) ||
+                (product.subcategory && matchesSearchText(product.subcategory, searchQuery)) ||
+                (product.brand && matchesSearchText(product.brand, searchQuery)) ||
+                (product.tags && product.tags.some(tag => matchesSearchText(tag, searchQuery))) ||
+                (product.description && matchesSearchText(product.description, searchQuery)) ||
+                matchesSearchText(product.title, searchQuery)
+              )
+            )
+          )
+        );
 
       return matchesCategory && matchesSearch;
     });
@@ -338,21 +459,19 @@ function BudgetCollectionContent() {
                 <ShoppingBag className="w-4 h-4 text-[#D32F2F]" /> Price Collections
               </h3>
               <div className="space-y-1">
-                <button
-                  onClick={() => router.push("/products")}
-                  className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-[#6B6B63] hover:bg-[#FAF9F6] hover:text-[#2B2B2B] transition-all"
+                <Link
+                  href="/products"
+                  className="w-full text-left px-3 py-2 rounded-lg text-xs font-bold text-[#6B6B63] hover:bg-[#FAF9F6] hover:text-[#2B2B2B] transition-all block"
                 >
                   All Budgets (General Catalog)
-                </button>
+                </Link>
                 {budgets.filter((b) => b.active).map((b) => {
                   const isActive = b.id === budgetId;
+                  const s = BUDGET_ID_TO_SLUG[b.id] || b.id;
                   return (
-                    <button
+                    <Link
                       key={b.id}
-                      onClick={() => {
-                        const s = BUDGET_ID_TO_SLUG[b.id] || b.id;
-                        router.push(`/gifts-by-budget/${s}`);
-                      }}
+                      href={`/gifts-by-budget/${s}`}
                       className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
                         isActive
                           ? "bg-[#F8F7F3] text-[#D32F2F]"
@@ -361,7 +480,7 @@ function BudgetCollectionContent() {
                     >
                       <span>{b.title}</span>
                       {isActive && <span className="w-1.5 h-1.5 bg-[#D32F2F] rounded-full" />}
-                    </button>
+                    </Link>
                   );
                 })}
               </div>

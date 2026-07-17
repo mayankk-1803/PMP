@@ -13,6 +13,7 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { resolveProductImage, resolveCategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 import { getCanonicalCategoryName, getCanonicalSubcategoryName } from "@/lib/slugResolver";
+import { toDisplayName } from "@/lib/displayNames";
 
 interface Category {
   id: string;
@@ -86,8 +87,8 @@ export default function PromoMerchPage() {
       .filter((p) => p.category === catSlug)
       .slice(0, 3)
       .map((p) => {
-        const subName = p.subcategory ? getCanonicalSubcategoryName(p.subcategory) : "";
-        const catName = getCanonicalCategoryName(p.category);
+        const subName = p.subcategory ? toDisplayName(getCanonicalSubcategoryName(p.subcategory)) : "";
+        const catName = toDisplayName(getCanonicalCategoryName(p.category));
         const resolved = subName || catName;
         const titleText = resolved === p.subcategory || resolved === p.category 
           ? (resolved || "Corporate Gift").replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
@@ -184,7 +185,7 @@ export default function PromoMerchPage() {
                         <div className="absolute inset-0 bg-black/10 z-10 group-hover:bg-black/0 transition-colors duration-500" />
                         <SafeImage
                           src={matchedImg}
-                          alt={cat.name}
+                          alt={toDisplayName(cat.name)}
                           category={cat.slug}
                           className="w-full h-full object-cover transition-transform duration-700 ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
                         />
@@ -197,10 +198,10 @@ export default function PromoMerchPage() {
 
                       <div className="p-6 flex flex-col flex-grow text-left">
                         <h3 className="text-lg font-bold text-[#2B2B2B] group-hover:text-[#D32F2F] transition-colors mb-2 leading-tight">
-                          {cat.name}
+                          {toDisplayName(cat.name)}
                         </h3>
                         <p className="text-[#6B6B63] text-xs leading-relaxed line-clamp-3 mb-6 flex-grow font-medium">
-                          {cat.description || `Custom corporate branding and bespoke finishes on premium ${cat.name.toLowerCase()} options.`}
+                          {cat.description || `Custom corporate branding and bespoke finishes on premium ${toDisplayName(cat.name).toLowerCase()} options.`}
                         </p>
                         <div className="pt-4 border-t border-[#F5C2C2] flex items-center justify-between text-xs font-bold text-[#D32F2F]">
                           <span>Explore Products</span>

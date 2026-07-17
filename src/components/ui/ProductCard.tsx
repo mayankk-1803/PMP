@@ -14,6 +14,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { resolveProductImage } from "@/lib/imageResolver";
 import { cleanProductTitle, resolveDisplayName } from "@/lib/slugResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
+import { toDisplayName } from "@/lib/displayNames";
 
 interface ProductCardProps {
   title: string;
@@ -63,7 +64,8 @@ export function ProductCard({
   const displayImage = resolveProductImage({ title, imageUrl, category, slug }) || "";
 
   const getCardDisplayName = () => {
-    return resolveDisplayName({ title, category, subcategory, displayName });
+    const rawName = resolveDisplayName({ title, category, subcategory, displayName });
+    return isProduct ? rawName : toDisplayName(rawName);
   };
 
   const handleToggleShortlist = (e: React.MouseEvent) => {

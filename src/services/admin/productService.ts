@@ -49,6 +49,9 @@ export async function searchProducts(options: {
     const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
     const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
     const isTrolleyQuery = cleanSearch.includes("trolley") || cleanSearch.includes("canvastrolley");
+    const isHouseholdQuery = cleanSearch.includes("household") || cleanSearch === "decorative" || cleanSearch === "decoratives";
+    const isEidQuery = cleanSearch === "eid" || cleanSearch === "eidkits" || cleanSearch === "eidhampers" || cleanSearch === "eidhamper" || cleanSearch === "eidkit";
+    const isChristmasQuery = cleanSearch === "christmas" || cleanSearch === "christmaskits" || cleanSearch === "christmashampers" || cleanSearch === "christmashamper" || cleanSearch === "christmaskit";
 
     if (isPenQuery) {
       query.$or = [
@@ -78,6 +81,22 @@ export async function searchProducts(options: {
       query.$or = [
         { $text: { $search: options.search } },
         { subcategory: { $in: getSubcategorySlugAliases("trolley-bags") } }
+      ];
+    } else if (isHouseholdQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("household-utilities") } },
+        { subcategory: { $in: getSubcategorySlugAliases("household-utilities") } }
+      ];
+    } else if (isEidQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("eid-kits") } }
+      ];
+    } else if (isChristmasQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("christmas-kits") } }
       ];
     } else {
       query.$text = { $search: options.search };
@@ -147,6 +166,9 @@ export async function searchCatalogProducts(options: {
     const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
     const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
     const isTrolleyQuery = cleanSearch.includes("trolley") || cleanSearch.includes("canvastrolley");
+    const isHouseholdQuery = cleanSearch.includes("household") || cleanSearch === "decorative" || cleanSearch === "decoratives";
+    const isEidQuery = cleanSearch === "eid" || cleanSearch === "eidkits" || cleanSearch === "eidhampers" || cleanSearch === "eidhamper" || cleanSearch === "eidkit";
+    const isChristmasQuery = cleanSearch === "christmas" || cleanSearch === "christmaskits" || cleanSearch === "christmashampers" || cleanSearch === "christmashamper" || cleanSearch === "christmaskit";
 
     if (isPenQuery) {
       query.$or = [
@@ -176,6 +198,22 @@ export async function searchCatalogProducts(options: {
       query.$or = [
         { $text: { $search: options.search } },
         { subcategory: { $in: getSubcategorySlugAliases("trolley-bags") } }
+      ];
+    } else if (isHouseholdQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { category: { $in: getCategorySlugAliases("household-utilities") } },
+        { subcategory: { $in: getSubcategorySlugAliases("household-utilities") } }
+      ];
+    } else if (isEidQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("eid-kits") } }
+      ];
+    } else if (isChristmasQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("christmas-kits") } }
       ];
     } else {
       query.$text = { $search: options.search };

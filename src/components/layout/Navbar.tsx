@@ -22,6 +22,7 @@ import {
 } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
 import { getBudgetsConfig, BudgetConfigItem } from "@/app/87564/admin/budgets/actions";
+import { toDisplayName } from "@/lib/displayNames";
 
 const initialBudgets: BudgetConfigItem[] = BUDGETS.map((b, idx) => ({
   id: String(idx),

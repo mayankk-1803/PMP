@@ -4,6 +4,7 @@ import React, { useState, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getShortlistItemDisplayName } from "@/lib/enquiryHelper";
 import { getCanonicalCategoryName, getCanonicalSubcategoryName, cleanProductTitle } from "@/lib/slugResolver";
+import { toDisplayName } from "@/lib/displayNames";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -180,14 +181,12 @@ function EnquiryFormContainer() {
       const parts = [];
       if (brand) parts.push(`Brand: ${brand}`);
       if (category) {
-        const resolved = getCanonicalCategoryName(category);
-        const formattedCat = resolved === category ? category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : resolved;
-        parts.push(`Category: ${formattedCat}`);
+        const resolved = toDisplayName(getCanonicalCategoryName(category));
+        parts.push(`Category: ${resolved}`);
       }
       if (subcategory) {
-        const resolved = getCanonicalSubcategoryName(subcategory);
-        const formattedSub = resolved === subcategory ? subcategory.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : resolved;
-        parts.push(`Subcategory: ${formattedSub}`);
+        const resolved = toDisplayName(getCanonicalSubcategoryName(subcategory));
+        parts.push(`Subcategory: ${resolved}`);
       }
       if (moq) parts.push(`MOQ: ${moq}`);
       finalPayload.shortlist = [{ title: parts.join(" | ") }];
@@ -388,12 +387,12 @@ function EnquiryFormContainer() {
                               )}
                               {category && (
                                 <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
-                                  Category: {getCanonicalCategoryName(category)}
+                                  Category: {toDisplayName(getCanonicalCategoryName(category))}
                                 </span>
                               )}
                               {subcategory && (
                                 <span className="bg-white px-3 py-1.5 rounded-lg text-xs font-bold text-gray-800 border border-gray-200 shadow-xs">
-                                  Subcategory: {getCanonicalSubcategoryName(subcategory)}
+                                  Subcategory: {toDisplayName(getCanonicalSubcategoryName(subcategory))}
                                 </span>
                               )}
                               {brand && (
@@ -799,9 +798,9 @@ function EnquiryFormContainer() {
                         : [
                             brand,
                             subcategory 
-                              ? (getCanonicalSubcategoryName(subcategory) === subcategory ? subcategory.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : getCanonicalSubcategoryName(subcategory))
+                              ? toDisplayName(getCanonicalSubcategoryName(subcategory) === subcategory ? subcategory.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : getCanonicalSubcategoryName(subcategory))
                               : category 
-                                ? (getCanonicalCategoryName(category) === category ? category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : getCanonicalCategoryName(category))
+                                ? toDisplayName(getCanonicalCategoryName(category) === category ? category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : getCanonicalCategoryName(category))
                                 : ""
                           ].filter(Boolean).join(" ")
                     }

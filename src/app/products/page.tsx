@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import React, { useState, useEffect, Suspense, useMemo } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -11,6 +11,9 @@ import {
 import { ProductCard } from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/Button";
 import { PROMO_SUBCATEGORY_SLUGS, PRODUCT_HIERARCHY } from "@/data/siteConfig";
+import { toDisplayName } from "@/lib/displayNames";
+import { clientCache } from "@/lib/clientCache";
+import { useNavigationCache } from "@/context/NavigationCacheContext";
 
 interface CatalogProduct {
   title: string;
@@ -48,6 +51,14 @@ const HIDDEN_PRODUCT_SLUGS = new Set([
 function ProductsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
+  const { getPageState, setPageState, getScrollPosition, setScrollPosition } = useNavigationCache();
+
+  // Create a stable cache key based on route pathname + query string
+  const cacheKey = useMemo(() => {
+    const paramsStr = searchParams?.toString();
+    return pathname + (paramsStr ? `?${paramsStr}` : "");
+  }, [pathname, searchParams]);
   
   const initialCategory = searchParams?.get("category") || "all";
   const initialSubcategory = searchParams?.get("subcategory") || "all";
@@ -56,13 +67,51 @@ function ProductsPageContent() {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedSubcategory, setSelectedSubcategory] = useState(initialSubcategory);
   const [selectedBudget, setSelectedBudget] = useState(initialBudget);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [products, setProducts] = useState<CatalogProduct[]>([]);
-  const [categories, setCategories] = useState<CatalogNode[]>([{ name: "All Categories", slug: "all", type: "all" }]);
-  const [isLoading, setIsLoading] = useState(true);
 
+  // Initialize filters and pagination from client-side UI state cache
+  const [searchQuery, setSearchQuery] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const saved = getPageState<any>(cacheKey);
+      return saved?.searchQuery ?? "";
+    }
+    return "";
+  });
+  
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      const saved = getPageState<any>(cacheKey);
+      return saved?.currentPage ?? 1;
+    }
+    return 1;
+  });
+
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Hydrate lists immediately from client cache to eliminate skeleton flicker
+  const [products, setProducts] = useState<CatalogProduct[]>(() => {
+    if (typeof window !== "undefined") {
+      const cached = clientCache.get<any>("/api/catalog/products");
+      return cached?.data ?? [];
+    }
+    return [];
+  });
+
+  const [categories, setCategories] = useState<CatalogNode[]>(() => {
+    if (typeof window !== "undefined") {
+      const cached = clientCache.get<any>("/api/catalog/categories-list");
+      return cached ?? [{ name: "All Categories", slug: "all", type: "all" }];
+    }
+    return [{ name: "All Categories", slug: "all", type: "all" }];
+  });
+
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !clientCache.has("/api/catalog/products");
+    }
+    return true;
+  });
+
+  // Track searchParams change
   useEffect(() => {
     const cat = searchParams?.get("category") || "all";
     const sub = searchParams?.get("subcategory") || "all";
@@ -70,104 +119,203 @@ function ProductsPageContent() {
     setSelectedSubcategory(sub);
     const bud = searchParams?.get("range") || "all";
     setSelectedBudget(bud);
-    setCurrentPage(1);
-  }, [searchParams]);
+
+    // When searchParams change, restore page index from route state cache
+    const saved = getPageState<any>(pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : ""));
+    setCurrentPage(saved?.currentPage ?? 1);
+    setSearchQuery(saved?.searchQuery ?? "");
+  }, [searchParams, pathname, getPageState]);
+
+  // Save state (search query & pagination page) into context on modification
+  useEffect(() => {
+    setPageState(cacheKey, {
+      searchQuery,
+      currentPage,
+    });
+  }, [cacheKey, searchQuery, currentPage, setPageState]);
+
+  // Track window scroll and save to state context
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(cacheKey, window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [cacheKey, setScrollPosition]);
+
+  // Restore scroll Y position once rendering is complete
+  useEffect(() => {
+    if (!isLoading) {
+      const savedScroll = getScrollPosition(cacheKey);
+      if (savedScroll > 0) {
+        const timer = setTimeout(() => {
+          window.scrollTo({ top: savedScroll, behavior: "instant" });
+        }, 80);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [cacheKey, isLoading, getScrollPosition]);
+
+  // Idle prefetching for adjacent subcategories
+  useEffect(() => {
+    if (isLoading || categories.length <= 1) return;
+
+    const prefetchAdjacent = () => {
+      const activeSlug = selectedSubcategory !== "all" ? selectedSubcategory : selectedCategory;
+      const currentIndex = categories.findIndex((c) => c.slug === activeSlug);
+
+      const urlsToPrefetch: string[] = [];
+      if (currentIndex !== -1) {
+        if (currentIndex > 1) {
+          const prev = categories[currentIndex - 1];
+          urlsToPrefetch.push(`/products?${prev.type}=${prev.slug}`);
+        }
+        if (currentIndex < categories.length - 1) {
+          const next = categories[currentIndex + 1];
+          urlsToPrefetch.push(`/products?${next.type}=${next.slug}`);
+        }
+      }
+
+      urlsToPrefetch.forEach((url) => {
+        router.prefetch(url);
+      });
+    };
+
+    if (typeof window !== "undefined") {
+      if ("requestIdleCallback" in window) {
+        const idleId = (window as any).requestIdleCallback(prefetchAdjacent);
+        return () => (window as any).cancelIdleCallback(idleId);
+      } else {
+        const timer = setTimeout(prefetchAdjacent, 1500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [categories, selectedCategory, selectedSubcategory, isLoading, router]);
 
   useEffect(() => {
     let active = true;
 
     async function loadCatalog() {
-      setIsLoading(true);
-      const [productsResponse, subcategoriesResponse] = await Promise.all([
-        fetch("/api/catalog/products"),
-        fetch("/api/catalog/subcategories"),
-      ]);
-      const [productsResult, subcategoriesResult] = await Promise.all([
-        productsResponse.json(),
-        subcategoriesResponse.json(),
-      ]);
+      const hasCached = clientCache.has("/api/catalog/products") && clientCache.has("/api/catalog/subcategories");
+      if (!hasCached) {
+        setIsLoading(true);
+      }
 
-      if (!active) return;
+      try {
+        // Fetch fresh data in the background (stale-while-revalidate)
+        const [productsResult, subcategoriesResult] = await Promise.all([
+          clientCache.fetchWithCache<any>("/api/catalog/products", undefined, true),
+          clientCache.fetchWithCache<any>("/api/catalog/subcategories", undefined, true)
+        ]);
 
-      const allProducts: CatalogProduct[] = productsResult.data ?? [];
-      setProducts(allProducts);
+        if (!active) return;
 
-      // Build set of subcategory slugs that actually have products
-      const slugsWithProducts = new Set(allProducts.map((p) => p.subcategory));
+        const allProducts: CatalogProduct[] = productsResult.data ?? [];
+        
+        // Deep stringified comparison to avoid unnecessary state updates and layout flicker
+        if (JSON.stringify(allProducts) !== JSON.stringify(products)) {
+          setProducts(allProducts);
+        }
 
-      // Build ordered sidebar from PRODUCT_HIERARCHY (single source of truth)
-      const orderedPromoCategories: CatalogNode[] = [];
-      for (const cat of PRODUCT_HIERARCHY[0].categories) {
-        if (cat.subcategories.length === 0) {
-          const legacySlugs = new Set(
-            cat.slug === "pens" ? ["pens", "premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"] :
-            cat.slug === "caps" ? ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"] :
-            cat.slug === "table-top" ? ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat"] :
-            cat.slug === "diaries-notebooks" ? ["diaries-notebooks", "diaries", "executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks"] :
-            [cat.slug]
-          );
+        const slugsWithProducts = new Set(allProducts.map((p) => p.subcategory));
 
-          const hasProducts = allProducts.some(
-            (p) => p.category === cat.slug || legacySlugs.has(p.subcategory)
-          );
+        const orderedPromoCategories: CatalogNode[] = [];
+        for (const cat of PRODUCT_HIERARCHY[0].categories) {
+          if (cat.subcategories.length === 0) {
+            const legacySlugs = new Set(
+              cat.slug === "pens" ? ["pens", "premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"] :
+              cat.slug === "caps" ? ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"] :
+              cat.slug === "table-top" ? ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat"] :
+              cat.slug === "diaries-notebooks" ? ["diaries-notebooks", "diaries", "executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks"] :
+              [cat.slug]
+            );
 
-          if (hasProducts) {
-            orderedPromoCategories.push({ name: cat.name, slug: cat.slug, type: "category" });
-          }
-        } else {
-          for (const sub of cat.subcategories) {
-            if (HIDDEN_PRODUCT_SLUGS.has(sub.slug)) continue;
+            const hasProducts = allProducts.some(
+              (p) => p.category === cat.slug || legacySlugs.has(p.subcategory)
+            );
 
-            const isNewCategory = 
-              sub.slug === "badges-sub" || 
-              sub.slug === "neck-rest-back-rest-sub" ||
-              sub.slug === "pens" ||
-              sub.slug === "caps" ||
-              sub.slug === "table-top" ||
-              sub.slug === "diaries-notebooks";
-            const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
-              (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
-              (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks"));
+            if (hasProducts) {
+              orderedPromoCategories.push({ name: cat.name, slug: cat.slug, type: "category" });
+            }
+          } else {
+            for (const sub of cat.subcategories) {
+              if (HIDDEN_PRODUCT_SLUGS.has(sub.slug)) continue;
 
-            if (PROMO_SUBCATEGORY_SLUGS.has(sub.slug) && hasProducts) {
-              orderedPromoCategories.push({ name: sub.name, slug: sub.slug, type: "subcategory" });
+              const isNewCategory = 
+                sub.slug === "badges-sub" || 
+                sub.slug === "neck-rest-back-rest-sub" ||
+                sub.slug === "pens" ||
+                sub.slug === "caps" ||
+                sub.slug === "table-top" ||
+                sub.slug === "diaries-notebooks";
+              const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
+                (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
+                (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks"));
+
+              if (PROMO_SUBCATEGORY_SLUGS.has(sub.slug) && hasProducts) {
+                orderedPromoCategories.push({ name: sub.name, slug: sub.slug, type: "subcategory" });
+              }
             }
           }
         }
+
+        const apiSubcats: CatalogNode[] = (subcategoriesResult.data ?? [])
+          .filter(
+            (item: any) =>
+              !HIDDEN_PRODUCT_SLUGS.has(item.slug) &&
+              (PROMO_SUBCATEGORY_SLUGS.has(item.slug) || 
+               item.slug === "laptop-backpacks") &&
+              slugsWithProducts.has(item.slug) &&
+              !orderedPromoCategories.some((c) => c.slug === item.slug || 
+                (c.slug === "laptop-bags" && item.slug === "laptop-backpacks"))
+          )
+          .map((item: any) => ({
+            name: item.name,
+            slug: item.slug,
+            type: "subcategory" as const
+          }));
+
+        const finalCategories: CatalogNode[] = [
+          { name: "All Categories", slug: "all", type: "all" },
+          ...orderedPromoCategories,
+          ...apiSubcats,
+        ];
+
+        if (JSON.stringify(finalCategories) !== JSON.stringify(categories)) {
+          setCategories(finalCategories);
+          clientCache.set("/api/catalog/categories-list", finalCategories);
+        }
+
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Failed fetching catalog data in background", err);
+        if (active) setIsLoading(false);
       }
-
-      const apiSubcats: CatalogNode[] = (subcategoriesResult.data ?? [])
-        .filter(
-          (item: any) =>
-            !HIDDEN_PRODUCT_SLUGS.has(item.slug) &&
-            (PROMO_SUBCATEGORY_SLUGS.has(item.slug) || 
-             item.slug === "laptop-backpacks") &&
-            slugsWithProducts.has(item.slug) &&
-            !orderedPromoCategories.some((c) => c.slug === item.slug || 
-              (c.slug === "laptop-bags" && item.slug === "laptop-backpacks"))
-        )
-        .map((item: any) => ({
-          name: item.name,
-          slug: item.slug,
-          type: "subcategory" as const
-        }));
-
-      setCategories([
-        { name: "All Categories", slug: "all", type: "all" },
-        ...orderedPromoCategories,
-        ...apiSubcats,
-      ]);
-      setIsLoading(false);
     }
 
-    loadCatalog().catch(() => {
-      if (active) setIsLoading(false);
-    });
+    loadCatalog();
 
     return () => {
       active = false;
     };
   }, []);
+
+  const getCategoryHref = (slug: string, type: "category" | "subcategory" | "all") => {
+    const params = new URLSearchParams(searchParams?.toString() || "");
+    if (slug === "all") {
+      params.delete("category");
+      params.delete("subcategory");
+    } else if (type === "subcategory") {
+      params.set("subcategory", slug);
+      params.delete("category");
+    } else if (type === "category") {
+      params.set("category", slug);
+      params.delete("subcategory");
+    }
+    return `/products?${params.toString()}`;
+  };
 
   const handleCategoryChange = (slug: string, type: "category" | "subcategory" | "all" = "subcategory") => {
     setCurrentPage(1);
@@ -292,15 +440,21 @@ function ProductsPageContent() {
       !searchQuery ||
       (normalizedSearchQuery === "decorative" || normalizedSearchQuery === "decoratives"
         ? (product.subcategory === "decorative" || product.subcategory === "decoratives" || product.title.toLowerCase().includes("decorative"))
-        : (normalizedSearchQuery === "householdutilities" || normalizedSearchQuery === "householdutility"
-          ? (product.subcategory === "household-utilities" || product.title.toLowerCase().includes("household utility") || product.title.toLowerCase().includes("household utilities"))
-          : (
-            matchesSearchText(product.category, searchQuery) ||
-            matchesSearchText(product.subcategory, searchQuery) ||
-            (product.brand && matchesSearchText(product.brand, searchQuery)) ||
-            (product.tags && product.tags.some(tag => matchesSearchText(tag, searchQuery))) ||
-            (product.description && matchesSearchText(product.description, searchQuery)) ||
-            matchesSearchText(product.title, searchQuery)
+        : (normalizedSearchQuery === "householdutilities" || normalizedSearchQuery === "householdutility" || normalizedSearchQuery === "household"
+          ? (product.subcategory === "household-utilities" || product.title.toLowerCase().includes("household utility") || product.title.toLowerCase().includes("household utilities") || product.title.toLowerCase().includes("household"))
+          : (normalizedSearchQuery === "eidkits" || normalizedSearchQuery === "eidkit" || normalizedSearchQuery === "eidhampers" || normalizedSearchQuery === "eidhamper" || normalizedSearchQuery === "eid"
+            ? (product.subcategory === "eid-kits" || product.title.toLowerCase().includes("eid"))
+            : (normalizedSearchQuery === "christmaskits" || normalizedSearchQuery === "christmaskit" || normalizedSearchQuery === "christmashampers" || normalizedSearchQuery === "christmashamper" || normalizedSearchQuery === "christmas"
+              ? (product.subcategory === "christmas-kits" || product.title.toLowerCase().includes("christmas"))
+              : (
+                matchesSearchText(product.category, searchQuery) ||
+                matchesSearchText(product.subcategory, searchQuery) ||
+                (product.brand && matchesSearchText(product.brand, searchQuery)) ||
+                (product.tags && product.tags.some(tag => matchesSearchText(tag, searchQuery))) ||
+                (product.description && matchesSearchText(product.description, searchQuery)) ||
+                matchesSearchText(product.title, searchQuery)
+              )
+            )
           )
         )
       );
@@ -402,18 +556,18 @@ function ProductsPageContent() {
                       ? (selectedCategory === cat.slug)
                       : (selectedSubcategory === cat.slug));
                   return (
-                    <button
+                    <Link
                       key={cat.slug}
-                      onClick={() => handleCategoryChange(cat.slug, cat.type)}
+                      href={getCategoryHref(cat.slug, cat.type)}
                       className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
                         isSelected
                           ? "bg-[#F8F7F3] text-[#D32F2F]"
                           : "text-[#6B6B63] hover:bg-[#FAF9F6] hover:text-[#2B2B2B]"
                       }`}
                     >
-                      <span>{cat.name}</span>
+                      <span>{toDisplayName(cat.name)}</span>
                       {isSelected && <span className="w-1.5 h-1.5 bg-[#D32F2F] rounded-full" />}
-                    </button>
+                    </Link>
                   );
                 })}
               </div>
@@ -611,17 +765,18 @@ function ProductsPageContent() {
                           ? (selectedCategory === cat.slug)
                           : (selectedSubcategory === cat.slug));
                       return (
-                        <button
+                        <Link
                           key={cat.slug}
-                          onClick={() => { handleCategoryChange(cat.slug, cat.type); setShowMobileFilters(false); }}
+                          href={getCategoryHref(cat.slug, cat.type)}
+                          onClick={() => setShowMobileFilters(false)}
                           className={`text-left px-3 py-2.5 rounded-lg text-xs font-bold transition-all truncate border ${
                             isSelected
                               ? "bg-red-50 text-red-650 border-red-200"
                               : "text-gray-600 border-gray-250 hover:bg-gray-50"
                           }`}
                         >
-                          {cat.name}
-                        </button>
+                          {toDisplayName(cat.name)}
+                        </Link>
                       );
                     })}
                   </div>
