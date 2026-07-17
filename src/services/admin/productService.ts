@@ -6,7 +6,8 @@ import { connectMongoDB } from "@/lib/mongodb";
 import { destroyCloudinaryAssets, uniquePublicIds } from "@/lib/admin/cloudinaryLifecycle";
 import { ProductModel } from "@/models/cmsModels";
 import { resolveProductImage } from "@/lib/imageResolver";
-import { getCanonicalCategorySlug, getCanonicalSubcategorySlug, getCategorySlugAliases, getSubcategorySlugAliases, cleanProductTitle } from "@/lib/slugResolver";
+import { getCanonicalCategorySlug, getCanonicalSubcategorySlug, getCategorySlugAliases, getSubcategorySlugAliases, cleanProductTitle, getCanonicalCategoryName } from "@/lib/slugResolver";
+import { listAllCategories, listAllSubcategories } from "@/services/admin/taxonomyService";
 
 export function listProducts(): ProductRecord[] {
   return listRecords("products").filter((product) => product.active).map(p => ({
@@ -76,7 +77,7 @@ export async function searchProducts(options: {
     } else if (isTrolleyQuery) {
       query.$or = [
         { $text: { $search: options.search } },
-        { subcategory: { $in: getSubcategorySlugAliases("canvas-trolley-bags") } }
+        { subcategory: { $in: getSubcategorySlugAliases("trolley-bags") } }
       ];
     } else {
       query.$text = { $search: options.search };
@@ -174,7 +175,7 @@ export async function searchCatalogProducts(options: {
     } else if (isTrolleyQuery) {
       query.$or = [
         { $text: { $search: options.search } },
-        { subcategory: { $in: getSubcategorySlugAliases("canvas-trolley-bags") } }
+        { subcategory: { $in: getSubcategorySlugAliases("trolley-bags") } }
       ];
     } else {
       query.$text = { $search: options.search };
@@ -363,6 +364,42 @@ export async function getCatalogProductBySlug(slug: string): Promise<ProductReco
 }
 
 export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt" | "updatedAt">) {
+  const canonicalCat = getCanonicalCategorySlug(input.category);
+  const canonicalSub = getCanonicalSubcategorySlug(input.subcategory ?? input.category);
+
+  // 1. Validate Category
+  const categories = await listAllCategories();
+  const catExists = categories.some((c) => c.slug === canonicalCat);
+  if (!catExists) {
+    throw new Error("Category validation failed.");
+  }
+
+  // 2. Validate Subcategory
+  const subcategories = await listAllSubcategories();
+  const subRecord = subcategories.find((s) => s.slug === canonicalSub);
+  if (!subRecord) {
+    throw new Error("Subcategory not found.");
+  }
+
+  // 3. Validate Parent Category Match
+  if (subRecord.category !== canonicalCat) {
+    const catName = getCanonicalCategoryName(canonicalCat) || canonicalCat;
+    throw new Error(`Selected subcategory does not belong to ${catName}.`);
+  }
+
+  // 4. Validate Duplicate Slug
+  if (input.slug) {
+    let dup = null;
+    if (process.env.MONGODB_URI) {
+      dup = await ProductModel.findOne({ slug: input.slug, isDeleted: { $ne: true } }).lean();
+    } else {
+      dup = listRecords("products").find((p) => p.slug === input.slug);
+    }
+    if (dup) {
+      throw new Error("Duplicate product slug.");
+    }
+  }
+
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
     const images = input.galleryImages?.length ? input.galleryImages : input.images ?? [];
@@ -389,8 +426,8 @@ export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt
       slug: input.slug,
       description: input.description,
       shortDescription: input.shortDescription,
-      category: input.category,
-      subcategory: input.subcategory,
+      category: canonicalCat,
+      subcategory: canonicalSub,
       brand: input.brand,
       featuredImage: input.featuredImage || images[0],
       galleryImages: images,
@@ -410,10 +447,69 @@ export async function createProduct(input: Omit<ProductRecord, "id" | "createdAt
     return mapMongoProduct(product.toObject());
   }
 
-  return createRecord("products", input);
+  return createRecord("products", {
+    ...input,
+    category: canonicalCat,
+    subcategory: canonicalSub,
+  });
 }
 
 export async function updateProduct(id: string, patch: Partial<ProductRecord> & { status?: string }) {
+  const canonicalCat = patch.category ? getCanonicalCategorySlug(patch.category) : undefined;
+  const canonicalSub = patch.subcategory ? getCanonicalSubcategorySlug(patch.subcategory) : undefined;
+
+  let existingProduct: any = null;
+  if (process.env.MONGODB_URI) {
+    existingProduct = await ProductModel.findById(id).lean<any>();
+  } else {
+    existingProduct = listRecords("products").find((p) => p.id === id);
+  }
+  if (!existingProduct) {
+    throw new Error("Product not found");
+  }
+
+  const finalCat = canonicalCat ?? existingProduct.category;
+  const finalSub = canonicalSub ?? existingProduct.subcategory;
+
+  if (canonicalCat !== undefined) {
+    const categories = await listAllCategories();
+    const catExists = categories.some((c) => c.slug === canonicalCat);
+    if (!catExists) {
+      throw new Error("Category validation failed.");
+    }
+  }
+
+  if (canonicalSub !== undefined) {
+    const subcategories = await listAllSubcategories();
+    const subRecord = subcategories.find((s) => s.slug === canonicalSub);
+    if (!subRecord) {
+      throw new Error("Subcategory not found.");
+    }
+    if (subRecord.category !== finalCat) {
+      const catName = getCanonicalCategoryName(finalCat) || finalCat;
+      throw new Error(`Selected subcategory does not belong to ${catName}.`);
+    }
+  } else if (canonicalCat !== undefined) {
+    const subcategories = await listAllSubcategories();
+    const subRecord = subcategories.find((s) => s.slug === finalSub);
+    if (subRecord && subRecord.category !== finalCat) {
+      const catName = getCanonicalCategoryName(finalCat) || finalCat;
+      throw new Error(`Selected subcategory does not belong to ${catName}.`);
+    }
+  }
+
+  if (patch.slug && patch.slug !== existingProduct.slug) {
+    let dup = null;
+    if (process.env.MONGODB_URI) {
+      dup = await ProductModel.findOne({ slug: patch.slug, _id: { $ne: id }, isDeleted: { $ne: true } }).lean();
+    } else {
+      dup = listRecords("products").find((p) => p.slug === patch.slug && p.id !== id);
+    }
+    if (dup) {
+      throw new Error("Duplicate product slug.");
+    }
+  }
+
   if (process.env.MONGODB_URI) {
     await connectMongoDB();
     const images = patch.galleryImages?.length ? patch.galleryImages : patch.images;
@@ -425,7 +521,6 @@ export async function updateProduct(id: string, patch: Partial<ProductRecord> & 
     let specs = patch.specifications;
     // @ts-ignore
     if (patch.budget !== undefined || patch.displayName !== undefined) {
-      const existingProduct = await ProductModel.findById(id).lean<any>();
       const existingSpecs = normalizeSpecifications(existingProduct?.specifications) || {};
       specs = {
         ...existingSpecs,
@@ -439,6 +534,8 @@ export async function updateProduct(id: string, patch: Partial<ProductRecord> & 
 
     const update: Record<string, unknown> = {
       ...patch,
+      category: canonicalCat ?? patch.category,
+      subcategory: canonicalSub ?? patch.subcategory,
       name: patch.title,
       featuredImage: patch.featuredImage || images?.[0],
       galleryImages: images,
@@ -453,7 +550,11 @@ export async function updateProduct(id: string, patch: Partial<ProductRecord> & 
     return product ? mapMongoProduct(product) : null;
   }
 
-  return updateRecord("products", id, patch);
+  return updateRecord("products", id, {
+    ...patch,
+    category: canonicalCat ?? patch.category,
+    subcategory: canonicalSub ?? patch.subcategory,
+  });
 }
 
 export async function deleteProduct(id: string, permanent: boolean = false, adminId?: string) {
