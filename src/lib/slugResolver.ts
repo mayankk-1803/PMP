@@ -149,7 +149,7 @@ export const getCanonicalCategorySlug = (slug: string | null | undefined): strin
     return "electronics";
   }
   if (clean === "decoratives" || clean === "decorative") {
-    return "decoratives";
+    return "household-utilities";
   }
   if (clean === "householdutilities" || clean === "householdutility") {
     return "household-utilities";
@@ -242,7 +242,7 @@ export const getCanonicalCategoryName = (name: string | null | undefined): strin
     return "Electronics";
   }
   if (clean === "decoratives" || clean === "decorative") {
-    return "Decoratives";
+    return "Household Utilities";
   }
   if (clean === "householdutilities" || clean === "householdutility") {
     return "Household Utilities";
@@ -282,8 +282,8 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
   if (clean === "duffelbag" || clean === "duffelbags" || clean === "dufflebag" || clean === "dufflebags" || clean === "duffel" || clean === "duffle") {
     return "duffle-bags";
   }
-  if (clean === "trolleybag" || clean === "trolleybags") {
-    return "trolley-bags";
+  if (clean === "trolleybag" || clean === "trolleybags" || clean === "canvastrolleybag" || clean === "canvastrolleybags") {
+    return "canvas-trolley-bags";
   }
   if (clean === "slingbag" || clean === "slingbags") {
     return "sling-bags";
@@ -416,7 +416,7 @@ export const getCanonicalSubcategoryName = (name: string | null | undefined): st
     return "Duffle Bags";
   }
   if (clean === "trolleybag" || clean === "trolleybags" || clean === "canvastrolleybag" || clean === "canvastrolleybags") {
-    return "Canvas Trolley Bags";
+    return "Trolley Bags";
   }
   if (clean === "slingbag" || clean === "slingbags") {
     return "Sling Bags";
@@ -541,6 +541,9 @@ export const getCategorySlugAliases = (slug: string | null | undefined): string[
   if (canon === "caps") {
     return ["caps", "cotton-caps", "sports-caps", "promotional-caps", "baseball-caps"];
   }
+  if (canon === "household-utilities") {
+    return ["household-utilities", "householdutilities", "householdutility", "household-utility", "decoratives", "decorative"];
+  }
   return [slug, canon].filter((v, i, a) => a.indexOf(v) === i);
 };
 
@@ -565,8 +568,8 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
   if (canon === "duffle-bags") {
     return ["duffle-bags", "duffel-bags", "duffel-bag", "duffle-bag"];
   }
-  if (canon === "trolley-bags") {
-    return ["trolley-bags", "trolleybag", "trolleybags"];
+  if (canon === "canvas-trolley-bags" || canon === "trolley-bags") {
+    return ["canvas-trolley-bags", "trolley-bags", "canvastrolleybag", "canvastrolleybags", "trolleybag", "trolleybags", "canvas trolley bags", "canvas trolley bag", "trolley bag", "trolley bags"];
   }
   if (canon === "sling-bags") {
     return ["sling-bags", "slingbag", "slingbags"];
@@ -595,10 +598,15 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
   if (canon === "wireless-charger") {
     return ["wireless-charger", "wireless", "wirelesscharger", "wireless-chargers"];
   }
-  if (canon === "household-utilities" || canon === "bluetooth-speaker") {
-    return ["household-utilities", "bluetooth-speaker", "wired", "bluetoothspeaker", "bluetoothspeakers", "speaker", "speakers"];
+  if (canon === "household-utilities") {
+    return ["household-utilities"];
   }
-  
+  if (canon === "bluetooth-speaker") {
+    return ["bluetooth-speaker", "wired", "bluetoothspeaker", "bluetoothspeakers", "speaker", "speakers"];
+  }
+  if (canon === "decorative") {
+    return ["decorative", "decoratives"];
+  }
   return [slug, canon].filter((v, i, a) => a.indexOf(v) === i);
 };
 

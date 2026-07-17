@@ -82,7 +82,7 @@ export const PRODUCT_HIERARCHY = [
           { name: "Laptop Bags", slug: "laptop-bags", href: "/products?subcategory=laptop-bags" },
           { name: "Travel Bags", slug: "travel-bags", href: "/products?subcategory=travel-bags" },
           { name: "Duffle Bags", slug: "duffle-bags", href: "/products?subcategory=duffle-bags" },
-          { name: "Canvas Trolley Bags", slug: "trolley-bags", href: "/products?subcategory=trolley-bags" },
+          { name: "Trolley Bags", slug: "trolley-bags", href: "/products?subcategory=trolley-bags" },
           { name: "Sling Bags", slug: "sling-bags", href: "/products?subcategory=sling-bags" }
         ]
       },
@@ -172,19 +172,12 @@ export const PRODUCT_HIERARCHY = [
           { name: "Wireless", slug: "wireless-charger", href: "/products?subcategory=wireless-charger" }
         ]
       },
-      // Column 12b: Decoratives
-      {
-        name: "Decoratives",
-        slug: "decoratives",
-        subcategories: [
-          { name: "Decorative", slug: "decorative", href: "/products?subcategory=decorative" }
-        ]
-      },
       // Column 12c: Household Utilities
       {
         name: "Household Utilities",
         slug: "household-utilities",
         subcategories: [
+          { name: "Decorative", slug: "decorative", href: "/products?subcategory=decorative" },
           { name: "Household Utilities", slug: "household-utilities", href: "/products?subcategory=household-utilities" }
         ]
       },

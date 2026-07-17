@@ -31,6 +31,7 @@ interface CatalogProduct {
 interface CatalogNode {
   name: string;
   slug: string;
+  type: "category" | "subcategory" | "all";
 }
 
 const BUDGET_TIERS = [{ name: "All Budgets", value: "all" }];
@@ -48,29 +49,25 @@ function ProductsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const mapLegacyCategory = (slug: string): string => {
-    if (["premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"].includes(slug)) return "pens";
-    if (["promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(slug)) return "caps";
-    if (["mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "tabletop"].includes(slug)) return "table-top";
-    if (["executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks", "diaries", "diariesnotebooks"].includes(slug)) return "diaries-notebooks";
-    return slug;
-  };
-
-  const initialCategory = mapLegacyCategory(searchParams?.get("category") || searchParams?.get("subcategory") || "all");
+  const initialCategory = searchParams?.get("category") || "all";
+  const initialSubcategory = searchParams?.get("subcategory") || "all";
   const initialBudget = searchParams?.get("range") || "all";
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(initialSubcategory);
   const [selectedBudget, setSelectedBudget] = useState(initialBudget);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [products, setProducts] = useState<CatalogProduct[]>([]);
-  const [categories, setCategories] = useState<CatalogNode[]>([{ name: "All Categories", slug: "all" }]);
+  const [categories, setCategories] = useState<CatalogNode[]>([{ name: "All Categories", slug: "all", type: "all" }]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const cat = searchParams?.get("category") || searchParams?.get("subcategory") || "all";
-    setSelectedCategory(mapLegacyCategory(cat));
+    const cat = searchParams?.get("category") || "all";
+    const sub = searchParams?.get("subcategory") || "all";
+    setSelectedCategory(cat);
+    setSelectedSubcategory(sub);
     const bud = searchParams?.get("range") || "all";
     setSelectedBudget(bud);
     setCurrentPage(1);
@@ -99,9 +96,6 @@ function ProductsPageContent() {
       const slugsWithProducts = new Set(allProducts.map((p) => p.subcategory));
 
       // Build ordered sidebar from PRODUCT_HIERARCHY (single source of truth)
-      // Only include subcategories that:
-      //  1. Are in the Promotional Products hierarchy
-      //  2. Have at least one product in the database
       const orderedPromoCategories: CatalogNode[] = [];
       for (const cat of PRODUCT_HIERARCHY[0].categories) {
         if (cat.subcategories.length === 0) {
@@ -118,7 +112,7 @@ function ProductsPageContent() {
           );
 
           if (hasProducts) {
-            orderedPromoCategories.push({ name: cat.name, slug: cat.slug });
+            orderedPromoCategories.push({ name: cat.name, slug: cat.slug, type: "category" });
           }
         } else {
           for (const sub of cat.subcategories) {
@@ -136,24 +130,30 @@ function ProductsPageContent() {
               (sub.slug === "travel-bags" && slugsWithProducts.has("travel-backpacks"));
 
             if (PROMO_SUBCATEGORY_SLUGS.has(sub.slug) && hasProducts) {
-              orderedPromoCategories.push({ name: sub.name, slug: sub.slug });
+              orderedPromoCategories.push({ name: sub.name, slug: sub.slug, type: "subcategory" });
             }
           }
         }
       }
 
-      const apiSubcats: CatalogNode[] = (subcategoriesResult.data ?? []).filter(
-        (item: CatalogNode) =>
-          !HIDDEN_PRODUCT_SLUGS.has(item.slug) &&
-          (PROMO_SUBCATEGORY_SLUGS.has(item.slug) || 
-           item.slug === "laptop-backpacks") &&
-          slugsWithProducts.has(item.slug) &&
-          !orderedPromoCategories.some((c) => c.slug === item.slug || 
-            (c.slug === "laptop-bags" && item.slug === "laptop-backpacks"))
-      );
+      const apiSubcats: CatalogNode[] = (subcategoriesResult.data ?? [])
+        .filter(
+          (item: any) =>
+            !HIDDEN_PRODUCT_SLUGS.has(item.slug) &&
+            (PROMO_SUBCATEGORY_SLUGS.has(item.slug) || 
+             item.slug === "laptop-backpacks") &&
+            slugsWithProducts.has(item.slug) &&
+            !orderedPromoCategories.some((c) => c.slug === item.slug || 
+              (c.slug === "laptop-bags" && item.slug === "laptop-backpacks"))
+        )
+        .map((item: any) => ({
+          name: item.name,
+          slug: item.slug,
+          type: "subcategory" as const
+        }));
 
       setCategories([
-        { name: "All Categories", slug: "all" },
+        { name: "All Categories", slug: "all", type: "all" },
         ...orderedPromoCategories,
         ...apiSubcats,
       ]);
@@ -169,14 +169,18 @@ function ProductsPageContent() {
     };
   }, []);
 
-  const handleCategoryChange = (slug: string) => {
-    setSelectedCategory(slug);
+  const handleCategoryChange = (slug: string, type: "category" | "subcategory" | "all" = "subcategory") => {
     setCurrentPage(1);
     const params = new URLSearchParams(searchParams?.toString());
-    if (slug === "all") {
+    if (slug === "all" || type === "all") {
       params.delete("category");
-    } else {
+      params.delete("subcategory");
+    } else if (type === "subcategory") {
+      params.set("subcategory", slug);
+      params.delete("category");
+    } else if (type === "category") {
       params.set("category", slug);
+      params.delete("subcategory");
     }
     router.push(`/products?${params.toString()}`);
   };
@@ -195,6 +199,7 @@ function ProductsPageContent() {
 
   const handleResetFilters = () => {
     setSelectedCategory("all");
+    setSelectedSubcategory("all");
     setSelectedBudget("all");
     setSearchQuery("");
     setCurrentPage(1);
@@ -230,35 +235,77 @@ function ProductsPageContent() {
     const matchSubcategory = (selected: string, productSub: string): boolean => {
       if (selected === productSub) return true;
       if (selected === "laptop-bags" && (productSub === "laptop-backpacks" || productSub === "laptop-bags")) return true;
+      if (selected === "decorative" && (productSub === "decorative" || productSub === "decoratives")) return true;
+      if (selected === "trolley-bags" && (productSub === "trolley-bags" || productSub === "canvas-trolley-bags")) return true;
+      if (selected === "pens" && ["pens", "premium-pens", "eco-pens", "plastic-pens", "metal-pens", "executive-pens", "engraved-pens", "gift-box-pens"].includes(productSub)) return true;
+      if (selected === "caps" && ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(productSub)) return true;
+      if (selected === "table-top" && ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "paper-weight", "paperweight"].includes(productSub)) return true;
+      if (selected === "diaries-notebooks" && ["diaries-notebooks", "diaries", "executive-diaries", "eco-notebooks", "standard-notebooks", "diaries", "diariesnotebooks", "premium-diaries", "premium-notebooks"].includes(productSub)) return true;
       return false;
     };
 
-    const matchesCategory = 
-      selectedCategory === "all" || 
-      product.category === selectedCategory || 
-      matchSubcategory(selectedCategory, product.subcategory) ||
-      (selectedCategory === "pens" && isPens) ||
-      (selectedCategory === "caps" && isCaps) ||
-      (selectedCategory === "table-top" && isTableTop) ||
-      (selectedCategory === "diaries-notebooks" && isDiaries);
+    const isHousehold = product.category === "household-utilities" || product.category === "decoratives" || product.category === "decorative" ||
+      ["household-utilities", "decorative", "decoratives"].includes(product.subcategory);
+
+    let matchesCategoryOrSubcategory = true;
+    if (selectedSubcategory !== "all") {
+      matchesCategoryOrSubcategory = matchSubcategory(selectedSubcategory, product.subcategory);
+    } else if (selectedCategory !== "all") {
+      if (selectedCategory === "household-utilities") {
+        matchesCategoryOrSubcategory = isHousehold;
+      } else {
+        matchesCategoryOrSubcategory = 
+          product.category === selectedCategory || 
+          matchSubcategory(selectedCategory, product.subcategory) ||
+          (selectedCategory === "pens" && isPens) ||
+          (selectedCategory === "caps" && isCaps) ||
+          (selectedCategory === "table-top" && isTableTop) ||
+          (selectedCategory === "diaries-notebooks" && isDiaries);
+      }
+    }
 
     const matchesBudget = selectedBudget === "all";
     const matchesSearchText = (text: string, q: string) => {
       if (!text || !q) return false;
       const normalizedText = text.toLowerCase().replace(/[^a-z0-9]/g, "");
       const normalizedQ = q.toLowerCase().replace(/[^a-z0-9]/g, "");
+      
+      // Special override for Trolley Bags / Canvas Trolley Bags search
+      if (normalizedQ === "canvastrolleybags" || normalizedQ === "canvastrolleybag" || normalizedQ === "canvastrolley" || normalizedQ === "trolleybags" || normalizedQ === "trolleybag") {
+        if (text === "trolley-bags" || text === "trolleybags" || text === "canvas-trolley-bags" || text === "canvastrolleybags") {
+          return true;
+        }
+      }
+      
+      // Special override for Decoratives search
+      if (normalizedQ === "decoratives" || normalizedQ === "decorative") {
+        if (text === "decorative" || text === "decoratives") {
+          return true;
+        }
+      }
+      
       return normalizedText.includes(normalizedQ);
     };
 
+    const normalizedSearchQuery = searchQuery.toLowerCase().replace(/[^a-z0-9]/g, "");
     const matchesSearch = 
       !searchQuery ||
-      matchesSearchText(product.category, searchQuery) ||
-      matchesSearchText(product.subcategory, searchQuery) ||
-      (product.brand && matchesSearchText(product.brand, searchQuery)) ||
-      (product.tags && product.tags.some(tag => matchesSearchText(tag, searchQuery))) ||
-      (product.description && matchesSearchText(product.description, searchQuery)) ||
-      matchesSearchText(product.title, searchQuery);
-    return matchesCategory && matchesBudget && matchesSearch;
+      (normalizedSearchQuery === "decorative" || normalizedSearchQuery === "decoratives"
+        ? (product.subcategory === "decorative" || product.subcategory === "decoratives" || product.title.toLowerCase().includes("decorative"))
+        : (normalizedSearchQuery === "householdutilities" || normalizedSearchQuery === "householdutility"
+          ? (product.subcategory === "household-utilities" || product.title.toLowerCase().includes("household utility") || product.title.toLowerCase().includes("household utilities"))
+          : (
+            matchesSearchText(product.category, searchQuery) ||
+            matchesSearchText(product.subcategory, searchQuery) ||
+            (product.brand && matchesSearchText(product.brand, searchQuery)) ||
+            (product.tags && product.tags.some(tag => matchesSearchText(tag, searchQuery))) ||
+            (product.description && matchesSearchText(product.description, searchQuery)) ||
+            matchesSearchText(product.title, searchQuery)
+          )
+        )
+      );
+
+    return matchesCategoryOrSubcategory && matchesBudget && matchesSearch;
   });
 
   // Pagination calculation
@@ -348,20 +395,27 @@ function ProductsPageContent() {
                 )}
               </div>
               <div className="space-y-1 max-h-[360px] overflow-y-auto pr-1">
-                {categories.map((cat) => (
-                  <button
-                    key={cat.slug}
-                    onClick={() => handleCategoryChange(cat.slug)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
-                      selectedCategory === cat.slug
-                        ? "bg-[#F8F7F3] text-[#D32F2F]"
-                        : "text-[#6B6B63] hover:bg-[#FAF9F6] hover:text-[#2B2B2B]"
-                    }`}
-                  >
-                    <span>{cat.name}</span>
-                    {selectedCategory === cat.slug && <span className="w-1.5 h-1.5 bg-[#D32F2F] rounded-full" />}
-                  </button>
-                ))}
+                {categories.map((cat) => {
+                  const isSelected = cat.type === "all"
+                    ? (selectedCategory === "all" && selectedSubcategory === "all")
+                    : (cat.type === "category"
+                      ? (selectedCategory === cat.slug)
+                      : (selectedSubcategory === cat.slug));
+                  return (
+                    <button
+                      key={cat.slug}
+                      onClick={() => handleCategoryChange(cat.slug, cat.type)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-between ${
+                        isSelected
+                          ? "bg-[#F8F7F3] text-[#D32F2F]"
+                          : "text-[#6B6B63] hover:bg-[#FAF9F6] hover:text-[#2B2B2B]"
+                      }`}
+                    >
+                      <span>{cat.name}</span>
+                      {isSelected && <span className="w-1.5 h-1.5 bg-[#D32F2F] rounded-full" />}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -550,19 +604,26 @@ function ProductsPageContent() {
                 <div className="space-y-3">
                   <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-red-500">Categories</h4>
                   <div className="grid grid-cols-2 gap-2">
-                    {categories.map((cat) => (
-                      <button
-                        key={cat.slug}
-                        onClick={() => { handleCategoryChange(cat.slug); setShowMobileFilters(false); }}
-                        className={`text-left px-3 py-2.5 rounded-lg text-xs font-bold transition-all truncate border ${
-                          selectedCategory === cat.slug
-                            ? "bg-red-50 text-red-650 border-red-200"
-                            : "text-gray-600 border-gray-250 hover:bg-gray-50"
-                        }`}
-                      >
-                        {cat.name}
-                      </button>
-                    ))}
+                    {categories.map((cat) => {
+                      const isSelected = cat.type === "all"
+                        ? (selectedCategory === "all" && selectedSubcategory === "all")
+                        : (cat.type === "category"
+                          ? (selectedCategory === cat.slug)
+                          : (selectedSubcategory === cat.slug));
+                      return (
+                        <button
+                          key={cat.slug}
+                          onClick={() => { handleCategoryChange(cat.slug, cat.type); setShowMobileFilters(false); }}
+                          className={`text-left px-3 py-2.5 rounded-lg text-xs font-bold transition-all truncate border ${
+                            isSelected
+                              ? "bg-red-50 text-red-650 border-red-200"
+                              : "text-gray-600 border-gray-250 hover:bg-gray-50"
+                          }`}
+                        >
+                          {cat.name}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
