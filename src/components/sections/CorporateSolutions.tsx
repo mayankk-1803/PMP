@@ -8,6 +8,7 @@ import { ArrowUpRight, MessageSquare } from "lucide-react";
 import { SafeImage } from "../ui/SafeImage";
 import { resolveCategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
+import { toDisplayName } from "@/lib/displayNames";
 
 interface CategoryRecord {
   id: string;
@@ -64,7 +65,7 @@ export function CorporateSolutions() {
           <div className="absolute inset-0 z-0">
             <SafeImage
               src={resolveCategoryImage(cat, DEFAULT_KIT_IMAGE)}
-              alt={cat.name}
+              alt={toDisplayName(cat.name)}
               category={cat.slug}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -87,10 +88,10 @@ export function CorporateSolutions() {
           <div className="relative z-10 p-6 flex flex-col justify-end h-full text-white">
             <div className="space-y-2 transform group-hover:-translate-y-1 transition-transform duration-300">
               <h3 className="text-lg font-bold tracking-tight text-white leading-tight group-hover:text-[#EF5350] transition-colors">
-                {cat.name === "Drinkware" ? "Drink Ware" : cat.name}
+                {toDisplayName(cat.name === "Drinkware" ? "Drink Ware" : cat.name)}
               </h3>
               <p className="text-gray-300 text-xs leading-relaxed max-w-[200px] sm:max-w-none line-clamp-2">
-                {cat.description || `Custom corporate branding on premium ${(cat.name === "Drinkware" ? "drink ware" : cat.name).toLowerCase()} options.`}
+                {cat.description || `Custom corporate branding on premium ${toDisplayName(cat.name === "Drinkware" ? "drink ware" : cat.name).toLowerCase()} options.`}
               </p>
             </div>
             

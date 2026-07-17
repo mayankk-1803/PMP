@@ -2,7 +2,7 @@
 
 import React, { Suspense, useEffect, useState, useMemo } from "react";
 import { DEFAULT_KIT_IMAGE, corporateKitImageOrFallback, corporateKitImage } from "@/lib/kitImageMap";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -15,50 +15,59 @@ import { getCanonicalKitSlug, getSubcategorySlugAliases } from "@/lib/slugResolv
 import { resolveProductImage, resolveSubcategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 import { PRODUCT_HIERARCHY } from "@/data/siteConfig";
+import { toDisplayName } from "@/lib/displayNames";
+import { clientCache } from "@/lib/clientCache";
+import { useNavigationCache } from "@/context/NavigationCacheContext";
 
 type ActiveTab = "corporate" | "industry" | "festive";
 
-const INDUSTRY_SLUGS = new Set([
-  "doctor-kits",
-  "architect-kits",
-  "mason-kits",
-  "electrician-kits",
-  "interior-designer-kits",
-  "plumber-kits",
-  "retailer-kits",
-  "painter-kits",
-  "engineer-kits"
-]);
+const INDUSTRY_SLUGS = new Set(["doctor-kits", "engineer-kits", "dealer-kits", "retailer-kits"]);
 
 const FESTIVE_HAMPER_COLLECTIONS = [
   {
     name: "Diwali Hampers",
     slug: "diwali-hampers",
-    description: "Diwali dry fruit, wellness, diya, and festive premium corporate hampers.",
+    description: "Traditional diyas, dry fruits, premium chocolates, and customized greeting items for Diwali gifting.",
     images: [
       "/images/Diwali Hampers/1.jpg",
       "/images/Diwali Hampers/2.jpg",
       "/images/Diwali Hampers/3.jpg",
-      "/images/Diwali Hampers/4.jpg",
-      "/images/Diwali Hampers/5.jpg",
     ],
   },
   {
     name: "Holi Hampers",
     slug: "holi-hampers",
-    description: "Holi hampers with organic colors, snacks, thandai mixes, and colorful branded boxes.",
-    images: ["/images/Holi Hampers/4b4cafcfc2eac114bea36d257d45a580.jpg"],
+    description: "Organic gulal, gourmet thandai mixes, traditional sweets, and branding options for corporate Holi gifting.",
+    images: [
+      "/images/Holi Hampers/1.jpg",
+      "/images/Holi Hampers/2.jpg",
+      "/images/Holi Hampers/3.jpg",
+    ],
   },
   {
-    name: "EID Hampers",
+    name: "Eid Hampers",
     slug: "eid-kits",
-    description: "EID gourmet hampers with dates, nuts, sweets, and elegant themed presentation.",
+    description: "Curated gourmet hampers with exotic dry fruits, dates, premium attar, and custom brand cards for Eid celebration.",
     images: [
-      "/images/EID HAmpers/1.jpg",
-      "/images/EID HAmpers/2.jpg",
-      "/images/EID HAmpers/3.jpg",
-      "/images/EID HAmpers/4.jpg",
-      "/images/EID HAmpers/5.jpg",
+      "/images/Eid Hampers/1.jpg",
+    ],
+  },
+  {
+    name: "Christmas Hampers",
+    slug: "christmas-kits",
+    description: "Festive plum cake, artisanal cookies, ornaments, customized mugs, and hot chocolate mixes.",
+    images: [
+      "/images/Christmas Hampers/1.jpg",
+    ],
+  },
+  {
+    name: "New Year Hampers",
+    slug: "new-year-hampers",
+    description: "Premium corporate diaries, desk organizers, calendars, and curated goodies to kickstart the New Year.",
+    images: [
+      "/images/New Year Hampers/1.jpg",
+      "/images/New Year Hampers/2.jpg",
+      "/images/New Year Hampers/3.jpg",
     ],
   },
   {
@@ -136,19 +145,82 @@ interface Product {
 function CorporateKitsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
+  const { getScrollPosition, setScrollPosition } = useNavigationCache();
   const selectedKit = searchParams?.get("kit") || "";
 
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cacheKey = useMemo(() => {
+    const paramsStr = searchParams?.toString();
+    return pathname + (paramsStr ? `?${paramsStr}` : "");
+  }, [pathname, searchParams]);
+
+  // Instantly hydrate subcategories and products from clientCache
+  const [subcategories, setSubcategories] = useState<Subcategory[]>(() => {
+    if (typeof window !== "undefined") {
+      const cached = clientCache.get<Subcategory[]>("/api/catalog/subcategories-corporate");
+      return cached ?? [];
+    }
+    return [];
+  });
+
+  const [products, setProducts] = useState<Product[]>(() => {
+    if (typeof window !== "undefined") {
+      const cached = clientCache.get<Product[]>("/api/catalog/products-corporate");
+      return cached ?? [];
+    }
+    return [];
+  });
+
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !clientCache.has("/api/catalog/products-corporate");
+    }
+    return true;
+  });
+
+  // Track window scroll and save to state context
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(cacheKey, window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [cacheKey, setScrollPosition]);
+
+  // Restore scroll Y position once rendering is complete
+  useEffect(() => {
+    if (!loading) {
+      const savedScroll = getScrollPosition(cacheKey);
+      if (savedScroll > 0) {
+        const timer = setTimeout(() => {
+          window.scrollTo({ top: savedScroll, behavior: "instant" });
+        }, 80);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [cacheKey, loading, getScrollPosition]);
 
   useEffect(() => {
-    Promise.all([
-      fetch("/api/catalog/categories").then((res) => res.json()),
-      fetch("/api/catalog/subcategories").then((res) => res.json()),
-      fetch("/api/catalog/products").then((res) => res.json())
-    ])
-      .then(([, subRes, prodRes]) => {
+    let active = true;
+
+    async function loadData() {
+      const hasCached = clientCache.has("/api/catalog/products-corporate");
+      if (!hasCached) {
+        setLoading(true);
+      }
+
+      try {
+        // Fetch fresh data in the background (stale-while-revalidate)
+        const [, subRes, prodRes] = await Promise.all([
+          clientCache.fetchWithCache<any>("/api/catalog/categories", undefined, true),
+          clientCache.fetchWithCache<any>("/api/catalog/subcategories", undefined, true),
+          clientCache.fetchWithCache<any>("/api/catalog/products", undefined, true)
+        ]);
+
+        if (!active) return;
+
         if (subRes.success && subRes.data) {
           let apiSubs = subRes.data || [];
           
@@ -198,14 +270,31 @@ function CorporateKitsContent() {
               mergedSubs.push(vs);
             }
           });
-          setSubcategories(mergedSubs);
+
+          if (JSON.stringify(mergedSubs) !== JSON.stringify(subcategories)) {
+            setSubcategories(mergedSubs);
+            clientCache.set("/api/catalog/subcategories-corporate", mergedSubs);
+          }
         }
-        if (prodRes.success && prodRes.data) setProducts(prodRes.data);
+        
+        if (prodRes.success && prodRes.data) {
+          const freshProds = prodRes.data;
+          if (JSON.stringify(freshProds) !== JSON.stringify(products)) {
+            setProducts(freshProds);
+            clientCache.set("/api/catalog/products-corporate", freshProds);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load corporate kits data in background:", err);
+      } finally {
         setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+      }
+    }
+
+    loadData();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const corporateOptions = useMemo(() => {
@@ -312,7 +401,7 @@ function CorporateKitsContent() {
     return fallbackCorporateCards(currentOptions);
   }, [activeTab, corporateOptions, currentOptions, festiveOptions, products, selectedSubcategory, selectedKit]);
 
-  const selectedLabel = selectedSubcategory?.name || "Corporate Kits";
+  const selectedLabel = toDisplayName(selectedSubcategory?.name) || "Corporate Kits";
   const selectedDescription = selectedSubcategory?.description || 
     "Explore premium, custom-branded onboarding kits, specialized field employee kits, and luxury festive hampers curated to elevate your brand perception.";
 
@@ -399,7 +488,7 @@ function CorporateKitsContent() {
                       : "border-[#F5C2C2] bg-[#FAF9F6] text-[#6B6B63] hover:border-[#D32F2F]/30 hover:bg-white hover:text-[#2B2B2B]"
                   }`}
                 >
-                  {item.name}
+                  {toDisplayName(item.name)}
                 </Link>
               );
             })}

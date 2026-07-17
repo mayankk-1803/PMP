@@ -116,6 +116,58 @@
         "order": 1,
         "active": true,
         "id": "bp-1784019158441-h2ogfkai7"
+      },
+      {
+        "slug": "notebooks",
+        "displayName": "Notebooks",
+        "category": "Diaries & Notebooks",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301358/pacmyproduct/admin/wteww2oqu7gngozgjvmj.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/wteww2oqu7gngozgjvmj",
+        "galleryPublicIds": [],
+        "id": "bp-1784301362981-j7bb5bxaa"
+      },
+      {
+        "slug": "keychains",
+        "displayName": "Keychains",
+        "category": "Keychains",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301388/pacmyproduct/admin/wapubgxtldlkfchafx5o.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/wapubgxtldlkfchafx5o",
+        "galleryPublicIds": [],
+        "id": "bp-1784301392351-ds6nlzu7d"
       }
     ]
   },
@@ -140,7 +192,86 @@
       }
     ],
     "collectionImages": [],
-    "products": []
+    "products": [
+      {
+        "slug": "diaries-notebooks",
+        "displayName": "Diaries & Notebooks",
+        "category": "Diaries & Notebooks",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301520/pacmyproduct/admin/v86ch1ymsvqncjbqowhy.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/v86ch1ymsvqncjbqowhy",
+        "galleryPublicIds": [],
+        "id": "bp-1784301524900-ia6wu257i"
+      },
+      {
+        "slug": "table-tops",
+        "displayName": "Table Tops",
+        "category": "Office Utility",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301562/pacmyproduct/admin/j8shknzt4kmwlatvhkp3.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/j8shknzt4kmwlatvhkp3",
+        "galleryPublicIds": [],
+        "id": "bp-1784301566181-lvqhlm0jz"
+      },
+      {
+        "slug": "coffee-mug",
+        "displayName": "Coffee Mug",
+        "category": "Drinkware",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301756/pacmyproduct/admin/hhxpaelhficlhkoictig.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/hhxpaelhficlhkoictig",
+        "galleryPublicIds": [],
+        "id": "bp-1784301761127-h0gd2m8gp"
+      }
+    ]
   },
   {
     "id": "500-1000",
@@ -163,7 +294,86 @@
       }
     ],
     "collectionImages": [],
-    "products": []
+    "products": [
+      {
+        "slug": "flask",
+        "displayName": "Flask",
+        "category": "Drinkware",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301825/pacmyproduct/admin/t28bvfwq2xepo1nwbsn5.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/t28bvfwq2xepo1nwbsn5",
+        "galleryPublicIds": [],
+        "id": "bp-1784301829964-ypxap6769"
+      },
+      {
+        "slug": "steel-bottle",
+        "displayName": "Steel Bottle",
+        "category": "Drinkware",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301878/pacmyproduct/admin/tcxzkru9aok3pfkleccv.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/tcxzkru9aok3pfkleccv",
+        "galleryPublicIds": [],
+        "id": "bp-1784301882332-05g5mraf7"
+      },
+      {
+        "slug": "neckbands",
+        "displayName": "Neckbands",
+        "category": "Electronics",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784301918/pacmyproduct/admin/ap8gvzmn2ifwrmnxhzmx.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/ap8gvzmn2ifwrmnxhzmx",
+        "galleryPublicIds": [],
+        "id": "bp-1784301924169-bgm5zuw50"
+      }
+    ]
   },
   {
     "id": "1000-2500",
@@ -186,7 +396,86 @@
       }
     ],
     "collectionImages": [],
-    "products": []
+    "products": [
+      {
+        "slug": "speaker",
+        "displayName": "Speaker",
+        "category": "Electronics",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784302076/pacmyproduct/admin/nbeuqn4dfftutjrjbvz7.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/nbeuqn4dfftutjrjbvz7",
+        "galleryPublicIds": [],
+        "id": "bp-1784302080825-m1n86sk8o"
+      },
+      {
+        "slug": "diwali-hampers",
+        "displayName": "Diwali Hampers",
+        "category": "Festive Hampers",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784302125/pacmyproduct/admin/yvubwtecjq0dxx1i2ce0.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/yvubwtecjq0dxx1i2ce0",
+        "galleryPublicIds": [],
+        "id": "bp-1784302129474-qgcivcyb5"
+      },
+      {
+        "slug": "t-shirts",
+        "displayName": "T-Shirts",
+        "category": "T-Shirts",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784302179/pacmyproduct/admin/a4wa2xmf7pqlz43olv1w.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/a4wa2xmf7pqlz43olv1w",
+        "galleryPublicIds": [],
+        "id": "bp-1784302184071-bzf0is0et"
+      }
+    ]
   },
   {
     "id": "2500-5000",
@@ -209,7 +498,86 @@
       }
     ],
     "collectionImages": [],
-    "products": []
+    "products": [
+      {
+        "slug": "earbuds",
+        "displayName": "Earbuds",
+        "category": "Electronics",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784302414/pacmyproduct/admin/fgyhre1jdrzq3foaajow.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/fgyhre1jdrzq3foaajow",
+        "galleryPublicIds": [],
+        "id": "bp-1784302419042-4m1ipmwku"
+      },
+      {
+        "slug": "trolley-bags",
+        "displayName": "Trolley Bags",
+        "category": "Bags",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784302442/pacmyproduct/admin/wb2ck90nrgtqvjkkwfz4.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/wb2ck90nrgtqvjkkwfz4",
+        "galleryPublicIds": [],
+        "id": "bp-1784302448119-0useqqc3c"
+      },
+      {
+        "slug": "christmas-hampers",
+        "displayName": "Christmas Hampers",
+        "category": "Festive Hampers",
+        "description": "",
+        "moq": 50,
+        "brand": "PacMyProduct",
+        "price": "",
+        "buttonText": "Get Quote",
+        "specifications": {
+          "material": "",
+          "size": "",
+          "weight": "",
+          "colors": "",
+          "packaging": ""
+        },
+        "brandingOptions": [],
+        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784302690/pacmyproduct/admin/fdwgh8c5ol7vhztope8c.png",
+        "gallery": [],
+        "tags": [],
+        "order": 1,
+        "active": true,
+        "cloudinaryPublicId": "pacmyproduct/admin/fdwgh8c5ol7vhztope8c",
+        "galleryPublicIds": [],
+        "id": "bp-1784302695046-yp3zjemfy"
+      }
+    ]
   },
   {
     "id": "5000",

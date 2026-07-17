@@ -12,6 +12,7 @@ import { SafeImage } from "../ui/SafeImage";
 import { resolveSubcategoryImage } from "@/lib/imageResolver";
 import { buildEnquiryUrl } from "@/lib/enquiryHelper";
 import { useProductPreview } from "@/context/ProductPreviewContext";
+import { toDisplayName } from "@/lib/displayNames";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -143,7 +144,7 @@ export function FeaturedHampers() {
                     <div className="relative aspect-[4/3] w-full bg-[#FAF9F6] overflow-hidden flex-shrink-0 border-b border-[#F5C2C2]">
                       <SafeImage
                         src={hamperImg}
-                        alt={hamper.name}
+                        alt={toDisplayName(hamper.name)}
                         category="gift-sets"
                         useNextImage={true}
                         nextImageProps={{
@@ -172,7 +173,7 @@ export function FeaturedHampers() {
                     <div className="p-6 flex flex-col flex-grow text-left">
                       <div className="flex justify-between items-start mb-2 min-h-[44px]">
                         <h3 className="font-bold text-[#2B2B2B] text-base leading-tight group-hover:text-[#D32F2F] transition-colors line-clamp-2">
-                          {hamper.name}
+                          {toDisplayName(hamper.name)}
                         </h3>
                         <span className="font-extrabold text-[#EF5350] text-xs tracking-wider uppercase bg-[#EF5350]/10 px-2.5 py-1 rounded-md ml-2 flex-shrink-0">{hamperPrice}</span>
                       </div>

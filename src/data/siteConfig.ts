@@ -56,9 +56,9 @@ export const CORPORATE_KITS = [
 export const OCCASION_HAMPERS = [
   { name: "Diwali Hampers", slug: "diwali-hampers", href: "/corporate-kits?kit=diwali-hampers" },
   { name: "Holi Hampers", slug: "holi-hampers", href: "/corporate-kits?kit=holi-hampers" },
-  { name: "Eid Kits", slug: "eid-kits", href: "/corporate-kits?kit=eid-kits" },
+  { name: "Eid Hampers", slug: "eid-kits", href: "/corporate-kits?kit=eid-kits" },
   { name: "Women's Day Gifts", slug: "womens-day-gifts", href: "/corporate-kits?kit=womens-day-gifts" },
-  { name: "Christmas Kits", slug: "christmas-kits", href: "/corporate-kits?kit=christmas-kits" },
+  { name: "Christmas Hampers", slug: "christmas-kits", href: "/corporate-kits?kit=christmas-kits" },
   { name: "New Year Hampers", slug: "new-year-hampers", href: "/corporate-kits?kit=new-year-hampers" }
 ];
 
@@ -172,13 +172,13 @@ export const PRODUCT_HIERARCHY = [
           { name: "Wireless", slug: "wireless-charger", href: "/products?subcategory=wireless-charger" }
         ]
       },
-      // Column 12c: Household Utilities
+      // Column 12c: Household
       {
-        name: "Household Utilities",
+        name: "Household",
         slug: "household-utilities",
         subcategories: [
           { name: "Decorative", slug: "decorative", href: "/products?subcategory=decorative" },
-          { name: "Household Utilities", slug: "household-utilities", href: "/products?subcategory=household-utilities" }
+          { name: "Household", slug: "household-utilities", href: "/products?subcategory=household-utilities" }
         ]
       },
       // Moved Column 13: Clocks
@@ -1435,7 +1435,7 @@ const BASE_SITE_HAMPERS = [
     image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=800&auto=format&fit=crop"
   },
   {
-    title: "Eid Kits",
+    title: "Eid Hampers",
     price: "Custom Quote",
     description: "Traditional dates, exotic nuts, and luxury prayer mats for Eid gifting.",
     imageUrl: "https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?q=80&w=800&auto=format&fit=crop",
@@ -1455,7 +1455,7 @@ const BASE_SITE_HAMPERS = [
     image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop"
   },
   {
-    title: "Christmas Kits",
+    title: "Christmas Hampers",
     price: "Custom Quote",
     description: "Plum cake, artisanal chocolates, and festive ornaments for the holiday season.",
     imageUrl: "https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=800&auto=format&fit=crop",

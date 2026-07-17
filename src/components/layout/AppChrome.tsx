@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShortlistProvider } from "@/context/ShortlistContext";
 import { ProductPreviewProvider } from "@/context/ProductPreviewContext";
+import { NavigationCacheProvider } from "@/context/NavigationCacheContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
@@ -27,10 +28,11 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ShortlistProvider>
-      <ProductPreviewProvider>
-        <ScrollProgressBar />
-        <Navbar />
+    <NavigationCacheProvider>
+      <ShortlistProvider>
+        <ProductPreviewProvider>
+          <ScrollProgressBar />
+          <Navbar />
         <main className="flex-1 flex flex-col pt-[80px] lg:pt-[90px]">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
@@ -50,7 +52,8 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
         <MobileStickyCTA />
         <ProductPreviewModal />
         <SmartTimedPopup />
-      </ProductPreviewProvider>
-    </ShortlistProvider>
+        </ProductPreviewProvider>
+      </ShortlistProvider>
+    </NavigationCacheProvider>
   );
 }

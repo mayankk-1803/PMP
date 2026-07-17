@@ -234,6 +234,7 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Trolley Bags")]: LOCAL_IMAGE_POOLS.trolleyBags[0],   // Trolley Bags → Trolley Bags folder only
   [normalizeImageTitle("Decorative")]: "/images/tabletopup.png",
   [normalizeImageTitle("Decoratives")]: "/images/tabletopup.png",
+  [normalizeImageTitle("Household")]: "/images/tabletopup.png",
   [normalizeImageTitle("Household Utilities")]: "/images/tabletopup.png",
   [normalizeImageTitle("Sling Bags")]: LOCAL_IMAGE_POOLS.slingBags[0],
   [normalizeImageTitle("Classic Sling Bags")]: LOCAL_IMAGE_POOLS.slingBags[0],
@@ -282,6 +283,7 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Women Day Appreciation Hamper")]: "/kitsimages/womendayhamper.png",
   [normalizeImageTitle("Women's Day Appreciation Hamper")]: "/kitsimages/womendayhamper.png",
   [normalizeImageTitle("Christmas Kits")]: LOCAL_IMAGE_POOLS.festiveHampers[2],
+  [normalizeImageTitle("Christmas Hampers")]: LOCAL_IMAGE_POOLS.festiveHampers[2],
   [normalizeImageTitle("New Year Gifts")]: LOCAL_IMAGE_POOLS.festiveHampers[0],
   [normalizeImageTitle("New Year Hampers")]: LOCAL_IMAGE_POOLS.festiveHampers[0],
   [normalizeImageTitle("Employee Welcome Hampers")]: "/images/employeewelcome.png",

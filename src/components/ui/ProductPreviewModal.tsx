@@ -8,6 +8,7 @@ import { buildEnquiryUrl, getShortlistItemDisplayName } from "@/lib/enquiryHelpe
 import { getCanonicalSubcategoryName, getCanonicalCategoryName, cleanProductTitle, resolveDisplayName } from "@/lib/slugResolver";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { getDisplayCategoryName, getDisplaySubcategoryName, toDisplayName } from "@/lib/displayNames";
 
 export function ProductPreviewModal() {
   const { isOpen, product, closePreview } = useProductPreview();
@@ -117,21 +118,22 @@ export function ProductPreviewModal() {
 
   // Safe category & subcategory name formatting
   const displayCategory = product.category
-    ? getCanonicalCategoryName(product.category) || product.category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+    ? getDisplayCategoryName(getCanonicalCategoryName(product.category) || product.category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()))
     : "Gifts";
   
   const displaySubcategory = product.subcategory
-    ? getCanonicalSubcategoryName(product.subcategory) || product.subcategory.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+    ? getDisplaySubcategoryName(getCanonicalSubcategoryName(product.subcategory) || product.subcategory.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()))
     : "";
 
   const getProductPreviewTitle = () => {
-    return resolveDisplayName({
+    const rawTitle = resolveDisplayName({
       title: product.title,
       name: product.name,
       displayName: product.displayName,
       category: product.category,
       subcategory: product.subcategory
     });
+    return toDisplayName(rawTitle);
   };
 
   return (

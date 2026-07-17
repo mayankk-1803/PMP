@@ -151,7 +151,7 @@ export const getCanonicalCategorySlug = (slug: string | null | undefined): strin
   if (clean === "decoratives" || clean === "decorative") {
     return "household-utilities";
   }
-  if (clean === "householdutilities" || clean === "householdutility") {
+  if (clean === "householdutilities" || clean === "householdutility" || clean === "household") {
     return "household-utilities";
   }
   if (clean === "clocks" || clean === "clock") {
@@ -376,7 +376,7 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
   // Electronics & Clocks & Grooming & Executive
   if (clean === "wireless" || clean === "wirelesscharger" || clean === "wirelesschargers") return "wireless-charger";
   if (clean === "decorative" || clean === "decoratives") return "decorative";
-  if (clean === "householdutilities" || clean === "householdutility" || clean === "wired" || clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "household-utilities";
+  if (clean === "householdutilities" || clean === "householdutility" || clean === "household" || clean === "wired" || clean === "bluetoothspeaker" || clean === "bluetoothspeakers" || clean === "speaker" || clean === "speakers") return "household-utilities";
   if (clean === "wallclock" || clean === "wallclocks") return "wall-clock";
   if (clean === "wristwatch" || clean === "wristwatches" || clean === "watch" || clean === "watches") return "wrist-watch";
   if (clean === "malegroomingkit" || clean === "malegroomingkits" || clean === "malegrooming") return "male-grooming-kit";
@@ -599,7 +599,13 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
     return ["wireless-charger", "wireless", "wirelesscharger", "wireless-chargers"];
   }
   if (canon === "household-utilities") {
-    return ["household-utilities"];
+    return ["household-utilities", "household", "householdutilities"];
+  }
+  if (canon === "eid-kits") {
+    return ["eid-kits", "eid-hampers", "eidhampers", "eidkits", "eid"];
+  }
+  if (canon === "christmas-kits") {
+    return ["christmas-kits", "christmas-hampers", "christmashampers", "christmaskits", "christmas"];
   }
   if (canon === "bluetooth-speaker") {
     return ["bluetooth-speaker", "wired", "bluetoothspeaker", "bluetoothspeakers", "speaker", "speakers"];
