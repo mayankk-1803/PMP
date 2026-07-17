@@ -47,6 +47,7 @@ export async function searchProducts(options: {
     const isCapQuery = cleanSearch.includes("cap") || cleanSearch === "caps" || cleanSearch === "cap";
     const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
     const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
+    const isTrolleyQuery = cleanSearch.includes("trolley") || cleanSearch.includes("canvastrolley");
 
     if (isPenQuery) {
       query.$or = [
@@ -71,6 +72,11 @@ export async function searchProducts(options: {
         { $text: { $search: options.search } },
         { category: { $in: getCategorySlugAliases("diaries-notebooks") } },
         { subcategory: { $in: getSubcategorySlugAliases("diaries-notebooks") } }
+      ];
+    } else if (isTrolleyQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("canvas-trolley-bags") } }
       ];
     } else {
       query.$text = { $search: options.search };
@@ -139,6 +145,7 @@ export async function searchCatalogProducts(options: {
     const isCapQuery = cleanSearch.includes("cap") || cleanSearch === "caps" || cleanSearch === "cap";
     const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
     const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
+    const isTrolleyQuery = cleanSearch.includes("trolley") || cleanSearch.includes("canvastrolley");
 
     if (isPenQuery) {
       query.$or = [
@@ -163,6 +170,11 @@ export async function searchCatalogProducts(options: {
         { $text: { $search: options.search } },
         { category: { $in: getCategorySlugAliases("diaries-notebooks") } },
         { subcategory: { $in: getSubcategorySlugAliases("diaries-notebooks") } }
+      ];
+    } else if (isTrolleyQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("canvas-trolley-bags") } }
       ];
     } else {
       query.$text = { $search: options.search };

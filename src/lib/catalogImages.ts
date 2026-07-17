@@ -253,7 +253,7 @@ export const realCatalogImage = (title: string, category = "", subcategory = "",
 
   // ── Bags — strict per subcategory ─────────────────────────────────
   if (sub === "duffle-bags" || ttl.includes("duffle")) return pick(POOLS.duffel, title, seed);
-  if (sub === "trolley-bags" || ttl.includes("trolley")) return pick(POOLS.trolleyBags, title, seed);
+  if (sub === "trolley-bags" || sub === "canvas-trolley-bags" || ttl.includes("trolley")) return pick(POOLS.trolleyBags, title, seed);
   if (sub === "sling-bags" || ttl.includes("sling bag")) return pick(POOLS.slingBags, title, seed);
   if (sub === "laptop-bags" || ttl.includes("laptop bag")) return pick(POOLS.laptopBags, title, seed);
   if (sub === "travel-bags" || ttl.includes("travel bag")) return pick(POOLS.travelBags, title, seed);
