@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { getBudgetsConfig, BudgetConfigItem } from "./actions";
+import { getBudgetsConfig } from "./actions";
+import type { BudgetConfigItem } from "@/services/admin/budgetCollectionService";
 import { Pencil, Loader2, ImagePlus, Eye, EyeOff, Package } from "lucide-react";
 
 export default function BudgetManagementPage() {

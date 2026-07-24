@@ -22,54 +22,6 @@
     "collectionImages": [],
     "products": [
       {
-        "slug": "diary",
-        "displayName": "Diary",
-        "category": "Office & Stationery",
-        "description": "",
-        "moq": 50,
-        "brand": "PacMyProduct",
-        "price": "",
-        "buttonText": "Get Quote",
-        "specifications": {
-          "material": "",
-          "size": "",
-          "weight": "",
-          "colors": "",
-          "packaging": ""
-        },
-        "brandingOptions": [],
-        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784018799/pacmyproduct/admin/vjnlwzmmcelvlncglbaw.png",
-        "gallery": [],
-        "tags": [],
-        "order": 1,
-        "active": true,
-        "id": "bp-1784018806690-ewvcgtf6n"
-      },
-      {
-        "slug": "stainless-steel-bottle",
-        "displayName": "Stainless Steel Bottle",
-        "category": "Drinkware",
-        "description": "",
-        "moq": 50,
-        "brand": "PacMyProduct",
-        "price": "",
-        "buttonText": "Get Quote",
-        "specifications": {
-          "material": "",
-          "size": "",
-          "weight": "",
-          "colors": "",
-          "packaging": ""
-        },
-        "brandingOptions": [],
-        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784018872/pacmyproduct/admin/wacrczxwwv1n1cpa7cfr.png",
-        "gallery": [],
-        "tags": [],
-        "order": 1,
-        "active": true,
-        "id": "bp-1784018885020-7xrpa2173"
-      },
-      {
         "slug": "coffee-mug",
         "displayName": "Coffee Mug",
         "category": "Drinkware",
@@ -220,32 +172,6 @@
         "cloudinaryPublicId": "pacmyproduct/admin/wuxoeui5tysjupekn8wq",
         "galleryPublicIds": [],
         "id": "bp-1784894055617-mquc11wlx"
-      },
-      {
-        "slug": "paper-weight",
-        "displayName": "Paper Weight ",
-        "category": "Office Utility",
-        "description": "",
-        "moq": 50,
-        "brand": "PacMyProduct",
-        "price": "",
-        "buttonText": "Get Quote",
-        "specifications": {
-          "material": "",
-          "size": "",
-          "weight": "",
-          "colors": "",
-          "packaging": ""
-        },
-        "brandingOptions": [],
-        "featuredImage": "https://res.cloudinary.com/dncupx9ul/image/upload/v1784894180/pacmyproduct/admin/encpr6qaliqpsmc2kavs.png",
-        "gallery": [],
-        "tags": [],
-        "order": 1,
-        "active": true,
-        "cloudinaryPublicId": "pacmyproduct/admin/encpr6qaliqpsmc2kavs",
-        "galleryPublicIds": [],
-        "id": "bp-1784894183193-qpaoy5riz"
       }
     ]
   },

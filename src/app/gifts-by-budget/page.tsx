@@ -6,7 +6,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { getBudgetsConfig, BudgetConfigItem, getBudgetCardImageAction } from "@/app/87564/admin/budgets/actions";
+import { getBudgetsConfig, getBudgetCardImageAction } from "@/app/87564/admin/budgets/actions";
+import type { BudgetConfigItem } from "@/services/admin/budgetCollectionService";
 import { BUDGETS } from "@/data/siteConfig";
 import { Wallet, PiggyBank, Coins, Briefcase, Gem, Crown, ChevronRight, Loader2 } from "lucide-react";
 

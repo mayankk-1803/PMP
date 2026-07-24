@@ -10,7 +10,8 @@ import {
   Home, RefreshCw, X, ShoppingBag, MapPin, ArrowRight, Loader2
 } from "lucide-react";
 import { ProductCard } from "@/components/ui/ProductCard";
-import { getBudgetsConfig, BudgetConfigItem } from "@/app/87564/admin/budgets/actions";
+import { getBudgetsConfig } from "@/app/87564/admin/budgets/actions";
+import type { BudgetConfigItem } from "@/services/admin/budgetCollectionService";
 import { normalizeBudgetRange, budgetsMatch } from "@/app/gifts-by-budget/page";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
 import { clientCache } from "@/lib/clientCache";

@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { X, Loader2, Package } from "lucide-react";
 import { ImageUploader } from "@/components/admin/ImageUploader";
-import { saveBudgetsConfig, BudgetConfigItem, BudgetProduct } from "../actions";
+import { saveBudgetsConfig } from "../actions";
+import type { BudgetConfigItem, BudgetProduct } from "@/services/admin/budgetCollectionService";
 
 const emptyProduct: Omit<BudgetProduct, "id"> = {
   slug: "",
@@ -201,7 +202,7 @@ export default function BudgetProductModal({
         onSaveSuccess(updatedBudget, updatedList);
         onClose();
       } else {
-        setLocalError("Failed to save product.");
+        setLocalError(res?.message || "Failed to save product.");
       }
     } catch (err: any) {
       console.error("Save product failed:", err);

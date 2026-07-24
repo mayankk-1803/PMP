@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { getBudgetsConfig, saveBudgetsConfig, BudgetConfigItem, BudgetProduct } from "../actions";
+import { getBudgetsConfig, saveBudgetsConfig } from "../actions";
+import type { BudgetConfigItem, BudgetProduct } from "@/services/admin/budgetCollectionService";
 import { ArrowLeft, Coins, Plus, Trash2, Pencil, Loader2, Check, X, ImagePlus, Eye, EyeOff, Settings } from "lucide-react";
 import dynamic from "next/dynamic";
 
@@ -71,10 +72,12 @@ export default function BudgetCollectionDetailPage() {
     try {
       const updatedList = allBudgets.map((b) => (b.id === budget.id ? budget : b));
       const res = await saveBudgetsConfig(updatedList);
-      if (res.success) {
+      if (res && res.success) {
         setAllBudgets(updatedList);
         setSuccessMsg("Settings saved successfully!");
         setTimeout(() => setSuccessMsg(""), 2000);
+      } else {
+        setErrorMsg(res?.message || "Failed to save settings.");
       }
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to save settings.");
@@ -96,18 +99,24 @@ export default function BudgetCollectionDetailPage() {
   const handleDeleteProduct = async (prodId: string) => {
     if (!budget || !confirm("Are you sure you want to delete this product from this collection?")) return;
     setSaving(true);
+    setErrorMsg("");
     try {
       const updatedProducts = (budget.products || []).filter((p) => p.id !== prodId);
       const updatedBudget = { ...budget, products: updatedProducts };
       const updatedList = allBudgets.map((b) => (b.id === budget.id ? updatedBudget : b));
       
       const res = await saveBudgetsConfig(updatedList);
-      if (res.success) {
+      if (res && res.success) {
         setBudget(updatedBudget);
         setAllBudgets(updatedList);
+        setSuccessMsg("Product deleted successfully!");
+        setTimeout(() => setSuccessMsg(""), 2000);
+      } else {
+        setErrorMsg(res?.message || "Failed to delete product.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Delete failed:", err);
+      setErrorMsg(err.message || "Failed to delete product.");
     } finally {
       setSaving(false);
     }
