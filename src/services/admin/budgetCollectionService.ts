@@ -48,7 +48,7 @@ export const defaultBudgets: BudgetConfigItem[] = [
   { id: "250-500", title: "₹250–500", value: "₹250 - ₹500", description: "Perfect for Standard Swag", image: "", bannerImage: "", subtitle: "Value Swag Kits", buttonText: "Explore Collection", displayOrder: 2, active: true, publicId: "", bannerPublicId: "", images: [], collectionImages: [], products: [] },
   { id: "500-1000", title: "₹500–1000", value: "₹500 - ₹1000", description: "Perfect for Premium Accessories", image: "", bannerImage: "", subtitle: "Premium Gifts", buttonText: "Explore Collection", displayOrder: 3, active: true, publicId: "", bannerPublicId: "", images: [], collectionImages: [], products: [] },
   { id: "1000-2500", title: "₹1000–2500", value: "₹1000 - ₹2500", description: "Perfect for Executive Hampers", image: "", bannerImage: "", subtitle: "Executive Selection", buttonText: "Explore Collection", displayOrder: 4, active: true, publicId: "", bannerPublicId: "", images: [], collectionImages: [], products: [] },
-  { id: "2500-5000", title: "₹2500–5000", value: "₹2500+", description: "Perfect for Luxury & VIP Gifts", image: "", bannerImage: "", subtitle: "Luxury VIP Collection", buttonText: "Explore Collection", displayOrder: 5, active: true, publicId: "", bannerPublicId: "", images: [], collectionImages: [], products: [] },
+  { id: "2500-5000", title: "₹2500–5000", value: "₹2500+", description: "Perfect for Luxury & VIP Gifts", image: "", bannerImage: "", subtitle: "Luxury VIP Collection", displayOrder: 5, active: true, publicId: "", bannerPublicId: "", images: [], collectionImages: [], products: [] },
   { id: "5000", title: "₹5000+", value: "₹2500+", description: "Perfect for Ultra-Luxury VIP Gifts", image: "", bannerImage: "", subtitle: "Ultra-Luxury VIP", buttonText: "Explore Collection", displayOrder: 6, active: true, publicId: "", bannerPublicId: "", images: [], collectionImages: [], products: [] }
 ];
 
@@ -129,11 +129,17 @@ async function writeToDiskFileBestEffort(data: BudgetConfigItem[]): Promise<void
 
 export async function getBudgetsConfigService(): Promise<BudgetConfigItem[]> {
   try {
+    const diskData = await loadFromDiskFile();
+
     if (process.env.MONGODB_URI) {
       await connectMongoDB();
       const mongoDocs = await BudgetCollectionModel.find({}).sort({ displayOrder: 1 }).lean<any[]>();
 
-      if (mongoDocs && mongoDocs.length > 0) {
+      const totalMongoProducts = (mongoDocs || []).reduce((acc, doc) => acc + (Array.isArray(doc?.products) ? doc.products.length : 0), 0);
+      const totalDiskProducts = (diskData || []).reduce((acc, doc) => acc + (Array.isArray(doc?.products) ? doc.products.length : 0), 0);
+
+      // If mongoDocs exist and contain products (or if disk file has no products), use MongoDB
+      if (mongoDocs && mongoDocs.length > 0 && (totalMongoProducts > 0 || totalDiskProducts === 0)) {
         const sanitized = await Promise.all(
           mongoDocs.map(async (doc, idx) => {
             const item = sanitizeBudgetConfigItem(doc, idx);
@@ -149,9 +155,8 @@ export async function getBudgetsConfigService(): Promise<BudgetConfigItem[]> {
         return sanitized;
       }
 
-      // If MongoDB is empty, seed from disk or defaultBudgets
-      console.log("[Budget CRUD] MongoDB collection empty. Seeding initial budget collections...");
-      const diskData = await loadFromDiskFile();
+      // If Mongo is empty OR has 0 products while disk file has products, seed MongoDB from disk file (or defaultBudgets)
+      console.log("[Budget CRUD] Seeding MongoDB budget collections from budgets.json / defaults...");
       const seedSource = diskData || defaultBudgets;
 
       const seededItems = await Promise.all(
@@ -167,16 +172,19 @@ export async function getBudgetsConfigService(): Promise<BudgetConfigItem[]> {
         })
       );
 
-      // Persist seeded documents to MongoDB
+      // Save seeded items to MongoDB
       for (const item of seededItems) {
-        await BudgetCollectionModel.findOneAndUpdate({ id: item.id }, { $set: item }, { upsert: true, new: true });
+        await BudgetCollectionModel.findOneAndUpdate(
+          { id: item.id },
+          { $set: item },
+          { upsert: true, returnDocument: "after" }
+        );
       }
 
       return seededItems;
     }
 
     // Local / Offline fallback without MONGODB_URI
-    const diskData = await loadFromDiskFile();
     const source = diskData || defaultBudgets;
     const mapped = await Promise.all(
       source.map(async (rawItem, idx) => {
@@ -210,7 +218,7 @@ export async function saveBudgetsConfigService(data: BudgetConfigItem[]): Promis
         await BudgetCollectionModel.findOneAndUpdate(
           { id: item.id },
           { $set: sanitized },
-          { upsert: true, new: true }
+          { upsert: true, returnDocument: "after" }
         );
       }
 
