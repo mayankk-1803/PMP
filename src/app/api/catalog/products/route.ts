@@ -62,7 +62,8 @@ export async function GET(req: Request) {
       if (selected === "bags" && (productSubOrCat === "backpacks-bags" || productSubOrCat === "bags")) return true;
       if (selected === "pens" && ["pens", "premium-pens", "eco-pens", "plastic-pens", "metal-pens", "executive-pens", "engraved-pens", "gift-box-pens"].includes(productSubOrCat)) return true;
       if (selected === "caps" && ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(productSubOrCat)) return true;
-      if (selected === "table-top" && ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "paper-weight", "paperweight", "desktop-accessories", "desktopaccessories"].includes(productSubOrCat)) return true;
+      if (selected === "table-top" && ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "desktop-accessories", "desktopaccessories"].includes(productSubOrCat)) return true;
+      if (selected === "paper-weight" && ["paper-weight", "paperweight", "paper-weight-sub", "paperweightsub"].includes(productSubOrCat)) return true;
       if (selected === "diaries-notebooks" && ["diaries-notebooks", "diaries", "executive-diaries", "eco-notebooks", "premium-notebooks", "notebooks", "premium-diaries", "standard-notebooks"].includes(productSubOrCat)) return true;
       if (selected === "trolley-bags" && (productSubOrCat === "trolley-bags" || productSubOrCat === "canvas-trolley-bags" || productSubOrCat === "canvastrolleybags" || productSubOrCat === "canvastrolleybag")) return true;
       if (selected === "canvas-trolley-bags" && (productSubOrCat === "trolley-bags" || productSubOrCat === "canvas-trolley-bags" || productSubOrCat === "canvastrolleybags" || productSubOrCat === "canvastrolleybag")) return true;
@@ -89,9 +90,10 @@ export async function GET(req: Request) {
       }
     }
  
+    const isPaperWeightQuery = query && (query.includes("paperweight") || query.includes("paper weight") || query.includes("paper-weight"));
     const isPenQuery = query && (query.includes("pen") || query === "pens");
     const isCapQuery = query && (query.includes("cap") || query === "caps");
-    const isTableTopQuery = query && (query.includes("table") || query.includes("mousepad") || query.includes("paperweight") || query.includes("organiser") || query.includes("organizer") || query.includes("tablemat") || query.includes("tabletop"));
+    const isTableTopQuery = query && !isPaperWeightQuery && (query.includes("table") || query.includes("mousepad") || query.includes("organiser") || query.includes("organizer") || query.includes("tablemat") || query.includes("tabletop"));
     const isDiaryQuery = query && (query.includes("diar") || query.includes("notebook") || query.includes("diary") || query.includes("diaries"));
     const isTrolleyQuery = query && (query.includes("trolley") || query.includes("canvastrolley"));
     const isDecorativeQuery = query && (query.includes("decorat") || query.includes("decoratives") || query.includes("decorative"));
@@ -101,6 +103,7 @@ export async function GET(req: Request) {
       product.title.toLowerCase().includes(query) || 
       product.description.toLowerCase().includes(query) || 
       product.slug.toLowerCase().includes(query) ||
+      (isPaperWeightQuery && (product.category === "table-top" || product.subcategory === "paper-weight")) ||
       (isPenQuery && (product.category === "pens" || product.subcategory === "pens")) ||
       (isCapQuery && (product.category === "caps" || product.subcategory === "caps")) ||
       (isTableTopQuery && (product.category === "table-top" || product.subcategory === "table-top")) ||

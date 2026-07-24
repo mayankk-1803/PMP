@@ -271,6 +271,7 @@ const LOCAL_CATALOG_IMAGES_BY_TITLE: Record<string, string> = {
   [normalizeImageTitle("Desk Organiser")]: LOCAL_IMAGE_POOLS.deskOrganiser[0],
   [normalizeImageTitle("Desk Organizer")]: LOCAL_IMAGE_POOLS.deskOrganiser[0],
   [normalizeImageTitle("Table Top")]: "/images/tabletopup.png",
+  [normalizeImageTitle("Corporate Gifts")]: "/images/joiningkit.png",
 
   [normalizeImageTitle("Festive Hampers")]: LOCAL_IMAGE_POOLS.festiveHampers[0],
   [normalizeImageTitle("Diwali Hampers")]: LOCAL_IMAGE_POOLS.diwaliHampers[0],

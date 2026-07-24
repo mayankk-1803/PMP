@@ -1,6 +1,7 @@
 import type { BrandRecord, CategoryRecord, ProductRecord, SubcategoryRecord } from "./types";
 import { realCatalogImage } from "@/lib/catalogImages";
 import { localCatalogImage } from "@/lib/localCatalogImages";
+import { getCategoryPresentation } from "@/lib/catalogPresentation";
 
 const now = "2026-06-04T00:00:00.000Z";
 
@@ -49,9 +50,9 @@ const imagePools = {
     "/images/slingbags/classicslingbag.png",
   ],
   giftbox: [
-    "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1000&auto=format&fit=crop",
+    "/images/joiningkit.png",
+    "/images/joiningkit.png",
+    "/images/joiningkit.png",
   ],
   hamper: [
     "/images/Festive Hampers/1.jpg",
@@ -59,15 +60,15 @@ const imagePools = {
     "/images/Holi Hampers/4b4cafcfc2eac114bea36d257d45a580.jpg",
   ],
   carton: [
-    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8311?q=80&w=1000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=1000&auto=format&fit=crop",
+    "/images/joiningkit.png",
+    "/images/joiningkit.png",
   ],
 };
 
 const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const categoryDefinitions = [
-  ["Corporate Gifts", "corporate-gifts", "Promotional Products", "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=1000&auto=format&fit=crop"],
+  ["Corporate Gifts", "corporate-gifts", "Promotional Products", "/images/joiningkit.png"],
   ["Pens", "pens", "Promotional Products", imagePools.pen[0]],
   ["T-Shirts", "t-shirts", "Promotional Products", imagePools.tshirt[0]],
   ["Caps", "caps", "Promotional Products", imagePools.cap[0]],
@@ -86,7 +87,7 @@ export const PROFESSIONAL_CATEGORIES: CategoryRecord[] = categoryDefinitions.map
   slug,
   parentGroup,
   image,
-  description: `${name} managed from MongoDB CMS.`,
+  description: getCategoryPresentation(slug).marketingDescription,
   active: true,
   createdAt: now,
 }));
