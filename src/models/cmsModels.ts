@@ -224,3 +224,27 @@ export const QuoteModel = mongoose.models.Quote || mongoose.model("Quote", Quote
 export const EnquiryModel = mongoose.models.Enquiry || mongoose.model("Enquiry", EnquirySchema, "enquiries");
 export const EmailLogModel = mongoose.models.EmailLog || mongoose.model("EmailLog", EmailLogSchema, "email_logs");
 export const ActivityLogModel = mongoose.models.ActivityLog || mongoose.model("ActivityLog", ActivityLogSchema, "activity_logs");
+
+const BudgetCollectionSchema = new Schema(
+  {
+    id: { type: String, required: true, unique: true, index: true },
+    title: { type: String, required: true },
+    value: { type: String, required: true },
+    description: String,
+    image: String,
+    bannerImage: String,
+    subtitle: String,
+    buttonText: String,
+    displayOrder: { type: Number, default: 0, index: true },
+    active: { type: Boolean, default: true },
+    publicId: String,
+    bannerPublicId: String,
+    images: Schema.Types.Mixed,
+    collectionImages: Schema.Types.Mixed,
+    products: Schema.Types.Mixed,
+  },
+  timestamps
+);
+
+export const BudgetCollectionModel = mongoose.models.BudgetCollection || mongoose.model("BudgetCollection", BudgetCollectionSchema, "budget_collections");
+

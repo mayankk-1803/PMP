@@ -21,7 +21,8 @@ import {
   OCCASION_HAMPERS
 } from "@/data/siteConfig";
 import { SafeImage } from "../ui/SafeImage";
-import { getBudgetsConfig, BudgetConfigItem } from "@/app/87564/admin/budgets/actions";
+import { getBudgetsConfig } from "@/app/87564/admin/budgets/actions";
+import type { BudgetConfigItem } from "@/services/admin/budgetCollectionService";
 import { toDisplayName } from "@/lib/displayNames";
 
 const initialBudgets: BudgetConfigItem[] = BUDGETS.map((b, idx) => ({

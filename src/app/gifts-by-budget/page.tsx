@@ -6,7 +6,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BackgroundGradient } from "@/components/layout/BackgroundGradient";
-import { getBudgetsConfig, BudgetConfigItem, getBudgetCardImageAction } from "@/app/87564/admin/budgets/actions";
+import { getBudgetsConfig, getBudgetCardImageAction } from "@/app/87564/admin/budgets/actions";
+import type { BudgetConfigItem } from "@/services/admin/budgetCollectionService";
 import { BUDGETS } from "@/data/siteConfig";
 import { Wallet, PiggyBank, Coins, Briefcase, Gem, Crown, ChevronRight, Loader2 } from "lucide-react";
 
@@ -23,8 +24,9 @@ const getBudgetIcon = (index: number) => {
   return icons[index] || <Coins key="default" className="w-4 h-4" />;
 };
 
+const DEFAULT_IDS = ["0-250", "250-500", "500-1000", "1000-2500", "2500-5000", "5000"];
 const initialBudgets: BudgetConfigItem[] = BUDGETS.map((b, idx) => ({
-  id: String(idx),
+  id: DEFAULT_IDS[idx] || String(idx),
   title: b.name,
   value: b.value,
   description: "Perfect curated gifting solutions",
