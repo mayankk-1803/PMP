@@ -305,10 +305,14 @@ export const getCanonicalSubcategorySlug = (slug: string | null | undefined): st
     return "caps";
   }
 
+  // Paper Weight subcategories
+  if (clean === "paperweight" || clean === "paperweightsub") {
+    return "paper-weight";
+  }
+
   // Table Top subcategories
   if (
     clean === "tabletop" || clean === "tabletopitems" || clean === "tabletopitem" ||
-    clean === "paperweight" || clean === "paperweightsub" || clean === "paper-weight" || clean === "paper-weight-sub" ||
     clean === "mousepad" || clean === "mousepadsub" || clean === "mousepads" ||
     clean === "deskorganiser" || clean === "deskorganizersub" || clean === "deskorganisers" || clean === "deskorganizer" || clean === "deskorganizersub" || clean === "deskorganizers" ||
     clean === "tablemat" || clean === "tablematssub" || clean === "tablemats" ||
@@ -438,10 +442,14 @@ export const getCanonicalSubcategoryName = (name: string | null | undefined): st
     return "Caps";
   }
 
+  // Paper Weight subcategories
+  if (clean === "paperweight" || clean === "paperweightsub") {
+    return "Paper Weight";
+  }
+
   // Table Top subcategories
   if (
     clean === "tabletop" || clean === "tabletopitems" || clean === "tabletopitem" ||
-    clean === "paperweight" || clean === "paperweightsub" || clean === "paper-weight" || clean === "paper-weight-sub" ||
     clean === "mousepad" || clean === "mousepadsub" || clean === "mousepads" ||
     clean === "deskorganiser" || clean === "deskorganizersub" || clean === "deskorganisers" || clean === "deskorganizer" || clean === "deskorganizersub" || clean === "deskorganizers" ||
     clean === "tablemat" || clean === "tablematssub" || clean === "tablemats" ||
@@ -583,7 +591,7 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
   if (canon === "table-top") {
     return [
       "table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", 
-      "paper-weight", "paperweight", "paper-weight-sub", "paperweightsub", "desktop-accessories", "desktopaccessories", "desktopaccessoriessub"
+      "desktop-accessories", "desktopaccessories", "desktopaccessoriessub"
     ];
   }
   if (canon === "diaries-notebooks") {
@@ -592,8 +600,8 @@ export const getSubcategorySlugAliases = (slug: string | null | undefined): stri
       "diariesnotebooks", "executivediary", "econotebook", "premiumnotebooks", "notebooks", "notebook"
     ];
   }
-  if (canon === "paper-weight-sub") {
-    return ["paper-weight-sub", "paperweight", "paperweightsub"];
+  if (canon === "paper-weight" || canon === "paper-weight-sub") {
+    return ["paper-weight", "paperweight", "paper-weight-sub", "paperweightsub"];
   }
   if (canon === "wireless-charger") {
     return ["wireless-charger", "wireless", "wirelesscharger", "wireless-chargers"];
@@ -647,5 +655,58 @@ export const resolveDisplayName = (product?: {
   
   return "Corporate Gift";
 };
+
+/**
+ * Legacy classification helper to check if a product represents a Paper Weight.
+ * Priority order:
+ * 1. Explicit displayName
+ * 2. Product title
+ * 3. Product name
+ * 4. Tags
+ * 5. Existing helper utilities (slug)
+ */
+export const isPaperWeightProduct = (product: any): boolean => {
+  if (!product) return false;
+
+  // Priority 1: Explicit display name
+  if (product.displayName && typeof product.displayName === "string") {
+    const dn = product.displayName.toLowerCase();
+    if (dn.includes("paper weight") || dn.includes("paperweight")) return true;
+  }
+
+  // Priority 2: Product title
+  if (product.title && typeof product.title === "string") {
+    const t = product.title.toLowerCase();
+    if (t.includes("paper weight") || t.includes("paperweight")) return true;
+  }
+
+  // Priority 3: Product name
+  if (product.name && typeof product.name === "string") {
+    const n = product.name.toLowerCase();
+    if (n.includes("paper weight") || n.includes("paperweight")) return true;
+  }
+
+  // Priority 4: Tags
+  if (Array.isArray(product.tags)) {
+    if (
+      product.tags.some(
+        (tag: any) =>
+          typeof tag === "string" &&
+          (tag.toLowerCase().includes("paper weight") || tag.toLowerCase().includes("paperweight"))
+      )
+    ) {
+      return true;
+    }
+  }
+
+  // Priority 5: Existing helper utilities (slug check)
+  if (product.slug && typeof product.slug === "string") {
+    const s = product.slug.toLowerCase();
+    if (s.includes("paper-weight") || s.includes("paperweight")) return true;
+  }
+
+  return false;
+};
+
 
 

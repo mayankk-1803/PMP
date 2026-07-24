@@ -137,7 +137,8 @@ export const PRODUCT_HIERARCHY = [
         name: "Table Top",
         slug: "table-top",
         subcategories: [
-          { name: "Table Top", slug: "table-top", href: "/products?subcategory=table-top" }
+          { name: "Table Top", slug: "table-top", href: "/products?subcategory=table-top" },
+          { name: "Paper Weight", slug: "paper-weight", href: "/products?subcategory=paper-weight" }
         ]
       },
       // Column 9: Diaries / Notebooks

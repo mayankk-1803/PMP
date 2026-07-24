@@ -35,7 +35,8 @@ export const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
   "table-mats": "/images/Table Mat/1.jpg",
   "desk-organiser": "/images/Desk Organsier/1.jpg",
   "table-top": "/images/tabletopup.png",
-  // Kits & Hampers — use kit images
+  "corporate-gifts": "/images/joiningkit.png",
+  "corporate-gifts-solutions": "/images/joiningkit.png",
   "corporate-kits": DEFAULT_KIT_IMAGE,
   "kits-hampers": DEFAULT_KIT_IMAGE,
   "festive-hampers": "/images/Festive Hampers/1.jpg",
@@ -49,7 +50,7 @@ export const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
   "mason": corporateKitImage("Mason Kits") || DEFAULT_KIT_IMAGE,
   "womens-day-gifts": "/kitsimages/womendayhamper.png",
   // Default
-  "default": ""
+  "default": "/images/joiningkit.png"
 };
 
 export interface SafeImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> {

@@ -6,16 +6,28 @@ import { connectMongoDB } from "@/lib/mongodb";
 import { destroyCloudinaryAssets, uniquePublicIds } from "@/lib/admin/cloudinaryLifecycle";
 import { ProductModel } from "@/models/cmsModels";
 import { resolveProductImage } from "@/lib/imageResolver";
-import { getCanonicalCategorySlug, getCanonicalSubcategorySlug, getCategorySlugAliases, getSubcategorySlugAliases, cleanProductTitle, getCanonicalCategoryName } from "@/lib/slugResolver";
+import { getCanonicalCategorySlug, getCanonicalSubcategorySlug, getCategorySlugAliases, getSubcategorySlugAliases, cleanProductTitle, getCanonicalCategoryName, isPaperWeightProduct } from "@/lib/slugResolver";
 import { listAllCategories, listAllSubcategories } from "@/services/admin/taxonomyService";
 
 export function listProducts(): ProductRecord[] {
-  return listRecords("products").filter((product) => product.active).map(p => ({
-    ...p,
-    title: cleanProductTitle(p.title),
-    category: getCanonicalCategorySlug(p.category) || p.category || "",
-    subcategory: getCanonicalSubcategorySlug(p.subcategory) || p.subcategory || "",
-  }));
+  return listRecords("products").filter((product) => product.active).map(p => {
+    let category = getCanonicalCategorySlug(p.category) || p.category || "";
+    let subcategory = getCanonicalSubcategorySlug(p.subcategory) || p.subcategory || "";
+    if (subcategory === "paper-weight") {
+      category = "table-top";
+    } else if (subcategory === "table-top" || category === "table-top") {
+      if (isPaperWeightProduct(p)) {
+        subcategory = "paper-weight";
+        category = "table-top";
+      }
+    }
+    return {
+      ...p,
+      title: cleanProductTitle(p.title),
+      category,
+      subcategory,
+    };
+  });
 }
 
 export async function listAllProducts(): Promise<ProductRecord[]> {
@@ -42,18 +54,30 @@ export async function searchProducts(options: {
   const limit = Math.min(100, Math.max(1, Number(options.limit) || 20));
   const query: Record<string, any> = { isDeleted: { $ne: true } };
 
+  const canonSub = options.subcategory ? getCanonicalSubcategorySlug(options.subcategory) : undefined;
+  const canonCat = options.category ? getCanonicalCategorySlug(options.category) : undefined;
+
   if (options.search) {
     const cleanSearch = options.search.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const isPaperWeightQuery = cleanSearch.includes("paperweight") || cleanSearch.includes("paper-weight");
     const isPenQuery = cleanSearch.includes("pen") || cleanSearch === "pens" || cleanSearch === "pen";
     const isCapQuery = cleanSearch.includes("cap") || cleanSearch === "caps" || cleanSearch === "cap";
-    const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
+    const isTableTopQuery = !isPaperWeightQuery && (cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop"));
     const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
     const isTrolleyQuery = cleanSearch.includes("trolley") || cleanSearch.includes("canvastrolley");
     const isHouseholdQuery = cleanSearch.includes("household") || cleanSearch === "decorative" || cleanSearch === "decoratives";
     const isEidQuery = cleanSearch === "eid" || cleanSearch === "eidkits" || cleanSearch === "eidhampers" || cleanSearch === "eidhamper" || cleanSearch === "eidkit";
     const isChristmasQuery = cleanSearch === "christmas" || cleanSearch === "christmaskits" || cleanSearch === "christmashampers" || cleanSearch === "christmashamper" || cleanSearch === "christmaskit";
 
-    if (isPenQuery) {
+    if (isPaperWeightQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("paper-weight") } },
+        { name: { $regex: /paper\s*weight/i } },
+        { title: { $regex: /paper\s*weight/i } },
+        { displayName: { $regex: /paper\s*weight/i } }
+      ];
+    } else if (isPenQuery) {
       query.$or = [
         { $text: { $search: options.search } },
         { category: { $in: getCategorySlugAliases("pens") } },
@@ -102,8 +126,30 @@ export async function searchProducts(options: {
       query.$text = { $search: options.search };
     }
   }
-  if (options.category) query.category = { $in: getCategorySlugAliases(options.category) };
-  if (options.subcategory) query.subcategory = { $in: getSubcategorySlugAliases(options.subcategory) };
+
+  if (canonSub === "paper-weight") {
+    query.$or = [
+      { subcategory: { $in: getSubcategorySlugAliases("paper-weight") } },
+      {
+        $and: [
+          { $or: [{ category: { $in: getCategorySlugAliases("table-top") } }, { subcategory: { $in: getSubcategorySlugAliases("table-top") } }] },
+          {
+            $or: [
+              { name: { $regex: /paper\s*weight/i } },
+              { title: { $regex: /paper\s*weight/i } },
+              { displayName: { $regex: /paper\s*weight/i } },
+              { tags: { $in: [/paper\s*weight/i] } }
+            ]
+          }
+        ]
+      }
+    ];
+  } else if (options.subcategory && options.subcategory !== "all") {
+    query.subcategory = { $in: getSubcategorySlugAliases(options.subcategory) };
+  } else if (options.category && options.category !== "all") {
+    const categoryFilters = getCategorySlugAliases(options.category);
+    query.$and = [{ $or: [{ category: { $in: categoryFilters } }, { subcategory: { $in: categoryFilters } }] }];
+  }
   if (options.brand) query.brand = options.brand;
   if (options.active === "true") query.status = { $ne: "HIDDEN" };
   if (options.active === "false") query.status = "HIDDEN";
@@ -122,17 +168,21 @@ export async function searchProducts(options: {
   const projection = options.search ? { score: { $meta: "textScore" } } : undefined;
   const mongoSort: any = options.search && !options.sortBy ? { score: { $meta: "textScore" }, createdAt: -1 } : sort;
 
-  const [products, total] = await Promise.all([
-    ProductModel.find(query, projection)
-      .sort(mongoSort)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .lean<any[]>(),
-    ProductModel.countDocuments(query),
-  ]);
+  const rawProducts = await ProductModel.find(query, projection)
+    .sort(mongoSort)
+    .lean<any[]>();
+
+  let mappedProducts = rawProducts.map(mapMongoProduct);
+
+  if (canonSub && canonSub !== "all") {
+    mappedProducts = mappedProducts.filter((p) => p.subcategory === canonSub);
+  }
+
+  const total = mappedProducts.length;
+  const paginated = mappedProducts.slice((page - 1) * limit, page * limit);
 
   return {
-    data: products.map(mapMongoProduct),
+    data: paginated,
     pagination: {
       page,
       limit,
@@ -159,18 +209,29 @@ export async function searchCatalogProducts(options: {
   const limit = Math.min(1000, Math.max(1, Number(options.limit) || 1000));
   const query: Record<string, any> = { status: "PUBLISHED", isDeleted: { $ne: true } };
   
+  const canonSub = options.subcategory ? getCanonicalSubcategorySlug(options.subcategory) : undefined;
+
   if (options.search) {
     const cleanSearch = options.search.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const isPaperWeightQuery = cleanSearch.includes("paperweight") || cleanSearch.includes("paper-weight");
     const isPenQuery = cleanSearch.includes("pen") || cleanSearch === "pens" || cleanSearch === "pen";
     const isCapQuery = cleanSearch.includes("cap") || cleanSearch === "caps" || cleanSearch === "cap";
-    const isTableTopQuery = cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("paperweight") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop");
+    const isTableTopQuery = !isPaperWeightQuery && (cleanSearch.includes("table") || cleanSearch.includes("mousepad") || cleanSearch.includes("organiser") || cleanSearch.includes("organizer") || cleanSearch.includes("tablemat") || cleanSearch.includes("tabletop"));
     const isDiaryQuery = cleanSearch.includes("diar") || cleanSearch.includes("notebook") || cleanSearch.includes("diary") || cleanSearch.includes("diaries");
     const isTrolleyQuery = cleanSearch.includes("trolley") || cleanSearch.includes("canvastrolley");
     const isHouseholdQuery = cleanSearch.includes("household") || cleanSearch === "decorative" || cleanSearch === "decoratives";
     const isEidQuery = cleanSearch === "eid" || cleanSearch === "eidkits" || cleanSearch === "eidhampers" || cleanSearch === "eidhamper" || cleanSearch === "eidkit";
     const isChristmasQuery = cleanSearch === "christmas" || cleanSearch === "christmaskits" || cleanSearch === "christmashampers" || cleanSearch === "christmashamper" || cleanSearch === "christmaskit";
 
-    if (isPenQuery) {
+    if (isPaperWeightQuery) {
+      query.$or = [
+        { $text: { $search: options.search } },
+        { subcategory: { $in: getSubcategorySlugAliases("paper-weight") } },
+        { name: { $regex: /paper\s*weight/i } },
+        { title: { $regex: /paper\s*weight/i } },
+        { displayName: { $regex: /paper\s*weight/i } }
+      ];
+    } else if (isPenQuery) {
       query.$or = [
         { $text: { $search: options.search } },
         { category: { $in: getCategorySlugAliases("pens") } },
@@ -220,7 +281,24 @@ export async function searchCatalogProducts(options: {
     }
   }
   
-  if (options.subcategory && options.subcategory !== "all") {
+  if (canonSub === "paper-weight") {
+    query.$or = [
+      { subcategory: { $in: getSubcategorySlugAliases("paper-weight") } },
+      {
+        $and: [
+          { $or: [{ category: { $in: getCategorySlugAliases("table-top") } }, { subcategory: { $in: getSubcategorySlugAliases("table-top") } }] },
+          {
+            $or: [
+              { name: { $regex: /paper\s*weight/i } },
+              { title: { $regex: /paper\s*weight/i } },
+              { displayName: { $regex: /paper\s*weight/i } },
+              { tags: { $in: [/paper\s*weight/i] } }
+            ]
+          }
+        ]
+      }
+    ];
+  } else if (options.subcategory && options.subcategory !== "all") {
     query.subcategory = { $in: getSubcategorySlugAliases(options.subcategory) };
   } else if (options.category && options.category !== "all") {
     const categoryFilters = getCategorySlugAliases(options.category);
@@ -260,17 +338,21 @@ export async function searchCatalogProducts(options: {
   const projection = options.search ? { score: { $meta: "textScore" } } : undefined;
   const sort: any = options.search && !options.sortBy ? { score: { $meta: "textScore" }, createdAt: -1 } : sortMap[options.sortBy || "order"] || sortMap.order;
 
-  const [products, total] = await Promise.all([
-    ProductModel.find(query, projection)
-      .sort(sort)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .lean<any[]>(),
-    ProductModel.countDocuments(query),
-  ]);
+  const rawProducts = await ProductModel.find(query, projection)
+    .sort(sort)
+    .lean<any[]>();
+
+  let mappedProducts = rawProducts.map(mapMongoProduct);
+
+  if (canonSub && canonSub !== "all") {
+    mappedProducts = mappedProducts.filter((p) => p.subcategory === canonSub);
+  }
+
+  const total = mappedProducts.length;
+  const paginated = mappedProducts.slice((page - 1) * limit, page * limit);
 
   return {
-    data: products.map(mapMongoProduct),
+    data: paginated,
     pagination: {
       page,
       limit,
@@ -283,11 +365,21 @@ export async function searchCatalogProducts(options: {
 export function getProductBySlug(slug: string): ProductRecord | null {
   const product = listRecords("products").find((product) => product.slug === slug) ?? null;
   if (!product) return null;
+  let category = getCanonicalCategorySlug(product.category) || product.category || "";
+  let subcategory = getCanonicalSubcategorySlug(product.subcategory) || product.subcategory || "";
+  if (subcategory === "paper-weight") {
+    category = "table-top";
+  } else if (subcategory === "table-top" || category === "table-top") {
+    if (isPaperWeightProduct(product)) {
+      subcategory = "paper-weight";
+      category = "table-top";
+    }
+  }
   return {
     ...product,
     title: cleanProductTitle(product.title),
-    category: getCanonicalCategorySlug(product.category) || product.category || "",
-    subcategory: getCanonicalSubcategorySlug(product.subcategory) || product.subcategory || "",
+    category,
+    subcategory,
   };
 }
 
@@ -309,8 +401,17 @@ const normalizeForLookup = (str: string) => {
 
 const mapMongoProduct = (product: any): ProductRecord => {
   const title = product.name || product.title || "";
-  const category = getCanonicalCategorySlug(product.category) || product.category || "";
-  const subcategory = getCanonicalSubcategorySlug(product.subcategory) || product.subcategory || "";
+  let category = getCanonicalCategorySlug(product.category) || product.category || "";
+  let subcategory = getCanonicalSubcategorySlug(product.subcategory) || product.subcategory || "";
+  
+  if (subcategory === "paper-weight") {
+    category = "table-top";
+  } else if (subcategory === "table-top" || category === "table-top") {
+    if (isPaperWeightProduct(product)) {
+      subcategory = "paper-weight";
+      category = "table-top";
+    }
+  }
   
   // Resolve primary image via database-first centralized resolver
   const matchedImage = resolveProductImage({

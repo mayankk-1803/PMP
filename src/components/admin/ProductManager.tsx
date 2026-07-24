@@ -186,6 +186,7 @@ export function ProductManager() {
         { name: "Pens", slug: "pens", category: "pens" },
         { name: "Caps", slug: "caps", category: "caps" },
         { name: "Table Top", slug: "table-top", category: "table-top" },
+        { name: "Paper Weight", slug: "paper-weight", category: "table-top" },
         { name: "Diaries / Notebooks", slug: "diaries-notebooks", category: "diaries-notebooks" },
         { name: "Badges", slug: "badges-sub", category: "badges" },
         { name: "Neck Rest / Back Rest", slug: "neck-rest-back-rest-sub", category: "neck-rest-back-rest" },

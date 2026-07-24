@@ -214,13 +214,12 @@ export function HeroSection() {
             initial={false}
             className="pt-8 text-[36px] min-[375px]:text-[40px] sm:text-[44px] font-black tracking-tight text-white leading-[1]"
           >
-            <AnimatedWords text="Premium Corporate Gifts" delay={t(0.5)} />
+            <AnimatedWords text="Elevating Corporate" delay={t(0.5)} />
             <AnimatedWords
-              text="& Branded Merchandise"
+              text="Gifting Experiences"
               delay={t(1.0)}
               className="block"
-              wordClassName="text-[#D32F2F]"
-             
+              wordClassName="text-[#EF4444]"
             />
           </motion.h1>
 
@@ -230,42 +229,27 @@ export function HeroSection() {
             className="mt-6 max-w-sm text-[15px] leading-[1.55] text-white/90 font-semibold"
           >
             <AnimatedWords
-              text="Premium welcome kits, executive gifts, and branded merchandise curated for modern teams."
+              text="Thoughtfully Curated. Beautifully Packaged. Meaningful Delivery."
               delay={t(1.45)}
               step={0.055}
-             
             />
           </motion.p>
 
           {/* CTA Buttons */}
-          <div
-            className="hero-control-reveal mt-4 flex items-center gap-2"
-            style={controlRevealStyle(t(1.95))}
-          >
-            <Button
-              variant="default"
-              className="h-12 flex-1 rounded-2xl font-bold bg-[#D32F2F] hover:bg-[#C62828] text-white flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(211,47,47,0.25)] border-0 cursor-pointer text-sm group active:scale-[0.97] transition-all duration-200"
-              asChild
+          <div className="mt-8 flex flex-col gap-3">
+            <Link
+              href="/corporate-kits"
+              className="w-full inline-flex items-center justify-center h-12 rounded-2xl bg-gradient-to-r from-[#EF4444] to-[#DC2626] text-white text-xs font-black uppercase tracking-wider shadow-lg hover:shadow-xl transition-all"
             >
-              <Link href="/promotional-merchandise">
-                Explore Products <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-
-            <div>
-              <Button
-                variant="outline"
-                className="h-12 shrink-0 rounded-2xl px-4 font-bold border border-white/30 text-white bg-white/15 hover:bg-white/25 backdrop-blur-md flex items-center justify-center gap-1.5 text-sm active:scale-[0.97] transition-all duration-200"
-                asChild
-              >
-                <Link href="/enquiry">
-                  Quote <ChevronRight className="w-3.5 h-3.5" />
-                </Link>
-              </Button>
-            </div>
+              Explore Corporate Kits
+            </Link>
+            <Link
+              href="/promotional-merchandise"
+              className="w-full inline-flex items-center justify-center h-12 rounded-2xl bg-white/10 text-white border border-white/20 text-xs font-black uppercase tracking-wider backdrop-blur-md hover:bg-white/20 transition-all"
+            >
+              Browse Catalog
+            </Link>
           </div>
-
-
         </div>
       </div>
 
@@ -279,13 +263,13 @@ export function HeroSection() {
           <div className="max-w-[480px] space-y-1">
             {/* Heading line 1 */}
             <div className="text-2xl sm:text-4xl lg:text-[44px] xl:text-[50px] font-black tracking-tight text-white leading-[1.1] sm:leading-[1.05]">
-              <AnimatedWords text="Premium Corporate Gifts" delay={t(0.6)} />
+              <AnimatedWords text="Elevating Corporate" delay={t(0.6)} />
             </div>
 
             {/* Heading line 2 */}
             <div className="-mt-1 text-2xl sm:text-4xl lg:text-[44px] xl:text-[50px] font-black tracking-tight leading-[1.1] sm:leading-[1.05]">
               <AnimatedWords
-                text="& Branded Merchandise"
+                text="Gifting Experiences"
                 delay={t(0.83)}
                 wordClassName="text-[#D32F2F]"
                

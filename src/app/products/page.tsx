@@ -249,6 +249,7 @@ function ProductsPageContent() {
                 sub.slug === "pens" ||
                 sub.slug === "caps" ||
                 sub.slug === "table-top" ||
+                sub.slug === "paper-weight" ||
                 sub.slug === "diaries-notebooks";
               const hasProducts = isNewCategory || slugsWithProducts.has(sub.slug) || 
                 (sub.slug === "laptop-bags" && slugsWithProducts.has("laptop-backpacks")) ||
@@ -362,7 +363,8 @@ function ProductsPageContent() {
     // Exclude Kits and Hampers and Packaging on promotional page if selectedCategory is "all"
     const isPens = product.category === "pens" || ["premium-pens", "eco-pens", "gift-box-pens", "engraved-pens"].includes(product.subcategory);
     const isCaps = product.category === "caps" || ["promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(product.subcategory);
-    const isTableTop = product.category === "table-top" || ["mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "tabletop"].includes(product.subcategory);
+    const isPaperWeight = product.subcategory === "paper-weight" || ["paper-weight", "paperweight", "paper-weight-sub", "paperweightsub"].includes(product.subcategory);
+    const isTableTop = product.category === "table-top" || ["mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "tabletop", "paper-weight", "paperweight"].includes(product.subcategory);
     const isDiaries = product.category === "diaries-notebooks" || ["executive-diaries", "premium-diaries", "eco-notebooks", "standard-notebooks", "diaries", "diariesnotebooks"].includes(product.subcategory);
 
     const isPromo = 
@@ -370,6 +372,7 @@ function ProductsPageContent() {
       product.subcategory === "laptop-backpacks" ||
       isPens ||
       isCaps ||
+      isPaperWeight ||
       isTableTop ||
       isDiaries ||
       product.category === "corporate-gifts" ||
@@ -387,7 +390,8 @@ function ProductsPageContent() {
       if (selected === "trolley-bags" && (productSub === "trolley-bags" || productSub === "canvas-trolley-bags")) return true;
       if (selected === "pens" && ["pens", "premium-pens", "eco-pens", "plastic-pens", "metal-pens", "executive-pens", "engraved-pens", "gift-box-pens"].includes(productSub)) return true;
       if (selected === "caps" && ["caps", "promotional-caps", "sports-caps", "cotton-caps", "baseball-caps", "event-caps", "snapback-caps"].includes(productSub)) return true;
-      if (selected === "table-top" && ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat", "paper-weight", "paperweight"].includes(productSub)) return true;
+      if (selected === "table-top" && ["table-top", "tabletop", "mouse-pad", "desk-organiser", "table-mats", "mousepad", "deskorganiser", "tablemat"].includes(productSub)) return true;
+      if (selected === "paper-weight" && ["paper-weight", "paperweight", "paper-weight-sub", "paperweightsub"].includes(productSub)) return true;
       if (selected === "diaries-notebooks" && ["diaries-notebooks", "diaries", "executive-diaries", "eco-notebooks", "standard-notebooks", "diaries", "diariesnotebooks", "premium-diaries", "premium-notebooks"].includes(productSub)) return true;
       return false;
     };
